@@ -4,6 +4,18 @@ The Wholeslide library provides a simple interface to read whole-slide images.
 
 [wiki:Download]
 
+== About the Wholeslide library ==
+
+This library can read virtual slides in the following formats:
+
+ * Trestle
+
+ * Hamamatsu
+
+ * Aperio
+
+It provides a simple C interface for programmers to use to decode images of these kinds.
+
 == About whole-slide images ==
 
 Whole-slide images, also known as virtual slides, are large, high resolution images used in digital
