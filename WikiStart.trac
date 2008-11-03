@@ -14,6 +14,15 @@ The library can read virtual slides in the following formats:
 
 It provides a simple C interface for programmers to use to decode images of these kinds.
 
+The architecture and design of the library is described in a technical report:
+''A Vendor-Neutral Library and Viewer for Whole-Slide Images''[[BR]]
+Adam Goode, M. Satyanarayanan[[BR]]
+Technical Report CMU-CS-08-136, June 2008[[BR]]
+Computer Science Department, Carnegie Mellon University
+
+[http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html Abstract]
+[http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf PDF]
+
 == About whole-slide images ==
 
 Whole-slide images, also known as virtual slides, are large, high resolution images used in digital
