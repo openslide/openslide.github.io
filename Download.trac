@@ -8,3 +8,11 @@ Source code is available for the following releases:
 
  * [http://wholeslide.cs.cmu.edu/download/wholeslide-1.0.0.tar.gz Wholeslide 1.0.0]
  * [http://wholeslide.cs.cmu.edu/download/wholeslide-java-1.0.0.tar.gz Wholeslide java interface 1.0.0]
+
+
+== Version Control ==
+
+[http://git.or.cz/ Git] repositories for Wholeslide are available. The commands to clone are:
+
+ * {{{git clone git://wholeslide.cs.cmu.edu/wholeslide.git}}}
+ * {{{git clone git://wholeslide.cs.cmu.edu/wholeslide-java.git}}}
