@@ -6,8 +6,8 @@ Wholeslide is available under the terms of the GNU General Public License, versi
 
 Source code is available for the following releases:
 
- * [http://wholeslide.cs.cmu.edu/download/wholeslide-1.0.0.tar.gz Wholeslide 1.0.0]
- * [http://wholeslide.cs.cmu.edu/download/wholeslide-java-1.0.0.tar.gz Wholeslide java interface 1.0.0]
+ * [http://wholeslide.cs.cmu.edu/download/wholeslide-1.0.0.tar.gz Wholeslide 1.0.0] (stable API)
+ * [http://wholeslide.cs.cmu.edu/download/wholeslide-java-1.0.0.tar.gz Wholeslide java interface 1.0.0] (still unstable API, subject to change)
 
 
 == Version Control ==
