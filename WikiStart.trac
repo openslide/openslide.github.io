@@ -1,10 +1,10 @@
-= Wholeslide =
+= OpenSlide =
 
-The Wholeslide library provides a simple interface to read whole-slide images.
+OpenSlide is a C library that provides a simple interface to read whole-slide images.
 
 [wiki:Download]
 
-== About the Wholeslide library ==
+== About OpenSlide ==
 
 The library can read virtual slides in the following formats:
 
