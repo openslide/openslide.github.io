@@ -1,6 +1,6 @@
-= Downloading Wholeslide =
+= Downloading OpenSlide =
 
-Wholeslide is available under the terms of the GNU General Public License, version 2.
+OpenSlide is available under the terms of the GNU General Public License, version 2.
 
 == Source ==
 
@@ -12,7 +12,7 @@ Source code is available for the following releases:
 
 == Version Control ==
 
-[http://git.or.cz/ Git] repositories for Wholeslide are available. The commands to clone are:
+[http://git.or.cz/ Git] repositories for OpenSlide are available. The commands to clone are:
 
  * {{{git clone git://wholeslide.cs.cmu.edu/wholeslide.git}}}
  * {{{git clone git://wholeslide.cs.cmu.edu/wholeslide-java.git}}}
