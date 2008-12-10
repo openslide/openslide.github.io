@@ -7,7 +7,7 @@ OpenSlide is available under the terms of the GNU General Public License, versio
 Source code is available for the following releases:
 
  * [http://openslide.cs.cmu.edu/download/openslide-1.0.0.tar.gz OpenSlide 1.0.0] (stable API)
- * (currently unavailable) [http://openslide.cs.cmu.edu/download/openslide-java-1.0.0.tar.gz OpenSlide java interface 1.0.0] (still unstable API, subject to change)
+ * [http://openslide.cs.cmu.edu/download/openslide-java-1.0.0.tar.gz OpenSlide java interface 1.0.0] (still unstable API, subject to change)
 
 
 == Version Control ==
