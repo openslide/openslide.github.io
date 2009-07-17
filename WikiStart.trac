@@ -10,7 +10,7 @@ The library can read virtual slides in the following formats:
 
  * Trestle
  * Hamamatsu (.vms)
- * Aperio (.svs)
+ * Aperio (.svs, some .tif)
 
 It provides a simple C interface for programmers to use to decode images of these kinds.
 
