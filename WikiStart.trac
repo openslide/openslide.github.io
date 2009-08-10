@@ -38,7 +38,6 @@ There is no universal data format for whole-slide images, so each vendor impleme
 formats, libraries, and viewers. Vendors typically do not document their formats. Even when
 there is documentation, important details are omitted. Because a vendor’s library or viewer is the
 only way to view a particular whole-slide image, doctors and researchers can be unnecessarily
-tied to a particular vendor. Finally, few (if any) vendors provide libraries and viewers for non-
-Windows platforms. Some have gone with a server approach, pushing tiles through a web server,
+tied to a particular vendor. Finally, few (if any) vendors provide libraries and viewers for non-Windows platforms. Some have gone with a server approach, pushing tiles through a web server,
 or using Java applets, but these approaches have shortcomings in high-latency or non-networked
 environments.
