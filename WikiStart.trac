@@ -1,6 +1,6 @@
 = OpenSlide =
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images. The current version is 2.0, released 2009-07-17.
+OpenSlide is a C library that provides a simple interface to read whole-slide images. The current version is 2.1, released 2009-08-18.
 
 [wiki:Download]
 
@@ -11,6 +11,7 @@ The library can read virtual slides in the following formats:
  * Trestle (.tif)
  * Hamamatsu (.vms)
  * Aperio (.svs, .tif)
+ * Zeiss/MIRAX (.mrxs)
 
 It provides a simple C interface for programmers to use to decode images of these kinds.
 
