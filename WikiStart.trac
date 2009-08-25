@@ -61,3 +61,6 @@ only way to view a particular whole-slide image, doctors and researchers can be 
 tied to a particular vendor. Finally, few (if any) vendors provide libraries and viewers for non-Windows platforms. Some have gone with a server approach, pushing tiles through a web server,
 or using Java applets, but these approaches have shortcomings in high-latency or non-networked
 environments.
+
+== Acknowledgements ==
+OpenSlide has been supported by the [http://www.nih.gov/ National Institutes of Health] and the [http://www.ctsi.pitt.edu/ Clinical and Translational Science Institute] at the University of Pittsburgh.
