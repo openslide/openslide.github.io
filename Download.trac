@@ -9,7 +9,9 @@ Source code is available for the following releases:
  * OpenSlide 2.2.0 (stable API)
    * [http://openslide.cs.cmu.edu/download/openslide-2.2.0.tar.gz]
    * [http://openslide.cs.cmu.edu/download/openslide-2.2.0.tar.xz]
- * [http://openslide.cs.cmu.edu/download/openslide-java-0.6.1.tar.gz OpenSlide Java interface 0.6.1] (for OpenSlide 2, still unstable API, subject to change)
+ * OpenSlide Java interface 0.7.0 (for OpenSlide 2, still unstable API, subject to change)
+   * [http://openslide.cs.cmu.edu/download/openslide-java-0.7.0.gz]
+   * [http://openslide.cs.cmu.edu/download/openslide-java-0.7.0.xz]
 
 == Win32 Binaries ==
 See [milestone:"Win32 binaries"] milestone.
