@@ -2,6 +2,9 @@
 {{{
 #!NewsFlash
 
+= OpenSlide Java version 0.7.0, 2009-09-15 =
+Version 0.7.0 of the Java bindings enables support for some lockless concurrent access.
+
 = OpenSlide version 2.2.0, 2009-09-15 =
 Version 2.2 has been released, adding thread safety (in some cases lockless).
 
