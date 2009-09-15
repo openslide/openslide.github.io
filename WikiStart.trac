@@ -6,7 +6,7 @@
 Version 0.7.0 of the Java bindings enables support for lockless concurrent access.
 
 = OpenSlide version 2.2.0, 2009-09-15 =
-Version 2.2 has been released, adding thread safety (in some cases lockless).
+Version 2.2 has been released, adding thread safety (lockless with Hamamatsu and MIRAX files).
 
 = OpenSlide Java version 0.6.1, 2009-08-25 =
 Version 0.6.1 of the Java bindings adds executable jar support for the demo GUI.
