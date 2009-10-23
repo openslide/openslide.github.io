@@ -1,6 +1,8 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide version 2.2.1, 2009-10-23 =
+Version 2.2.1 has been released, fixing thread safety problems in 2.2.0 (not quite lockless anymore).
 
 = OpenSlide Java version 0.7.0, 2009-09-15 =
 Version 0.7.0 of the Java bindings enables support for lockless concurrent access.
@@ -25,7 +27,7 @@ Version 0.5.0 of the Java bindings adds metadata support and bug fixes.
 
 }}}
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images. The current version is 2.2, released 2009-09-15.
+OpenSlide is a C library that provides a simple interface to read whole-slide images. The current version is 2.2.1, released 2009-10-23.
 
 [wiki:Download]
 
