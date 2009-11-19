@@ -2,7 +2,7 @@
 {{{
 #!NewsFlash
 = OpenSlide Java version 0.7.1, 2009-11-19 =
-Version 0.7.1 of the Java bindings fixes some bugs.
+Version 0.7.1 of the Java bindings fixes some bugs when writing JPEG thumbnails with ImageIO.
 
 = OpenSlide version 2.2.1, 2009-10-23 =
 Version 2.2.1 has been released, fixing thread safety problems in 2.2.0 (not quite lockless anymore).
