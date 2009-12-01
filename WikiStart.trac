@@ -45,7 +45,7 @@ The library can read virtual slides in the following formats:
 
 It provides a simple C interface for programmers to use to decode images of these kinds.
 
-See the [wiki:Virtual Slide Cheatsheet] for more information.
+See the [wiki:"Virtual Slide Cheatsheet"] for more information.
 
 == Tech Report ==
 
