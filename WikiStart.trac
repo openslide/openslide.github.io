@@ -42,6 +42,7 @@ The library can read virtual slides in the following formats:
  * [wiki:"Hamamatsu format" Hamamatsu (.vms)]
  * [wiki:"Aperio format" Aperio (.svs, .tif)]
  * [wiki:"MIRAX format" MIRAX (.mrxs)]
+ * [wiki:"Generic tiled TIFF format" Generic tiled TIFF (.tif)]
 
 It provides a simple C interface for programmers to use to decode images of these kinds.
 
