@@ -1,4 +1,4 @@
-== Aperio ==
+== Aperio format ==
  Format:: single-file pyramidal tiled TIFF, with non-standard metadata
  File extensions:: `.svs`, `.tif`
  OpenSlide vendor backend:: `aperio`
