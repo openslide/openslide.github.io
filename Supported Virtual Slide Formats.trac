@@ -1,0 +1,35 @@
+== Virtual slide formats understood by OpenSlide ==
+=== Trestle ===
+ Format:: single-file pyramidal tiled TIFF, with non-standard metadata and overlaps
+ File extensions:: `.tif`
+ OpenSlide vendor backend:: `trestle`
+ OpenSlide ops backend:: `tiff`
+ More info:: [wiki:"Trestle format"]
+
+=== Hamamatsu ===
+ Format:: multi-file JPEG with proprietary metadata and index file formats
+ File extensions:: `.vms`
+ OpenSlide vendor backend:: `hamamatsu`
+ OpenSlide ops backend:: `jpeg`
+ More info:: [wiki:"Hamamatsu format"]
+
+=== Aperio ===
+ Format:: single-file pyramidal tiled TIFF, with non-standard metadata and compression
+ File extensions:: `.svs`, `.tif`
+ OpenSlide vendor backend:: `aperio`
+ OpenSlide ops backend:: `tiff`
+ More info:: [wiki:"Aperio format"]
+
+=== MIRAX ===
+ Format:: multi-file JPEG with very complicated non-standard metadata and indexes
+ File extensions:: `.mrxs`
+ OpenSlide vendor backend:: `mirax`
+ OpenSlide ops backend:: `jpeg`
+ More info:: [wiki:"MIRAX format"]
+
+=== Generic tiled TIFF ===
+ Format:: single-file pyramidal tiled TIFF
+ File extensions:: `.tif`
+ OpenSlide vendor backend:: `generic-tiff`
+ OpenSlide ops backend:: `tiff`
+ More info:: [wiki:"Generic tiled TIFF format"]
