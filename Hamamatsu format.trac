@@ -1,0 +1,11 @@
+== Hamamatsu format ==
+ Format:: multi-file JPEG with proprietary metadata and index file formats
+ File extensions:: `.vms`
+ OpenSlide vendor backend:: `hamamatsu`
+ OpenSlide ops backend:: `jpeg`
+
+=== Detection ===
+
+=== Associated Images ===
+
+=== Known Properties ===
