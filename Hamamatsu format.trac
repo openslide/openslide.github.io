@@ -24,7 +24,7 @@ Because JPEG does not allow for large files, multiple JPEG files are needed to e
 
 Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. To get around this, JPEG restart markers are placed at regular intervals, and these offsets are specified in the optimisation file. With restart markers identified, OpenSlide can treat JPEG as a tiled format, where the height is the height of an MCU row, and the width is the number of MCUs per row divided by the restart marker interval times the width of an MCU. (This often leads to oddly-shaped and inefficient tiles of 8x2048, for example.)
 
-Unfortunately, the optimisation file does not give the location of every restart marker, only the ones found at the beginning of an MCU row. It also seems that the file ends early, and does not give the location of the restart marker at the last MCU row.
+Unfortunately, the optimisation file does not give the location of every restart marker, only the ones found at the beginning of an MCU row. It also seems that the file ends early, and does not give the location of the restart marker at the last MCU row of the last image file.
 
 Thus, the optimisation file can only be taken as a hint, and cannot be trusted. The entire set of JPEG files must be scanned for restart markers in order to facilitate random access. OpenSlide does this lazily as needed, and also in a background thread that runs only when OpenSlide is otherwise idle.
 
@@ -54,8 +54,14 @@ Here are known keys from the file:
 
 
 === Optimisation File ===
+The optimisation file contains a list of 32- (or 64- or 320- ?) bit
+little endian values, giving the file offset into an MCU row,
+each offset starts at a 40-byte alignment, and the last row (of the
+entire file, not each image) seems to be missing. The offsets are all packed into 1 file, even with multiple images. The order of images is left-to-right, top-to-bottom.
+
 
 === Map File ===
+
 
 === Image Files ===
 
