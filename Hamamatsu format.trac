@@ -35,22 +35,22 @@ The `.vms` file is the main index file for the format. It is a Windows INI-style
 
 Here are known keys from the file:
 ||`NoLayers`||Number of layers, currently must be 1 to be accepted||
-||`NoJpegColumns`||||
-||`NoJpegRows`||||
-||`ImageFile`||||
-||`ImageFile(x,y)`||||
-||`MapFile`||||
-||`OptimisationFile`||||
-||`AuthCode`||||
-||`SourceLens`||||
-||`PhysicalWidth`||||
-||`PhysicalHeight`||||
-||`LayerSpacing`||||
-||`MacroImage`||||
-||`PhysicalMacroWidth`||||
-||`PhysicalMacroHeight`||||
-||`XOffsetFromSlideCentre`||||
-||`YOffsetFromSlideCentre`||||
+||`NoJpegColumns`||Number of JPEG files across, given in `ImageFile` attributes||
+||`NoJpegRows`||Number of JPEG files down, given in `ImageFile` attributes||
+||`ImageFile`||Semantically equivalent to `ImageFile(0,0)`, though not specified that way. The image in position (0,0) of the set of images||
+||`ImageFile(x,y)`||Where `x` and `y` are integers, and both cannot be 0. These are the images that make up the virtual slide, as a concatenation of JPEG images. `x` and `y` specify the relative location of each JPEG||
+||`MapFile`||A lower-resolution version of all the ImageFiles||
+||`OptimisationFile`||File specifying some of the restart marker offsets in each ImageFile||
+||`AuthCode`||Unknown||
+||`SourceLens`||Possibly the magnification||
+||`PhysicalWidth`||Width of the slide in some unit?||
+||`PhysicalHeight`||Height of the slide in some unit?||
+||`LayerSpacing`||Unknown||
+||`MacroImage`||Image file for the "macro" associated image||
+||`PhysicalMacroWidth`||Unknown||
+||`PhysicalMacroHeight`||Unknown||
+||`XOffsetFromSlideCentre`||Unknown||
+||`YOffsetFromSlideCentre`||Unknown||
 
 
 === Optimisation File ===
