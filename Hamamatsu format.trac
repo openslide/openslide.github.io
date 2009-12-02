@@ -9,7 +9,21 @@ OpenSlide will detect a file as Hamamatsu if:
 
  1. The file given is a .ini-style text file.
  2. It has a `[Virtual Microscope Specimen]` group.
- 3. 
+ 3. The file specifies a single layer (`NoLayers=1`).
+ 4. There are at least 1 row and 1 column of JPEG images (`NoJpegColumns` and `NoJpegRows`).
+ 5. The mapfile given by `MapFile` is a valid readable file in the same directory as the VMS file.
+ 6. The files given by the various `ImageFile` lines do not exceed the number of rows and columns as specified above.
+ 7. The mapfile and image files are all valid JPEG files.
+ 8. The restart interval in each JPEG file is zero, or evenly divides into the number of MCUs per row.
+ 9. The image files (except the map file) all have the same "tile" sizes (see below).
+
+=== VMS File ===
+
+=== Optimisation File ===
+
+=== Map File ===
+
+=== Image Files ===
 
 === Associated Images ===
 
