@@ -28,29 +28,29 @@ Unfortunately, the optimisation file does not give the location of every restart
 
 Thus, the optimisation file can only be taken as a hint, and cannot be trusted. The entire set of JPEG files must be scanned for restart markers in order to facilitate random access. OpenSlide does this lazily as needed, and also in a background thread that runs only when OpenSlide is otherwise idle.
 
-The map file is a lower-resolution version of 
+The map file is a lower-resolution version of the other images, and can be used to make a 2-level JPEG pyramid. JPEG also allows for lower-resolution decoding, so further pyramid levels are synthesized from each JPEG file.
 
 === VMS File ===
 The `.vms` file is the main index file for the format. It is a Windows INI-style key-value pair file, with sections. Only keys in the `Virtual Microscope Specimen]` group are read by OpenSlide.
 
 Here are known keys from the file:
 ||NoLayers||Number of layers, currently must be 1 to be accepted||
-||NoJpegColumns||
-NoJpegRows=1
-ImageFile=Case8 - 2007-12-14 13.36.49.jpg
-ImageFile(1,0)=Case8 - 2007-12-14 13.36.49(1,0).jpg
-MapFile=Case8 - 2007-12-14 13.36.49_map2.jpg
-OptimisationFile=Case8 - 2007-12-14 13.36.49.opt
-AuthCode=981944831
-SourceLens=20.000000
-PhysicalWidth=47669700
-PhysicalHeight=24813648
-LayerSpacing=0
-MacroImage=Case8 - 2007-12-14 13.36.49_macro.jpg
-PhysicalMacroWidth=76000000
-PhysicalMacroHeight=26000000
-XOffsetFromSlideCentre=10133333
-YOffsetFromSlideCentre=1105000
+||NoJpegColumns||||
+||NoJpegRows||||
+||ImageFile||||
+||ImageFile(x,y)||||
+||MapFile||||
+||OptimisationFile||||
+||AuthCode||||
+||SourceLens||||
+||PhysicalWidth||||
+||PhysicalHeight||||
+||LayerSpacing||||
+||MacroImage||||
+||PhysicalMacroWidth||||
+||PhysicalMacroHeight||||
+||XOffsetFromSlideCentre||||
+||YOffsetFromSlideCentre||||
 
 
 === Optimisation File ===
