@@ -5,6 +5,11 @@
  OpenSlide ops backend:: `jpeg`
 
 === Detection ===
+OpenSlide will detect a file as Hamamatsu if:
+
+ 1. The file given is a .ini-style text file.
+ 2. It has a `[Virtual Microscope Specimen]` group.
+ 3. 
 
 === Associated Images ===
 
