@@ -67,5 +67,7 @@ The map file is a standard JPEG file. Its restart markers (if any) are not inclu
 These files are given by the various `ImageFile` keys. They are assumed to have a height which is a multiple of the MCU height. They are assumed to have a width which is a multiple of MCUs per row divided by the restart interval.
 
 === Associated Images ===
+ macro:: the image file given by the `MacroImage` value in the VMS file
 
 === Known Properties ===
+All key-value data stored in the VMS file are encoded as properties prefixed with "`hamamatsu.`".
