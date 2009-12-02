@@ -7,7 +7,7 @@
 === Detection ===
 OpenSlide will detect a file as Hamamatsu if:
 
- 1. The file given is a .ini-style text file.
+ 1. The file given is a INI-style text file.
  2. It has a `[Virtual Microscope Specimen]` group.
  3. The file specifies a single layer (`NoLayers=1`).
  4. There are at least 1 row and 1 column of JPEG images (`NoJpegColumns` and `NoJpegRows`).
@@ -17,7 +17,41 @@ OpenSlide will detect a file as Hamamatsu if:
  8. The restart interval in each JPEG file is zero, or evenly divides into the number of MCUs per row.
  9. The image files (except the map file) all have the same "tile" sizes (see below).
 
+=== Overview ===
+The Hamamatsu format consists of an index file (VMS), 2 or more JPEG files, and an "optimisation" file.
+
+Because JPEG does not allow for large files (see [wiki:Limitations of JPEG]), multiple JPEG files are needed to encode large images. To avoid having many files, the Hamamatsu format uses close to maximum size (65K by 65K) JPEG files. 
+
+Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. To get around this, JPEG restart markers are placed at regular intervals, and these offsets are specified in the optimisation file. With restart markers identified, OpenSlide can treat JPEG as a tiled format, where the height is the height of an MCU row, and the width is the number of MCUs per row divided by the restart marker interval times the width of an MCU. (This often leads to oddly-shaped and inefficient tiles of 8x2048, for example.)
+
+Unfortunately, the optimisation file does not give the location of every restart marker, only the ones found at the beginning of an MCU row. It also seems that the file ends early, and does not give the location of the restart marker at the last MCU row.
+
+Thus, the optimisation file can only be taken as a hint, and cannot be trusted. The entire set of JPEG files must be scanned for restart markers in order to facilitate random access. OpenSlide does this lazily as needed, and also in a background thread that runs only when OpenSlide is otherwise idle.
+
+The map file is a lower-resolution version of 
+
 === VMS File ===
+The `.vms` file is the main index file for the format. It is a Windows INI-style key-value pair file, with sections. Only keys in the `Virtual Microscope Specimen]` group are read by OpenSlide.
+
+Here are known keys from the file:
+||NoLayers||Number of layers, currently must be 1 to be accepted||
+||NoJpegColumns||
+NoJpegRows=1
+ImageFile=Case8 - 2007-12-14 13.36.49.jpg
+ImageFile(1,0)=Case8 - 2007-12-14 13.36.49(1,0).jpg
+MapFile=Case8 - 2007-12-14 13.36.49_map2.jpg
+OptimisationFile=Case8 - 2007-12-14 13.36.49.opt
+AuthCode=981944831
+SourceLens=20.000000
+PhysicalWidth=47669700
+PhysicalHeight=24813648
+LayerSpacing=0
+MacroImage=Case8 - 2007-12-14 13.36.49_macro.jpg
+PhysicalMacroWidth=76000000
+PhysicalMacroHeight=26000000
+XOffsetFromSlideCentre=10133333
+YOffsetFromSlideCentre=1105000
+
 
 === Optimisation File ===
 
