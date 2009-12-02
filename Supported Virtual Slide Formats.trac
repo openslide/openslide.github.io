@@ -21,7 +21,7 @@ Single-file pyramidal tiled TIFF, with non-standard metadata and compression.
  More info:: [wiki:"Aperio format"]
 
 === MIRAX ===
-Multi-file JPEG with very complicated non-standard metadata and indexes.
+Multi-file JPEG with very complicated proprietary metadata and indexes.
  File extensions:: `.mrxs`
  OpenSlide vendor backend:: `mirax`
  OpenSlide ops backend:: `jpeg`
