@@ -20,7 +20,7 @@ OpenSlide will detect a file as Hamamatsu if:
 === Overview ===
 The Hamamatsu format consists of an index file (VMS), 2 or more JPEG files, and an "optimisation" file.
 
-Because JPEG does not allow for large files (see [wiki:Limitations of JPEG]), multiple JPEG files are needed to encode large images. To avoid having many files, the Hamamatsu format uses close to maximum size (65K by 65K) JPEG files. 
+Because JPEG does not allow for large files, multiple JPEG files are needed to encode large images. To avoid having many files, the Hamamatsu format uses close to maximum size (65K by 65K) JPEG files. 
 
 Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. To get around this, JPEG restart markers are placed at regular intervals, and these offsets are specified in the optimisation file. With restart markers identified, OpenSlide can treat JPEG as a tiled format, where the height is the height of an MCU row, and the width is the number of MCUs per row divided by the restart marker interval times the width of an MCU. (This often leads to oddly-shaped and inefficient tiles of 8x2048, for example.)
 
