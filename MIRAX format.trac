@@ -7,7 +7,13 @@
 === Detection ===
 OpenSlide will detect a file as MIRAX if:
 
- 1. 
+ 1. The file ends with `.mrxs`.
+ 2. A directory exists in the same location as the file, with the same name as the file minus the extension.
+ 3. A file named `Slidedat.ini` exists in the directory.
+ 4. The slidedat file is readable as a Windows INI-style file.
+ 5. The slidedat file has a `[GENERAL]` section with the following keys: `SLIDE_VERSION`, `SLIDE_ID`, `IMAGENUMBER_X`, `IMAGENUMBER_Y`.
+ 6. The slidedat file has a `[HIERARCHICAL]` section with the following keys: `HIER_COUNT`, `NONHIER_COUNT`.
+ 7. The slidedat file has a key in the `[HIERARCHICAL]` section with the value of `Slide zoom level`. The key matches this printf-style template: `HIER_%d_NAME`.
 
 === Overview ===
 
