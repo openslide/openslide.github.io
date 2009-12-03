@@ -5,7 +5,7 @@
  OpenSlide ops backend:: `tiff`
 
 === Detection ===
-Trestle slides are stored in single-file TIFF format. OpenSlide will detect a file as generic TIFF if:
+OpenSlide will detect a file as generic TIFF if:
 
  1. No other detections succeed.
  2. The file is TIFF.
