@@ -23,7 +23,7 @@ OpenSlide will detect a file as MIRAX if:
 
 === Overview ===
 
-Because JPEG does not allow for large files, multiple JPEG files are needed to encode large images. To avoid having many files, the Hamamatsu format uses close to maximum size (65K by 65K) JPEG files. 
+Because JPEG does not allow for large files, multiple JPEG files are needed to encode large images.
 
 Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. 
 
