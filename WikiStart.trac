@@ -1,6 +1,12 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide version 2.3.0, 2009-12-11 =
+Version 2.3.0 has been released, adding [wiki:"Generic tiled TIFF format"] (for InterScope files), fixing some bugs, reducing TIFF error messages, and fixing some build problems.
+
+= OpenSlide Java version 0.7.2, 2009-12-11 =
+Version 0.7.2 of the Java bindings adds a file chooser popup in the sample app and a FileFilter.
+
 = OpenSlide Java version 0.7.1, 2009-11-19 =
 Version 0.7.1 of the Java bindings fixes some bugs when writing JPEG thumbnails with ImageIO.
 
@@ -30,7 +36,7 @@ Version 0.5.0 of the Java bindings adds metadata support and bug fixes.
 
 }}}
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 2.2.1, released 2009-10-23.
+OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 2.3.0, released 2009-12-11. There is also a Java binding available, including a simple image viewer.
 
 [wiki:Download]
 
