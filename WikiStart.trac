@@ -1,6 +1,9 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide version 2.3.1, 2009-12-14 =
+Version 2.3.1 has been released, fixing an Aperio regression introduced in version 2.3.0.
+
 = OpenSlide version 2.3.0, 2009-12-11 =
 Version 2.3.0 has been released, adding [wiki:"Generic tiled TIFF format"] (for InterScope files), fixing some bugs, reducing TIFF error messages, and fixing some build problems.
 
