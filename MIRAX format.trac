@@ -20,8 +20,11 @@ OpenSlide will detect a file as MIRAX if:
  11. There are `FILE_COUNT` keys in the `[DATAFILE]` section with the following names: `FILE_%d`, where `%d` goes from 0 to `FILE_COUNT-1`.
  12. For each value in `section_names`, a group must exist with that name. Each group must contain the keys: `OVERLAP_X`, `OVERLAP_Y`, `IMAGE_FILL_COLOR_BGR`, `DIGITIZER_WIDTH`, `DIGITIZER_HEIGHT`. The overlap values must be parseable as doubles, the rest as integers. The key `IMAGE_FORMAT` must exist, with the value `JPEG`.
  13. Each `section_names` section must have the key `IMAGE_CONCAT_FACTOR`. The value of the first section's `IMAGE_CONCAT_FACTOR` must be 0, the rest 1.
- 14. More coming...
- 15. 
+ 14. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_NAME` (`%d` is an integer) and with the value `VIMSLIDE_POSITION_BUFFER`. Bind `%d` to the variable `position_nonhier_offset`.
+ 15. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_NAME` (`%d` is an integer) and with the value `Scan data layer`. Bind `%d` to the variable `scan_nonhier_offset`.
+ 16. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideThumbnail`.
+ 17. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideBarcode`.
+ 18. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlidePreview`.
 
 === Overview ===
 
