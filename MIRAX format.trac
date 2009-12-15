@@ -28,7 +28,7 @@ OpenSlide will detect a file as MIRAX if:
  17. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideBarcode`.
  18. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlidePreview`.
  19. The value of the `INDEXFILE` key above is the name of a readable file.
- 20. The indexfile is of a valid format, and all data referred to by it is valid (see below).
+ 20. The index file is of a valid format, and all data referred to by it is valid (see below).
 
 
 === Overview ===
@@ -38,6 +38,10 @@ Because JPEG does not allow for large files, multiple JPEG files are needed to e
 Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. To avoid having many individual files, MIRAX packs JPEG files into a small number of data files. The index file provides offsets into the data files for each required piece of data.
 
 === Index File ===
+
+The index file is a crazy beast.
+
+It starts with ASCII strings matching the `SLIDE_VERSION` and `SLIDE_ID` values from the slidedat file. Then, all hell breaks loose.
 
 === Data Files ===
 
