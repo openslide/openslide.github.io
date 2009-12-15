@@ -5,6 +5,8 @@
  OpenSlide ops backend:: `jpeg`
 
 === Detection ===
+Note: MIRAX is incredibly complicated. These detection steps are probably not complete.
+
 OpenSlide will detect a file as MIRAX if:
 
  1. The file ends with `.mrxs`.
@@ -25,12 +27,17 @@ OpenSlide will detect a file as MIRAX if:
  16. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideThumbnail`.
  17. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideBarcode`.
  18. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlidePreview`.
+ 19. The value of the `INDEXFILE` key above is the name of a readable file.
+ 20. The indexfile is of a valid format, and all data referred to by it is valid (see below).
+
 
 === Overview ===
 
 Because JPEG does not allow for large files, multiple JPEG files are needed to encode large images.
 
 Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. 
+
+=== Index File ===
 
 
 
