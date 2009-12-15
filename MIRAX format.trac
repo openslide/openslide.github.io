@@ -35,10 +35,11 @@ OpenSlide will detect a file as MIRAX if:
 
 Because JPEG does not allow for large files, multiple JPEG files are needed to encode large images.
 
-Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. 
+Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. To avoid having many individual files, MIRAX packs JPEG files into a small number of data files. The index file provides offsets into the data files for each required piece of data.
 
 === Index File ===
 
+=== Data Files ===
 
 
 === Associated Images ===
