@@ -57,6 +57,13 @@ It provides a simple C interface for programmers to use to decode images of thes
 
 See [wiki:"Supported Virtual Slide Formats"] for more information.
 
+== Mailing List ==
+
+There is an announcement mailing list. It is a low-volume list and is moderated.
+
+ * [https://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/ Announcement list subscription info]
+ * [http://lists.andrew.cmu.edu/pipermail/openslide-announce/ Announcement list archive] 
+
 == Tech Report ==
 
 The architecture and design of the library is described in a technical report:
