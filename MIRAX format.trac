@@ -41,7 +41,9 @@ Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access d
 
 The index file is a crazy beast.
 
-It starts with ASCII strings matching the `SLIDE_VERSION` and `SLIDE_ID` values from the slidedat file. Then, all hell breaks loose.
+It starts with ASCII strings matching the `SLIDE_VERSION` and `SLIDE_ID` values from the slidedat file. Then, all hell breaks loose. The rest of the file consists of 32-bit little-endian integers (unaligned) with seemingly no structure.
+
+More info coming, for now see [http://openslide.cs.cmu.edu/cgi-bin/gitweb.cgi?p=openslide.git;a=blob;f=misc/print-mirax.py;hb=HEAD misc/print-mirax.py].
 
 === Data Files ===
 
