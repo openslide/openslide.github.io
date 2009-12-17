@@ -57,6 +57,8 @@ It provides a simple C interface for programmers to use to decode images of thes
 
 See [wiki:"Supported Virtual Slide Formats"] for more information.
 
+OpenSlide is a product of the research lab of [http://www.cs.cmu.edu/~satya/ M. Satyanarayanan] in the Carnegie Mellon [http://www.cs.cmu.edu/ School of Computer Science].
+
 == Mailing List ==
 
 There is an announcement mailing list. It is a low-volume list and is moderated.
