@@ -13,7 +13,7 @@ OpenSlide will detect a file as MIRAX if:
  2. A directory exists in the same location as the file, with the same name as the file minus the extension.
  3. A file named `Slidedat.ini` exists in the directory.
  4. The slidedat file is readable as a Windows INI-style file.
- 5. The slidedat file has a `[GENERAL]` section with the following keys: `SLIDE_VERSION`, `SLIDE_ID`, `IMAGENUMBER_X`, `IMAGENUMBER_Y`.
+ 5. The slidedat file has a `[GENERAL]` section with the following keys: `SLIDE_VERSION`, `SLIDE_ID`, `IMAGENUMBER_X`, `IMAGENUMBER_Y`, `CameraImageDivisionsPerSide`.
  6. The slidedat file has a `[HIERARCHICAL]` section with the following keys: `HIER_COUNT`, `NONHIER_COUNT`, `INDEXFILE`.
  7. A key exists in the `[HIERARCHICAL]` section with the value of `Slide zoom level`. The key matches this printf-style template: `HIER_%d_NAME`. The `%d` is bound to the variable `zoom_level`. Currently, `zoom_level` must be 0.
  8. The `[HIERARCHICAL]` section has a key with the name `HIER_%d_COUNT` where `%d` is the value of `zoom_level` in the previous step. The value must be an integer, interpreted as `zoom_count`.
