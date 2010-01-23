@@ -1,5 +1,5 @@
 == Trestle format ==
- Format:: single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional metadata and overlaps data can be stored in additional files
+ Format:: single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional files can contain more metadata and detailed overlap info
  File extensions:: `.tif`
  OpenSlide vendor backend:: `trestle`
  OpenSlide ops backend:: `tiff`
