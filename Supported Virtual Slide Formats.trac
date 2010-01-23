@@ -1,6 +1,6 @@
 == Virtual slide formats understood by OpenSlide ==
 === Trestle ===
-Single-file pyramidal tiled TIFF, with non-standard metadata and overlaps.
+Single-file pyramidal tiled TIFF, with non-standard metadata and overlaps. Additional files can contain more metadata and detailed overlap info.
  File extensions:: `.tif`
  OpenSlide vendor backend:: `trestle`
  OpenSlide ops backend:: `tiff`
