@@ -10,3 +10,54 @@
    A non-cryptographic hash of a subset of the slide data. It can be used
    to uniquely identify a particular virtual slide, but cannot be used
    to detect file corruption or modification.
+
+
+== Properties from the JPEG backend ==
+No properties defined.
+
+
+== Properties from the TIFF backend ==
+ tiff.ImageDescription::
+   The contents of the TIFF ImageDescripton tag.
+
+ tiff.Make::
+   The contents of the TIFF Make tag.
+
+ tiff.Model::
+   The contents of the TIFF Model tag.
+
+ tiff.Software::
+   The contents of the TIFF Software tag.
+
+ tiff.DateTime::
+   The contents of the TIFF DateTime tag.
+
+ tiff.Artist::
+   The contents of the TIFF Artist tag.
+
+ tiff.HostComputer::
+   The contents of the TIFF HostComputer tag.
+
+ tiff.Copyright::
+   The contents of the TIFF Copyright tag.
+
+ tiff.DocumentName::
+   The contents of the TIFF DocumentName tag.
+
+ tiff.XResolution::
+   The contents of the TIFF XResolution tag.
+
+ tiff.YResolution::
+   The contents of the TIFF yResolution tag.
+
+ tiff.XPosition::
+   The contents of the TIFF XPosition tag.
+
+ tiff.YPosition::
+   The contents of the TIFF YPosition tag.
+
+ tiff.ResolutionUnit::
+   The contents of the TIFF ResolutionUnit tag.
+
+== Vendor-specific properties ==
+A list of vendor-specific properties can be found on the pages for each vendor format, linked from [wiki:"Supported Virtual Slide Formats"].
