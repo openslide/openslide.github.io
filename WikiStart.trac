@@ -75,6 +75,7 @@ There are two mailing lists for OpenSlide:
 Some documentation is included within the downloadable files. Additionally there is:
  * [http://openslide.cs.cmu.edu/download/api/openslide_8h.html C API Documentation]
  * [wiki:"List of Known Properties"]
+ * [wiki:"Requested Properties"]
 
 == Tech Report ==
 
