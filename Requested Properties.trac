@@ -1,1 +1,1 @@
-Future versions of OpenSlide will support new properties in the `openslide.*` space. This page contains some requested properties and from what vendor-specific properties we might derive them from.
+Future versions of OpenSlide will support new properties that start with "`openslide.`". This page contains some requested properties and from what vendor-specific properties we might derive them from.
