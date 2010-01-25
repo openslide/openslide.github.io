@@ -1,6 +1,6 @@
 Future versions of OpenSlide will support new properties that start with "`openslide.`". This page contains some requested properties and from what vendor-specific properties we might derive them from.
 
 ||'''proposed name'''||'''description'''||'''aperio'''||'''hamamatsu'''||'''trestle'''||'''mirax'''||
-||openslide.mpp-x||Microns-per-pixel in the X dimension||
-||openslide.mpp-y||Microns-per-pixel in the Y dimension||
-||openslide.objective-power||Magnification power of the objective||
+||`openslide.mpp-x`||Microns-per-pixel in the X dimension||`aperio.MPP`||||`tiff.XResolution` (note that this is a totally non-standard use of this TIFF tag||||
+||`openslide.mpp-y`||Microns-per-pixel in the Y dimension||`aperio.MPP`||||`tiff.YResolution` (see note for `tiff.XResolution`)||||
+||`openslide.objective-power`||Magnification power of the objective||
