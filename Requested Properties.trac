@@ -3,3 +3,4 @@ Future versions of OpenSlide will support new properties that start with "`opens
 ||'''proposed name'''||'''description'''||'''aperio'''||'''hamamatsu'''||'''trestle'''||'''mirax'''||'''tiff'''||
 ||openslide.mpp-x||Microns-per-pixel in the X dimension||
 ||openslide.mpp-y||Microns-per-pixel in the Y dimension||
+||openslide.objective-power||Magnification power of the objective||
