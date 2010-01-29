@@ -1,6 +1,9 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide version 3.0.0, 2010-01-28 =
+Version 3.0.0 has been released, with a license change to LGPLv2, introduction of "quickhash-1", MIRAX bug fixes, and documentation improvements.
+
 = OpenSlide version 2.3.1, 2009-12-14 =
 Version 2.3.1 has been released, fixing an Aperio regression introduced in version 2.3.0.
 
