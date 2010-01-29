@@ -42,7 +42,7 @@ Version 0.5.0 of the Java bindings adds metadata support and bug fixes.
 
 }}}
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 2.3.1, released 2009-12-14. There is also a Java binding available, including a simple image viewer.
+OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.0.0, released 2010-01-28. There is also a Java binding available, including a simple image viewer.
 
 [wiki:Download]
 
