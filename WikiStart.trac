@@ -1,6 +1,9 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide Java version 0.8.0, 2010-01-28 =
+Version 0.8.0 of the Java bindings changes the license to LGPLv2, fixes some bugs, adds a new selection type, and adds a call to paint a specific layer without scaling.
+
 = OpenSlide version 3.0.0, 2010-01-28 =
 Version 3.0.0 has been released, with a license change to LGPLv2, introduction of "quickhash-1", MIRAX bug fixes, and documentation improvements.
 
