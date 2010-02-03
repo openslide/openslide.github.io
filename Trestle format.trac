@@ -40,3 +40,6 @@ None.
 
 === Known Properties ===
 All data encoded in the `ImageDescription` TIFF field is represented as properties prefixed with "`trestle.`".
+
+=== Test Data ===
+[http://openslide.cs.cmu.edu/download/openslide-testdata/Trestle/]
