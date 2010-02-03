@@ -71,3 +71,6 @@ These files are given by the various `ImageFile` keys. They are assumed to have 
 
 === Known Properties ===
 All key-value data stored in the VMS file are encoded as properties prefixed with "`hamamatsu.`".
+
+=== Test Data ===
+[http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/] (ndpi format, wrapped vms format, currently not readable by OpenSlide)
