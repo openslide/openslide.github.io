@@ -54,3 +54,6 @@ Some Aperio files use compression type 33003. Images using this compression need
 
 === Known Properties ===
 All key-value data encoded in the `ImageDescription` TIFF field is represented as properties prefixed with "`aperio.`".
+
+=== Test Data ===
+[http://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/]
