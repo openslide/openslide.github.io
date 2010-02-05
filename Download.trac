@@ -17,8 +17,11 @@ Source code is available for the following releases:
 See [milestone:"Win32 binaries"] milestone.
 For now, here is a [http://openslide.cs.cmu.edu/download/tmp/win32 temporary location].
 
-== Version Control ==
+== Python ==
+There is an OpenSlide binding for Python available at:
+[http://www.osc.edu/~kerwin/pyOpenSlide/]
 
+== Version Control ==
 [http://git.or.cz/ Git] repositories for OpenSlide are available. The commands to clone are:
 
  * {{{git clone git://openslide.cs.cmu.edu/openslide.git}}} ([http://openslide.cs.cmu.edu/cgi-bin/gitweb.cgi?p=openslide.git;a=summary gitweb])
