@@ -10,41 +10,6 @@ Version 0.8.0 of the Java bindings changes the license to LGPLv2, fixes some bug
 = OpenSlide version 3.0.0, 2010-01-28 =
 Version 3.0.0 has been released, with a license change to LGPLv2, introduction of "quickhash-1", MIRAX bug fixes, and documentation improvements.
 
-= OpenSlide version 2.3.1, 2009-12-14 =
-Version 2.3.1 has been released, fixing an Aperio regression introduced in version 2.3.0.
-
-= OpenSlide version 2.3.0, 2009-12-11 =
-Version 2.3.0 has been released, adding [wiki:"Generic tiled TIFF format"] (for InterScope files), fixing some bugs, reducing TIFF error messages, and fixing some build problems.
-
-= OpenSlide Java version 0.7.2, 2009-12-11 =
-Version 0.7.2 of the Java bindings adds a file chooser popup in the sample app and a FileFilter.
-
-= OpenSlide Java version 0.7.1, 2009-11-19 =
-Version 0.7.1 of the Java bindings fixes some bugs when writing JPEG thumbnails with ImageIO.
-
-= OpenSlide version 2.2.1, 2009-10-23 =
-Version 2.2.1 has been released, fixing thread safety problems in 2.2.0 (not quite lockless anymore).
-
-= OpenSlide Java version 0.7.0, 2009-09-15 =
-Version 0.7.0 of the Java bindings enables support for lockless concurrent access.
-
-= OpenSlide version 2.2.0, 2009-09-15 =
-Version 2.2 has been released, adding thread safety (lockless with Hamamatsu and MIRAX files).
-
-= OpenSlide Java version 0.6.1, 2009-08-25 =
-Version 0.6.1 of the Java bindings adds executable jar support for the demo GUI.
-
-= OpenSlide version 2.1.0, 2009-08-18 =
-Version 2.1 has been released, adding support for MIRAX mrxs.
-
-= OpenSlide Java version 0.6.0, 2009-08-17 =
-Version 0.6 of the Java bindings now shows properties in the demo GUI.
-
-= OpenSlide version 2.0.0, 2009-07-16 =
-Version 2.0 has been released, adding support for image metadata and an Aperio variant.
-
-= OpenSlide Java version 0.5.0, 2009-07-15 =
-Version 0.5.0 of the Java bindings adds metadata support and bug fixes.
 
 }}}
 
