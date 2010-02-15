@@ -74,3 +74,5 @@ All key-value data stored in the VMS file are encoded as properties prefixed wit
 
 === Test Data ===
 [http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/] (ndpi format, wrapped vms format, currently not readable by OpenSlide)
+
+[http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/] (vms format)
