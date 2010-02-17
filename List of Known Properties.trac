@@ -9,7 +9,8 @@
  openslide.quickhash-1::
    A non-cryptographic hash of a subset of the slide data. It can be used
    to uniquely identify a particular virtual slide, but cannot be used
-   to detect file corruption or modification.
+   to detect file corruption or modification. Generation of this property      
+   requires that OpenSlide be compiled with glib >= 2.16.
 
 
 == Properties from the JPEG backend ==
