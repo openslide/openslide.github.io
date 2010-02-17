@@ -1,6 +1,10 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide version 3.0.2, 2010-02-17 =
+Version 3.0.2 has been released, which restores the ability to build with glib 2.12, at the expense
+   of not having "quickhash-1" in that configuration.
+
 = OpenSlide version 3.0.1, 2010-02-04 =
 Version 3.0.1 has been released, with a fix for drawing the edges of TIFF files.
 
