@@ -1,0 +1,16 @@
+= Some Projects Using OpenSlide =
+
+== Collaborative Systems for Analyzing Tissue Microarrays ==
+The [http://pleiad.umdnj.edu/CBII/index.html Center for Biomedical Imaging & Informatics] at [http://www.umdnj.edu/ UMDNJ] uses OpenSlide for a tissue microarray analysis and data management toolset currently under development as part of the "Collaborative Systems for Analyzing Tissue Microarrays" project.
+
+== Image Mining for Comparative Analysis of Expression Patterns in Tissue Microarrays ==
+The Center for Biomedical Imaging & Informatics has a joint project with [http://www.emory.edu/ Emory University] entitled [http://cci.emory.edu/cms/projects/image_mining.html Image Mining for Comparative Analysis of Expression Patterns in Tissue Microarrays], and they are investigating using OpenSlide.
+
+== In Silico Brain Tumor Research Center ==
+The [https://wiki.nci.nih.gov/display/ISCRE/Emory+University+In+Silico+Brain+Tumor+Research+Center In Silico Brain Tumor Research Center] at Emory uses OpenSlide to extract images for analysis.
+
+== caMicroscope ==
+Emory uses OpenSlide to develop [https://cabig.nci.nih.gov/tools/caMicroscope caMicroscope], a [http://cagrid.org/ caGrid] compliant pathology viewer.
+
+== SlideTutor ==
+The [http://slidetutor.upmc.edu/ SlideTutor] project at [http://www.upmc.edu/ UPMC] uses OpenSlide to read slides in various formats.
