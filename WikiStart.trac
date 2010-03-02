@@ -39,6 +39,8 @@ See [wiki:"Supported Virtual Slide Formats"] for more information.
 
 OpenSlide is a product of the research group of [http://www.cs.cmu.edu/~satya/ M. Satyanarayanan] (Satya) in the Carnegie Mellon [http://www.cs.cmu.edu/ School of Computer Science].
 
+[wiki:"Some Projects Using OpenSlide" Some projects using OpenSlide].
+
 == Mailing Lists ==
 
 There are two mailing lists for OpenSlide:
