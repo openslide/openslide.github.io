@@ -31,7 +31,7 @@ Thus, the optimisation file can only be taken as a hint, and cannot be trusted. 
 The map file is a lower-resolution version of the other images, and can be used to make a 2-level JPEG pyramid. JPEG also allows for lower-resolution decoding, so further pyramid levels are synthesized from each JPEG file.
 
 === VMS File ===
-The `.vms` file is the main index file for the format. It is a Windows INI-style key-value pair file, with sections. Only keys in the `Virtual Microscope Specimen]` group are read by OpenSlide.
+The `.vms` file is the main index file for the format. It is a Windows INI-style key-value pair file, with sections. Only keys in the `Virtual Microscope Specimen` group are read by OpenSlide.
 
 Here are known keys from the file:
 ||`NoLayers`||Number of layers, currently must be 1 to be accepted||
