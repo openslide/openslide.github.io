@@ -102,4 +102,4 @@ If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will fin
 ||65426||Optimisation entries, as above||
 ||65428||Unknown, `AuthCode`?||
 
-Unlike in VMS, JPEG files in NDPI are not necessarily valid. If `ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then the width or height as stored in the JPEG file is 0. libjpeg will refuse to read the header of such a file, so the JPEG data stream must be altered when fed into libjpeg. Since a random access source manager is already required to read VMS JPEG files, this change is not too bad.
+Unlike in VMS, JPEG files in NDPI are not necessarily valid. If `ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then the width or height as stored in the JPEG file is 0. JPEG files are not split into validly-sized files like in VMS. libjpeg will refuse to read the header of such a file, so the JPEG data stream must be altered when fed into libjpeg. Since a random access source manager is already required to read VMS JPEG files, this change is not too bad.
