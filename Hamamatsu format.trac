@@ -89,3 +89,13 @@ If one just reads the TIFF tags directly, one will find:
 ||`Model`||"NanoZoomer"||
 ||`XResolution`||Seemingly correct X resolution, when interpreted with `ResolutionUnit`||
 ||`YResolution`||Seemingly correct Y resolution, when interpreted with `ResolutionUnit`||
+||`ResolutionUnit`||Seemingly correct resolution unit||
+||`Software`||"NDP.scan"||
+||65420||Unknown, always 1?||
+||65421||Magnification? `SourceLens` from VMS? Seems correctly downsampled for each entry. (-1.0 for macro file)||
+||65422||`XOffsetFromSlideCentre`||
+||65423||`YOffsetFromSlideCentre`||
+||65424||Unknown, always 0?||
+||65425||Unknown, always 0?||
+||65426||Optimisation entries, as above||
+||65428||Unknown, `AuthCode`?||
