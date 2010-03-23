@@ -77,7 +77,7 @@ All key-value data stored in the VMS file are encoded as properties prefixed wit
 
 [http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/] (vms format)
 
-=== Preliminary NDPI Notes ====
+=== Preliminary NDPI Notes ===
 NDPI is basically VMS stuffed into a broken TIFF file. libtiff cannot read the headers of a TIFF file, because NDPI specifies the RowsPerStrip as the height of the file, and after doing out the multiplication, this typically overflows libtiff and it refuses to open the file.
 
 Unlike the VMS format, the NDPI is stored in a pyramid format as TIFF directory entries. The macro image seems to come last.
