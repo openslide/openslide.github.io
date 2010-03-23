@@ -91,6 +91,8 @@ If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will fin
 ||`YResolution`||Seemingly correct Y resolution, when interpreted with `ResolutionUnit`||
 ||`ResolutionUnit`||Seemingly correct resolution unit||
 ||`Software`||"NDP.scan"||
+||`StripOffsets`||The offset of the JPEG file for this layer||
+||`StripByteCounts||The length of the JPEG file for this layer||
 ||65420||Unknown, always 1?||
 ||65421||Magnification? `SourceLens` from VMS? Seems correctly downsampled for each entry. (-1.0 for macro file)||
 ||65422||`XOffsetFromSlideCentre`||
@@ -99,3 +101,5 @@ If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will fin
 ||65425||Unknown, always 0?||
 ||65426||Optimisation entries, as above||
 ||65428||Unknown, `AuthCode`?||
+
+Unlike in VMS, JPEG files in NDPI are not necessarily valid. If `ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then the width or height as stored in the JPEG file is 0. libjpeg will refuse to read the header of such a file, so the JPEG data stream must be altered when fed into libjpeg. Since a random access source manager is already required to read VMS JPEG files, this change is not too bad.
