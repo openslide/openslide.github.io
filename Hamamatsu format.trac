@@ -82,7 +82,7 @@ NDPI is basically VMS stuffed into a broken TIFF file. libtiff cannot read the h
 
 Unlike the VMS format, the NDPI is stored in a pyramid format as TIFF directory entries. The macro image seems to come last.
 
-If one just reads the TIFF tags directly, one will find:
+If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will find:
 ||`ImageWidth`||Width of the image||
 ||`ImageHeight`||Height of the image||
 ||`Make`||"Hamamatsu"||
