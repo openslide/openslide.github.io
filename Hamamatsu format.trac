@@ -92,7 +92,7 @@ If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will fin
 ||`ResolutionUnit`||Seemingly correct resolution unit||
 ||`Software`||"NDP.scan", sometimes with a version number||
 ||`StripOffsets`||The offset of the JPEG file for this layer||
-||`StripByteCounts||The length of the JPEG file for this layer||
+||`StripByteCounts`||The length of the JPEG file for this layer||
 ||65420||Unknown, always 1?||
 ||65421||Magnification? `SourceLens` from VMS? Seems correctly downsampled for each entry. (-1 for macro image, -2 for some sort of mask?)||
 ||65422||`XOffsetFromSlideCentre`||
