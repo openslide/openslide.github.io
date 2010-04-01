@@ -2,7 +2,7 @@
 {{{
 #!NewsFlash
 = OpenSlide version 3.1.0, 2010-04-01 =
-Version 3.1.0 has been released, which fixes problems with TIFF files and adds support for certain newer Aperio files.
+Version 3.1.0 has been released, which fixes problems with some TIFF files and adds support for certain newer Aperio files (compression 33005).
 
 = OpenSlide version 3.0.3, 2010-03-01 =
 Version 3.0.3 has been released, which fixes nasty artifacts in some MIRAX files seen at some zoom levels.
