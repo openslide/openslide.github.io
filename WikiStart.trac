@@ -1,6 +1,9 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide version 3.1.0, 2010-04-01 =
+Version 3.1.0 has been released, which fixes problems with TIFF files and adds support for certain newer Aperio files.
+
 = OpenSlide version 3.0.3, 2010-03-01 =
 Version 3.0.3 has been released, which fixes nasty artifacts in some MIRAX files seen at some zoom levels.
 
@@ -19,7 +22,7 @@ Version 3.0.0 has been released, with a license change to LGPLv2, introduction o
 
 }}}
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.0.3, released 2010-03-01. There is also a Java binding available, including a simple image viewer.
+OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.1.0, released 2010-04-01. There is also a Java binding available, including a simple image viewer
 
 [wiki:Download]
 
