@@ -37,8 +37,9 @@ Here are known keys from the file:
 ||`NoLayers`||Number of layers, currently must be 1 to be accepted||
 ||`NoJpegColumns`||Number of JPEG files across, given in `ImageFile` attributes||
 ||`NoJpegRows`||Number of JPEG files down, given in `ImageFile` attributes||
-||`ImageFile`||Semantically equivalent to `ImageFile(0,0)`, though not specified that way. The image in position (0,0) of the set of images||
-||`ImageFile(x,y)`||Where `x` and `y` are integers, and both cannot be 0. These are the images that make up the virtual slide, as a concatenation of JPEG images. `x` and `y` specify the location of each JPEG||
+||`ImageFile`||Semantically equivalent to `ImageFile(0,0,0)`, though not specified that way. The image in position (0,0,0) of the set of images||
+||`ImageFile(x,y)`||Semantically equivalent to `ImageFile(0,x,y)`, though not specified that way. The image in position (0,x,y) of the set of images||
+||`ImageFile(z,x,y)`||Where `x` and `y` are non-negative integers. Both `x` and `y` cannot be 0. `z` is a positive integer. These are the images that make up the virtual slide, as a concatenation of JPEG images. `x` and `y` specify the location of each JPEG, `z` specifies the focal plane||
 ||`MapFile`||A lower-resolution version of all the ImageFiles||
 ||`OptimisationFile`||File specifying some of the restart marker offsets in each ImageFile||
 ||`AuthCode`||Unknown||
