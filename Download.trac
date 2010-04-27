@@ -17,6 +17,13 @@ Source code is available for the following releases:
 See [milestone:"Win32 binaries"] milestone.
 For now, here is a [http://openslide.cs.cmu.edu/download/tmp/win32 temporary location].
 
+== Fedora ==
+Fedora users can install OpenSlide with `yum install openslide`.
+
+== Red Hat Enterprise Linux / CentOS / Scientific Linux ==
+After installing [https://fedoraproject.org/wiki/EPEL EPEL], users of RHEL 5 or RHEL-derived systems can just `yum install openslide`.
+
+
 == Python ==
 There is an OpenSlide binding for Python available at:
 [http://www.osc.edu/~kerwin/pyOpenSlide/]
