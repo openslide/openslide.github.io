@@ -65,6 +65,9 @@ Some documentation is included within the downloadable files. Additionally there
  * [wiki:"List of Known Properties"]
  * [wiki:"Requested Properties"]
 
+== Test Data ==
+Some [http://openslide.cs.cmu.edu/download/openslide-testdata.torrent freely-distributable test data] is available.
+
 == Tech Report ==
 
 The architecture and design of the library is described in a technical report:
