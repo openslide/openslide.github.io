@@ -1,6 +1,12 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide Java version 0.9.0, 2010-06-01 =
+Version 0.9.0 of the Java bindings adds support for the error handling system, eliminates the swig dependency, and adds new methods for painting.
+
+= OpenSlide version 3.2.0, 2010-06-01 =
+Version 3.2.0 has been released, adding experimental CMake support and fixes for building with MSVC, an error handling mechanism, initial Hamamatsu Nanozoomer VMU support, and the "openslide-write-png" tool.
+
 = OpenSlide version 3.1.1, 2010-04-27 =
 Version 3.1.1 has been released, fixing some bugs reading invalid VMS files. VMS files with multiple layers (NoLayers > 1) are also supported now, but the additional layers are ignored.
 
