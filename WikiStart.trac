@@ -31,7 +31,7 @@ Version 3.0.0 has been released, with a license change to LGPLv2, introduction o
 
 }}}
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.1.1, released 2010-04-27. There is also a Java binding available, including a simple image viewer.
+OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.2.0, released 2010-06-01. There is also a Java binding available, including a simple image viewer.
 
 [wiki:Download]
 
@@ -40,7 +40,7 @@ OpenSlide is a C library that provides a simple interface to read whole-slide im
 The library can read virtual slides in the following formats:
 
  * [wiki:"Trestle format" Trestle (.tif)]
- * [wiki:"Hamamatsu format" Hamamatsu (.vms)]
+ * [wiki:"Hamamatsu format" Hamamatsu (.vms, .vmu)]
  * [wiki:"Aperio format" Aperio (.svs, .tif)]
  * [wiki:"MIRAX format" MIRAX (.mrxs)]
  * [wiki:"Generic tiled TIFF format" Generic tiled TIFF (.tif)]
