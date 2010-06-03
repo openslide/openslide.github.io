@@ -1,8 +1,8 @@
 == Hamamatsu format ==
- Format:: multi-file JPEG with proprietary metadata and index file formats
- File extensions:: `.vms`
+ Format:: multi-file JPEG/NGR with proprietary metadata and index file formats
+ File extensions:: `.vms`, `.vmu`
  OpenSlide vendor backend:: `hamamatsu`
- OpenSlide ops backend:: `jpeg`
+ OpenSlide ops backend:: `jpeg` for `.vms`, `ngr` for `.vmu`
 
 === Detection ===
 OpenSlide will detect a file as Hamamatsu if:
