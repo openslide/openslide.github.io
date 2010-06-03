@@ -7,10 +7,10 @@ Single-file pyramidal tiled TIFF, with non-standard metadata and overlaps. Addit
  More info:: [wiki:"Trestle format"]
 
 === Hamamatsu ===
-Multi-file JPEG with proprietary metadata and index file formats.
- File extensions:: `.vms`
+Multi-file JPEG/NGR with proprietary metadata and index file formats.
+ File extensions:: `.vms`, `.vmu`
  OpenSlide vendor backend:: `hamamatsu`
- OpenSlide ops backend:: `jpeg`
+ OpenSlide ops backend:: `jpeg` (for `.vms`), `ngr` (for `.vmu`)
  More info:: [wiki:"Hamamatsu format"]
 
 === Aperio ===
