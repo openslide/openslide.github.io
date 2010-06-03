@@ -61,7 +61,7 @@ The `.vmu` file is the main index file for the VMU format. Only keys in the `Unc
 Here are known keys from the file:
 ||`NoLayers`||(see VMS above)||
 ||`ImageFile`||(see VMS above)||
-||`ImageFile(x,y)`|(see VMS above)||
+||`ImageFile(x,y)`||(see VMS above)||
 ||`ImageFile(z,x,y)`||(see VMS above)||
 ||`MapFile`||(see VMS above)||
 ||`MapScale`||Seems to be the downsample factor of the map||
