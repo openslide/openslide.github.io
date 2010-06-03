@@ -139,6 +139,8 @@ For VMS, these files are in JPEG, for VMU they are in NGR format.
 === NGR Format ===
 The NGR file contains uncompressed 16-bit RGB data, with a small header. The files we have encountered start with `GN`, two more bytes, and then width, height, and column width in little endian 32-bit format. The column width must divide evenly into the width. Column width is important, since NGR files are generated in columns, where the first column comes first in the file, followed by subsequent files. Columns are painted left-to-right.
 
+At offset 24 is another 32-bit integer which gives the offset in the file to the start of the image data. The image data we have encountered is in 16-bit little endian format.
+
 === Associated Images ===
  macro:: the image file given by the `MacroImage` value in the VMS/VMU file
 
