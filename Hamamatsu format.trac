@@ -18,7 +18,7 @@ OpenSlide will detect a file as Hamamatsu if:
  9. The image files (except the map file) all have the same "tile" sizes (see below).
 
 === Overview ===
-The Hamamatsu format consists of an index file (VMS), 2 or more JPEG files, and an "optimisation" file.
+The Hamamatsu format consists of an index file (VMS or VMU), 2 or more image files, and (in the case of VMS) an "optimisation" file.
 
 Multiple focal planes are ignored, only focal plane 0 is read.
 
@@ -56,7 +56,7 @@ Here are known keys from the file:
 ||`YOffsetFromSlideCentre`||Unknown||
 
 
-=== Optimisation File ===
+=== Optimisation File (only for VMS) ===
 The optimisation file contains a list of 32- (or 64- or 320- ?) bit
 little endian values, giving the file offset into an MCU row,
 each offset starts at a 40-byte alignment, and the last row (of the
