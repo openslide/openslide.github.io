@@ -10,7 +10,7 @@ Single-file pyramidal tiled TIFF, with non-standard metadata and overlaps. Addit
 Multi-file JPEG/NGR with proprietary metadata and index file formats.
  File extensions:: `.vms`, `.vmu`
  OpenSlide vendor backend:: `hamamatsu`
- OpenSlide ops backend:: `jpeg` (for `.vms`), `ngr` (for `.vmu`)
+ OpenSlide ops backend:: `jpeg` for `.vms`, `ngr` for `.vmu`
  More info:: [wiki:"Hamamatsu format"]
 
 === Aperio ===
