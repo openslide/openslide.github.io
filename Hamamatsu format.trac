@@ -140,10 +140,10 @@ For VMS, these files are in JPEG, for VMU they are in NGR format.
 
 
 === Associated Images ===
- macro:: the image file given by the `MacroImage` value in the VMS file
+ macro:: the image file given by the `MacroImage` value in the VMS/VMU file
 
 === Known Properties ===
-All key-value data stored in the VMS file are encoded as properties prefixed with "`hamamatsu.`".
+All key-value data stored in the VMS/VMU file are encoded as properties prefixed with "`hamamatsu.`".
 
 === Test Data ===
 [http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/] (ndpi format, wrapped vms format, currently not readable by OpenSlide)
