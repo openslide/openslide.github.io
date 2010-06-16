@@ -1,6 +1,12 @@
 = OpenSlide =
 {{{
 #!NewsFlash
+= OpenSlide Java version 0.9.1, 2010-06-16 =
+Version 0.9.1 of the Java bindings fixes a Windows build bug and remove checks for negative coordinates and zero dimensions.
+
+= OpenSlide version 3.2.2, 2010-06-16 =
+Version 3.2.2 has been released, supporting negative coordinates and zero-sized dimensions in openslide_read_region, fixes a Windows build bug with new NGR support, and enables untested BigTIFF support.
+
 = OpenSlide version 3.2.1, 2010-06-03 =
 Version 3.2.1 has been released, fixing Windows crashes, quieting down the error logging, and fixing problems with libjpeg 7.
 
@@ -34,7 +40,7 @@ Version 3.0.0 has been released, with a license change to LGPLv2, introduction o
 
 }}}
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.2.1, released 2010-06-03. There is also a Java binding available, including a simple image viewer.
+OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.2.2, released 2010-06-16. There is also a Java binding available, including a simple image viewer.
 
 [wiki:Download]
 
