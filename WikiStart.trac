@@ -5,7 +5,7 @@
 Version 0.9.1 of the Java bindings fixes a Windows build bug and remove checks for negative coordinates and zero dimensions.
 
 = OpenSlide version 3.2.2, 2010-06-16 =
-Version 3.2.2 has been released, supporting negative coordinates and zero-sized dimensions in openslide_read_region, fixes a Windows build bug with new NGR support, and enables untested BigTIFF support.
+Version 3.2.2 has been released, adding support for negative coordinates and zero-sized dimensions in openslide_read_region, fixing a Windows build bug with new NGR support, and adding untested BigTIFF support.
 
 = OpenSlide version 3.2.1, 2010-06-03 =
 Version 3.2.1 has been released, fixing Windows crashes, quieting down the error logging, and fixing problems with libjpeg 7.
