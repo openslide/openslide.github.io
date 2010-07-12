@@ -21,7 +21,7 @@ For now, here is a [http://openslide.cs.cmu.edu/download/tmp/win32 temporary loc
 Fedora users can install OpenSlide with `yum install openslide`.
 
 == Red Hat Enterprise Linux / CentOS / Scientific Linux ==
-After installing [https://fedoraproject.org/wiki/EPEL EPEL], users of RHEL 5 or RHEL-derived systems can just `yum install openslide`.
+After installing [https://fedoraproject.org/wiki/EPEL EPEL], users of RHEL >=5 or RHEL-derived systems can just `yum install openslide`.
 
 
 == Python ==
