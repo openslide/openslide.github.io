@@ -16,4 +16,4 @@ Emory uses OpenSlide to develop [https://cabig.nci.nih.gov/tools/caMicroscope ca
 The [http://slidetutor.upmc.edu/ SlideTutor] project at [http://www.upmc.edu/ UPMC] uses OpenSlide to read slides in various formats.
 
 == Algum ==
-The [http://algum.cs.cmu.edu/ Algum system] at CMU uses OpenSlide to display whole slide images.
+The [http://algum.cs.cmu.edu/ Algum system] at CMU uses OpenSlide to display whole slide images. To access the demo site, click through and login as "guest" "guest".
