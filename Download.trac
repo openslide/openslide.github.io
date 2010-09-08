@@ -31,5 +31,5 @@ There is an OpenSlide binding for Python available at:
 == Version Control ==
 [http://git.or.cz/ Git] repositories for OpenSlide are available. The commands to clone are:
 
- * {{{git clone git://openslide.cs.cmu.edu/openslide.git}}} ([http://openslide.cs.cmu.edu/cgi-bin/gitweb.cgi?p=openslide.git;a=summary gitweb])
- * {{{git clone git://openslide.cs.cmu.edu/openslide-java.git}}} ([http://openslide.cs.cmu.edu/cgi-bin/gitweb.cgi?p=openslide-java.git;a=summary gitweb])
+ * {{{git clone git://github.com/openslide/openslide.git}}} ([http://github.com/openslide/openslide github])
+ * {{{git clone git://github.com/openslide/openslide-java.git}}} ([http://github.com/openslide/openslide-java github])
