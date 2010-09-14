@@ -1,5 +1,8 @@
+---
+---
+<!--
 = OpenSlide =
-{{{
+{
 #!NewsFlash
 = OpenSlide Java version 0.9.2, 2010-08-10 =
 Version 0.9.2 of the Java bindings removes some experimental CMU-specific annotation support.
@@ -41,63 +44,115 @@ Version 0.8.0 of the Java bindings changes the license to LGPLv2, fixes some bug
 Version 3.0.0 has been released, with a license change to LGPLv2, introduction of "quickhash-1", MIRAX bug fixes, and documentation improvements.
 
 
-}}}
+}
+-->
+OpenSlide
+=========
 
-OpenSlide is a C library that provides a simple interface to read whole-slide images (also known as virtual slides). The current version is 3.2.2, released 2010-06-16. There is also a Java binding available, including a simple image viewer.
+OpenSlide is a C library that provides a simple interface to read
+whole-slide images (also known as virtual slides). The current version
+is 3.2.2, released 2010-06-16. There is also a Java binding available,
+including a simple image viewer.
 
-[wiki:Download]
+[Download][1]
 
-== About OpenSlide ==
+[1]: Download
+
+About OpenSlide
+---------------
 
 The library can read virtual slides in the following formats:
 
- * [wiki:"Trestle format" Trestle (.tif)]
- * [wiki:"Hamamatsu format" Hamamatsu (.vms, .vmu)]
- * [wiki:"Aperio format" Aperio (.svs, .tif)]
- * [wiki:"MIRAX format" MIRAX (.mrxs)]
- * [wiki:"Generic tiled TIFF format" Generic tiled TIFF (.tif)]
+ * [Trestle (.tif)][2]
+ * [Hamamatsu (.vms, .vmu)][3]
+ * [Aperio (.svs, .tif)][4]
+ * [MIRAX (.mrxs)][5]
+ * [Generic tiled TIFF (.tif)][6]
 
-It provides a simple C interface for programmers to use to decode images of these kinds.
+[2]: Trestle%20format
+[3]: Hamamatsu%20format
+[4]: Aperio%20format
+[5]: MIRAX%20format
+[6]: Generic%20tiled%20TIFF%20format
 
-See [wiki:"Supported Virtual Slide Formats"] for more information.
+It provides a simple C interface for programmers to use to decode
+images of these kinds.
 
-OpenSlide is a product of the research group of [http://www.cs.cmu.edu/~satya/ M. Satyanarayanan] (Satya) in the Carnegie Mellon [http://www.cs.cmu.edu/ School of Computer Science].
+See [Supported Virtual Slide Formats][7] for more information.
 
-See how [wiki:"Some Projects Using OpenSlide" some projects use OpenSlide].
+[7]: Supported%20Virtual%20Slide%20Formats
 
-== Mailing Lists ==
+
+OpenSlide is a product of the research group of [M. Satyanarayanan][8]
+(Satya) in the Carnegie Mellon [School of Computer Science][9].
+
+[8]: http://www.cs.cmu.edu/~satya/
+[9]: http://www.cs.cmu.edu/
+
+
+See how [some projects use OpenSlide][10].
+
+[10]: Some%20Projects%20Using%20OpenSlide
+
+
+Mailing Lists
+-------------
 
 There are two mailing lists for OpenSlide:
 
  * Users mailing list. Once subscribed, anyone can post. This list is for asking questions about OpenSlide.
-   * [http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/ Users list subscription info]
-   * [http://lists.andrew.cmu.edu/pipermail/openslide-users/ Users list archive] 
+   * [Users list subscription info][11]
+   * [Users list archive][12]
 
  * Announcement mailing list. It is a low-volume list and is moderated. All users are recommended to subscribe to this list.
-   * [http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/ Announcement list subscription info]
-   * [http://lists.andrew.cmu.edu/pipermail/openslide-announce/ Announcement list archive] 
+   * [Announcement list subscription info][13]
+   * [Announcement list archive][14]
 
-== Documentation ==
+[11]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
+[12]: http://lists.andrew.cmu.edu/pipermail/openslide-users/
+[13]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
+[14]: http://lists.andrew.cmu.edu/pipermail/openslide-announce/
+
+
+Documentation
+-------------
+
 Some documentation is included within the downloadable files. Additionally there is:
- * [http://openslide.cs.cmu.edu/download/api/openslide_8h.html C API Documentation]
- * [wiki:"List of Known Properties"]
- * [wiki:"Requested Properties"]
+ * [C API Documentation][15]
+ * [List of Known Properties][16]
+ * [Requested Properties][17]
 
-== Test Data ==
-Some [http://openslide.cs.cmu.edu/download/openslide-testdata.torrent freely-distributable test data] is available.
+[15]: api/openslide_8h.html
+[16]: List%20of%20Known%20Properties
+[17]: Requested%20Properties
 
-== Tech Report ==
+
+Test Data
+---------
+
+Some [freely-distributable test data][18] is available.
+
+[18]: http://openslide.cs.cmu.edu/download/openslide-testdata.torrent
+
+
+Tech Report
+-----------
 
 The architecture and design of the library is described in a technical report:
 
-''A Vendor-Neutral Library and Viewer for Whole-Slide Images''[[BR]]
-Adam Goode, M. Satyanarayanan[[BR]]
-Technical Report CMU-CS-08-136, June 2008[[BR]]
-Computer Science Department, Carnegie Mellon University[[BR]]
-[http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html Abstract]
-[http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf PDF]
+"A Vendor-Neutral Library and Viewer for Whole-Slide Images"  
+Adam Goode, M. Satyanarayanan  
+Technical Report CMU-CS-08-136, June 2008  
+Computer Science Department, Carnegie Mellon University  
+[Abstract][19]
+[PDF][20]
 
-== About whole-slide images ==
+[19]: http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html
+[20]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
+
+
+About whole-slide images
+------------------------
 
 Whole-slide images, also known as virtual slides, are large, high resolution images used in digital
 pathology. Reading these images using standard image tools or libraries is a challenge because
@@ -114,7 +169,12 @@ tied to a particular vendor. Finally, few (if any) vendors provide libraries and
 or using Java applets, but these approaches have shortcomings in high-latency or non-networked
 environments.
 
-== Acknowledgements ==
-OpenSlide has been supported by the [http://www.nih.gov/ National Institutes of Health] and the [http://www.ctsi.pitt.edu/ Clinical and Translational Science Institute] at the University of Pittsburgh.
+Acknowledgements
+----------------
+OpenSlide has been supported by the [National Institutes of Health][21] and the [Clinical and Translational Science Institute][22] at the University of Pittsburgh.
 
-[[Image(htdocs:NIH_logo.png, align=center, link=http://www.nih.gov/)]]
+[21]: http://www.nih.gov/
+[22]: http://www.ctsi.pitt.edu/
+
+
+[![NIH logo](images/NIH_logo.png)][21]
