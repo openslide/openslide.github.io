@@ -7,9 +7,6 @@ title: OpenSlide
 {% include news.markdown %}
 </div>
 
-OpenSlide
-=========
-
 OpenSlide is a C library that provides a simple interface to read
 whole-slide images (also known as virtual slides). The current version
 is 3.2.2, released 2010-06-16. There is also a Java binding available,

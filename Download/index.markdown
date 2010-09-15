@@ -1,12 +1,10 @@
 ---
 layout: default
-title: Download
+title: Downloading OpenSlide
 
 latest-version: 3.2.3
 latest-version-java: 0.9.2
 ---
-Downloading OpenSlide
-=====================
 
 OpenSlide is available under the terms of the GNU Lesser General Public License, version 2.1.
 
