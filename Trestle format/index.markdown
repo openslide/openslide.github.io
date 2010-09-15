@@ -7,14 +7,13 @@ Format
 :single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional files can contain more metadata and detailed overlap info
 
 File extensions
-: `.tif`
+:`.tif`
 
 OpenSlide vendor backend
-: `trestle`
+:`trestle`
 
 OpenSlide ops backend
-: `tiff`
-
+:`tiff`
 
 Detection
 ---------
