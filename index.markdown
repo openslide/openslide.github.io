@@ -98,7 +98,7 @@ Tech Report
 
 The architecture and design of the library is described in a technical report:
 
-"A Vendor-Neutral Library and Viewer for Whole-Slide Images"  
+*A Vendor-Neutral Library and Viewer for Whole-Slide Images*  
 Adam Goode, M. Satyanarayanan  
 Technical Report CMU-CS-08-136, June 2008  
 Computer Science Department, Carnegie Mellon University  
