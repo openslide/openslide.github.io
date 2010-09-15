@@ -85,6 +85,16 @@ Some documentation is included within the downloadable files. Additionally there
 [17]: Requested%20Properties
 
 
+Issue Trackers
+--------------
+
+ * [OpenSlide issue tracker][23]
+ * [OpenSlide Java issue tracker][24]
+
+[23]: http://github.com/openslide/openslide/issues
+[24]: http://github.com/openslide/openslide-java/issues
+
+
 Test Data
 ---------
 
