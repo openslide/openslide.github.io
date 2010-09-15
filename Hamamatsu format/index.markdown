@@ -109,66 +109,69 @@ VMU File
 The `.vmu` file is the main index file for the VMU format. Only keys in the `Uncompressed Virtual Microscope Specimen` group are read by OpenSlide.
 
 Here are known keys from the file:
-|`NoLayers`|(see VMS above)|
-|`ImageFile`|(see VMS above)|
-|`ImageFile(x,y)`|(see VMS above)|
-|`ImageFile(z,x,y)`|(see VMS above)|
-|`MapFile`|(see VMS above)|
-|`MapScale`|Seems to be the downsample factor of the map|
-|`AuthCode`|(see VMS above)|
-|`SourceLens`|(see VMS above)|
-|`PixelWidth`|Width of the image in pixels|
-|`PixelHeight`|Height of the image in pixels|
-|`PhysicalWidth`|(see VMS above)|
-|`PhysicalHeight`|(see VMS above)|
-|`LayerSpacing`|(see VMS above)|
-|`LayerOffset`|Unknown|
-|`MacroImage`|(see VMS above)|
-|`PhysicalMacroWidth`|(see VMS above)|
-|`PhysicalMacroHeight`|(see VMS above)|
-|`XOffsetFromSlideCentre`|(see VMS above)|
-|`YOffsetFromSlideCentre`|(see VMS above)|
-|`Reference`|Unknown|
-|`BitsPerPixel`|Bits per pixel, currently expected to be 36|
-|`PixelOrder`|Currently expected to be RGB|
-|`Creator`|String describing the software creating this image|
-|`IlluminationMode`|Unknown|
-|`ExposureMultiplier`|Unknown, possibly the multiplier used to scale to 15 bits?|
-|`GainRed`|Unknown|
-|`GainGreen`|Unknown|
-|`GainBlue`|Unknown|
-|`FocalPlaneTolerance`|Unknown|
-|`NMP`|Unknown|
-|`MacroIllumination`|Unknown|
-|`FocusOffset`|Unknown|
-|`RefocusInterval`|Unknown|
-|`CubeName`|Unknown|
-|`HardwareModel`|Name of the hardware|
-|`HardwareSerial`|Serial number of the hardware|
-|`NoFocusPoints`|Unknown|
-|`FocusPoint0X`|Unknown|
-|`FocusPoint0Y`|Unknown|
-|`FocusPoint0Z`|Unknown|
-|`FocusPoint1X`|Unknown|
-|`FocusPoint1Y`|Unknown|
-|`FocusPoint1Z`|Unknown|
-|`FocusPoint2X`|Unknown|
-|`FocusPoint2Y`|Unknown|
-|`FocusPoint2Z`|Unknown|
-|`FocusPoint3X`|Unknown|
-|`FocusPoint3Y`|Unknown|
-|`FocusPoint3Z`|Unknown|
-|`NoBlobPoints`|Unknown|
-|`BlobPoint0Blob`|Unknown|
-|`BlobPoint0FocusPoint`|Unknown|
-|`BlobPoint1Blob`|Unknown|
-|`BlobPoint1FocusPoint`|Unknown|
-|`BlobPoint2Blob`|Unknown|
-|`BlobPoint2FocusPoint`|Unknown|
-|`BlobPoint3Blob`|Unknown|
-|`BlobPoint3FocusPoint`|Unknown|
-|`BlobMapWidth`|Unknown|
-|`BlobMapHeight`|Unknown|
+
+Key                 | Description                |
+--------------------|----------------------------|
+`NoLayers`|(see VMS above)|
+`ImageFile`|(see VMS above)|
+`ImageFile(x,y)`|(see VMS above)|
+`ImageFile(z,x,y)`|(see VMS above)|
+`MapFile`|(see VMS above)|
+`MapScale`|Seems to be the downsample factor of the map|
+`AuthCode`|(see VMS above)|
+`SourceLens`|(see VMS above)|
+`PixelWidth`|Width of the image in pixels|
+`PixelHeight`|Height of the image in pixels|
+`PhysicalWidth`|(see VMS above)|
+`PhysicalHeight`|(see VMS above)|
+`LayerSpacing`|(see VMS above)|
+`LayerOffset`|Unknown|
+`MacroImage`|(see VMS above)|
+`PhysicalMacroWidth`|(see VMS above)|
+`PhysicalMacroHeight`|(see VMS above)|
+`XOffsetFromSlideCentre`|(see VMS above)|
+`YOffsetFromSlideCentre`|(see VMS above)|
+`Reference`|Unknown|
+`BitsPerPixel`|Bits per pixel, currently expected to be 36|
+`PixelOrder`|Currently expected to be RGB|
+`Creator`|String describing the software creating this image|
+`IlluminationMode`|Unknown|
+`ExposureMultiplier`|Unknown, possibly the multiplier used to scale to 15 bits?|
+`GainRed`|Unknown|
+`GainGreen`|Unknown|
+`GainBlue`|Unknown|
+`FocalPlaneTolerance`|Unknown|
+`NMP`|Unknown|
+`MacroIllumination`|Unknown|
+`FocusOffset`|Unknown|
+`RefocusInterval`|Unknown|
+`CubeName`|Unknown|
+`HardwareModel`|Name of the hardware|
+`HardwareSerial`|Serial number of the hardware|
+`NoFocusPoints`|Unknown|
+`FocusPoint0X`|Unknown|
+`FocusPoint0Y`|Unknown|
+`FocusPoint0Z`|Unknown|
+`FocusPoint1X`|Unknown|
+`FocusPoint1Y`|Unknown|
+`FocusPoint1Z`|Unknown|
+`FocusPoint2X`|Unknown|
+`FocusPoint2Y`|Unknown|
+`FocusPoint2Z`|Unknown|
+`FocusPoint3X`|Unknown|
+`FocusPoint3Y`|Unknown|
+`FocusPoint3Z`|Unknown|
+`NoBlobPoints`|Unknown|
+`BlobPoint0Blob`|Unknown|
+`BlobPoint0FocusPoint`|Unknown|
+`BlobPoint1Blob`|Unknown|
+`BlobPoint1FocusPoint`|Unknown|
+`BlobPoint2Blob`|Unknown|
+`BlobPoint2FocusPoint`|Unknown|
+`BlobPoint3Blob`|Unknown|
+`BlobPoint3FocusPoint`|Unknown|
+`BlobMapWidth`|Unknown|
+`BlobMapHeight`|Unknown|
 
 
 Optimisation File (only for VMS)
