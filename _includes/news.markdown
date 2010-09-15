@@ -1,3 +1,9 @@
+OpenSlide version 3.2.3, 2010-09-09
+===================================
+Version 3.2.3 has been released, supporting more MIRAX files, adding a background color
+property, fixing some MIRAX drawing bugs, and adding support for quickhash-1 on all
+platforms.
+
 OpenSlide Java version 0.9.2, 2010-08-10
 ========================================
 Version 0.9.2 of the Java bindings removes some experimental CMU-specific annotation support.
