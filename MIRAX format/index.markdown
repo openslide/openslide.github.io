@@ -1,11 +1,25 @@
-== MIRAX format ==
- Format:: multi-file JPEG with very complicated proprietary metadata and indexes
- File extensions:: `.mrxs`
- OpenSlide vendor backend:: `mirax`
- OpenSlide ops backend:: `jpeg`
+---
+layout: default
+title: MIRAX format
+---
 
-=== Detection ===
-'''Note: MIRAX is incredibly complicated. These detection steps are probably not complete.'''
+Format
+:multi-file JPEG with very complicated proprietary metadata and indexes
+
+File extensions
+:`.mrxs`
+
+OpenSlide vendor backend
+:`mirax`
+
+OpenSlide ops backend
+:`jpeg`
+
+
+Detection
+---------
+**Note: MIRAX is incredibly complicated. These detection steps are probably not complete.**
+
 
 OpenSlide will detect a file as MIRAX if:
 
@@ -31,27 +45,45 @@ OpenSlide will detect a file as MIRAX if:
  20. The index file is of a valid format, and all data referred to by it is valid (see below).
 
 
-=== Overview ===
+Overview
+--------
 
-Because JPEG does not allow for large files, multiple JPEG files are needed to encode large images.
+Because JPEG does not allow for large files, multiple JPEG files are
+needed to encode large images.
 
-Unfortunately, (unlike TIFF) JPEG provides very poor support for random-access decoding of parts of a file. To avoid having many individual files, MIRAX packs JPEG files into a small number of data files. The index file provides offsets into the data files for each required piece of data.
+Unfortunately, (unlike TIFF) JPEG provides very poor support for
+random-access decoding of parts of a file. To avoid having many
+individual files, MIRAX packs JPEG files into a small number of data
+files. The index file provides offsets into the data files for each
+required piece of data.
 
-=== Index File ===
+
+Index File
+----------
 
 The index file is a crazy beast.
 
-It starts with ASCII strings matching the `SLIDE_VERSION` and `SLIDE_ID` values from the slidedat file. Then, all hell breaks loose. The rest of the file consists of 32-bit little-endian integers (unaligned) with seemingly no structure.
+It starts with ASCII strings matching the `SLIDE_VERSION` and
+`SLIDE_ID` values from the slidedat file. Then, all hell breaks
+loose. The rest of the file consists of 32-bit little-endian integers
+(unaligned) with seemingly no structure.
 
-More info coming, for now see [http://openslide.cs.cmu.edu/cgi-bin/gitweb.cgi?p=openslide.git;a=blob;f=misc/print-mirax.py;hb=HEAD misc/print-mirax.py].
+More info coming, for now see [misc/print-mirax.py][1].
 
-=== Data Files ===
+[1]: http://github.com/openslide/openslide/blob/master/misc/print-mirax.py
 
-=== Slide Position File ===
+Data Files
+----------
 
-=== Associated Images ===
+Slide Position File
+-------------------
 
-=== Known Properties ===
+Associated Images
+-----------------
 
-=== Test Data ===
-[http://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/]
+Known Properties
+----------------
+
+Test Data
+---------
+<http://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>
