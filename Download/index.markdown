@@ -2,7 +2,7 @@
 layout: default
 title: Downloading OpenSlide
 
-latest-version: 3.2.3
+latest-version: 3.2.4
 latest-version-java: 0.9.2
 ---
 
