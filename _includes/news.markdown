@@ -1,3 +1,8 @@
+OpenSlide version 3.2.4, 2011-03-07
+===================================
+Version 3.2.4 has been released, supporting MIRAX files without non-hierarchical sections,
+working around some GKeyFile bugs, and fixing compilation errors on Windows.
+
 OpenSlide version 3.2.3, 2010-09-09
 ===================================
 Version 3.2.3 has been released, supporting more MIRAX files, adding a background color
