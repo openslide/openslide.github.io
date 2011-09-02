@@ -58,6 +58,6 @@ Version Control
  * `git clone git://github.com/openslide/openslide.git` ([github][9])
  * `git clone git://github.com/openslide/openslide-java.git` ([github][10])
 
-[8]: http://git.or.cz/
+[8]: http://git-scm.com/
 [9]: http://github.com/openslide/openslide
 [10]: http://github.com/openslide/openslide-java
