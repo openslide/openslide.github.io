@@ -1,3 +1,9 @@
+OpenSlide Python version 0.2.0, 2011-09-02
+==========================================
+The first release of the Python bindings includes complete access to the
+OpenSlide API, functionality for producing Deep Zoom images, and a simple
+web application for displaying whole-slide images in a browser.
+
 OpenSlide version 3.2.4, 2011-03-07
 ===================================
 Version 3.2.4 has been released, supporting MIRAX files without non-hierarchical sections,
