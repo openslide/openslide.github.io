@@ -96,8 +96,9 @@ def tile_image(pool, slidepath, associated, dz, out_base):
     iterator = enumerate_tiles(slidepath, associated, dz, out_base)
 
     def progress():
-        print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
-                    associated or 'slide', count, total),
+        print >> sys.stderr, "Tiling %s %s: wrote %d/%d tiles\r" % (
+                    os.path.basename(slidepath), associated or 'slide',
+                    count, total),
 
     # Write tiles
     progress()
