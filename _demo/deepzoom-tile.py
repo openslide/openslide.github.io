@@ -20,7 +20,6 @@
 
 """An example program to generate a Deep Zoom directory tree from a slide."""
 
-import json
 from multiprocessing import Process, JoinableQueue
 from openslide import open_slide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
@@ -111,10 +110,7 @@ class DeepZoomImageTiler(object):
 
     def _write_dzi(self):
         with open('%s.dzi' % self._basename, 'w') as fh:
-            fh.write(self.get_dzi())
-
-    def get_dzi(self):
-        return self._dz.get_dzi(self._format)
+            fh.write(self._dz.get_dzi(self._format))
 
 
 class DeepZoomStaticTiler(object):
@@ -133,7 +129,6 @@ class DeepZoomStaticTiler(object):
         self._queue = JoinableQueue(2 * workers)
         self._workers = workers
         self._with_viewer = with_viewer
-        self._dzi_data = {}
         for _i in range(workers):
             TileWorker(self._queue, slidepath, tile_size, overlap).start()
 
@@ -158,10 +153,8 @@ class DeepZoomStaticTiler(object):
             image = ImageSlide(self._slide.associated_images[associated])
             basename = os.path.join(self._basename, self._slugify(associated))
         dz = DeepZoomGenerator(image, self._tile_size, self._overlap)
-        tiler = DeepZoomImageTiler(dz, basename, self._format, associated,
-                    self._queue)
-        tiler.run()
-        self._dzi_data[self._url_for(associated)] = tiler.get_dzi()
+        DeepZoomImageTiler(dz, basename, self._format, associated,
+                    self._queue).run()
 
     def _url_for(self, associated):
         if associated is None:
@@ -177,13 +170,9 @@ class DeepZoomStaticTiler(object):
         template = env.get_template('index.html')
         associated_urls = dict((n, self._url_for(n))
                     for n in self._slide.associated_images)
-        # Embed the dzi metadata in the HTML to work around Chrome's
-        # refusal to allow XmlHttpRequest from file:///, even when
-        # the originating page is also a file:///
         data = template.render(slide_url=self._url_for(None),
                     associated=associated_urls,
-                    properties=self._slide.properties,
-                    dzi_data=json.dumps(self._dzi_data))
+                    properties=self._slide.properties)
         with open(os.path.join(self._basename, 'index.html'), 'w') as fh:
             fh.write(data)
 
