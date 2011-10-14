@@ -22,7 +22,7 @@
 
 import jinja2
 from multiprocessing import Process, JoinableQueue
-from openslide import open_slide, ImageSlide
+from openslide import OpenSlide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
@@ -49,7 +49,7 @@ class TileWorker(Process):
         self._slide = None
 
     def run(self):
-        self._slide = open_slide(self._slidepath)
+        self._slide = OpenSlide(self._slidepath)
         last_associated = None
         dz = self._get_dz()
         while True:
@@ -126,7 +126,7 @@ class DeepZoomStaticTiler(object):
     """Handles generation of tiles and metadata for all images in a slide."""
 
     def __init__(self, slidepath, basename, workers):
-        self._slide = open_slide(slidepath)
+        self._slide = OpenSlide(slidepath)
         self._basename = basename
         self._queue = JoinableQueue(2 * workers)
         self._workers = workers
