@@ -123,14 +123,14 @@ class DeepZoomImageTiler(object):
             fh.write(doc.toxml('UTF-8'))
 
 
-class DeepZoomStaticTiler(object):
+class DeepZoomSlideTiler(object):
     """Handles generation of tiles and metadata for all images in a slide."""
 
-    def __init__(self, slidepath, basename, workers):
+    def __init__(self, pool, slidepath, basename):
+        self._pool = pool
         self._path = slidepath
         self._slide = OpenSlide(slidepath)
         self._basename = basename
-        self._pool = Pool(workers, pool_init)
 
     def run(self):
         self._run_image()
@@ -138,7 +138,6 @@ class DeepZoomStaticTiler(object):
             self._run_image(name)
         self._write_html()
         self._write_static()
-        self._shutdown()
 
     def _run_image(self, associated=None):
         """Run a single image from self._slide."""
@@ -199,9 +198,28 @@ class DeepZoomStaticTiler(object):
                 result.append(word)
         return unicode(u'_'.join(result))
 
-    def _shutdown(self):
+
+class DeepZoomStaticTiler(object):
+    """Generates tiles and metadata for all slides in a directory tree."""
+
+    def __init__(self, path, basename, workers):
+        self._path = slidepath
+        self._basename = basename
+        self._pool = Pool(workers, pool_init)
+
+    def run(self):
+        self._walk_dir(self._path, self._basename)
         self._pool.close()
         self._pool.join()
+
+    def _walk_dir(self, in_base, out_base):
+        for in_name in os.listdir(in_base):
+            in_path = os.path.join(in_base, in_name)
+            out_path = os.path.join(out_base, in_name.lower())
+            if os.path.isdir(in_path):
+                self._walk_dir(in_path, out_path)
+            elif OpenSlide.can_open(in_path):
+                DeepZoomSlideTiler(self._pool, in_path, out_path).run()
 
 
 if __name__ == '__main__':
