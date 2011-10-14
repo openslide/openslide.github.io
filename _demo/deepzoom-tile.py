@@ -30,6 +30,7 @@ import re
 import shutil
 import sys
 from unicodedata import normalize
+import xml.dom.minidom as minidom
 
 VIEWER_SLIDE_NAME = 'slide'
 FORMAT = 'jpeg'
@@ -112,7 +113,13 @@ class DeepZoomImageTiler(object):
 
     def _write_dzi(self):
         with open('%s.dzi' % self._basename, 'w') as fh:
-            fh.write(self._dz.get_dzi(FORMAT))
+            dzi = self._dz.get_dzi(FORMAT)
+            # Hack: add MinTileLevel attribute to Image tag, in violation of
+            # the XML schema, to prevent OpenSeadragon from loading the
+            # lowest-level tiles
+            doc = minidom.parseString(dzi)
+            doc.documentElement.setAttribute('MinTileLevel', '8')
+            fh.write(doc.toxml('UTF-8'))
 
 
 class DeepZoomStaticTiler(object):
