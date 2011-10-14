@@ -20,6 +20,7 @@
 
 """An example program to generate a Deep Zoom directory tree from a slide."""
 
+import jinja2
 from multiprocessing import Process, JoinableQueue
 from openslide import open_slide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
@@ -117,10 +118,7 @@ class DeepZoomStaticTiler(object):
     """Handles generation of tiles and metadata for all images in a slide."""
 
     def __init__(self, slidepath, basename, format, tile_size, overlap,
-                workers, with_viewer):
-        if with_viewer:
-            # Check extra dependency before doing a bunch of work
-            import jinja2
+                workers):
         self._slide = open_slide(slidepath)
         self._basename = basename
         self._format = format
@@ -128,27 +126,22 @@ class DeepZoomStaticTiler(object):
         self._overlap = overlap
         self._queue = JoinableQueue(2 * workers)
         self._workers = workers
-        self._with_viewer = with_viewer
         for _i in range(workers):
             TileWorker(self._queue, slidepath, tile_size, overlap).start()
 
     def run(self):
         self._run_image()
-        if self._with_viewer:
-            for name in self._slide.associated_images:
-                self._run_image(name)
-            self._write_html()
-            self._write_static()
+        for name in self._slide.associated_images:
+            self._run_image(name)
+        self._write_html()
+        self._write_static()
         self._shutdown()
 
     def _run_image(self, associated=None):
         """Run a single image from self._slide."""
         if associated is None:
             image = self._slide
-            if self._with_viewer:
-                basename = os.path.join(self._basename, VIEWER_SLIDE_NAME)
-            else:
-                basename = self._basename
+            basename = os.path.join(self._basename, VIEWER_SLIDE_NAME)
         else:
             image = ImageSlide(self._slide.associated_images[associated])
             basename = os.path.join(self._basename, self._slugify(associated))
@@ -164,7 +157,6 @@ class DeepZoomStaticTiler(object):
         return '%s.dzi' % base
 
     def _write_html(self):
-        import jinja2
         env = jinja2.Environment(loader=jinja2.PackageLoader(__name__),
                     autoescape=True)
         template = env.get_template('index.html')
@@ -223,9 +215,6 @@ if __name__ == '__main__':
                 help='number of worker processes to start [4]')
     parser.add_option('-o', '--output', metavar='NAME', dest='basename',
                 help='base name of output file')
-    parser.add_option('-r', '--viewer', dest='with_viewer',
-                action='store_true',
-                help='generate directory tree with HTML viewer')
     parser.add_option('-s', '--size', metavar='PIXELS', dest='tile_size',
                 type='int', default=256,
                 help='tile size [256]')
@@ -239,5 +228,4 @@ if __name__ == '__main__':
         opts.basename = os.path.splitext(os.path.basename(slidepath))[0]
 
     DeepZoomStaticTiler(slidepath, opts.basename, opts.format,
-                opts.tile_size, opts.overlap, opts.workers,
-                opts.with_viewer).run()
+                opts.tile_size, opts.overlap, opts.workers).run()
