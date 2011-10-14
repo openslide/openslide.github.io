@@ -21,7 +21,7 @@
 """An example program to generate a Deep Zoom directory tree from a slide."""
 
 import jinja2
-from multiprocessing import Process, JoinableQueue
+from multiprocessing import Pool
 from openslide import OpenSlide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
@@ -38,56 +38,68 @@ QUALITY = 75
 TILE_SIZE = 512
 OVERLAP = 1
 
-class TileWorker(Process):
-    """A child process that generates and writes tiles."""
+class GeneratorCache(object):
+    def __init__(self):
+        self._path = ''
+        self._generators = {}
 
-    def __init__(self, queue, slidepath):
-        Process.__init__(self, name='TileWorker')
-        self.daemon = True
-        self._queue = queue
-        self._slidepath = slidepath
-        self._slide = None
+    def get_dz(self, path, associated=None):
+        if path != self._path:
+            generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
+                        OVERLAP)
+            slide = OpenSlide(path)
+            self._path = path
+            self._generators = {
+                None: generator(slide)
+            }
+            for name, image in slide.associated_images.iteritems():
+                self._generators[name] = generator(ImageSlide(image))
+        return self._generators[associated]
 
-    def run(self):
-        self._slide = OpenSlide(self._slidepath)
-        last_associated = None
-        dz = self._get_dz()
-        while True:
-            data = self._queue.get()
-            if data is None:
-                self._queue.task_done()
-                break
-            associated, level, address, outfile = data
-            if last_associated != associated:
-                dz = self._get_dz(associated)
-                last_associated = associated
+
+def pool_init():
+    global generator_cache
+    generator_cache = GeneratorCache()
+
+
+def process_tile(args):
+    try:
+        path, associated, level, address, outfile = args
+        if not os.path.exists(outfile):
+            dz = generator_cache.get_dz(path, associated)
             tile = dz.get_tile(level, address)
             tile.save(outfile, quality=QUALITY)
-            self._queue.task_done()
-
-    def _get_dz(self, associated=None):
-        if associated is not None:
-            image = ImageSlide(self._slide.associated_images[associated])
-        else:
-            image = self._slide
-        return DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
+    except KeyboardInterrupt:
+        return KeyboardInterrupt
 
 
 class DeepZoomImageTiler(object):
     """Handles generation of tiles and metadata for a single image."""
 
-    def __init__(self, dz, basename, associated, queue):
+    def __init__(self, pool, path, associated, dz, basename):
+        self._pool = pool
+        self._path = path
+        self._associated = associated
         self._dz = dz
         self._basename = basename
-        self._associated = associated
-        self._queue = queue
-        self._processed = 0
 
     def run(self):
-        self._write_tiles()
+        count = 0
+        total = self._dz.tile_count
+        def progress():
+            print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
+                        self._associated or 'slide', count, total),
+        progress()
+        for ret in self._pool.imap_unordered(process_tile,
+                    self._enumerate_tiles(), 32):
+            count += 1
+            if count % 100 == 0:
+                progress()
+        progress()
+        print
         self._write_dzi()
 
-    def _write_tiles(self):
+    def _enumerate_tiles(self):
         for level in xrange(self._dz.level_count):
             tiledir = os.path.join("%s_files" % self._basename, str(level))
             if not os.path.exists(tiledir):
@@ -97,19 +109,8 @@ class DeepZoomImageTiler(object):
                 for col in xrange(cols):
                     tilename = os.path.join(tiledir, '%d_%d.%s' % (
                                     col, row, FORMAT))
-                    if not os.path.exists(tilename):
-                        self._queue.put((self._associated, level, (col, row),
-                                    tilename))
-                    self._tile_done()
-
-    def _tile_done(self):
-        self._processed += 1
-        count, total = self._processed, self._dz.tile_count
-        if count % 100 == 0 or count == total:
-            print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
-                        self._associated or 'slide', count, total),
-            if count == total:
-                print
+                    yield (self._path, self._associated, level, (col, row),
+                                    tilename)
 
     def _write_dzi(self):
         with open('%s.dzi' % self._basename, 'w') as fh:
@@ -126,12 +127,10 @@ class DeepZoomStaticTiler(object):
     """Handles generation of tiles and metadata for all images in a slide."""
 
     def __init__(self, slidepath, basename, workers):
+        self._path = slidepath
         self._slide = OpenSlide(slidepath)
         self._basename = basename
-        self._queue = JoinableQueue(2 * workers)
-        self._workers = workers
-        for _i in range(workers):
-            TileWorker(self._queue, slidepath).start()
+        self._pool = Pool(workers, pool_init)
 
     def run(self):
         self._run_image()
@@ -150,7 +149,8 @@ class DeepZoomStaticTiler(object):
             image = ImageSlide(self._slide.associated_images[associated])
             basename = os.path.join(self._basename, self._slugify(associated))
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        DeepZoomImageTiler(dz, basename, associated, self._queue).run()
+        DeepZoomImageTiler(self._pool, self._path, associated, dz,
+                    basename).run()
 
     def _url_for(self, associated):
         if associated is None:
@@ -200,9 +200,8 @@ class DeepZoomStaticTiler(object):
         return unicode(u'_'.join(result))
 
     def _shutdown(self):
-        for _i in range(self._workers):
-            self._queue.put(None)
-        self._queue.join()
+        self._pool.close()
+        self._pool.join()
 
 
 if __name__ == '__main__':
