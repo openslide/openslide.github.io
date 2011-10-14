@@ -40,15 +40,15 @@ OVERLAP = 1
 
 class GeneratorCache(object):
     def __init__(self):
-        self._path = ''
+        self._slidepath = ''
         self._generators = {}
 
-    def get_dz(self, path, associated=None):
-        if path != self._path:
+    def get_dz(self, slidepath, associated=None):
+        if slidepath != self._slidepath:
             generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
                         OVERLAP)
-            slide = OpenSlide(path)
-            self._path = path
+            slide = OpenSlide(slidepath)
+            self._slidepath = slidepath
             self._generators = {
                 None: generator(slide)
             }
@@ -65,19 +65,19 @@ def pool_init():
 def process_tile(args):
     """Generate and save a tile."""
     try:
-        path, associated, level, address, outfile = args
+        slidepath, associated, level, address, outfile = args
         if not os.path.exists(outfile):
-            dz = generator_cache.get_dz(path, associated)
+            dz = generator_cache.get_dz(slidepath, associated)
             tile = dz.get_tile(level, address)
             tile.save(outfile, quality=QUALITY)
     except KeyboardInterrupt:
         return KeyboardInterrupt
 
 
-def enumerate_tiles(path, associated, dz, basename):
+def enumerate_tiles(slidepath, associated, dz, out_base):
     """Enumerate tiles in a single image."""
     for level in xrange(dz.level_count):
-        tiledir = os.path.join("%s_files" % basename, str(level))
+        tiledir = os.path.join("%s_files" % out_base, str(level))
         if not os.path.exists(tiledir):
             os.makedirs(tiledir)
         cols, rows = dz.level_tiles[level]
@@ -85,15 +85,15 @@ def enumerate_tiles(path, associated, dz, basename):
             for col in xrange(cols):
                 tilename = os.path.join(tiledir, '%d_%d.%s' % (
                                 col, row, FORMAT))
-                yield (path, associated, level, (col, row), tilename)
+                yield (slidepath, associated, level, (col, row), tilename)
 
 
-def tile_image(pool, path, associated, dz, basename):
+def tile_image(pool, slidepath, associated, dz, out_base):
     """Generate tiles and metadata for a single image."""
 
     count = 0
     total = dz.tile_count
-    iterator = enumerate_tiles(path, associated, dz, basename)
+    iterator = enumerate_tiles(slidepath, associated, dz, out_base)
 
     def progress():
         print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
@@ -109,7 +109,7 @@ def tile_image(pool, path, associated, dz, basename):
     print
 
     # Write DZI
-    with open('%s.dzi' % basename, 'w') as fh:
+    with open('%s.dzi' % out_base, 'w') as fh:
         dzi = dz.get_dzi(FORMAT)
         # Hack: add MinTileLevel attribute to Image tag, in violation of
         # the XML schema, to prevent OpenSeadragon from loading the
@@ -150,18 +150,18 @@ def copydir(src, dest):
             shutil.copy(srcpath, os.path.join(dest, name))
 
 
-def tile_slide(pool, path, basename):
+def tile_slide(pool, slidepath, out_base):
     """Generate tiles and metadata for all images in a slide."""
 
-    slide = OpenSlide(path)
+    slide = OpenSlide(slidepath)
 
     # Process images
-    def do_tile(associated, image, basename):
+    def do_tile(associated, image, out_base):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        tile_image(pool, path, associated, dz, basename)
-    do_tile(None, slide, os.path.join(basename, VIEWER_SLIDE_NAME))
+        tile_image(pool, slidepath, associated, dz, out_base)
+    do_tile(None, slide, os.path.join(out_base, VIEWER_SLIDE_NAME))
     for associated, image in slide.associated_images.iteritems():
-        do_tile(associated, ImageSlide(image), os.path.join(basename,
+        do_tile(associated, ImageSlide(image), os.path.join(out_base,
                     slugify(associated)))
 
     # Write HTML
@@ -172,13 +172,13 @@ def tile_slide(pool, path, basename):
     data = template.render(slide_url=dzi_for(None),
                 associated=associated_urls,
                 properties=slide.properties)
-    with open(os.path.join(basename, 'index.html'), 'w') as fh:
+    with open(os.path.join(out_base, 'index.html'), 'w') as fh:
         fh.write(data)
 
     # Copy static data
     basesrc = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                 'static')
-    basedst = os.path.join(basename, 'static')
+    basedst = os.path.join(out_base, 'static')
     copydir(basesrc, basedst)
     copydir(os.path.join(basesrc, 'images'), os.path.join(basedst, 'images'))
 
@@ -194,10 +194,10 @@ def walk_dir(pool, in_base, out_base):
             tile_slide(pool, in_path, out_path)
 
 
-def tile_tree(path, basename, workers):
+def tile_tree(in_base, out_base, workers):
     """Generate tiles and metadata for all slides in a directory tree."""
     pool = Pool(workers, pool_init)
-    walk_dir(pool, path, basename)
+    walk_dir(pool, in_base, out_base)
     pool.close()
     pool.join()
 
