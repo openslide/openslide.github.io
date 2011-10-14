@@ -203,19 +203,15 @@ def tile_tree(path, basename, workers):
 
 
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options] <slide>')
+    parser = OptionParser(usage='Usage: %prog [options] <in_dir> <out_dir>')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
-    parser.add_option('-o', '--output', metavar='NAME', dest='basename',
-                help='base name of output file')
 
     (opts, args) = parser.parse_args()
     try:
-        slidepath = args[0]
+        in_base, out_base = args[0:2]
     except IndexError:
-        parser.error('Missing slide argument')
-    if opts.basename is None:
-        opts.basename = os.path.splitext(os.path.basename(slidepath))[0]
+        parser.error('Missing argument')
 
-    tile_tree(slidepath, opts.basename, opts.workers)
+    tile_tree(in_base, out_base, opts.workers)
