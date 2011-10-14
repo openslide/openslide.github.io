@@ -32,17 +32,19 @@ import sys
 from unicodedata import normalize
 
 VIEWER_SLIDE_NAME = 'slide'
+FORMAT = 'jpeg'
+QUALITY = 75
+TILE_SIZE = 512
+OVERLAP = 1
 
 class TileWorker(Process):
     """A child process that generates and writes tiles."""
 
-    def __init__(self, queue, slidepath, tile_size, overlap):
+    def __init__(self, queue, slidepath):
         Process.__init__(self, name='TileWorker')
         self.daemon = True
         self._queue = queue
         self._slidepath = slidepath
-        self._tile_size = tile_size
-        self._overlap = overlap
         self._slide = None
 
     def run(self):
@@ -59,7 +61,7 @@ class TileWorker(Process):
                 dz = self._get_dz(associated)
                 last_associated = associated
             tile = dz.get_tile(level, address)
-            tile.save(outfile, quality=90)
+            tile.save(outfile, quality=QUALITY)
             self._queue.task_done()
 
     def _get_dz(self, associated=None):
@@ -67,16 +69,15 @@ class TileWorker(Process):
             image = ImageSlide(self._slide.associated_images[associated])
         else:
             image = self._slide
-        return DeepZoomGenerator(image, self._tile_size, self._overlap)
+        return DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
 
 
 class DeepZoomImageTiler(object):
     """Handles generation of tiles and metadata for a single image."""
 
-    def __init__(self, dz, basename, format, associated, queue):
+    def __init__(self, dz, basename, associated, queue):
         self._dz = dz
         self._basename = basename
-        self._format = format
         self._associated = associated
         self._queue = queue
         self._processed = 0
@@ -94,7 +95,7 @@ class DeepZoomImageTiler(object):
             for row in xrange(rows):
                 for col in xrange(cols):
                     tilename = os.path.join(tiledir, '%d_%d.%s' % (
-                                    col, row, self._format))
+                                    col, row, FORMAT))
                     if not os.path.exists(tilename):
                         self._queue.put((self._associated, level, (col, row),
                                     tilename))
@@ -111,23 +112,19 @@ class DeepZoomImageTiler(object):
 
     def _write_dzi(self):
         with open('%s.dzi' % self._basename, 'w') as fh:
-            fh.write(self._dz.get_dzi(self._format))
+            fh.write(self._dz.get_dzi(FORMAT))
 
 
 class DeepZoomStaticTiler(object):
     """Handles generation of tiles and metadata for all images in a slide."""
 
-    def __init__(self, slidepath, basename, format, tile_size, overlap,
-                workers):
+    def __init__(self, slidepath, basename, workers):
         self._slide = open_slide(slidepath)
         self._basename = basename
-        self._format = format
-        self._tile_size = tile_size
-        self._overlap = overlap
         self._queue = JoinableQueue(2 * workers)
         self._workers = workers
         for _i in range(workers):
-            TileWorker(self._queue, slidepath, tile_size, overlap).start()
+            TileWorker(self._queue, slidepath).start()
 
     def run(self):
         self._run_image()
@@ -145,9 +142,8 @@ class DeepZoomStaticTiler(object):
         else:
             image = ImageSlide(self._slide.associated_images[associated])
             basename = os.path.join(self._basename, self._slugify(associated))
-        dz = DeepZoomGenerator(image, self._tile_size, self._overlap)
-        DeepZoomImageTiler(dz, basename, self._format, associated,
-                    self._queue).run()
+        dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
+        DeepZoomImageTiler(dz, basename, associated, self._queue).run()
 
     def _url_for(self, associated):
         if associated is None:
@@ -204,20 +200,11 @@ class DeepZoomStaticTiler(object):
 
 if __name__ == '__main__':
     parser = OptionParser(usage='Usage: %prog [options] <slide>')
-    parser.add_option('-e', '--overlap', metavar='PIXELS', dest='overlap',
-                type='int', default=1,
-                help='overlap of adjacent tiles [1]')
-    parser.add_option('-f', '--format', metavar='{jpeg|png}', dest='format',
-                default='jpeg',
-                help='image format for tiles [jpeg]')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
     parser.add_option('-o', '--output', metavar='NAME', dest='basename',
                 help='base name of output file')
-    parser.add_option('-s', '--size', metavar='PIXELS', dest='tile_size',
-                type='int', default=256,
-                help='tile size [256]')
 
     (opts, args) = parser.parse_args()
     try:
@@ -227,5 +214,4 @@ if __name__ == '__main__':
     if opts.basename is None:
         opts.basename = os.path.splitext(os.path.basename(slidepath))[0]
 
-    DeepZoomStaticTiler(slidepath, opts.basename, opts.format,
-                opts.tile_size, opts.overlap, opts.workers).run()
+    DeepZoomStaticTiler(slidepath, opts.basename, opts.workers).run()
