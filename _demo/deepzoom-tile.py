@@ -63,6 +63,7 @@ def pool_init():
 
 
 def process_tile(args):
+    """Generate and save a tile."""
     try:
         path, associated, level, address, outfile = args
         if not os.path.exists(outfile):
@@ -73,153 +74,132 @@ def process_tile(args):
         return KeyboardInterrupt
 
 
-class DeepZoomImageTiler(object):
-    """Handles generation of tiles and metadata for a single image."""
-
-    def __init__(self, pool, path, associated, dz, basename):
-        self._pool = pool
-        self._path = path
-        self._associated = associated
-        self._dz = dz
-        self._basename = basename
-
-    def run(self):
-        count = 0
-        total = self._dz.tile_count
-        def progress():
-            print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
-                        self._associated or 'slide', count, total),
-        progress()
-        for ret in self._pool.imap_unordered(process_tile,
-                    self._enumerate_tiles(), 32):
-            count += 1
-            if count % 100 == 0:
-                progress()
-        progress()
-        print
-        self._write_dzi()
-
-    def _enumerate_tiles(self):
-        for level in xrange(self._dz.level_count):
-            tiledir = os.path.join("%s_files" % self._basename, str(level))
-            if not os.path.exists(tiledir):
-                os.makedirs(tiledir)
-            cols, rows = self._dz.level_tiles[level]
-            for row in xrange(rows):
-                for col in xrange(cols):
-                    tilename = os.path.join(tiledir, '%d_%d.%s' % (
-                                    col, row, FORMAT))
-                    yield (self._path, self._associated, level, (col, row),
-                                    tilename)
-
-    def _write_dzi(self):
-        with open('%s.dzi' % self._basename, 'w') as fh:
-            dzi = self._dz.get_dzi(FORMAT)
-            # Hack: add MinTileLevel attribute to Image tag, in violation of
-            # the XML schema, to prevent OpenSeadragon from loading the
-            # lowest-level tiles
-            doc = minidom.parseString(dzi)
-            doc.documentElement.setAttribute('MinTileLevel', '8')
-            fh.write(doc.toxml('UTF-8'))
+def enumerate_tiles(path, associated, dz, basename):
+    """Enumerate tiles in a single image."""
+    for level in xrange(dz.level_count):
+        tiledir = os.path.join("%s_files" % basename, str(level))
+        if not os.path.exists(tiledir):
+            os.makedirs(tiledir)
+        cols, rows = dz.level_tiles[level]
+        for row in xrange(rows):
+            for col in xrange(cols):
+                tilename = os.path.join(tiledir, '%d_%d.%s' % (
+                                col, row, FORMAT))
+                yield (path, associated, level, (col, row), tilename)
 
 
-class DeepZoomSlideTiler(object):
-    """Handles generation of tiles and metadata for all images in a slide."""
+def tile_image(pool, path, associated, dz, basename):
+    """Generate tiles and metadata for a single image."""
 
-    def __init__(self, pool, slidepath, basename):
-        self._pool = pool
-        self._path = slidepath
-        self._slide = OpenSlide(slidepath)
-        self._basename = basename
+    count = 0
+    total = dz.tile_count
+    iterator = enumerate_tiles(path, associated, dz, basename)
 
-    def run(self):
-        self._run_image()
-        for name in self._slide.associated_images:
-            self._run_image(name)
-        self._write_html()
-        self._write_static()
+    def progress():
+        print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
+                    associated or 'slide', count, total),
 
-    def _run_image(self, associated=None):
-        """Run a single image from self._slide."""
-        if associated is None:
-            image = self._slide
-            basename = os.path.join(self._basename, VIEWER_SLIDE_NAME)
-        else:
-            image = ImageSlide(self._slide.associated_images[associated])
-            basename = os.path.join(self._basename, self._slugify(associated))
+    # Write tiles
+    progress()
+    for ret in pool.imap_unordered(process_tile, iterator, 32):
+        count += 1
+        if count % 100 == 0:
+            progress()
+    progress()
+    print
+
+    # Write DZI
+    with open('%s.dzi' % basename, 'w') as fh:
+        dzi = dz.get_dzi(FORMAT)
+        # Hack: add MinTileLevel attribute to Image tag, in violation of
+        # the XML schema, to prevent OpenSeadragon from loading the
+        # lowest-level tiles
+        doc = minidom.parseString(dzi)
+        doc.documentElement.setAttribute('MinTileLevel', '8')
+        fh.write(doc.toxml('UTF-8'))
+
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+def slugify(text):
+    """Generate an ASCII-only slug."""
+    # Based on Flask snippet 5
+    result = []
+    for word in _punct_re.split(unicode(text, 'UTF-8').lower()):
+        word = normalize('NFKD', word).encode('ascii', 'ignore')
+        if word:
+            result.append(word)
+    return unicode(u'_'.join(result))
+
+
+def dzi_for(associated=None):
+    """Return the name of the DZI file for an image."""
+    if associated is None:
+        base = VIEWER_SLIDE_NAME
+    else:
+        base = slugify(associated)
+    return '%s.dzi' % base
+
+
+def copydir(src, dest):
+    """Copy the src directory to dest, excluding subdirectories."""
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+    for name in os.listdir(src):
+        srcpath = os.path.join(src, name)
+        if os.path.isfile(srcpath):
+            shutil.copy(srcpath, os.path.join(dest, name))
+
+
+def tile_slide(pool, path, basename):
+    """Generate tiles and metadata for all images in a slide."""
+
+    slide = OpenSlide(path)
+
+    # Process images
+    def do_tile(associated, image, basename):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        DeepZoomImageTiler(self._pool, self._path, associated, dz,
-                    basename).run()
+        tile_image(pool, path, associated, dz, basename)
+    do_tile(None, slide, os.path.join(basename, VIEWER_SLIDE_NAME))
+    for associated, image in slide.associated_images.iteritems():
+        do_tile(associated, ImageSlide(image), os.path.join(basename,
+                    slugify(associated)))
 
-    def _url_for(self, associated):
-        if associated is None:
-            base = VIEWER_SLIDE_NAME
-        else:
-            base = self._slugify(associated)
-        return '%s.dzi' % base
+    # Write HTML
+    env = jinja2.Environment(loader=jinja2.PackageLoader(__name__),
+                autoescape=True)
+    template = env.get_template('index.html')
+    associated_urls = dict((n, dzi_for(n)) for n in slide.associated_images)
+    data = template.render(slide_url=dzi_for(None),
+                associated=associated_urls,
+                properties=slide.properties)
+    with open(os.path.join(basename, 'index.html'), 'w') as fh:
+        fh.write(data)
 
-    def _write_html(self):
-        env = jinja2.Environment(loader=jinja2.PackageLoader(__name__),
-                    autoescape=True)
-        template = env.get_template('index.html')
-        associated_urls = dict((n, self._url_for(n))
-                    for n in self._slide.associated_images)
-        data = template.render(slide_url=self._url_for(None),
-                    associated=associated_urls,
-                    properties=self._slide.properties)
-        with open(os.path.join(self._basename, 'index.html'), 'w') as fh:
-            fh.write(data)
-
-    def _write_static(self):
-        basesrc = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    'static')
-        basedst = os.path.join(self._basename, 'static')
-        self._copydir(basesrc, basedst)
-        self._copydir(os.path.join(basesrc, 'images'),
-                    os.path.join(basedst, 'images'))
-
-    def _copydir(self, src, dest):
-        if not os.path.exists(dest):
-            os.makedirs(dest)
-        for name in os.listdir(src):
-            srcpath = os.path.join(src, name)
-            if os.path.isfile(srcpath):
-                shutil.copy(srcpath, os.path.join(dest, name))
-
-    _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
-    @classmethod
-    def _slugify(cls, text):
-        """Generates an ASCII-only slug."""
-        # Based on Flask snippet 5
-        result = []
-        for word in cls._punct_re.split(unicode(text, 'UTF-8').lower()):
-            word = normalize('NFKD', word).encode('ascii', 'ignore')
-            if word:
-                result.append(word)
-        return unicode(u'_'.join(result))
+    # Copy static data
+    basesrc = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                'static')
+    basedst = os.path.join(basename, 'static')
+    copydir(basesrc, basedst)
+    copydir(os.path.join(basesrc, 'images'), os.path.join(basedst, 'images'))
 
 
-class DeepZoomStaticTiler(object):
-    """Generates tiles and metadata for all slides in a directory tree."""
+def walk_dir(pool, in_base, out_base):
+    """Build a directory tree of tiled images from a tree of slides."""
+    for in_name in os.listdir(in_base):
+        in_path = os.path.join(in_base, in_name)
+        out_path = os.path.join(out_base, in_name.lower())
+        if os.path.isdir(in_path):
+            walk_dir(pool, in_path, out_path)
+        elif OpenSlide.can_open(in_path):
+            tile_slide(pool, in_path, out_path)
 
-    def __init__(self, path, basename, workers):
-        self._path = slidepath
-        self._basename = basename
-        self._pool = Pool(workers, pool_init)
 
-    def run(self):
-        self._walk_dir(self._path, self._basename)
-        self._pool.close()
-        self._pool.join()
-
-    def _walk_dir(self, in_base, out_base):
-        for in_name in os.listdir(in_base):
-            in_path = os.path.join(in_base, in_name)
-            out_path = os.path.join(out_base, in_name.lower())
-            if os.path.isdir(in_path):
-                self._walk_dir(in_path, out_path)
-            elif OpenSlide.can_open(in_path):
-                DeepZoomSlideTiler(self._pool, in_path, out_path).run()
+def tile_tree(path, basename, workers):
+    """Generate tiles and metadata for all slides in a directory tree."""
+    pool = Pool(workers, pool_init)
+    walk_dir(pool, path, basename)
+    pool.close()
+    pool.join()
 
 
 if __name__ == '__main__':
@@ -238,4 +218,4 @@ if __name__ == '__main__':
     if opts.basename is None:
         opts.basename = os.path.splitext(os.path.basename(slidepath))[0]
 
-    DeepZoomStaticTiler(slidepath, opts.basename, opts.workers).run()
+    tile_tree(slidepath, opts.basename, opts.workers)
