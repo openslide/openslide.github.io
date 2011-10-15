@@ -132,15 +132,6 @@ def slugify(text):
     return unicode(u'_'.join(result))
 
 
-def dzi_for(associated=None):
-    """Return the name of the DZI file for an image."""
-    if associated is None:
-        base = VIEWER_SLIDE_NAME
-    else:
-        base = slugify(associated)
-    return '%s.dzi' % base
-
-
 def tile_slide(pool, slidepath, out_root, out_base):
     """Generate tiles and metadata for all images in a slide."""
     slide = OpenSlide(slidepath)
