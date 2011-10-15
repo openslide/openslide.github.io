@@ -20,7 +20,6 @@
 
 """An example program to generate a Deep Zoom directory tree from a slide."""
 
-import jinja2
 from multiprocessing import Pool
 from openslide import OpenSlide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
@@ -153,17 +152,6 @@ def tile_slide(pool, slidepath, out_base):
     for associated, image in slide.associated_images.iteritems():
         do_tile(associated, ImageSlide(image), os.path.join(out_base,
                     slugify(associated)))
-
-    # Write HTML
-    env = jinja2.Environment(loader=jinja2.PackageLoader(__name__),
-                autoescape=True)
-    template = env.get_template('index.html')
-    associated_urls = dict((n, dzi_for(n)) for n in slide.associated_images)
-    data = template.render(slide_url=dzi_for(None),
-                associated=associated_urls,
-                properties=slide.properties)
-    with open(os.path.join(out_base, 'index.html'), 'w') as fh:
-        fh.write(data)
 
 
 def walk_dir(pool, in_base, out_base):
