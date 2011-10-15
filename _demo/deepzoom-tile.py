@@ -26,9 +26,12 @@ from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
 import re
+import shutil
 import sys
+from tempfile import mkdtemp
 from unicodedata import normalize
 import xml.dom.minidom as minidom
+import zipfile
 
 VIEWER_SLIDE_NAME = 'slide'
 FORMAT = 'jpeg'
@@ -163,6 +166,13 @@ def walk_dir(pool, in_base, out_base):
             walk_dir(pool, in_path, out_path)
         elif OpenSlide.can_open(in_path):
             tile_slide(pool, in_path, out_path)
+        elif os.path.splitext(in_path)[1] == '.zip':
+            temp_path = mkdtemp(prefix='slide-')
+            try:
+                zipfile.ZipFile(in_path).extractall(path=temp_path)
+                walk_dir(pool, temp_path, out_path)
+            finally:
+                shutil.rmtree(temp_path)
 
 
 def tile_tree(in_base, out_base, workers):
