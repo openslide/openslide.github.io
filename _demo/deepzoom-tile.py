@@ -75,10 +75,10 @@ def process_tile(args):
         return KeyboardInterrupt
 
 
-def enumerate_tiles(slidepath, associated, dz, out_base):
+def enumerate_tiles(slidepath, associated, dz, out_root, out_base):
     """Enumerate tiles in a single image."""
     for level in xrange(dz.level_count):
-        tiledir = os.path.join("%s_files" % out_base, str(level))
+        tiledir = os.path.join(out_root, "%s_files" % out_base, str(level))
         if not os.path.exists(tiledir):
             os.makedirs(tiledir)
         cols, rows = dz.level_tiles[level]
@@ -89,17 +89,16 @@ def enumerate_tiles(slidepath, associated, dz, out_base):
                 yield (slidepath, associated, level, (col, row), tilename)
 
 
-def tile_image(pool, slidepath, associated, dz, out_base):
+def tile_image(pool, slidepath, associated, dz, out_root, out_base):
     """Generate tiles and metadata for a single image."""
 
     count = 0
     total = dz.tile_count
-    iterator = enumerate_tiles(slidepath, associated, dz, out_base)
+    iterator = enumerate_tiles(slidepath, associated, dz, out_root, out_base)
 
     def progress():
-        print >> sys.stderr, "Tiling %s %s: wrote %d/%d tiles\r" % (
-                    os.path.basename(slidepath), associated or 'slide',
-                    count, total),
+        print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
+                    out_base, count, total),
 
     # Write tiles
     progress()
@@ -111,7 +110,7 @@ def tile_image(pool, slidepath, associated, dz, out_base):
     print
 
     # Write DZI
-    with open('%s.dzi' % out_base, 'w') as fh:
+    with open('%s/%s.dzi' % (out_root, out_base), 'w') as fh:
         dzi = dz.get_dzi(FORMAT)
         # Hack: add MinTileLevel attribute to Image tag, in violation of
         # the XML schema, to prevent OpenSeadragon from loading the
@@ -142,7 +141,7 @@ def dzi_for(associated=None):
     return '%s.dzi' % base
 
 
-def tile_slide(pool, slidepath, out_base):
+def tile_slide(pool, slidepath, out_root, out_base):
     """Generate tiles and metadata for all images in a slide."""
 
     slide = OpenSlide(slidepath)
@@ -150,14 +149,15 @@ def tile_slide(pool, slidepath, out_base):
     # Process images
     def do_tile(associated, image, out_base):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        tile_image(pool, slidepath, associated, dz, out_base)
+        tile_image(pool, slidepath, associated, dz, out_root, out_base)
     do_tile(None, slide, os.path.join(out_base, VIEWER_SLIDE_NAME))
     for associated, image in slide.associated_images.iteritems():
         do_tile(associated, ImageSlide(image), os.path.join(out_base,
                     slugify(associated)))
 
 
-def walk_dir(pool, tempdir, in_base, out_base, suppress_descent=False):
+def walk_dir(pool, tempdir, in_base, out_root, out_base='',
+            suppress_descent=False):
     """Build a directory tree of tiled images from a tree of slides.
 
     If suppress_descent is True, we will not do any further nesting of
@@ -172,14 +172,15 @@ def walk_dir(pool, tempdir, in_base, out_base, suppress_descent=False):
                         os.path.splitext(in_name.lower())[0])
 
         if os.path.isdir(in_path):
-            walk_dir(pool, tempdir, in_path, out_path, suppress_descent)
+            walk_dir(pool, tempdir, in_path, out_root, out_path,
+                        suppress_descent)
         elif OpenSlide.can_open(in_path):
-            tile_slide(pool, in_path, out_path)
+            tile_slide(pool, in_path, out_root, out_path)
         elif os.path.splitext(in_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_path
             zipfile.ZipFile(in_path).extractall(path=temp_path)
-            walk_dir(pool, tempdir, temp_path, out_path, True)
+            walk_dir(pool, tempdir, temp_path, out_root, out_path, True)
 
 
 def tile_tree(in_base, out_base, workers):
