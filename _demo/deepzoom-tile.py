@@ -157,20 +157,28 @@ def tile_slide(pool, slidepath, out_base):
                     slugify(associated)))
 
 
-def walk_dir(pool, in_base, out_base):
-    """Build a directory tree of tiled images from a tree of slides."""
+def walk_dir(pool, in_base, out_base, suppress_descent=False):
+    """Build a directory tree of tiled images from a tree of slides.
+
+    If suppress_descent is True, we will not do any further nesting of
+    output subdirectories as we descend the input directory tree."""
+
     for in_name in os.listdir(in_base):
         in_path = os.path.join(in_base, in_name)
-        out_path = os.path.join(out_base, in_name.lower())
+        if suppress_descent:
+            out_path = out_base
+        else:
+            out_path = os.path.join(out_base, in_name.lower())
+
         if os.path.isdir(in_path):
-            walk_dir(pool, in_path, out_path)
+            walk_dir(pool, in_path, out_path, suppress_descent)
         elif OpenSlide.can_open(in_path):
             tile_slide(pool, in_path, out_path)
         elif os.path.splitext(in_path)[1] == '.zip':
             temp_path = mkdtemp(prefix='slide-')
             try:
                 zipfile.ZipFile(in_path).extractall(path=temp_path)
-                walk_dir(pool, temp_path, out_path)
+                walk_dir(pool, temp_path, out_path, True)
             finally:
                 shutil.rmtree(temp_path)
 
