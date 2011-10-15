@@ -178,6 +178,7 @@ def walk_dir(pool, in_base, out_base, suppress_descent=False):
         elif os.path.splitext(in_path)[1] == '.zip':
             temp_path = mkdtemp(prefix='slide-')
             try:
+                print 'Extracting %s...' % out_path
                 zipfile.ZipFile(in_path).extractall(path=temp_path)
                 walk_dir(pool, temp_path, out_path, True)
             finally:
