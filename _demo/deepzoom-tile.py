@@ -157,7 +157,7 @@ def tile_slide(pool, slidepath, out_base):
                     slugify(associated)))
 
 
-def walk_dir(pool, in_base, out_base, suppress_descent=False):
+def walk_dir(pool, tempdir, in_base, out_base, suppress_descent=False):
     """Build a directory tree of tiled images from a tree of slides.
 
     If suppress_descent is True, we will not do any further nesting of
@@ -172,25 +172,26 @@ def walk_dir(pool, in_base, out_base, suppress_descent=False):
                         os.path.splitext(in_name.lower())[0])
 
         if os.path.isdir(in_path):
-            walk_dir(pool, in_path, out_path, suppress_descent)
+            walk_dir(pool, tempdir, in_path, out_path, suppress_descent)
         elif OpenSlide.can_open(in_path):
             tile_slide(pool, in_path, out_path)
         elif os.path.splitext(in_path)[1] == '.zip':
-            temp_path = mkdtemp(prefix='slide-')
-            try:
-                print 'Extracting %s...' % out_path
-                zipfile.ZipFile(in_path).extractall(path=temp_path)
-                walk_dir(pool, temp_path, out_path, True)
-            finally:
-                shutil.rmtree(temp_path)
+            temp_path = mkdtemp(dir=tempdir)
+            print 'Extracting %s...' % out_path
+            zipfile.ZipFile(in_path).extractall(path=temp_path)
+            walk_dir(pool, tempdir, temp_path, out_path, True)
 
 
 def tile_tree(in_base, out_base, workers):
     """Generate tiles and metadata for all slides in a directory tree."""
     pool = Pool(workers, pool_init)
-    walk_dir(pool, in_base, out_base)
-    pool.close()
-    pool.join()
+    tempdir = mkdtemp(prefix='tiler-')
+    try:
+        walk_dir(pool, tempdir, in_base, out_base)
+        pool.close()
+        pool.join()
+    finally:
+        shutil.rmtree(tempdir)
 
 
 if __name__ == '__main__':
