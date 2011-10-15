@@ -144,39 +144,33 @@ def tile_slide(pool, slidepath, out_root, out_base):
                     slugify(associated)))
 
 
-def walk_dir(pool, tempdir, in_base, out_root, out_base='',
-            suppress_descent=False):
-    """Build a directory tree of tiled images from a tree of slides.
-
-    If suppress_descent is True, we will not do any further nesting of
-    output subdirectories as we descend the input directory tree."""
-
+def walk_slides(pool, tempdir, in_base, out_root, out_base):
+    """Build a directory of tiled images from a directory of slides."""
     for in_name in sorted(os.listdir(in_base)):
         in_path = os.path.join(in_base, in_name)
-        if suppress_descent:
-            out_path = out_base
-        else:
-            out_path = os.path.join(out_base,
-                        os.path.splitext(in_name.lower())[0])
-
-        if os.path.isdir(in_path):
-            walk_dir(pool, tempdir, in_path, out_root, out_path,
-                        suppress_descent)
-        elif OpenSlide.can_open(in_path):
+        out_path = os.path.join(out_base, os.path.splitext(in_name.lower())[0])
+        if OpenSlide.can_open(in_path):
             tile_slide(pool, in_path, out_root, out_path)
         elif os.path.splitext(in_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_path
             zipfile.ZipFile(in_path).extractall(path=temp_path)
-            walk_dir(pool, tempdir, temp_path, out_root, out_path, True)
+            for sub_name in os.listdir(temp_path):
+                sub_path = os.path.join(temp_path, sub_name)
+                if OpenSlide.can_open(sub_path):
+                    tile_slide(pool, sub_path, out_root, out_path)
+                    break
 
 
 def tile_tree(in_base, out_base, workers):
-    """Generate tiles and metadata for all slides in a directory tree."""
+    """Generate tiles and metadata for slides in a two-level directory tree."""
     pool = Pool(workers, pool_init)
     tempdir = mkdtemp(prefix='tiler-')
     try:
-        walk_dir(pool, tempdir, in_base, out_base)
+        for in_name in sorted(os.listdir(in_base)):
+            in_path = os.path.join(in_base, in_name)
+            if os.path.isdir(in_path):
+                walk_slides(pool, tempdir, in_path, out_base, in_name.lower())
         pool.close()
         pool.join()
     finally:
