@@ -27,7 +27,6 @@ from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
 import re
-import shutil
 import sys
 from unicodedata import normalize
 import xml.dom.minidom as minidom
@@ -141,16 +140,6 @@ def dzi_for(associated=None):
     return '%s.dzi' % base
 
 
-def copydir(src, dest):
-    """Copy the src directory to dest, excluding subdirectories."""
-    if not os.path.exists(dest):
-        os.makedirs(dest)
-    for name in os.listdir(src):
-        srcpath = os.path.join(src, name)
-        if os.path.isfile(srcpath):
-            shutil.copy(srcpath, os.path.join(dest, name))
-
-
 def tile_slide(pool, slidepath, out_base):
     """Generate tiles and metadata for all images in a slide."""
 
@@ -175,13 +164,6 @@ def tile_slide(pool, slidepath, out_base):
                 properties=slide.properties)
     with open(os.path.join(out_base, 'index.html'), 'w') as fh:
         fh.write(data)
-
-    # Copy static data
-    basesrc = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                'static')
-    basedst = os.path.join(out_base, 'static')
-    copydir(basesrc, basedst)
-    copydir(os.path.join(basesrc, 'images'), os.path.join(basedst, 'images'))
 
 
 def walk_dir(pool, in_base, out_base):
