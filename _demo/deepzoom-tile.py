@@ -168,7 +168,8 @@ def walk_dir(pool, in_base, out_base, suppress_descent=False):
         if suppress_descent:
             out_path = out_base
         else:
-            out_path = os.path.join(out_base, in_name.lower())
+            out_path = os.path.join(out_base,
+                        os.path.splitext(in_name.lower())[0])
 
         if os.path.isdir(in_path):
             walk_dir(pool, in_path, out_path, suppress_descent)
