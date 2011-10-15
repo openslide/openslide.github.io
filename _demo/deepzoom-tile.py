@@ -143,15 +143,12 @@ def dzi_for(associated=None):
 
 def tile_slide(pool, slidepath, out_root, out_base):
     """Generate tiles and metadata for all images in a slide."""
-
     slide = OpenSlide(slidepath)
-
-    # Process images
     def do_tile(associated, image, out_base):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
         tile_image(pool, slidepath, associated, dz, out_root, out_base)
     do_tile(None, slide, os.path.join(out_base, VIEWER_SLIDE_NAME))
-    for associated, image in slide.associated_images.iteritems():
+    for associated, image in sorted(slide.associated_images.items()):
         do_tile(associated, ImageSlide(image), os.path.join(out_base,
                     slugify(associated)))
 
@@ -163,7 +160,7 @@ def walk_dir(pool, tempdir, in_base, out_root, out_base='',
     If suppress_descent is True, we will not do any further nesting of
     output subdirectories as we descend the input directory tree."""
 
-    for in_name in os.listdir(in_base):
+    for in_name in sorted(os.listdir(in_base)):
         in_path = os.path.join(in_base, in_name)
         if suppress_descent:
             out_path = out_base
