@@ -150,12 +150,16 @@ def tile_slide(pool, slidepath, out_name, out_root, out_base):
         'name': out_name,
         'slide': do_tile(None, slide,
                     os.path.join(out_base, VIEWER_SLIDE_NAME)),
-        'associated': []
+        'associated': [],
+        'properties_url': os.path.join(BASE_URL, out_base, 'properties.js'),
     }
     for associated, image in sorted(slide.associated_images.items()):
         cur_props = do_tile(associated, ImageSlide(image),
                     os.path.join(out_base, slugify(associated)))
         properties['associated'].append(cur_props)
+    with open(os.path.join(out_root, out_base, 'properties.js'), 'w') as fh:
+        buf = json.dumps(dict(slide.properties), indent=1)
+        fh.write('set_slide_properties(%s);\n' % buf)
     return properties
 
 
