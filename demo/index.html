@@ -24,7 +24,7 @@ $(document).ready(function() {
                             '</a>');
                 a.data('group', i);
                 a.data('slide', j);
-                var images = $('<ul/>');
+                var images = $('<ul class="associated"/>').hide();
                 $('<li/>').appendTo(slides).append(a).append(images);
                 a.wrap('<div/>');
                 $.each(slide.associated, function(k, image) {
@@ -73,10 +73,11 @@ $(document).ready(function() {
             image = slide.associated[associated_id];
         }
 
-        // Load properties
+        // See if we're switching slides
         var prev = $('.current-slide').children('a');
         if (prev.data('group') !== group_id ||
                     prev.data('slide') !== slide_id) {
+            // Load properties
             $("#properties").html('').addClass('loading');
             $.ajax({
                 'cache': true,
@@ -86,6 +87,12 @@ $(document).ready(function() {
                 'success': populate_properties,
                 'url': slide.properties_url,
             });
+
+            // Show associated images
+            $('.visible-associated').slideUp('fast').
+                        removeClass('visible-associated');
+            link.parent().siblings('.associated').slideDown('fast').
+                        addClass('visible-associated');
         }
 
         // Start viewer
