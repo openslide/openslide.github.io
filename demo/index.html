@@ -123,13 +123,37 @@ $(document).ready(function() {
         'success': populate_images,
         'url': 'http://localhost/info.js',
     });
+
+    // CSS doesn't provide a good way to specify a div of height
+    // (100% - height(header))
+    $(window).resize(function() {
+        $('#content').css('height', window.innerHeight -
+                    $('#header').outerHeight() - 20);
+    }).resize();
 });
 </script>
 </head>
 
 <body>
-<div id="images" class="scroll-parent loading"></div>
-<div id="view"></div>
-<div id="properties" class="scroll-parent"></div>
+<div id="header">
+    <a href="/">
+        <img src="/images/openslide_logo.png" height="102" width="306">
+    </a>
+    <div id="help-text">
+        <p class="no-top">These are freely-distributable test slides
+        in several formats.  Here, you can explore OpenSlide's rendering of
+        these slides using the
+        <a href="http://openseadragon.codeplex.com/">OpenSeadragon</a>
+        viewer.</p>
+        <p class="no-bottom">Select a slide, then drag in the viewer
+        to move around and use the mouse wheel to zoom.</p>
+    </div>
+    <div class="clear"></div>
+</div>
+<div id="content">
+    <div id="images" class="scroll-parent loading"></div>
+    <div id="view"></div>
+    <div id="properties" class="scroll-parent"></div>
+</div>
 </body>
 </html>

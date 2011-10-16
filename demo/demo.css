@@ -1,5 +1,19 @@
+body {
+    margin: 10px;
+    padding: 0;
+    overflow: hidden;
+}
 h1 {
     font-size: 1.2em;
+}
+.clear {
+    clear: both;
+}
+.no-top {
+    margin-top: 0;
+}
+.no-bottom {
+    margin-bottom: 0;
 }
 .loading {
     background-image: url('images/loading.gif');
@@ -8,11 +22,21 @@ h1 {
 }
 .scroll-parent {
     overflow: auto;
-    height: 98%;
+    height: 100%;
 }
 .scroll {
     display: inline-block;
     width: 100%;
+}
+div#header img {
+    float: left;
+}
+div#help-text {
+    margin-left: 330px;
+}
+div#content {
+    position: relative;
+    height: 400px;
 }
 div#images {
     position: absolute;
@@ -38,7 +62,7 @@ div#view {
     position: absolute;
     left: 21%;
     width: 53%;
-    height: 98%;
+    height: 100%;
     background-color: black;
     border: 1px solid #000;
     color: white;
