@@ -20,6 +20,7 @@
 
 """An example program to generate a Deep Zoom directory tree from a slide."""
 
+import json
 from multiprocessing import Pool
 from openslide import OpenSlide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
@@ -33,6 +34,7 @@ from unicodedata import normalize
 import xml.dom.minidom as minidom
 import zipfile
 
+BASE_URL = 'http://localhost/'
 VIEWER_SLIDE_NAME = 'slide'
 FORMAT = 'jpeg'
 QUALITY = 75
@@ -109,15 +111,21 @@ def tile_image(pool, slidepath, associated, dz, out_root, out_base):
     progress()
     print
 
-    # Write DZI
-    with open('%s/%s.dzi' % (out_root, out_base), 'w') as fh:
-        dzi = dz.get_dzi(FORMAT)
-        # Hack: add MinTileLevel attribute to Image tag, in violation of
-        # the XML schema, to prevent OpenSeadragon from loading the
-        # lowest-level tiles
-        doc = minidom.parseString(dzi)
-        doc.documentElement.setAttribute('MinTileLevel', '8')
-        fh.write(doc.toxml('UTF-8'))
+    # Format DZI
+    dzi = dz.get_dzi(FORMAT)
+    # Hack: add MinTileLevel attribute to Image tag, in violation of
+    # the XML schema, to prevent OpenSeadragon from loading the
+    # lowest-level tiles
+    doc = minidom.parseString(dzi)
+    doc.documentElement.setAttribute('MinTileLevel', '8')
+    dzi = doc.toxml('UTF-8')
+
+    # Return properties
+    return {
+        'name': associated,
+        'dzi': dzi,
+        'url': os.path.join(BASE_URL, out_base + '.dzi'),
+    }
 
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -137,20 +145,27 @@ def tile_slide(pool, slidepath, out_root, out_base):
     slide = OpenSlide(slidepath)
     def do_tile(associated, image, out_base):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        tile_image(pool, slidepath, associated, dz, out_root, out_base)
-    do_tile(None, slide, os.path.join(out_base, VIEWER_SLIDE_NAME))
+        return tile_image(pool, slidepath, associated, dz, out_root, out_base)
+    properties = {
+        'slide': do_tile(None, slide,
+                    os.path.join(out_base, VIEWER_SLIDE_NAME)),
+        'associated': []
+    }
     for associated, image in sorted(slide.associated_images.items()):
-        do_tile(associated, ImageSlide(image), os.path.join(out_base,
-                    slugify(associated)))
+        cur_props = do_tile(associated, ImageSlide(image),
+                    os.path.join(out_base, slugify(associated)))
+        properties['associated'].append(cur_props)
+    return properties
 
 
 def walk_slides(pool, tempdir, in_base, out_root, out_base):
     """Build a directory of tiled images from a directory of slides."""
+    slides = []
     for in_name in sorted(os.listdir(in_base)):
         in_path = os.path.join(in_base, in_name)
         out_path = os.path.join(out_base, os.path.splitext(in_name.lower())[0])
         if OpenSlide.can_open(in_path):
-            tile_slide(pool, in_path, out_root, out_path)
+            slides.append(tile_slide(pool, in_path, out_root, out_path))
         elif os.path.splitext(in_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_path
@@ -158,19 +173,30 @@ def walk_slides(pool, tempdir, in_base, out_root, out_base):
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
                 if OpenSlide.can_open(sub_path):
-                    tile_slide(pool, sub_path, out_root, out_path)
+                    slides.append(tile_slide(pool, sub_path, out_root,
+                                out_path))
                     break
+    return slides
 
 
 def tile_tree(in_base, out_base, workers):
     """Generate tiles and metadata for slides in a two-level directory tree."""
     pool = Pool(workers, pool_init)
+    slide_types = []
     tempdir = mkdtemp(prefix='tiler-')
     try:
         for in_name in sorted(os.listdir(in_base)):
             in_path = os.path.join(in_base, in_name)
             if os.path.isdir(in_path):
-                walk_slides(pool, tempdir, in_path, out_base, in_name.lower())
+                slides = walk_slides(pool, tempdir, in_path, out_base,
+                            in_name.lower())
+                slide_types.append({
+                    'name': in_name,
+                    'slides': slides,
+                })
+        with open(os.path.join(out_base, 'info.js'), 'w') as fh:
+            buf = json.dumps(slide_types, indent=1)
+            fh.write('loadData(%s);\n' % buf)
         pool.close()
         pool.join()
     finally:
