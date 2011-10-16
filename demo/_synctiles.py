@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# deepzoom-tile - Convert whole-slide images to Deep Zoom format
+# _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2011 Carnegie Mellon University
 #
@@ -17,8 +17,6 @@
 # along with this library; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
-"""An example program to generate a Deep Zoom directory tree from a slide."""
 
 import json
 from multiprocessing import Pool
