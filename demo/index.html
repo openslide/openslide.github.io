@@ -12,12 +12,12 @@ $(document).ready(function() {
     var viewer;
 
     function populate_images(data, status, xhr) {
-        groups = data;
+        groups = data.groups;
         var top = $('<div class="scroll"/>')
         $('#images').removeClass('loading').html('<h1>Slides</h1>').
                     append(top);
 
-        $.each(data, function(i, group) {
+        $.each(groups, function(i, group) {
             top.append('<h2>' + group.name + '</h2>');
             var slides = $('<ul/>');
             top.append(slides);
@@ -39,6 +39,10 @@ $(document).ready(function() {
                 });
             });
         });
+        var versions = $('<p id="versions">');
+        versions.append('OpenSlide ' + data.openslide +
+                    '<br>OpenSlide Python ' + data.openslide_python);
+        top.append(versions);
 
         $(".load-image").click(function(ev) {
             open_slide($(this));

@@ -20,12 +20,14 @@
 
 import json
 from multiprocessing import Pool
+import openslide
 from openslide import OpenSlide, ImageSlide
 from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
 import re
 import shutil
+import subprocess
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
@@ -184,10 +186,26 @@ def walk_slides(pool, tempdir, in_base, out_root, out_base):
     return slides
 
 
+def get_openslide_version():
+    """Guess the OpenSlide library version, since it can't tell us."""
+    proc = subprocess.Popen(['pkg-config', 'openslide', '--modversion'],
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+    if proc.returncode:
+        raise Exception("Couldn't guess OpenSlide library version")
+    ver = out.strip()
+    print 'Guessed OpenSlide version: %s' % ver
+    return ver
+
+
 def tile_tree(in_base, out_base, workers):
     """Generate tiles and metadata for slides in a two-level directory tree."""
     pool = Pool(workers, pool_init)
-    slide_types = []
+    data = {
+        'openslide': get_openslide_version(),
+        'openslide_python': openslide.__version__,
+        'groups': [],
+    }
     tempdir = mkdtemp(prefix='tiler-')
     try:
         for in_name in sorted(os.listdir(in_base)):
@@ -195,12 +213,12 @@ def tile_tree(in_base, out_base, workers):
             if os.path.isdir(in_path):
                 slides = walk_slides(pool, tempdir, in_path, out_base,
                             in_name.lower())
-                slide_types.append({
+                data['groups'].append({
                     'name': in_name,
                     'slides': slides,
                 })
         with open(os.path.join(out_base, 'info.js'), 'w') as fh:
-            buf = json.dumps(slide_types, indent=1)
+            buf = json.dumps(data, indent=1)
             fh.write('set_slide_info(%s);\n' % buf)
         pool.close()
         pool.join()

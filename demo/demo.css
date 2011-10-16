@@ -55,6 +55,9 @@ div#images ul {
 div#images li {
     list-style-type: none;
 }
+#versions {
+    font-size: small;
+}
 .current-slide {
     background-color: #ccf;
 }
