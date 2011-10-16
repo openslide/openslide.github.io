@@ -140,13 +140,14 @@ def slugify(text):
     return unicode(u'_'.join(result))
 
 
-def tile_slide(pool, slidepath, out_root, out_base):
+def tile_slide(pool, slidepath, out_name, out_root, out_base):
     """Generate tiles and metadata for all images in a slide."""
     slide = OpenSlide(slidepath)
     def do_tile(associated, image, out_base):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
         return tile_image(pool, slidepath, associated, dz, out_root, out_base)
     properties = {
+        'name': out_name,
         'slide': do_tile(None, slide,
                     os.path.join(out_base, VIEWER_SLIDE_NAME)),
         'associated': []
@@ -163,9 +164,11 @@ def walk_slides(pool, tempdir, in_base, out_root, out_base):
     slides = []
     for in_name in sorted(os.listdir(in_base)):
         in_path = os.path.join(in_base, in_name)
-        out_path = os.path.join(out_base, os.path.splitext(in_name.lower())[0])
+        out_name = os.path.splitext(in_name)[0]
+        out_path = os.path.join(out_base, out_name.lower())
         if OpenSlide.can_open(in_path):
-            slides.append(tile_slide(pool, in_path, out_root, out_path))
+            slides.append(tile_slide(pool, in_path, out_name, out_root,
+                        out_path))
         elif os.path.splitext(in_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_path
@@ -173,8 +176,8 @@ def walk_slides(pool, tempdir, in_base, out_root, out_base):
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
                 if OpenSlide.can_open(sub_path):
-                    slides.append(tile_slide(pool, sub_path, out_root,
-                                out_path))
+                    slides.append(tile_slide(pool, sub_path, out_name,
+                                out_root, out_path))
                     break
     return slides
 
