@@ -24,10 +24,11 @@ $(document).ready(function() {
                             '</a>');
                 a.data('group', i);
                 a.data('slide', j);
-                $('<li/>').appendTo(slides).append(a);
+                var slide_li = $('<li/>').appendTo(slides).append(a);
+                a.wrap('<div/>');
                 if (slide.associated.length) {
                     var images = $('<ul/>');
-                    slides.append(images);
+                    slide_li.append(images);
                     $.each(slide.associated, function(k, image) {
                         var a = $('<a class="load-image" href="#">' +
                                     image.name + '</a>');
