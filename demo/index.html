@@ -6,9 +6,88 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+    var groups;
     var viewer;
 
-    function open_slide(url) {
+    function populate_images(data, status, xhr) {
+        groups = data;
+        var top = $('<div class="scroll"/>')
+        $('#images').html('<h1>Slides</h1>').append(top);
+
+        $.each(data, function(i, group) {
+            top.append('<h2>' + group.name + '</h2>');
+            var slides = $('<ul/>');
+            top.append(slides);
+            $.each(group.slides, function(j, slide) {
+                var a = $('<a class="load-image" href="#">' + slide.name +
+                            '</a>');
+                a.data('group', i);
+                a.data('slide', j);
+                $('<li/>').appendTo(slides).append(a);
+                if (slide.associated.length) {
+                    var images = $('<ul/>');
+                    slides.append(images);
+                    $.each(slide.associated, function(k, image) {
+                        var a = $('<a class="load-image" href="#">' +
+                                    image.name + '</a>');
+                        a.data('group', i);
+                        a.data('slide', j);
+                        a.data('image', k);
+                        $('<li/>').appendTo(images).append(a);
+                    });
+                }
+            });
+        });
+
+        $(".load-image").click(function(ev) {
+            open_slide($(this));
+            ev.preventDefault();
+        });
+    }
+
+    function populate_properties(data, status, xhr) {
+        var props = $("#properties").html("<h1>Slide properties</h1>");
+        var dl = $('<dl/>');
+        dl.appendTo(props).wrap('<div class="scroll"/>');
+        keys = [];
+        $.each(data, function(k, v) {
+            keys.push(k);
+        });
+        keys.sort();
+        $.each(keys, function(i, k) {
+            dl.append("<dt>" + k + "<dd>" + data[k]);
+        });
+        props.scrollTop(0).scrollLeft(0);
+    }
+
+    function open_slide(link) {
+        // Load info objects
+        var group_id = link.data('group');
+        var slide_id = link.data('slide');
+        var associated_id = link.data('image');
+        var slide = groups[group_id].slides[slide_id];
+        var image;
+        if (typeof associated_id === 'undefined') {
+            image = slide.slide;
+        } else {
+            image = slide.associated[associated_id];
+        }
+
+        // Load properties
+        var prev = $('.current-slide').children('a');
+        if (prev.data('group') !== group_id ||
+                    prev.data('slide') !== slide_id) {
+            $.ajax({
+                'cache': true,
+                'dataType': 'jsonp',
+                'jsonp': false,  // don't append callback argument
+                'jsonpCallback': 'set_slide_properties',
+                'success': populate_properties,
+                'url': slide.properties_url,
+            });
+        }
+
+        // Start viewer
         if (viewer) {
             // Never reuse an existing viewer to avoid a timer leak
             // (OpenSeadragon issue #14)
@@ -18,51 +97,24 @@ $(document).ready(function() {
         viewer = new Seadragon.Viewer("view");
         viewer.config.animationTime = 0.5;
         viewer.config.blendTime = 0.1;
-        viewer.openDzi(url);
+        viewer.openDzi(image.url, image.dzi);
+
+        // Update selection highlight
+        $(".current-slide").removeClass("current-slide");
+        link.parent().addClass("current-slide");
     }
 
-    open_slide("{{ slide_url }}");
-    $(".load-slide").click(function(ev) {
-        $(".current-slide").removeClass("current-slide");
-        $(this).parent().addClass("current-slide");
-        open_slide($(this).attr('data-url'));
-        ev.preventDefault();
+    $.ajax({
+        'cache': true,
+        'dataType': 'jsonp',
+        'jsonp': false,  // don't append callback argument
+        'jsonpCallback': 'set_slide_info',
+        'success': populate_images,
+        'url': 'http://localhost/info.js',
     });
 });
 </script>
 
-<div id="images">
-    <h1>View</h1>
-    <div class="current-slide">
-        <a class="load-slide" href="#" data-url="{{ slide_url }}">Slide</a>
-    </div>
-    <h2>Associated images</h2>
-    {% if associated %}
-        <ul class="associated-images">
-            {% for name in associated %}
-                <li><a class="load-slide" href="#"
-                        data-url="{{ associated[name] }}">
-                    {{ name }}
-                </a>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <span class="associated-images notice">None</span>
-    {% endif %}
-</div>
+<div id="images" class="scroll-parent"></div>
 <div id="view"></div>
-<div id="properties">
-    <h1>Slide properties</h1>
-    {% if properties %}
-        <div id="properties-inner">
-            <dl>
-            {% for name in properties %}
-                <dt>{{ name }}
-                <dd>{{ properties[name] }}
-            {% endfor %}
-            </dl>
-        </div>
-    {% else %}
-        <span class="notice">None</span>
-    {% endif %}
-</div>
+<div id="properties" class="scroll-parent"></div>
