@@ -24,20 +24,17 @@ $(document).ready(function() {
                             '</a>');
                 a.data('group', i);
                 a.data('slide', j);
-                var slide_li = $('<li/>').appendTo(slides).append(a);
+                var images = $('<ul/>');
+                $('<li/>').appendTo(slides).append(a).append(images);
                 a.wrap('<div/>');
-                if (slide.associated.length) {
-                    var images = $('<ul/>');
-                    slide_li.append(images);
-                    $.each(slide.associated, function(k, image) {
-                        var a = $('<a class="load-image" href="#">' +
-                                    image.name + '</a>');
-                        a.data('group', i);
-                        a.data('slide', j);
-                        a.data('image', k);
-                        $('<li/>').appendTo(images).append(a);
-                    });
-                }
+                $.each(slide.associated, function(k, image) {
+                    var a = $('<a class="load-image" href="#">' +
+                                image.name + '</a>');
+                    a.data('group', i);
+                    a.data('slide', j);
+                    a.data('image', k);
+                    $('<li/>').appendTo(images).append(a);
+                });
             });
         });
 
