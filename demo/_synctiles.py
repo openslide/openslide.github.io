@@ -227,15 +227,22 @@ def tile_tree(in_base, out_base, workers):
 
 
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options] <in_dir> <out_dir>')
+    parser = OptionParser(usage='Usage: %prog [options] {generate} <in_dir>')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
+    parser.add_option('-o', '--output', metavar='DIR', dest='out_base',
+                help='output directory')
 
     (opts, args) = parser.parse_args()
     try:
-        in_base, out_base = args[0:2]
+        command, in_base = args[0:2]
     except IndexError:
         parser.error('Missing argument')
 
-    tile_tree(in_base, out_base, opts.workers)
+    if command == 'generate':
+        if not opts.out_base:
+            parser.error('Output directory not specified')
+        tile_tree(in_base, opts.out_base, opts.workers)
+    else:
+        parser.error('Unknown command')
