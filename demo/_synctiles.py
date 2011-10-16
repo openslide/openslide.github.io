@@ -199,7 +199,7 @@ def tile_tree(in_base, out_base, workers):
                 })
         with open(os.path.join(out_base, 'info.js'), 'w') as fh:
             buf = json.dumps(slide_types, indent=1)
-            fh.write('loadData(%s);\n' % buf)
+            fh.write('set_slide_info(%s);\n' % buf)
         pool.close()
         pool.join()
     finally:
