@@ -18,7 +18,7 @@ h1 {
 .loading {
     background-image: url('images/loading.gif');
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: 50% 30px;
 }
 .scroll-parent {
     overflow: auto;
@@ -36,7 +36,7 @@ div#help-text {
 }
 div#content {
     position: relative;
-    height: 400px;
+    height: 4000px;
 }
 div#images {
     position: absolute;
