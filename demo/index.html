@@ -12,7 +12,8 @@ $(document).ready(function() {
     function populate_images(data, status, xhr) {
         groups = data;
         var top = $('<div class="scroll"/>')
-        $('#images').html('<h1>Slides</h1>').append(top);
+        $('#images').removeClass('loading').html('<h1>Slides</h1>').
+                    append(top);
 
         $.each(data, function(i, group) {
             top.append('<h2>' + group.name + '</h2>');
@@ -46,7 +47,8 @@ $(document).ready(function() {
     }
 
     function populate_properties(data, status, xhr) {
-        var props = $("#properties").html("<h1>Slide properties</h1>");
+        var props = $("#properties").removeClass('loading').
+                    html("<h1>Slide properties</h1>");
         var dl = $('<dl/>');
         dl.appendTo(props).wrap('<div class="scroll"/>');
         keys = [];
@@ -77,6 +79,7 @@ $(document).ready(function() {
         var prev = $('.current-slide').children('a');
         if (prev.data('group') !== group_id ||
                     prev.data('slide') !== slide_id) {
+            $("#properties").html('').addClass('loading');
             $.ajax({
                 'cache': true,
                 'dataType': 'jsonp',
@@ -115,6 +118,6 @@ $(document).ready(function() {
 });
 </script>
 
-<div id="images" class="scroll-parent"></div>
+<div id="images" class="scroll-parent loading"></div>
 <div id="view"></div>
 <div id="properties" class="scroll-parent"></div>

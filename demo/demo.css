@@ -1,6 +1,11 @@
 h1 {
     font-size: 1.2em;
 }
+.loading {
+    background-image: url('images/loading.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
 .scroll-parent {
     overflow: auto;
     height: 98%;
