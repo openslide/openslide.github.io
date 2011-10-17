@@ -18,6 +18,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+import boto
 import json
 from multiprocessing import Pool
 import openslide
@@ -34,7 +35,8 @@ from unicodedata import normalize
 import xml.dom.minidom as minidom
 import zipfile
 
-BASE_URL = 'http://localhost/'
+S3_BUCKET = 'openslide-demo'
+BASE_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET
 VIEWER_SLIDE_NAME = 'slide'
 FORMAT = 'jpeg'
 QUALITY = 75
@@ -226,8 +228,62 @@ def tile_tree(in_base, out_base, workers):
         shutil.rmtree(tempdir)
 
 
+def walk_files(root, base=''):
+    """Return an iterator over files in a directory tree.
+
+    Each iteration yields (directory_relative_path,
+    [(file_path, file_relative_path)...])."""
+
+    files = []
+    for name in sorted(os.listdir(os.path.join(root, base))):
+        cur_base = os.path.join(base, name)
+        cur_path = os.path.join(root, cur_base)
+        if os.path.isdir(cur_path):
+            for ent in walk_files(root, cur_base):
+                yield ent
+        else:
+            files.append((cur_path, cur_base))
+    yield (base, files)
+
+
+def sync_tiles(in_base):
+    """Synchronize the specified directory tree into S3."""
+
+    if not os.path.exists(os.path.join(in_base, 'info.js')):
+        raise ValueError('%s is not a tile directory' % in_base)
+
+    conn = boto.connect_s3()
+    bucket = conn.get_bucket(S3_BUCKET)
+
+    print "Enumerating S3 bucket..."
+    index = {}
+    for key in bucket.list():
+        index[key.name] = key.etag.strip('"')
+
+    print "Pruning S3 bucket..."
+    for name in sorted(index):
+        if not os.path.exists(os.path.join(in_base, name)):
+            boto.s3.key.Key(bucket, name).delete()
+
+    for parent, files in walk_files(in_base):
+        count = 0
+        total = len(files)
+        for cur_path, cur_base in files:
+            key = boto.s3.key.Key(bucket, cur_base)
+            with open(cur_path, 'rb') as fh:
+                md5_hex, md5_b64 = key.compute_md5(fh)
+                if index.get(cur_base, '') != md5_hex:
+                    key.set_contents_from_file(fh, md5=(md5_hex, md5_b64),
+                                policy='public-read')
+            count += 1
+            print >> sys.stderr, "Synchronizing %s: %d/%d files\r" % (
+                        parent, count, total),
+        if total:
+            print
+
+
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options] {generate} <in_dir>')
+    parser = OptionParser(usage='Usage: %prog [options] {generate|sync} <in_dir>')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
@@ -244,5 +300,7 @@ if __name__ == '__main__':
         if not opts.out_base:
             parser.error('Output directory not specified')
         tile_tree(in_base, opts.out_base, opts.workers)
+    elif command == 'sync':
+        sync_tiles(in_base)
     else:
         parser.error('Unknown command')
