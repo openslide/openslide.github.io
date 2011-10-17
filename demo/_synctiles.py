@@ -293,7 +293,7 @@ if __name__ == '__main__':
     (opts, args) = parser.parse_args()
     try:
         command, in_base = args[0:2]
-    except IndexError:
+    except ValueError:
         parser.error('Missing argument')
 
     if command == 'generate':
