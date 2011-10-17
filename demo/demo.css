@@ -6,6 +6,9 @@ body {
 h1 {
     font-size: 1.2em;
 }
+a img {
+    border: 0;
+}
 .clear {
     clear: both;
 }
