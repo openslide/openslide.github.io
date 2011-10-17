@@ -277,7 +277,7 @@ def sync_tiles(in_base):
                                 policy='public-read')
             count += 1
             print >> sys.stderr, "Synchronizing %s: %d/%d files\r" % (
-                        parent, count, total),
+                        parent or 'root', count, total),
         if total:
             print
 
