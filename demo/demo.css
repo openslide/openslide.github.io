@@ -59,6 +59,7 @@ div#images ul {
     padding-left: 0;
 }
 div#images li {
+    margin: 0.2em 0;
     list-style-type: none;
 }
 #versions {
