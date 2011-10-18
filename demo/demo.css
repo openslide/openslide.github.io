@@ -6,6 +6,9 @@ body {
 h1 {
     font-size: 1.2em;
 }
+a:link {
+    color: #0000ee;
+}
 a img {
     border: 0;
 }
@@ -60,6 +63,9 @@ div#images li {
 }
 #versions {
     font-size: small;
+}
+div#images a {
+    color: #0000ee;
 }
 .current-slide {
     background-color: #ccf;
