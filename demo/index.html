@@ -158,7 +158,7 @@ $(document).ready(function() {
     // CSS doesn't provide a good way to specify a div of height
     // (100% - height(header))
     $(window).resize(function() {
-        $('#content').css('height', window.innerHeight -
+        $('#content').css('height', $(window).height() -
                     $('#header').outerHeight() - 20);
     }).resize();
 
