@@ -127,7 +127,7 @@ $(document).ready(function() {
                 'jsonp': false,  // don't append callback argument
                 'jsonpCallback': 'set_slide_properties',
                 'success': populate_properties,
-                'url': slide.properties_url,
+                'url': slide.properties_url
             });
 
             // Show associated images
@@ -152,7 +152,7 @@ $(document).ready(function() {
         'jsonp': false,  // don't append callback argument
         'jsonpCallback': 'set_slide_info',
         'success': populate_images,
-        'url': 'http://openslide-demo.s3.amazonaws.com/info.js',
+        'url': 'http://openslide-demo.s3.amazonaws.com/info.js'
     });
 
     // CSS doesn't provide a good way to specify a div of height
