@@ -92,6 +92,10 @@ div#properties {
     right: 0;
     width: 25%;
 }
+.download-link {
+    font-size: small;
+    margin: 0.5em 0;
+}
 div#properties dl {
     font-size: small;
     margin: 0;

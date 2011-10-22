@@ -73,9 +73,11 @@ $(document).ready(function() {
         });
     }
 
-    function populate_properties(data, status, xhr) {
+    function populate_properties(download_url, data) {
         var props = $("#properties").removeClass('loading').
                     html("<h1>Slide properties</h1>");
+        $('<a href="' + download_url + '">Download original slide</a>').
+                    appendTo(props).wrap('<div class="download-link"/>');
         var dl = $('<dl/>');
         dl.appendTo(props).wrap('<div class="scroll"/>');
         keys = [];
@@ -126,7 +128,9 @@ $(document).ready(function() {
                 'dataType': 'jsonp',
                 'jsonp': false,  // don't append callback argument
                 'jsonpCallback': 'set_slide_properties',
-                'success': populate_properties,
+                'success': function(data, status, xhr) {
+                    populate_properties(slide.download_url, data);
+                },
                 'url': slide.properties_url
             });
 
