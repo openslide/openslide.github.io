@@ -37,6 +37,7 @@ import zipfile
 
 S3_BUCKET = 'openslide-demo'
 BASE_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET
+DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
 FORMAT = 'jpeg'
 QUALITY = 75
@@ -159,18 +160,21 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
     }
 
 
-def tile_slide(pool, in_path, out_name, out_root, out_relpath):
+def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
+            out_relpath):
     """Generate tiles and metadata for all images in a slide."""
-    slide = OpenSlide(in_path)
+    slide = OpenSlide(in_phys_path)
     def do_tile(associated, image, out_relpath):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        return tile_image(pool, in_path, associated, dz, out_root, out_relpath)
+        return tile_image(pool, in_phys_path, associated, dz, out_root,
+                    out_relpath)
     properties = {
         'name': out_name,
         'slide': do_tile(None, slide,
                     os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
         'properties_url': os.path.join(BASE_URL, out_relpath, 'properties.js'),
+        'download_url': os.path.join(DOWNLOAD_BASE_URL, in_relpath),
     }
     for associated, image in sorted(slide.associated_images.items()):
         cur_props = do_tile(associated, ImageSlide(image),
@@ -182,16 +186,17 @@ def tile_slide(pool, in_path, out_name, out_root, out_relpath):
     return properties
 
 
-def walk_slides(pool, tempdir, in_path, out_root, out_relpath):
+def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath):
     """Build a directory of tiled images from a directory of slides."""
     slides = []
-    for in_name in sorted(os.listdir(in_path)):
-        in_cur_path = os.path.join(in_path, in_name)
+    for in_name in sorted(os.listdir(os.path.join(in_root, in_relpath))):
+        in_cur_relpath = os.path.join(in_relpath, in_name)
+        in_cur_path = os.path.join(in_root, in_cur_relpath)
         out_name = os.path.splitext(in_name)[0]
         out_cur_relpath = os.path.join(out_relpath, out_name.lower())
         if OpenSlide.can_open(in_cur_path):
-            slides.append(tile_slide(pool, in_cur_path, out_name, out_root,
-                        out_cur_relpath))
+            slides.append(tile_slide(pool, in_cur_relpath, in_cur_path,
+                        out_name, out_root, out_cur_relpath))
         elif os.path.splitext(in_cur_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_cur_relpath
@@ -199,8 +204,8 @@ def walk_slides(pool, tempdir, in_path, out_root, out_relpath):
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
                 if OpenSlide.can_open(sub_path):
-                    slides.append(tile_slide(pool, sub_path, out_name,
-                                out_root, out_cur_relpath))
+                    slides.append(tile_slide(pool, in_cur_relpath, sub_path,
+                                out_name, out_root, out_cur_relpath))
                     break
     return slides
 
@@ -216,10 +221,9 @@ def tile_tree(in_root, out_root, workers):
     tempdir = mkdtemp(prefix='tiler-')
     try:
         for in_name in sorted(os.listdir(in_root)):
-            in_path = os.path.join(in_root, in_name)
-            if os.path.isdir(in_path):
-                slides = walk_slides(pool, tempdir, in_path, out_root,
-                            in_name.lower())
+            if os.path.isdir(os.path.join(in_root, in_name)):
+                slides = walk_slides(pool, tempdir, in_root, in_name,
+                            out_root, in_name.lower())
                 if slides:
                     data['groups'].append({
                         'name': GROUP_NAME_MAP.get(in_name, in_name),
