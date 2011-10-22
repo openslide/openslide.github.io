@@ -106,7 +106,7 @@ Test Data
 
 Some [freely-distributable test data][18] is available.
 
-[18]: http://openslide.cs.cmu.edu/download/openslide-testdata.torrent
+[18]: http://openslide.cs.cmu.edu/download/openslide-testdata/
 
 
 Tech Report
