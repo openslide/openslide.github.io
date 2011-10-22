@@ -42,6 +42,10 @@ FORMAT = 'jpeg'
 QUALITY = 75
 TILE_SIZE = 512
 OVERLAP = 1
+GROUP_NAME_MAP = {
+    'Hamamatsu': 'Hamamatsu NDPI',
+    'Hamamatsu-vms': 'Hamamatsu VMS',
+}
 
 class GeneratorCache(object):
     def __init__(self):
@@ -216,7 +220,7 @@ def tile_tree(in_base, out_base, workers):
                 slides = walk_slides(pool, tempdir, in_path, out_base,
                             in_name.lower())
                 data['groups'].append({
-                    'name': in_name,
+                    'name': GROUP_NAME_MAP.get(in_name, in_name),
                     'slides': slides,
                 })
         with open(os.path.join(out_base, 'info.js'), 'w') as fh:
