@@ -292,8 +292,18 @@ def sync_tiles(in_root):
             print
 
 
+def sync_info(in_root):
+    """Copy info.js from the specified directory tree into S3."""
+
+    conn = boto.connect_s3()
+    bucket = conn.get_bucket(S3_BUCKET)
+    with open(os.path.join(in_root, 'info.js'), 'rb') as fh:
+        boto.s3.key.Key(bucket, 'info.js').set_contents_from_file(fh,
+                    policy='public-read')
+
+
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options] {generate|sync} <in_dir>')
+    parser = OptionParser(usage='Usage: %prog [options] {generate|sync|syncinfo} <in_dir>')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
@@ -312,5 +322,7 @@ if __name__ == '__main__':
         tile_tree(in_root, opts.out_root, opts.workers)
     elif command == 'sync':
         sync_tiles(in_root)
+    elif command == 'syncinfo':
+        sync_info(in_root)
     else:
         parser.error('Unknown command')
