@@ -39,6 +39,8 @@ S3_BUCKET = 'openslide-demo'
 BASE_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
+METADATA_NAME = 'info.js'
+SLIDE_METADATA_NAME = 'properties.js'
 FORMAT = 'jpeg'
 QUALITY = 75
 TILE_SIZE = 512
@@ -173,14 +175,16 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
         'slide': do_tile(None, slide,
                     os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
-        'properties_url': os.path.join(BASE_URL, out_relpath, 'properties.js'),
+        'properties_url': os.path.join(BASE_URL, out_relpath,
+                    SLIDE_METADATA_NAME),
         'download_url': os.path.join(DOWNLOAD_BASE_URL, in_relpath),
     }
     for associated, image in sorted(slide.associated_images.items()):
         cur_props = do_tile(associated, ImageSlide(image),
                     os.path.join(out_relpath, slugify(associated)))
         properties['associated'].append(cur_props)
-    with open(os.path.join(out_root, out_relpath, 'properties.js'), 'w') as fh:
+    with open(os.path.join(out_root, out_relpath, SLIDE_METADATA_NAME),
+                'w') as fh:
         buf = json.dumps(dict(slide.properties), indent=1)
         fh.write('set_slide_properties(%s);\n' % buf)
     return properties
@@ -229,7 +233,7 @@ def tile_tree(in_root, out_root, workers):
                         'name': GROUP_NAME_MAP.get(in_name, in_name),
                         'slides': slides,
                     })
-        with open(os.path.join(out_root, 'info.js'), 'w') as fh:
+        with open(os.path.join(out_root, METADATA_NAME), 'w') as fh:
             buf = json.dumps(data, indent=1)
             fh.write('set_slide_info(%s);\n' % buf)
         pool.close()
@@ -259,7 +263,7 @@ def walk_files(root, relpath=''):
 def sync_tiles(in_root):
     """Synchronize the specified directory tree into S3."""
 
-    if not os.path.exists(os.path.join(in_root, 'info.js')):
+    if not os.path.exists(os.path.join(in_root, METADATA_NAME)):
         raise ValueError('%s is not a tile directory' % in_root)
 
     conn = boto.connect_s3()
@@ -297,8 +301,8 @@ def sync_info(in_root):
 
     conn = boto.connect_s3()
     bucket = conn.get_bucket(S3_BUCKET)
-    with open(os.path.join(in_root, 'info.js'), 'rb') as fh:
-        boto.s3.key.Key(bucket, 'info.js').set_contents_from_file(fh,
+    with open(os.path.join(in_root, METADATA_NAME), 'rb') as fh:
+        boto.s3.key.Key(bucket, METADATA_NAME).set_contents_from_file(fh,
                     policy='public-read')
 
 
