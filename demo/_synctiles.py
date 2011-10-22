@@ -49,15 +49,15 @@ GROUP_NAME_MAP = {
 
 class GeneratorCache(object):
     def __init__(self):
-        self._slidepath = ''
+        self._in_path = ''
         self._generators = {}
 
-    def get_dz(self, slidepath, associated=None):
-        if slidepath != self._slidepath:
+    def get_dz(self, in_path, associated=None):
+        if in_path != self._in_path:
             generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
                         OVERLAP)
-            slide = OpenSlide(slidepath)
-            self._slidepath = slidepath
+            slide = OpenSlide(in_path)
+            self._in_path = in_path
             self._generators = {
                 None: generator(slide)
             }
@@ -74,39 +74,39 @@ def pool_init():
 def process_tile(args):
     """Generate and save a tile."""
     try:
-        slidepath, associated, level, address, outfile = args
-        if not os.path.exists(outfile):
-            dz = generator_cache.get_dz(slidepath, associated)
+        in_path, associated, level, address, out_path = args
+        if not os.path.exists(out_path):
+            dz = generator_cache.get_dz(in_path, associated)
             tile = dz.get_tile(level, address)
-            tile.save(outfile, quality=QUALITY)
+            tile.save(out_path, quality=QUALITY)
     except KeyboardInterrupt:
         return KeyboardInterrupt
 
 
-def enumerate_tiles(slidepath, associated, dz, out_root, out_base):
+def enumerate_tiles(in_path, associated, dz, out_root, out_relpath):
     """Enumerate tiles in a single image."""
     for level in xrange(dz.level_count):
-        tiledir = os.path.join(out_root, "%s_files" % out_base, str(level))
-        if not os.path.exists(tiledir):
-            os.makedirs(tiledir)
+        dir_path = os.path.join(out_root, "%s_files" % out_relpath, str(level))
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
         cols, rows = dz.level_tiles[level]
         for row in xrange(rows):
             for col in xrange(cols):
-                tilename = os.path.join(tiledir, '%d_%d.%s' % (
+                file_path = os.path.join(dir_path, '%d_%d.%s' % (
                                 col, row, FORMAT))
-                yield (slidepath, associated, level, (col, row), tilename)
+                yield (in_path, associated, level, (col, row), file_path)
 
 
-def tile_image(pool, slidepath, associated, dz, out_root, out_base):
+def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
     """Generate tiles and metadata for a single image."""
 
     count = 0
     total = dz.tile_count
-    iterator = enumerate_tiles(slidepath, associated, dz, out_root, out_base)
+    iterator = enumerate_tiles(in_path, associated, dz, out_root, out_relpath)
 
     def progress():
         print >> sys.stderr, "Tiling %s: wrote %d/%d tiles\r" % (
-                    out_base, count, total),
+                    out_relpath, count, total),
 
     # Write tiles
     progress()
@@ -130,7 +130,7 @@ def tile_image(pool, slidepath, associated, dz, out_root, out_base):
     return {
         'name': associated,
         'dzi': dzi,
-        'url': os.path.join(BASE_URL, out_base + '.dzi'),
+        'url': os.path.join(BASE_URL, out_relpath + '.dzi'),
     }
 
 
@@ -146,48 +146,48 @@ def slugify(text):
     return unicode(u'_'.join(result))
 
 
-def tile_slide(pool, slidepath, out_name, out_root, out_base):
+def tile_slide(pool, in_path, out_name, out_root, out_relpath):
     """Generate tiles and metadata for all images in a slide."""
-    slide = OpenSlide(slidepath)
-    def do_tile(associated, image, out_base):
+    slide = OpenSlide(in_path)
+    def do_tile(associated, image, out_relpath):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
-        return tile_image(pool, slidepath, associated, dz, out_root, out_base)
+        return tile_image(pool, in_path, associated, dz, out_root, out_relpath)
     properties = {
         'name': out_name,
         'slide': do_tile(None, slide,
-                    os.path.join(out_base, VIEWER_SLIDE_NAME)),
+                    os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
-        'properties_url': os.path.join(BASE_URL, out_base, 'properties.js'),
+        'properties_url': os.path.join(BASE_URL, out_relpath, 'properties.js'),
     }
     for associated, image in sorted(slide.associated_images.items()):
         cur_props = do_tile(associated, ImageSlide(image),
-                    os.path.join(out_base, slugify(associated)))
+                    os.path.join(out_relpath, slugify(associated)))
         properties['associated'].append(cur_props)
-    with open(os.path.join(out_root, out_base, 'properties.js'), 'w') as fh:
+    with open(os.path.join(out_root, out_relpath, 'properties.js'), 'w') as fh:
         buf = json.dumps(dict(slide.properties), indent=1)
         fh.write('set_slide_properties(%s);\n' % buf)
     return properties
 
 
-def walk_slides(pool, tempdir, in_base, out_root, out_base):
+def walk_slides(pool, tempdir, in_path, out_root, out_relpath):
     """Build a directory of tiled images from a directory of slides."""
     slides = []
-    for in_name in sorted(os.listdir(in_base)):
-        in_path = os.path.join(in_base, in_name)
+    for in_name in sorted(os.listdir(in_path)):
+        in_cur_path = os.path.join(in_path, in_name)
         out_name = os.path.splitext(in_name)[0]
-        out_path = os.path.join(out_base, out_name.lower())
-        if OpenSlide.can_open(in_path):
-            slides.append(tile_slide(pool, in_path, out_name, out_root,
-                        out_path))
-        elif os.path.splitext(in_path)[1] == '.zip':
+        out_cur_relpath = os.path.join(out_relpath, out_name.lower())
+        if OpenSlide.can_open(in_cur_path):
+            slides.append(tile_slide(pool, in_cur_path, out_name, out_root,
+                        out_cur_relpath))
+        elif os.path.splitext(in_cur_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
-            print 'Extracting %s...' % out_path
-            zipfile.ZipFile(in_path).extractall(path=temp_path)
+            print 'Extracting %s...' % out_cur_relpath
+            zipfile.ZipFile(in_cur_path).extractall(path=temp_path)
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
                 if OpenSlide.can_open(sub_path):
                     slides.append(tile_slide(pool, sub_path, out_name,
-                                out_root, out_path))
+                                out_root, out_cur_relpath))
                     break
     return slides
 
@@ -204,7 +204,7 @@ def get_openslide_version():
     return ver
 
 
-def tile_tree(in_base, out_base, workers):
+def tile_tree(in_root, out_root, workers):
     """Generate tiles and metadata for slides in a two-level directory tree."""
     pool = Pool(workers, pool_init)
     data = {
@@ -214,17 +214,17 @@ def tile_tree(in_base, out_base, workers):
     }
     tempdir = mkdtemp(prefix='tiler-')
     try:
-        for in_name in sorted(os.listdir(in_base)):
-            in_path = os.path.join(in_base, in_name)
+        for in_name in sorted(os.listdir(in_root)):
+            in_path = os.path.join(in_root, in_name)
             if os.path.isdir(in_path):
-                slides = walk_slides(pool, tempdir, in_path, out_base,
+                slides = walk_slides(pool, tempdir, in_path, out_root,
                             in_name.lower())
                 if slides:
                     data['groups'].append({
                         'name': GROUP_NAME_MAP.get(in_name, in_name),
                         'slides': slides,
                     })
-        with open(os.path.join(out_base, 'info.js'), 'w') as fh:
+        with open(os.path.join(out_root, 'info.js'), 'w') as fh:
             buf = json.dumps(data, indent=1)
             fh.write('set_slide_info(%s);\n' % buf)
         pool.close()
@@ -233,29 +233,29 @@ def tile_tree(in_base, out_base, workers):
         shutil.rmtree(tempdir)
 
 
-def walk_files(root, base=''):
+def walk_files(root, relpath=''):
     """Return an iterator over files in a directory tree.
 
     Each iteration yields (directory_relative_path,
     [(file_path, file_relative_path)...])."""
 
     files = []
-    for name in sorted(os.listdir(os.path.join(root, base))):
-        cur_base = os.path.join(base, name)
-        cur_path = os.path.join(root, cur_base)
+    for name in sorted(os.listdir(os.path.join(root, relpath))):
+        cur_relpath = os.path.join(relpath, name)
+        cur_path = os.path.join(root, cur_relpath)
         if os.path.isdir(cur_path):
-            for ent in walk_files(root, cur_base):
+            for ent in walk_files(root, cur_relpath):
                 yield ent
         else:
-            files.append((cur_path, cur_base))
-    yield (base, files)
+            files.append((cur_path, cur_relpath))
+    yield (relpath, files)
 
 
-def sync_tiles(in_base):
+def sync_tiles(in_root):
     """Synchronize the specified directory tree into S3."""
 
-    if not os.path.exists(os.path.join(in_base, 'info.js')):
-        raise ValueError('%s is not a tile directory' % in_base)
+    if not os.path.exists(os.path.join(in_root, 'info.js')):
+        raise ValueError('%s is not a tile directory' % in_root)
 
     conn = boto.connect_s3()
     bucket = conn.get_bucket(S3_BUCKET)
@@ -266,23 +266,23 @@ def sync_tiles(in_base):
         index[key.name] = key.etag.strip('"')
 
     print "Pruning S3 bucket..."
-    for name in sorted(index):
-        if not os.path.exists(os.path.join(in_base, name)):
-            boto.s3.key.Key(bucket, name).delete()
+    for relpath in sorted(index):
+        if not os.path.exists(os.path.join(in_root, relpath)):
+            boto.s3.key.Key(bucket, relpath).delete()
 
-    for parent, files in walk_files(in_base):
+    for parent_relpath, files in walk_files(in_root):
         count = 0
         total = len(files)
-        for cur_path, cur_base in files:
-            key = boto.s3.key.Key(bucket, cur_base)
+        for cur_path, cur_relpath in files:
+            key = boto.s3.key.Key(bucket, cur_relpath)
             with open(cur_path, 'rb') as fh:
                 md5_hex, md5_b64 = key.compute_md5(fh)
-                if index.get(cur_base, '') != md5_hex:
+                if index.get(cur_relpath, '') != md5_hex:
                     key.set_contents_from_file(fh, md5=(md5_hex, md5_b64),
                                 policy='public-read')
             count += 1
             print >> sys.stderr, "Synchronizing %s: %d/%d files\r" % (
-                        parent or 'root', count, total),
+                        parent_relpath or 'root', count, total),
         if total:
             print
 
@@ -292,20 +292,20 @@ if __name__ == '__main__':
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
-    parser.add_option('-o', '--output', metavar='DIR', dest='out_base',
+    parser.add_option('-o', '--output', metavar='DIR', dest='out_root',
                 help='output directory')
 
     (opts, args) = parser.parse_args()
     try:
-        command, in_base = args[0:2]
+        command, in_root = args[0:2]
     except ValueError:
         parser.error('Missing argument')
 
     if command == 'generate':
-        if not opts.out_base:
+        if not opts.out_root:
             parser.error('Output directory not specified')
-        tile_tree(in_base, opts.out_base, opts.workers)
+        tile_tree(in_root, opts.out_root, opts.workers)
     elif command == 'sync':
-        sync_tiles(in_base)
+        sync_tiles(in_root)
     else:
         parser.error('Unknown command')
