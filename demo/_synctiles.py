@@ -219,10 +219,11 @@ def tile_tree(in_base, out_base, workers):
             if os.path.isdir(in_path):
                 slides = walk_slides(pool, tempdir, in_path, out_base,
                             in_name.lower())
-                data['groups'].append({
-                    'name': GROUP_NAME_MAP.get(in_name, in_name),
-                    'slides': slides,
-                })
+                if slides:
+                    data['groups'].append({
+                        'name': GROUP_NAME_MAP.get(in_name, in_name),
+                        'slides': slides,
+                    })
         with open(os.path.join(out_base, 'info.js'), 'w') as fh:
             buf = json.dumps(data, indent=1)
             fh.write('set_slide_info(%s);\n' % buf)
