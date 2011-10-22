@@ -216,6 +216,12 @@ def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath):
 
 def tile_tree(in_root, out_root, workers):
     """Generate tiles and metadata for slides in a two-level directory tree."""
+    if os.path.exists(os.path.join(out_root, METADATA_NAME)):
+        # We want to allow incremental regeneration, but only for recovery
+        # from crashes etc.  OpenSlide's rendering of a slide may change
+        # over time, so after each OpenSlide release the output tree should
+        # be rebuilt from scratch.
+        raise ValueError('This is a complete tree; please regenerate from scratch.')
     pool = Pool(workers, pool_init)
     data = {
         'openslide': get_openslide_version(),
