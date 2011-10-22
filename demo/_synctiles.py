@@ -47,6 +47,31 @@ GROUP_NAME_MAP = {
     'Hamamatsu-vms': 'Hamamatsu VMS',
 }
 
+
+def get_openslide_version():
+    """Guess the OpenSlide library version, since it can't tell us."""
+    proc = subprocess.Popen(['pkg-config', 'openslide', '--modversion'],
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+    if proc.returncode:
+        raise Exception("Couldn't guess OpenSlide library version")
+    ver = out.strip()
+    print 'Guessed OpenSlide version: %s' % ver
+    return ver
+
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+def slugify(text):
+    """Generate an ASCII-only slug."""
+    # Based on Flask snippet 5
+    result = []
+    for word in _punct_re.split(unicode(text, 'UTF-8').lower()):
+        word = normalize('NFKD', word).encode('ascii', 'ignore')
+        if word:
+            result.append(word)
+    return unicode(u'_'.join(result))
+
+
 class GeneratorCache(object):
     def __init__(self):
         self._in_path = ''
@@ -134,18 +159,6 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
     }
 
 
-_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
-def slugify(text):
-    """Generate an ASCII-only slug."""
-    # Based on Flask snippet 5
-    result = []
-    for word in _punct_re.split(unicode(text, 'UTF-8').lower()):
-        word = normalize('NFKD', word).encode('ascii', 'ignore')
-        if word:
-            result.append(word)
-    return unicode(u'_'.join(result))
-
-
 def tile_slide(pool, in_path, out_name, out_root, out_relpath):
     """Generate tiles and metadata for all images in a slide."""
     slide = OpenSlide(in_path)
@@ -190,18 +203,6 @@ def walk_slides(pool, tempdir, in_path, out_root, out_relpath):
                                 out_root, out_cur_relpath))
                     break
     return slides
-
-
-def get_openslide_version():
-    """Guess the OpenSlide library version, since it can't tell us."""
-    proc = subprocess.Popen(['pkg-config', 'openslide', '--modversion'],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate()
-    if proc.returncode:
-        raise Exception("Couldn't guess OpenSlide library version")
-    ver = out.strip()
-    print 'Guessed OpenSlide version: %s' % ver
-    return ver
 
 
 def tile_tree(in_root, out_root, workers):
