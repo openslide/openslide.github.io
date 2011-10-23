@@ -61,7 +61,6 @@ Algum
 -----
 
 The [Algum system][10] at CMU uses OpenSlide to display whole slide
-images. To access the demo site, click through and login as "guest"
-"guest".
+images.
 
 [10]: http://algum.cs.cmu.edu/
