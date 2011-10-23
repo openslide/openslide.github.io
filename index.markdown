@@ -57,6 +57,15 @@ See how [some projects use OpenSlide][10].
 [10]: Some%20Projects%20Using%20OpenSlide
 
 
+Demo
+----
+
+There is a [web-based demo][26] of OpenSlide rendering various slide
+formats.
+
+[26]: demo/
+
+
 Mailing Lists
 -------------
 
