@@ -61,9 +61,9 @@ Version Control
 ---------------
 [Git][8] repositories for OpenSlide are available. The commands to clone are:
 
- * `git clone git://github.com/openslide/openslide.git` ([github][9])
- * `git clone git://github.com/openslide/openslide-java.git` ([github][10])
- * `git clone git://github.com/openslide/openslide-python.git` ([github][11])
+ * `git clone git://github.com/openslide/openslide.git` ([GitHub][9])
+ * `git clone git://github.com/openslide/openslide-java.git` ([GitHub][10])
+ * `git clone git://github.com/openslide/openslide-python.git` ([GitHub][11])
 
 [8]: http://git-scm.com/
 [9]: http://github.com/openslide/openslide

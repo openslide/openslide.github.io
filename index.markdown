@@ -3,6 +3,12 @@ layout: default
 title: OpenSlide
 ---
 
+<a href="https://github.com/openslide">
+<img style="position: absolute; top: 0; right: 0; border: 0;"
+src="https://a248.e.akamai.net/assets.github.com/img/abad93f42020b733148435e2cd92ce15c542d320/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+alt="Fork me on GitHub">
+</a>
+
 <div markdown="1" class="newsflash">
 {% include news.markdown %}
 </div>
@@ -98,17 +104,22 @@ Some documentation is included within the downloadable files. Additionally there
 [17]: Requested%20Properties
 
 
-Issue Trackers
---------------
+Development
+-----------
 
- * [OpenSlide issue tracker][23]
- * [OpenSlide Java issue tracker][24]
- * [OpenSlide Python issue tracker][25]
+Development of OpenSlide happens on [GitHub][27]:
+
+ * [OpenSlide][28] ([issue tracker][23])
+ * [OpenSlide Java][29] ([issue tracker][24])
+ * [OpenSlide Python][30] ([issue tracker][25])
 
 [23]: http://github.com/openslide/openslide/issues
 [24]: http://github.com/openslide/openslide-java/issues
 [25]: http://github.com/openslide/openslide-python/issues
-
+[27]: http://github.com/openslide
+[28]: http://github.com/openslide/openslide
+[29]: http://github.com/openslide/openslide-java
+[30]: http://github.com/openslide/openslide-python
 
 Test Data
 ---------
