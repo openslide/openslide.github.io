@@ -1,3 +1,22 @@
+OpenSlide Python version 0.3.0, 2011-12-16
+==========================================
+Version 0.3.0 of the Python bindings fixes some crashes, adds Windows
+support, adds methods for obtaining Deep Zoom tile coordinates, and
+improves the example Deep Zoom tilers.
+
+OpenSlide Java version 0.10.0, 2011-12-16
+=========================================
+Version 0.10.0 of the Java bindings renames the package and library files,
+compiles using GNU Autotools, changes handling of associated images, and
+fixes OpenSlideView translation by large offsets.
+
+OpenSlide version 3.2.5, 2011-12-16
+===================================
+Version 3.2.5 has been released, supporting MIRAX 1.03 files, fixing
+openslide_read_region for large dimensions, reducing memory usage,
+disabling quickhash-1 for unusual TIFFs where it is very slow, and
+fixing compilation errors.
+
 OpenSlide Python version 0.2.0, 2011-09-02
 ==========================================
 The first release of the Python bindings includes complete access to the
