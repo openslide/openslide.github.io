@@ -112,9 +112,9 @@ Slide Position File
 The slide position file is referenced by the
 `VIMSLIDE_POSITION_BUFFER.default` nonhierarchical section.  It contains
 one entry for each camera position (*not* each tile position) in row-major
-order.  Each entry is nine bytes: the `X` pixel coordinate of the photo (3
-bytes, little-endian), a flag byte, the `Y` coordinate (3 bytes,
-little-endian), and two flag bytes.
+order.  Each entry is nine bytes: a flag byte, the `X` pixel coordinate of
+the photo (4 bytes, little-endian), and the `Y` coordinate (4 bytes,
+little-endian).
 
 Associated Images
 -----------------
