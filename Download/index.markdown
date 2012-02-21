@@ -1,11 +1,9 @@
 ---
 layout: default
 title: Downloading OpenSlide
-
-latest-version: 3.2.5
-latest-version-java: 0.10.0
-latest-version-python: 0.3.0
 ---
+
+{% include versions.markdown %}
 
 OpenSlide is available under the terms of the GNU Lesser General Public License, version 2.1.
 
@@ -14,22 +12,22 @@ Source
 
 Source code is available for the following releases:
 
- * OpenSlide {{ page.latest-version }} (stable API)
-   * [`openslide-{{ page.latest-version }}.tar.gz`][1]
-   * [`openslide-{{ page.latest-version }}.tar.xz`][2]
- * OpenSlide Java interface {{ page.latest-version-java }} (still unstable API, subject to change)
-   * [`openslide-java-{{ page.latest-version-java }}.tar.gz`][3]
-   * [`openslide-java-{{ page.latest-version-java }}.tar.xz`][4]
- * OpenSlide Python interface {{ page.latest-version-python }} (still unstable API, subject to change)
-   * [`openslide-python-{{ page.latest-version-python }}.tar.gz`][12]
-   * [`openslide-python-{{ page.latest-version-python }}.tar.xz`][13]
+ * OpenSlide {{ latest-version }} (stable API)
+   * [`openslide-{{ latest-version }}.tar.gz`][1]
+   * [`openslide-{{ latest-version }}.tar.xz`][2]
+ * OpenSlide Java interface {{ latest-version-java }} (still unstable API, subject to change)
+   * [`openslide-java-{{ latest-version-java }}.tar.gz`][3]
+   * [`openslide-java-{{ latest-version-java }}.tar.xz`][4]
+ * OpenSlide Python interface {{ latest-version-python }} (still unstable API, subject to change)
+   * [`openslide-python-{{ latest-version-python }}.tar.gz`][12]
+   * [`openslide-python-{{ latest-version-python }}.tar.xz`][13]
 
-[1]: http://github.com/downloads/openslide/openslide/openslide-{{ page.latest-version }}.tar.gz
-[2]: http://github.com/downloads/openslide/openslide/openslide-{{ page.latest-version }}.tar.xz
-[3]: http://github.com/downloads/openslide/openslide-java/openslide-java-{{ page.latest-version-java }}.tar.gz
-[4]: http://github.com/downloads/openslide/openslide-java/openslide-java-{{ page.latest-version-java }}.tar.xz
-[12]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ page.latest-version-python }}.tar.gz
-[13]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ page.latest-version-python }}.tar.xz
+[1]: http://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.gz
+[2]: http://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.xz
+[3]: http://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.gz
+[4]: http://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.xz
+[12]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.gz
+[13]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.xz
 
 
 Win32 Binaries
