@@ -1,3 +1,10 @@
+OpenSlide version 3.2.6, 2012-02-23
+===================================
+Version 3.2.6 adds support for downsampled MIRAX files, improves
+performance on some MIRAX slides, fixes a minor MIRAX drawing bug, and
+fixes a 3.2.5 regression in openslide_read_region with large
+dimensions.
+
 OpenSlide Python version 0.3.0, 2011-12-16
 ==========================================
 Version 0.3.0 of the Python bindings fixes some crashes, adds Windows

@@ -125,58 +125,58 @@
 <a name="l00160"></a>00160 OPENSLIDE_PUBLIC()
 <a name="l00161"></a>00161 <span class="keywordtype">void</span> <a class="code" href="openslide_8h.html#a3a69dfe81462a4e90c8da78d1addc4bd" title="Close an OpenSlide object.">openslide_close</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
 <a name="l00163"></a>00163 
-<a name="l00204"></a>00204 OPENSLIDE_PUBLIC()
-<a name="l00205"></a>00205 const <span class="keywordtype">char</span> *<a class="code" href="openslide_8h.html#a130ff0793d57ecc5649ca7fff1fc005c" title="Get the current error string.">openslide_get_error</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
-<a name="l00207"></a>00207 
-<a name="l00213"></a>00213 
-<a name="l00217"></a><a class="code" href="openslide_8h.html#acab4512e53b74cb5b70b652fa322236e">00217</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_COMMENT &quot;openslide.comment&quot;</span>
-<a name="l00218"></a>00218 <span class="preprocessor"></span>
-<a name="l00222"></a><a class="code" href="openslide_8h.html#a0fd5ca3fa8167972fb4344906928928c">00222</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_VENDOR &quot;openslide.vendor&quot;</span>
-<a name="l00223"></a>00223 <span class="preprocessor"></span>
-<a name="l00227"></a><a class="code" href="openslide_8h.html#aa280780085714cf37802d8da311885de">00227</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_QUICKHASH1 &quot;openslide.quickhash-1&quot;</span>
-<a name="l00228"></a>00228 <span class="preprocessor"></span>
-<a name="l00233"></a><a class="code" href="openslide_8h.html#a9ab13d8e8d8e56334ab0bbad35c4cdb6">00233</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_BACKGROUND_COLOR &quot;openslide.background-color&quot;</span>
-<a name="l00234"></a>00234 <span class="preprocessor"></span>
-<a name="l00235"></a>00235 
-<a name="l00241"></a>00241 
-<a name="l00254"></a>00254 OPENSLIDE_PUBLIC()
-<a name="l00255"></a>00255 const <span class="keywordtype">char</span> * const *<a class="code" href="openslide_8h.html#a8dc4d1da342d1892bb011d97bd0c22b0" title="Get the NULL-terminated array of property names.">openslide_get_property_names</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
-<a name="l00256"></a>00256 
-<a name="l00257"></a>00257 
-<a name="l00272"></a>00272 OPENSLIDE_PUBLIC()
-<a name="l00273"></a>00273 const <span class="keywordtype">char</span> *<a class="code" href="openslide_8h.html#ab2a142492c7fd39c88669ef7864f072f" title="Get the value of a single property.">openslide_get_property_value</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr, const <span class="keywordtype">char</span> *name);
-<a name="l00274"></a>00274 
-<a name="l00282"></a>00282 OPENSLIDE_PUBLIC()
-<a name="l00283"></a>00283 const <span class="keywordtype">char</span> *<a class="code" href="openslide_8h.html#aab7aae3dc615a1f33f359bb93d02ab41" title="Get the comment (if any) for this image.">openslide_get_comment</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
-<a name="l00284"></a>00284 
-<a name="l00286"></a>00286 
-<a name="l00292"></a>00292 
-<a name="l00307"></a>00307 OPENSLIDE_PUBLIC()
-<a name="l00308"></a>00308 const <span class="keywordtype">char</span> * const *<a class="code" href="openslide_8h.html#af6400c16cf1a94557f013f301ee2ea4d" title="Get the NULL-terminated array of associated image names.">openslide_get_associated_image_names</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
-<a name="l00309"></a>00309 
-<a name="l00323"></a>00323 OPENSLIDE_PUBLIC()
-<a name="l00324"></a>00324 <span class="keywordtype">void</span> <a class="code" href="openslide_8h.html#a2d1bca93ff5cbd2e13c4e6aaec868fd1" title="Get the dimensions of an associated image.">openslide_get_associated_image_dimensions</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr,
-<a name="l00325"></a>00325                                                const <span class="keywordtype">char</span> *name,
-<a name="l00326"></a>00326                                                int64_t *w, int64_t *h);
-<a name="l00327"></a>00327 
-<a name="l00328"></a>00328 
-<a name="l00344"></a>00344 OPENSLIDE_PUBLIC()
-<a name="l00345"></a>00345 <span class="keywordtype">void</span> <a class="code" href="openslide_8h.html#a71ace07f87c9aeab328d3a6efcd2f983" title="Copy pre-multiplied ARGB data from an associated image.">openslide_read_associated_image</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr,
-<a name="l00346"></a>00346                                      const <span class="keywordtype">char</span> *name,
-<a name="l00347"></a>00347                                      uint32_t *dest);
-<a name="l00349"></a>00349 
-<a name="l00350"></a>00350 
-<a name="l00351"></a>00351 <span class="comment">// these are meant to throw compile- and link-time errors,</span>
-<a name="l00352"></a>00352 <span class="comment">// since the functions they replace were never implemented</span>
-<a name="l00353"></a>00353 <span class="keywordtype">int</span> _openslide_give_prefetch_hint_UNIMPLEMENTED(<span class="keywordtype">void</span>);
-<a name="l00354"></a>00354 <span class="keywordtype">void</span> _openslide_cancel_prefetch_hint_UNIMPLEMENTED(<span class="keywordtype">void</span>);
-<a name="l00355"></a>00355 <span class="preprocessor">#define openslide_give_prefetch_hint(osr, x, y, layer, w, h)    \</span>
-<a name="l00356"></a>00356 <span class="preprocessor">  _openslide_give_prefetch_hint_UNIMPLEMENTED(-1);</span>
-<a name="l00357"></a>00357 <span class="preprocessor"></span><span class="preprocessor">#define openslide_cancel_prefetch_hint(osr, prefetch_id)        \</span>
-<a name="l00358"></a>00358 <span class="preprocessor">  _openslide_cancel_prefetch_hint_UNIMPLEMENTED(-1)</span>
-<a name="l00359"></a>00359 <span class="preprocessor"></span>
-<a name="l00360"></a>00360 
-<a name="l00369"></a>00369 <span class="preprocessor">#endif</span>
+<a name="l00205"></a>00205 OPENSLIDE_PUBLIC()
+<a name="l00206"></a>00206 const <span class="keywordtype">char</span> *<a class="code" href="openslide_8h.html#a130ff0793d57ecc5649ca7fff1fc005c" title="Get the current error string.">openslide_get_error</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
+<a name="l00208"></a>00208 
+<a name="l00214"></a>00214 
+<a name="l00218"></a><a class="code" href="openslide_8h.html#acab4512e53b74cb5b70b652fa322236e">00218</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_COMMENT &quot;openslide.comment&quot;</span>
+<a name="l00219"></a>00219 <span class="preprocessor"></span>
+<a name="l00223"></a><a class="code" href="openslide_8h.html#a0fd5ca3fa8167972fb4344906928928c">00223</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_VENDOR &quot;openslide.vendor&quot;</span>
+<a name="l00224"></a>00224 <span class="preprocessor"></span>
+<a name="l00228"></a><a class="code" href="openslide_8h.html#aa280780085714cf37802d8da311885de">00228</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_QUICKHASH1 &quot;openslide.quickhash-1&quot;</span>
+<a name="l00229"></a>00229 <span class="preprocessor"></span>
+<a name="l00236"></a><a class="code" href="openslide_8h.html#a9ab13d8e8d8e56334ab0bbad35c4cdb6">00236</a> <span class="preprocessor">#define OPENSLIDE_PROPERTY_NAME_BACKGROUND_COLOR &quot;openslide.background-color&quot;</span>
+<a name="l00237"></a>00237 <span class="preprocessor"></span>
+<a name="l00238"></a>00238 
+<a name="l00244"></a>00244 
+<a name="l00257"></a>00257 OPENSLIDE_PUBLIC()
+<a name="l00258"></a>00258 const <span class="keywordtype">char</span> * const *<a class="code" href="openslide_8h.html#a8dc4d1da342d1892bb011d97bd0c22b0" title="Get the NULL-terminated array of property names.">openslide_get_property_names</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
+<a name="l00259"></a>00259 
+<a name="l00260"></a>00260 
+<a name="l00275"></a>00275 OPENSLIDE_PUBLIC()
+<a name="l00276"></a>00276 const <span class="keywordtype">char</span> *<a class="code" href="openslide_8h.html#ab2a142492c7fd39c88669ef7864f072f" title="Get the value of a single property.">openslide_get_property_value</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr, const <span class="keywordtype">char</span> *name);
+<a name="l00277"></a>00277 
+<a name="l00285"></a>00285 OPENSLIDE_PUBLIC()
+<a name="l00286"></a>00286 const <span class="keywordtype">char</span> *<a class="code" href="openslide_8h.html#aab7aae3dc615a1f33f359bb93d02ab41" title="Get the comment (if any) for this image.">openslide_get_comment</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
+<a name="l00287"></a>00287 
+<a name="l00289"></a>00289 
+<a name="l00295"></a>00295 
+<a name="l00310"></a>00310 OPENSLIDE_PUBLIC()
+<a name="l00311"></a>00311 const <span class="keywordtype">char</span> * const *<a class="code" href="openslide_8h.html#af6400c16cf1a94557f013f301ee2ea4d" title="Get the NULL-terminated array of associated image names.">openslide_get_associated_image_names</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr);
+<a name="l00312"></a>00312 
+<a name="l00326"></a>00326 OPENSLIDE_PUBLIC()
+<a name="l00327"></a>00327 <span class="keywordtype">void</span> <a class="code" href="openslide_8h.html#a2d1bca93ff5cbd2e13c4e6aaec868fd1" title="Get the dimensions of an associated image.">openslide_get_associated_image_dimensions</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr,
+<a name="l00328"></a>00328                                                const <span class="keywordtype">char</span> *name,
+<a name="l00329"></a>00329                                                int64_t *w, int64_t *h);
+<a name="l00330"></a>00330 
+<a name="l00331"></a>00331 
+<a name="l00347"></a>00347 OPENSLIDE_PUBLIC()
+<a name="l00348"></a>00348 <span class="keywordtype">void</span> <a class="code" href="openslide_8h.html#a71ace07f87c9aeab328d3a6efcd2f983" title="Copy pre-multiplied ARGB data from an associated image.">openslide_read_associated_image</a>(<a class="code" href="openslide_8h.html#a990dde8d8caba731de6a9c8895df41cb" title="The main OpenSlide type.">openslide_t</a> *osr,
+<a name="l00349"></a>00349                                      const <span class="keywordtype">char</span> *name,
+<a name="l00350"></a>00350                                      uint32_t *dest);
+<a name="l00352"></a>00352 
+<a name="l00353"></a>00353 
+<a name="l00354"></a>00354 <span class="comment">// these are meant to throw compile- and link-time errors,</span>
+<a name="l00355"></a>00355 <span class="comment">// since the functions they replace were never implemented</span>
+<a name="l00356"></a>00356 <span class="keywordtype">int</span> _openslide_give_prefetch_hint_UNIMPLEMENTED(<span class="keywordtype">void</span>);
+<a name="l00357"></a>00357 <span class="keywordtype">void</span> _openslide_cancel_prefetch_hint_UNIMPLEMENTED(<span class="keywordtype">void</span>);
+<a name="l00358"></a>00358 <span class="preprocessor">#define openslide_give_prefetch_hint(osr, x, y, layer, w, h)    \</span>
+<a name="l00359"></a>00359 <span class="preprocessor">  _openslide_give_prefetch_hint_UNIMPLEMENTED(-1);</span>
+<a name="l00360"></a>00360 <span class="preprocessor"></span><span class="preprocessor">#define openslide_cancel_prefetch_hint(osr, prefetch_id)        \</span>
+<a name="l00361"></a>00361 <span class="preprocessor">  _openslide_cancel_prefetch_hint_UNIMPLEMENTED(-1)</span>
+<a name="l00362"></a>00362 <span class="preprocessor"></span>
+<a name="l00363"></a>00363 
+<a name="l00372"></a>00372 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
 

@@ -1,5 +1,5 @@
-{% assign latest-version = '3.2.5' %}
-{% assign latest-version-date = '2011-12-16' %}
+{% assign latest-version = '3.2.6' %}
+{% assign latest-version-date = '2012-02-23' %}
 
 {% assign latest-version-java = '0.10.0' %}
 
