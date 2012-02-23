@@ -1,6 +1,7 @@
 ---
 layout: default
 title: OpenSlide
+news_show_extended: false
 ---
 
 {% include versions.markdown %}
@@ -13,6 +14,8 @@ alt="Fork me on GitHub">
 
 <div markdown="1" class="newsflash">
 {% include news.markdown %}
+***
+Older news is available [here][31].
 </div>
 
 OpenSlide is a C library that provides a simple interface to read
@@ -27,6 +30,7 @@ generator and a simple web-based viewer.
 
 [1]: Download
 [26]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
+[31]: News
 
 About OpenSlide
 ---------------
