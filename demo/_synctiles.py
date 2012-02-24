@@ -28,7 +28,6 @@ from optparse import OptionParser
 import os
 import re
 import shutil
-import subprocess
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
@@ -50,18 +49,6 @@ GROUP_NAME_MAP = {
     'Hamamatsu-vms': 'Hamamatsu VMS',
     'Mirax': 'MIRAX',
 }
-
-
-def get_openslide_version():
-    """Guess the OpenSlide library version, since it can't tell us."""
-    proc = subprocess.Popen(['pkg-config', 'openslide', '--modversion'],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = proc.communicate()
-    if proc.returncode:
-        raise Exception("Couldn't guess OpenSlide library version")
-    ver = out.strip()
-    print 'Guessed OpenSlide version: %s' % ver
-    return ver
 
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -225,10 +212,11 @@ def tile_tree(in_root, out_root, workers):
         raise ValueError('This is a complete tree; please regenerate from scratch.')
     pool = Pool(workers, pool_init)
     data = {
-        'openslide': get_openslide_version(),
+        'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
         'groups': [],
     }
+    print 'OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % data
     tempdir = mkdtemp(prefix='tiler-')
     try:
         for in_name in sorted(os.listdir(in_root)):
