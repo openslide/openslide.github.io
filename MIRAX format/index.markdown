@@ -27,22 +27,20 @@ OpenSlide will detect a file as MIRAX if:
  2. A directory exists in the same location as the file, with the same name as the file minus the extension.
  3. A file named `Slidedat.ini` exists in the directory.
  4. The slidedat file is readable as a Windows INI-style file.
- 5. The slidedat file has a `[GENERAL]` section with the following keys: `SLIDE_VERSION`, `SLIDE_ID`, `IMAGENUMBER_X`, `IMAGENUMBER_Y`, `CameraImageDivisionsPerSide`.
+ 5. The slidedat file has a `[GENERAL]` section with the following keys: `SLIDE_VERSION`, `SLIDE_ID`, `IMAGENUMBER_X`, `IMAGENUMBER_Y`.
  6. The slidedat file has a `[HIERARCHICAL]` section with the following keys: `HIER_COUNT`, `NONHIER_COUNT`, `INDEXFILE`.
  7. A key exists in the `[HIERARCHICAL]` section with the value of `Slide zoom level`. The key matches this printf-style template: `HIER_%d_NAME`. The `%d` is bound to the variable `zoom_level`. Currently, `zoom_level` must be 0.
  8. The `[HIERARCHICAL]` section has a key with the name `HIER_%d_COUNT` where `%d` is the value of `zoom_level` in the previous step. The value must be an integer, interpreted as `zoom_count`.
  9. Setting `x` to `zoom_level` and `y` from 0 to `zoom_count`, the `[HIERARCHICAL]` section has a key with the name `HIER_x_VAL_y_SECTION`. Let `section_names[]` be an array of length zoom_count, holding the values for each key.
  10. The `[DATAFILE]` section must exist, with the following keys: `FILE_COUNT`.
  11. There are `FILE_COUNT` keys in the `[DATAFILE]` section with the following names: `FILE_%d`, where `%d` goes from 0 to `FILE_COUNT-1`.
- 12. For each value in `section_names`, a group must exist with that name. Each group must contain the keys: `OVERLAP_X`, `OVERLAP_Y`, `IMAGE_FILL_COLOR_BGR`, `DIGITIZER_WIDTH`, `DIGITIZER_HEIGHT`. The overlap values must be parseable as doubles, the rest as integers. The key `IMAGE_FORMAT` must exist, with the value `JPEG`.
- 13. Each `section_names` section must have the key `IMAGE_CONCAT_FACTOR`. The value of the first section's `IMAGE_CONCAT_FACTOR` must be 0, the rest 1.
- 14. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_NAME` (`%d` is an integer) and with the value `VIMSLIDE_POSITION_BUFFER`. Bind `%d` to the variable `position_nonhier_offset`.
- 15. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_NAME` (`%d` is an integer) and with the value `Scan data layer`. Bind `%d` to the variable `scan_nonhier_offset`.
- 16. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideThumbnail`.
- 17. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideBarcode`.
- 18. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlidePreview`.
- 19. The value of the `INDEXFILE` key above is the name of a readable file.
- 20. The index file is of a valid format, and all data referred to by it is valid (see below).
+ 12. For each value in `section_names`, a group must exist with that name. Each group must contain the keys: `OVERLAP_X`, `OVERLAP_Y`, `IMAGE_FILL_COLOR_BGR`, `DIGITIZER_WIDTH`, `DIGITIZER_HEIGHT`, `IMAGE_CONCAT_FACTOR`. The overlap values must be parseable as doubles, the rest as integers. The key `IMAGE_FORMAT` must exist, with the value `JPEG`.
+ 13. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_NAME` (`%d` is an integer) and with the value `Scan data layer`. Bind `%d` to the variable `scan_nonhier_offset`.
+ 14. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideThumbnail`.
+ 15. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlideBarcode`.
+ 16. The `[HIERARCHICAL]` section has a key with the name `NONHIER_%d_VAL_%d` where the first `%d` is the value of `scan_nonhier_offset`. The key has a value of `ScanDataLayer_SlidePreview`.
+ 17. The value of the `INDEXFILE` key above is the name of a readable file.
+ 18. The index file is of a valid format, and all data referred to by it is valid (see below).
 
 
 Overview
