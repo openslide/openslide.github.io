@@ -1,3 +1,10 @@
+VIPS now supports OpenSlide, 2012-04-17
+---------------------------------------
+The [VIPS image processing system][65536] can now read whole-slide images
+with OpenSlide.
+
+[65536]: http://www.vips.ecs.soton.ac.uk
+
 OpenSlide version 3.2.6, 2012-02-23
 -----------------------------------
 Version 3.2.6 adds support for downsampled MIRAX files, improves
