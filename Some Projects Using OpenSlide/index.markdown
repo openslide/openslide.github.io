@@ -3,6 +3,14 @@ layout: default
 title: Some Projects Using OpenSlide
 ---
 
+VIPS
+----
+
+The [VIPS][11] image processing system can use OpenSlide to read
+slide files.
+
+[11]: http://www.vips.ecs.soton.ac.uk/
+
 Collaborative Systems for Analyzing Tissue Microarrays
 ------------------------------------------------------
 
