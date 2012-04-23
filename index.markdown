@@ -52,10 +52,9 @@ The library can read virtual slides in the following formats:
 It provides a simple C interface for programmers to use to decode
 images of these kinds.
 
-See [Supported Virtual Slide Formats][7] for more information.
-
-[7]: Supported%20Virtual%20Slide%20Formats
-
+OpenSlide's support for these formats is not endorsed by their respective
+vendors and may be incomplete.  Problems should be reported to the OpenSlide
+[mailing list][11] or [issue tracker][23].
 
 OpenSlide is a product of the research group of [M. Satyanarayanan][8]
 (Satya) in the Carnegie Mellon [School of Computer Science][9].
@@ -102,9 +101,11 @@ Documentation
 
 Some documentation is included within the downloadable files. Additionally there is:
  * [C API Documentation][15]
+ * [Supported Virtual Slide Formats][7]
  * [List of Known Properties][16]
  * [Requested Properties][17]
 
+[7]: Supported%20Virtual%20Slide%20Formats
 [15]: api/openslide_8h.html
 [16]: List%20of%20Known%20Properties
 [17]: Requested%20Properties

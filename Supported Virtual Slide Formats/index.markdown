@@ -3,6 +3,13 @@ layout: default
 title: Virtual slide formats understood by OpenSlide
 ---
 
+OpenSlide's support for these formats is not endorsed by their respective
+vendors and may be incomplete.  Problems should be reported to the OpenSlide
+[mailing list][6] or [issue tracker][7].
+
+[6]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
+[7]: http://github.com/openslide/openslide/issues
+
 Trestle
 -------
 Single-file pyramidal tiled TIFF, with non-standard metadata and
