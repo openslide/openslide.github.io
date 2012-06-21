@@ -5,51 +5,10 @@ title: Virtual slide formats understood by OpenSlide
 
 OpenSlide's support for these formats is not endorsed by their respective
 vendors and may be incomplete.  Problems should be reported to the OpenSlide
-[mailing list][6] or [issue tracker][7].
+[mailing list][1] or [issue tracker][2].
 
-[6]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
-[7]: http://github.com/openslide/openslide/issues
-
-Trestle
--------
-Single-file pyramidal tiled TIFF, with non-standard metadata and
-overlaps. Additional files can contain more metadata and detailed
-overlap info.
-
-File extensions
-:`.tif`
-
-OpenSlide vendor backend
-:`trestle`
-
-OpenSlide ops backend
-:`tiff`
-
-More info
-:[Trestle format][1]
-
-[1]: /Trestle%20format
-
-
-Hamamatsu
----------
-
-Multi-file JPEG/NGR with proprietary metadata and index file formats.
-
-File extensions
-:`.vms`, `.vmu`
-
-OpenSlide vendor backend
-:`hamamatsu`
-
-OpenSlide ops backend
-:`jpeg` for `.vms`, `ngr` for `.vmu`
-
-More info
-:[Hamamatsu format][2]
-
-[2]: /Hamamatsu%20format
-
+[1]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
+[2]: http://github.com/openslide/openslide/issues
 
 Aperio
 ------
@@ -71,6 +30,26 @@ More info
 [3]: /Aperio%20format
 
 
+Hamamatsu
+---------
+
+Multi-file JPEG/NGR with proprietary metadata and index file formats.
+
+File extensions
+:`.vms`, `.vmu`
+
+OpenSlide vendor backend
+:`hamamatsu`
+
+OpenSlide ops backend
+:`jpeg` for `.vms`, `ngr` for `.vmu`
+
+More info
+:[Hamamatsu format][4]
+
+[4]: /Hamamatsu%20format
+
+
 MIRAX
 -----
 
@@ -86,9 +65,30 @@ OpenSlide ops backend
 :`jpeg`
 
 More info
-:[MIRAX format][4]
+:[MIRAX format][5]
 
-[4]: /MIRAX%20format
+[5]: /MIRAX%20format
+
+
+Trestle
+-------
+Single-file pyramidal tiled TIFF, with non-standard metadata and
+overlaps. Additional files can contain more metadata and detailed
+overlap info.
+
+File extensions
+:`.tif`
+
+OpenSlide vendor backend
+:`trestle`
+
+OpenSlide ops backend
+:`tiff`
+
+More info
+:[Trestle format][6]
+
+[6]: /Trestle%20format
 
 
 Generic tiled TIFF
@@ -106,6 +106,6 @@ OpenSlide ops backend
 :`tiff`
 
 More info
-:[Generic tiled TIFF format][5]
+:[Generic tiled TIFF format][7]
 
-[5]: /Generic%20tiled%20TIFF%20format
+[7]: /Generic%20tiled%20TIFF%20format

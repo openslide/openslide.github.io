@@ -37,16 +37,16 @@ About OpenSlide
 
 The library can read virtual slides in the following formats:
 
- * [Trestle (.tif)][2]
+ * [Aperio (.svs, .tif)][2]
  * [Hamamatsu (.vms, .vmu)][3]
- * [Aperio (.svs, .tif)][4]
- * [MIRAX (.mrxs)][5]
+ * [MIRAX (.mrxs)][4]
+ * [Trestle (.tif)][5]
  * [Generic tiled TIFF (.tif)][6]
 
-[2]: Trestle%20format
+[2]: Aperio%20format
 [3]: Hamamatsu%20format
-[4]: Aperio%20format
-[5]: MIRAX%20format
+[4]: MIRAX%20format
+[5]: Trestle%20format
 [6]: Generic%20tiled%20TIFF%20format
 
 It provides a simple C interface for programmers to use to decode
