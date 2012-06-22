@@ -104,11 +104,13 @@ Some documentation is included within the downloadable files. Additionally there
  * [Supported Virtual Slide Formats][7]
  * [List of Known Properties][16]
  * [Requested Properties][17]
+ * [OpenSlide Wiki][32]
 
 [7]: Supported%20Virtual%20Slide%20Formats
 [15]: api/openslide_8h.html
 [16]: List%20of%20Known%20Properties
 [17]: Requested%20Properties
+[32]: https://github.com/openslide/openslide/wiki
 
 
 Development
