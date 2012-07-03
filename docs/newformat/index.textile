@@ -45,6 +45,22 @@ Use your judgement in assigning names to the associated images supported by your
 
 OpenSlide currently does not support pyramidal associated images; each associated image is loaded into memory in its entirety.  If an associated image is pyramidal but is not too large, your driver can simply provide the highest-resolution level.
 
+h2. Error handling
+
+OpenSlide takes a conservative approach to error handling.  Where feasible, a vendor driver should validate any slide metadata it is relying upon.  If the driver finds evidence that its understanding of the slide format is incomplete -- for example, required slide metadata is missing, or an enumerated field has an unknown value -- it should log an error and give up rather than attempting to muddle onward.
+
+If an error is encountered while opening a slide:
+
+# Log an error using @g_warning()@.
+# Fail the open.
+
+If an error is encountered at runtime (e.g. when handling an @openslide_read_region()@ call):
+
+# Call @_openslide_set_error()@.
+# Fail the call.
+
+@openslide_t@ error states are terminal: once @_openslide_set_error()@ has been called, no other operations can be performed on the @openslide_t@.
+
 h2. OpenSlide limitations
 
 OpenSlide's output is currently "limited to three color channels plus an alpha channel":https://github.com/openslide/openslide/issues/42, with a "maximum of 8 bits per channel":https://github.com/openslide/openslide/issues/41.  These restrictions are partially due to "Cairo":http://cairographics.org/ limitations, but correcting them would also require changes to the OpenSlide API.
