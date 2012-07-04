@@ -33,10 +33,8 @@ Source code is available for the following releases:
 Win32 Binaries
 --------------
 See the [Windows binaries label][5].
-For now, here is a [temporary location][6].
 
 [5]: http://github.com/openslide/openslide/issues/labels/Windows%20binaries
-[6]: http://openslide.cs.cmu.edu/download/tmp/win32
 
 
 Fedora
