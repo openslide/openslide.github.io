@@ -11,7 +11,7 @@ Drivers are named after the vendor of the product that uses the format.  This is
 
 h2. Properties
 
-The vendor driver is responsible for initializing a property map containing metadata about the slide.  A property has a name (a string) and a value (another string).  Property names defined by your driver should be prefixed by your driver’s name followed by a dot.  You should create properties for any and all metadata supported by your slide format.
+The vendor driver is responsible for initializing a property map containing metadata about the slide.  A property has a name (a string) and a value (another string).  Property names defined by your driver should be prefixed by your driver’s name followed by a dot.  You should create properties for any and all metadata supported by your slide format.  If the slide format contains textual metadata formatted as key-value pairs, you may dump this metadata directly into the property map, retaining the original key names (after prepending the name of the driver).  If you need to invent your own key names, you should use @lowercase-with-hyphens@ formatting.
 
 Your driver is also responsible for setting some standard properties:
 
