@@ -70,6 +70,10 @@ If an error is encountered at runtime (e.g. when handling an `openslide_read_reg
 
 `openslide_t` error states are terminal: once `_openslide_set_error()` has been called, no other operations can be performed on the `openslide_t`.
 
+### Caution: openslide_can_open()
+
+Your driver's `try` function will receive a NULL `openslide_t *osr` argument when called via `openslide_can_open()`.  In this case, you must go through all the motions of opening the slide, including reading the metadata for properties, even though you may not actually use the results.  This will ensure that `openslide_can_open()` returns `true` only if `openslide_open()` will, in fact, succeed.
+
 OpenSlide limitations
 ---------------------
 
