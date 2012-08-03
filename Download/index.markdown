@@ -47,12 +47,6 @@ After installing [EPEL][7], users of RHEL >=5 or RHEL-derived systems can just `
 
 [7]: https://fedoraproject.org/wiki/EPEL
 
-
-Python
-------
-An alternative Python binding to OpenSlide is available at:
-<http://www.osc.edu/~kerwin/pyOpenSlide/>
-
 Version Control
 ---------------
 [Git][8] repositories for OpenSlide are available. The commands to clone are:
