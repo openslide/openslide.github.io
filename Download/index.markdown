@@ -3,6 +3,7 @@ layout: default
 title: Downloading OpenSlide
 ---
 
+{% include links.markdown %}
 {% include versions.markdown %}
 
 OpenSlide is available under the terms of the GNU Lesser General Public License, version 2.1.
@@ -51,11 +52,8 @@ Version Control
 ---------------
 [Git][8] repositories for OpenSlide are available. The commands to clone are:
 
- * `git clone git://github.com/openslide/openslide.git` ([GitHub][9])
- * `git clone git://github.com/openslide/openslide-java.git` ([GitHub][10])
- * `git clone git://github.com/openslide/openslide-python.git` ([GitHub][11])
+ * `git clone git://github.com/openslide/openslide.git` ([GitHub][c-github])
+ * `git clone git://github.com/openslide/openslide-java.git` ([GitHub][java-github])
+ * `git clone git://github.com/openslide/openslide-python.git` ([GitHub][python-github])
 
 [8]: http://git-scm.com/
-[9]: http://github.com/openslide/openslide
-[10]: http://github.com/openslide/openslide-java
-[11]: http://github.com/openslide/openslide-python

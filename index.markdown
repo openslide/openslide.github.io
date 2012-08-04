@@ -4,6 +4,7 @@ title: OpenSlide
 news_show_extended: false
 ---
 
+{% include links.markdown %}
 {% include versions.markdown %}
 
 <a href="https://github.com/openslide">
@@ -26,9 +27,8 @@ Java and Python bindings are also available. The Java binding includes a
 simple image viewer. The Python binding includes a [Deep Zoom][26]
 generator and a simple web-based viewer.
 
-[Download][1]
+[Download][download]
 
-[1]: Download
 [26]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
 [31]: News
 
@@ -54,7 +54,7 @@ images of these kinds.
 
 OpenSlide's support for these formats is not endorsed by their respective
 vendors and may be incomplete.  Problems should be reported to the OpenSlide
-[mailing list][11] or [issue tracker][23].
+[mailing list][users-subscribe] or [issue tracker][c-issues].
 
 OpenSlide is a product of the research group of [M. Satyanarayanan][8]
 (Satya) in the Carnegie Mellon [School of Computer Science][9].
@@ -71,10 +71,8 @@ See how [some projects use OpenSlide][10].
 Demo
 ----
 
-There is a [web-based demo][26] of OpenSlide rendering various slide
+There is a [web-based demo][demo] of OpenSlide rendering various slide
 formats.
-
-[26]: demo/
 
 
 Mailing Lists
@@ -83,59 +81,43 @@ Mailing Lists
 There are two mailing lists for OpenSlide:
 
  * Users mailing list. Once subscribed, anyone can post. This list is for asking questions about OpenSlide.
-   * [Users list subscription info][11]
-   * [Users list archive][12]
+   * [Users list subscription info][users-subscribe]
+   * [Users list archive][users-archive]
 
  * Announcement mailing list. It is a low-volume list and is moderated. All users are recommended to subscribe to this list.
-   * [Announcement list subscription info][13]
-   * [Announcement list archive][14]
-
-[11]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
-[12]: http://lists.andrew.cmu.edu/pipermail/openslide-users/
-[13]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
-[14]: http://lists.andrew.cmu.edu/pipermail/openslide-announce/
+   * [Announcement list subscription info][announce-subscribe]
+   * [Announcement list archive][announce-archive]
 
 
 Documentation
 -------------
 
 Some documentation is included within the downloadable files. Additionally there is:
- * [C API Documentation][15]
+ * [C API Documentation][api]
  * [Supported Virtual Slide Formats][7]
  * [List of Known Properties][16]
  * [Requested Properties][17]
- * [OpenSlide Wiki][32]
+ * [OpenSlide Wiki][wiki]
 
 [7]: Supported%20Virtual%20Slide%20Formats
-[15]: api/openslide_8h.html
 [16]: List%20of%20Known%20Properties
 [17]: Requested%20Properties
-[32]: https://github.com/openslide/openslide/wiki
 
 
 Development
 -----------
 
-Development of OpenSlide happens on [GitHub][27]:
+Development of OpenSlide happens on [GitHub][github]:
 
- * [OpenSlide][28] ([issue tracker][23])
- * [OpenSlide Java][29] ([issue tracker][24])
- * [OpenSlide Python][30] ([issue tracker][25])
+ * [OpenSlide][c-github] ([issue tracker][c-issues])
+ * [OpenSlide Java][java-github] ([issue tracker][java-issues])
+ * [OpenSlide Python][python-github] ([issue tracker][python-issues])
 
-[23]: http://github.com/openslide/openslide/issues
-[24]: http://github.com/openslide/openslide-java/issues
-[25]: http://github.com/openslide/openslide-python/issues
-[27]: http://github.com/openslide
-[28]: http://github.com/openslide/openslide
-[29]: http://github.com/openslide/openslide-java
-[30]: http://github.com/openslide/openslide-python
 
 Test Data
 ---------
 
-Some [freely-distributable test data][18] is available.
-
-[18]: http://openslide.cs.cmu.edu/download/openslide-testdata/
+Some [freely-distributable test data][testdata] is available.
 
 
 Tech Report

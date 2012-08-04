@@ -3,12 +3,12 @@ layout: default
 title: Virtual slide formats understood by OpenSlide
 ---
 
+{% include links.markdown %}
+
 OpenSlide's support for these formats is not endorsed by their respective
 vendors and may be incomplete.  Problems should be reported to the OpenSlide
-[mailing list][1] or [issue tracker][2].
+[mailing list][users-subscribe] or [issue tracker][c-issues].
 
-[1]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
-[2]: http://github.com/openslide/openslide/issues
 
 Aperio
 ------
