@@ -42,6 +42,11 @@ Fedora
 ------
 Fedora users can install OpenSlide with `yum install openslide`.
 
+Debian/Ubuntu
+-------------
+Users of Ubuntu and Debian testing can install OpenSlide and its command-line
+utilities with `apt-get install openslide-tools`.
+
 Red Hat Enterprise Linux / CentOS / Scientific Linux
 ----------------------------------------------------
 After installing [EPEL][7], users of RHEL >=5 or RHEL-derived systems can just `yum install openslide`.
