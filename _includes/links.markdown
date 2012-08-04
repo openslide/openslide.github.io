@@ -13,7 +13,9 @@
 [c-github]: http://github.com/openslide/openslide
 [java-github]: http://github.com/openslide/openslide-java
 [python-github]: http://github.com/openslide/openslide-python
+[site-github]: http://github.com/openslide/openslide.github.com
 
 [c-issues]: http://github.com/openslide/openslide/issues
 [java-issues]: http://github.com/openslide/openslide-java/issues
 [python-issues]: http://github.com/openslide/openslide-python/issues
+[site-issues]: http://github.com/openslide/openslide.github.com/issues
