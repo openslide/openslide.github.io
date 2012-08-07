@@ -118,7 +118,8 @@ Development of OpenSlide happens on [GitHub][github]:
 Test Data
 ---------
 
-Some [freely-distributable test data][testdata] is available.
+Some freely-distributable test data is available via [HTTP][testdata] or
+[rsync][testdata-rsync].
 
 
 Tech Report

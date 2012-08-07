@@ -4,6 +4,7 @@
 [github]: http://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
+[testdata-rsync]: rsync://openslide.cs.cmu.edu/openslide-testdata/
 
 [announce-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
 [users-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
