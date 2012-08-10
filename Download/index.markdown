@@ -31,12 +31,20 @@ Source code is available for the following releases:
 [13]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.xz
 
 
-Win32 Binaries
---------------
-See the [Windows binaries label][5].
+Windows Binaries
+----------------
 
-[5]: http://github.com/openslide/openslide/issues/labels/Windows%20binaries
+The latest build is dated {{ latest-version-winbuild }}:
 
+ * [32-bit binaries][14]
+ * [64-bit binaries][15]
+ * [Corresponding sources][16]
+
+Problems with these binaries can be reported [here][winbuild-issues].
+
+[14]: http://github.com/downloads/openslide/openslide-winbuild/openslide-win32-{{ latest-version-winbuild }}.zip
+[15]: http://github.com/downloads/openslide/openslide-winbuild/openslide-win64-{{ latest-version-winbuild }}.zip
+[16]: http://github.com/downloads/openslide/openslide-winbuild/openslide-winbuild-{{ latest-version-winbuild }}.zip
 
 Fedora
 ------
@@ -60,5 +68,6 @@ Version Control
  * `git clone git://github.com/openslide/openslide.git` ([GitHub][c-github])
  * `git clone git://github.com/openslide/openslide-java.git` ([GitHub][java-github])
  * `git clone git://github.com/openslide/openslide-python.git` ([GitHub][python-github])
+ * `git clone git://github.com/openslide/openslide-winbuild.git` ([GitHub][winbuild-github])
 
 [8]: http://git-scm.com/

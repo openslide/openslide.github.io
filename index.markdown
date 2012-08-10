@@ -112,6 +112,7 @@ Development of OpenSlide happens on [GitHub][github]:
  * [OpenSlide][c-github] ([issue tracker][c-issues])
  * [OpenSlide Java][java-github] ([issue tracker][java-issues])
  * [OpenSlide Python][python-github] ([issue tracker][python-issues])
+ * [Windows build scripts][winbuild-github] ([issue tracker][winbuild-issues])
  * [Website][site-github] ([issue tracker][site-issues])
 
 

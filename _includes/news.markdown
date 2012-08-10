@@ -1,3 +1,10 @@
+Windows binaries now available, 2012-08-10
+------------------------------------------
+Compiled binaries for 32-bit and 64-bit Windows are now available from the
+[download][download_win] page.
+
+[download_win]: Download#windows_binaries
+
 VIPS now supports OpenSlide, 2012-04-17
 ---------------------------------------
 The [VIPS image processing system][vips] can now read whole-slide images
@@ -37,13 +44,13 @@ The first release of the Python bindings includes complete access to the
 OpenSlide API, functionality for producing Deep Zoom images, and a simple
 web application for displaying whole-slide images in a browser.
 
+
+{% if page.news_show_extended %}
+
 OpenSlide version 3.2.4, 2011-03-07
 -----------------------------------
 Version 3.2.4 has been released, supporting MIRAX files without non-hierarchical sections,
 working around some GKeyFile bugs, and fixing compilation errors on Windows.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide version 3.2.3, 2010-09-09
 -----------------------------------

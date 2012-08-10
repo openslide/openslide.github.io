@@ -4,3 +4,5 @@
 {% assign latest-version-java = '0.10.0' %}
 
 {% assign latest-version-python = '0.3.0' %}
+
+{% assign latest-version-winbuild = '20120802' %}
