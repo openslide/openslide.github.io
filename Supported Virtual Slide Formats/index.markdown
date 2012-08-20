@@ -50,6 +50,26 @@ More info
 [4]: /Hamamatsu%20format
 
 
+Leica
+-----
+
+Single-file pyramidal tiled BigTIFF with non-standard metadata.
+
+File extensions
+:`.scn`
+
+OpenSlide vendor backend
+:`leica`
+
+OpenSlide ops backend
+:`tiff`
+
+More info
+:[Leica format][8]
+
+[8]: /formats/leica/
+
+
 MIRAX
 -----
 

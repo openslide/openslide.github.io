@@ -39,12 +39,14 @@ The library can read virtual slides in the following formats:
 
  * [Aperio (.svs, .tif)][2]
  * [Hamamatsu (.vms, .vmu)][3]
+ * [Leica (.scn)][11]
  * [MIRAX (.mrxs)][4]
  * [Trestle (.tif)][5]
  * [Generic tiled TIFF (.tif)][6]
 
 [2]: Aperio%20format
 [3]: Hamamatsu%20format
+[11]: formats/leica/
 [4]: MIRAX%20format
 [5]: Trestle%20format
 [6]: Generic%20tiled%20TIFF%20format
