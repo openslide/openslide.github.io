@@ -16,7 +16,7 @@ alt="Fork me on GitHub">
 <div markdown="1" class="newsflash">
 {% include news.markdown %}
 ***
-Older news is available [here][31].
+Older news is available [here][news].
 </div>
 
 OpenSlide is a C library that provides a simple interface to read
@@ -30,7 +30,6 @@ generator and a simple web-based viewer.
 [Download][download]
 
 [26]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
-[31]: News
 
 About OpenSlide
 ---------------
@@ -58,9 +57,7 @@ OpenSlide is a product of the research group of [M. Satyanarayanan][8]
 [9]: http://www.cs.cmu.edu/
 
 
-See how [some projects use OpenSlide][10].
-
-[10]: Some%20Projects%20Using%20OpenSlide
+See how [some projects use OpenSlide][other-projects].
 
 
 Demo
@@ -90,11 +87,10 @@ Documentation
 Some documentation is included within the downloadable files. Additionally there is:
  * [C API Documentation][api]
  * [Supported Virtual Slide Formats][formats]
- * [List of Known Properties][16]
+ * [List of Known Properties][properties]
  * [Requested Properties][17]
  * [OpenSlide Wiki][wiki]
 
-[16]: List%20of%20Known%20Properties
 [17]: Requested%20Properties
 
 

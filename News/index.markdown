@@ -1,7 +1,4 @@
 ---
-layout: default
-title: OpenSlide News
-news_show_extended: true
+layout: redirect
+target: /news/
 ---
-
-{% include news.markdown %}

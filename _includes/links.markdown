@@ -1,6 +1,9 @@
-[download]: Download
+[news]: /news/
+[download]: /download/
 [api]: /api/openslide_8h.html
+[properties]: /properties/
 [demo]: /demo/
+[other-projects]: /other-projects/
 [github]: http://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
