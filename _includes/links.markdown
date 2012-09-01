@@ -6,6 +6,14 @@
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
 [testdata-rsync]: rsync://openslide.cs.cmu.edu/openslide-testdata/
 
+[formats]: /formats/
+[format-aperio]: /formats/aperio/
+[format-generic-tiff]: /formats/generic-tiff/
+[format-hamamatsu]: /formats/hamamatsu/
+[format-leica]: /formats/leica/
+[format-mirax]: /formats/mirax/
+[format-trestle]: /formats/trestle/
+
 [announce-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
 [users-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
 [announce-archive]: http://lists.andrew.cmu.edu/pipermail/openslide-announce/

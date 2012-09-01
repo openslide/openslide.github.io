@@ -37,19 +37,12 @@ About OpenSlide
 
 The library can read virtual slides in the following formats:
 
- * [Aperio (.svs, .tif)][2]
- * [Hamamatsu (.vms, .vmu)][3]
- * [Leica (.scn)][11]
- * [MIRAX (.mrxs)][4]
- * [Trestle (.tif)][5]
- * [Generic tiled TIFF (.tif)][6]
-
-[2]: Aperio%20format
-[3]: Hamamatsu%20format
-[11]: formats/leica/
-[4]: MIRAX%20format
-[5]: Trestle%20format
-[6]: Generic%20tiled%20TIFF%20format
+ * [Aperio (.svs, .tif)][format-aperio]
+ * [Hamamatsu (.vms, .vmu)][format-hamamatsu]
+ * [Leica (.scn)][format-leica]
+ * [MIRAX (.mrxs)][format-mirax]
+ * [Trestle (.tif)][format-trestle]
+ * [Generic tiled TIFF (.tif)][format-generic-tiff]
 
 It provides a simple C interface for programmers to use to decode
 images of these kinds.
@@ -96,12 +89,11 @@ Documentation
 
 Some documentation is included within the downloadable files. Additionally there is:
  * [C API Documentation][api]
- * [Supported Virtual Slide Formats][7]
+ * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][16]
  * [Requested Properties][17]
  * [OpenSlide Wiki][wiki]
 
-[7]: Supported%20Virtual%20Slide%20Formats
 [16]: List%20of%20Known%20Properties
 [17]: Requested%20Properties
 
