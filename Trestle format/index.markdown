@@ -77,7 +77,8 @@ value 0.
 Associated Images
 -----------------
 
-None.
+macro
+:the image with a filename extension of "`.Full`" (optional)
 
 
 Known Properties
