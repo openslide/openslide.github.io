@@ -108,6 +108,16 @@ Known Properties
 All key-value data encoded in the `ImageDescription` TIFF field is
 represented as properties prefixed with "`aperio.`".
 
+`openslide.mpp-x`
+:normalized `aperio.MPP`
+
+`openslide.mpp-y`
+:normalized `aperio.MPP`
+
+`openslide.objective-power`
+:normalized `aperio.AppMag`
+
+
 Test Data
 ---------
 

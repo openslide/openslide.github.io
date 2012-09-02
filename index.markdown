@@ -88,10 +88,7 @@ Some documentation is included within the downloadable files. Additionally there
  * [C API Documentation][api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][properties]
- * [Requested Properties][17]
  * [OpenSlide Wiki][wiki]
-
-[17]: Requested%20Properties
 
 
 Development

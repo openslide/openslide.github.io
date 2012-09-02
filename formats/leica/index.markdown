@@ -75,6 +75,15 @@ Known Properties
 `leica.objective`
 :the `objective` of the main image
 
+`openslide.mpp-x`
+:calculated as `10000/tiff.XResolution`
+
+`openslide.mpp-y`
+:calculated as `10000/tiff.YResolution`
+
+`openslide.objective-power`
+:normalized `leica.objective`
+
 
 Test Data
 ---------

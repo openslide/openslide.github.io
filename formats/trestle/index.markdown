@@ -87,6 +87,18 @@ Known Properties
 All data encoded in the `ImageDescription` TIFF field is represented
 as properties prefixed with "`trestle.`".
 
+`openslide.mpp-x`
+:copy of `tiff.XResolution` (note that this is a totally non-standard use
+of this TIFF tag)
+
+`openslide.mpp-y`
+:copy of `tiff.YResolution` (note that this is a totally non-standard use
+of this TIFF tag)
+
+`openslide.objective-power`
+:normalized `trestle.Objective Power`
+
+
 Test Data
 ---------
 

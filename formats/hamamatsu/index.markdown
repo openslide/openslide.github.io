@@ -92,7 +92,7 @@ Key                    | Description                     |
 `MapFile`|A lower-resolution version of all the ImageFiles|
 `OptimisationFile`|File specifying some of the restart marker offsets in each ImageFile|
 `AuthCode`|Unknown|
-`SourceLens`|Possibly the magnification|
+`SourceLens`|Apparently the magnification|
 `PhysicalWidth`|Width of the slide in some unit?|
 `PhysicalHeight`|Height of the slide in some unit?|
 `LayerSpacing`|Unknown|
@@ -230,6 +230,9 @@ Known Properties
 ----------------
 
 All key-value data stored in the VMS/VMU file are encoded as properties prefixed with "`hamamatsu.`".
+
+`openslide.objective-power`
+:normalized `hamamatsu.SourceLens`
 
 
 Test Data

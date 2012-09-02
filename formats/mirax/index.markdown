@@ -132,6 +132,20 @@ Known Properties
 All key-value data stored in the `Slidedat.ini` file are encoded as
 properties prefixed with "`mirax.`".
 
+`openslide.mpp-x`
+:normalized `MICROMETER_PER_PIXEL_X` from the Slidedat section
+corresponding to level 0 (typically
+`mirax.LAYER_0_LEVEL_0_SECTION.MICROMETER_PER_PIXEL_X`)
+
+`openslide.mpp-y`
+:normalized `MICROMETER_PER_PIXEL_Y` from the Slidedat section
+corresponding to level 0 (typically
+`mirax.LAYER_0_LEVEL_0_SECTION.MICROMETER_PER_PIXEL_Y`)
+
+`openslide.objective-power`
+:normalized `mirax.GENERAL.OBJECTIVE_MAGNIFICATION`
+
+
 Test Data
 ---------
 <http://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>
