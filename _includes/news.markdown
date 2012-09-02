@@ -1,3 +1,10 @@
+OpenSlide user meeting in Baltimore
+-----------------------------------
+There will be an [informal gathering][baltimore] of OpenSlide users on
+October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
+
+[baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
+
 Windows binaries now available, 2012-08-10
 ------------------------------------------
 Compiled binaries for 32-bit and 64-bit Windows are now available from the
