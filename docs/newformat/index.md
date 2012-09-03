@@ -63,14 +63,17 @@ OpenSlide currently does not support pyramidal associated images; each associate
 Error handling
 --------------
 
+### Preface: GError
+
+All functions called via `openslide_can_open()`/`openslide_open()`, and some utility functions called at runtime, report errors using GError.  GError has a [strict set of rules](http://developer.gnome.org/glib/stable/glib-Error-Reporting.html#glib-Error-Reporting.description) that **must** be followed when producing or consuming errors.
+
+### How to handle errors
+
 OpenSlide takes a conservative approach to error handling.  Where feasible, a vendor driver should validate any slide metadata it is relying upon.  If the driver finds evidence that its understanding of the slide format is incomplete -- for example, required slide metadata is missing, or an enumerated field has an unknown value -- it should log an error and give up rather than attempting to muddle onward.
 
-If an error is encountered while opening a slide:
+**If an error is encountered while opening a slide**, report an error using GError.  Report an `OPENSLIDE_ERROR_FORMAT_NOT_SUPPORTED` if the file is not recognized by your driver, or an `OPENSLIDE_ERROR_BAD_DATA` if the file is recognized but contained unexpected data.  If you received a GError in a different domain from a helper function such as `_openslide_fopen()`, it's okay to return this error, either prefixed or unprefixed; it will be treated as `OPENSLIDE_ERROR_BAD_DATA`.
 
-1. Log an error using `g_warning()`.
-2. Fail the open.
-
-If an error is encountered at runtime (e.g. when handling an `openslide_read_region()` call):
+**If an error is encountered at runtime** (e.g. when handling an `openslide_read_region()` call):
 
 1. Call `_openslide_set_error()`.
 2. Fail the call.
