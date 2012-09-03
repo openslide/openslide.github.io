@@ -17,9 +17,16 @@ The vendor driver is responsible for initializing a property map containing meta
 
 Your driver is also responsible for setting some standard properties:
 
-* `openslide.vendor`
-* `openslide.comment`, if applicable
 * `openslide.background-color`, if applicable
+* `openslide.comment`, if applicable
+* `openslide.mpp-x`, if possible.  Should be a double.
+* `openslide.mpp-y`, if possible.  Should be a double.
+* `openslide.objective-power`, if possible.  Should be an integer.
+* `openslide.vendor`
+
+`openslide.background-color` should be set with `_openslide_set_background_color_prop()`.
+
+`openslide.mpp-x`, `openslide.mpp-y`, and `openslide.objective-power` should be a copy of, or otherwise derived from, another vendor-specific property.  The vendor-specific property should be the uninterpreted value from the slide file, while the `openslide.` property should be the validated or calculated value, often produced with `_openslide_duplicate_{int,double}_prop()`.
 
 You should not set `openslide.quickhash-1` yourself; see below.
 
