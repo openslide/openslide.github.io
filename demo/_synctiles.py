@@ -45,6 +45,7 @@ QUALITY = 75
 TILE_SIZE = 512
 OVERLAP = 1
 GROUP_NAME_MAP = {
+    'Generic-TIFF': 'Generic TIFF',
     'Hamamatsu': 'Hamamatsu NDPI',
     'Hamamatsu-vms': 'Hamamatsu VMS',
     'Mirax': 'MIRAX',
