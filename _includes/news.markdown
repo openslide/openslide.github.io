@@ -5,6 +5,28 @@ October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
 
 [baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
 
+OpenSlide version 3.3.0, 2012-09-08
+-----------------------------------
+Version 3.3.0 adds support for Leica SCN files and preliminary support
+for MIRAX 2.2, adds standard properties for microns-per-pixel and objective
+power, and improves the command-line tools.
+
+**API changes**: some functions were renamed and the old names deprecated,
+`openslide_get_version` was added, and `openslide_open` now reports errors
+by returning a handle in error state.
+
+OpenSlide Java version 0.11.0, 2012-09-08
+-----------------------------------------
+Version 0.11.0 of the Java bindings renames some methods, adds APIs for
+obtaining the versions of OpenSlide and the Java bindings, fixes error
+handling under OpenSlide 3.3.0, and fixes many build problems.
+
+OpenSlide Python version 0.4.0, 2012-09-08
+------------------------------------------
+Version 0.3.0 of the Python bindings renames some methods and properties,
+adds a property for the OpenSlide library version, fixes error handling
+under OpenSlide 3.3.0, and fixes initialization on Mac OS X.
+
 Windows binaries now available, 2012-08-10
 ------------------------------------------
 Compiled binaries for 32-bit and 64-bit Windows are now available from the
@@ -25,6 +47,9 @@ Version 3.2.6 adds support for downsampled MIRAX files, improves
 performance on some MIRAX slides, fixes a minor MIRAX drawing bug, and
 fixes a 3.2.5 regression in openslide_read_region with large
 dimensions.
+
+
+{% if page.news_show_extended %}
 
 OpenSlide Python version 0.3.0, 2011-12-16
 ------------------------------------------
@@ -50,9 +75,6 @@ OpenSlide Python version 0.2.0, 2011-09-02
 The first release of the Python bindings includes complete access to the
 OpenSlide API, functionality for producing Deep Zoom images, and a simple
 web application for displaying whole-slide images in a browser.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide version 3.2.4, 2011-03-07
 -----------------------------------
