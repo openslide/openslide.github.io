@@ -23,12 +23,12 @@ Source code is available for the following releases:
    * [`openslide-python-{{ latest-version-python }}.tar.gz`][12]
    * [`openslide-python-{{ latest-version-python }}.tar.xz`][13]
 
-[1]: http://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.gz
-[2]: http://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.xz
-[3]: http://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.gz
-[4]: http://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.xz
-[12]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.gz
-[13]: http://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.xz
+[1]: https://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.gz
+[2]: https://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.xz
+[3]: https://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.gz
+[4]: https://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.xz
+[12]: https://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.gz
+[13]: https://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.xz
 
 
 Windows Binaries
@@ -42,9 +42,9 @@ The latest build is dated {{ latest-version-winbuild }}:
 
 Problems with these binaries can be reported [here][winbuild-issues].
 
-[14]: http://github.com/downloads/openslide/openslide-winbuild/openslide-win32-{{ latest-version-winbuild }}.zip
-[15]: http://github.com/downloads/openslide/openslide-winbuild/openslide-win64-{{ latest-version-winbuild }}.zip
-[16]: http://github.com/downloads/openslide/openslide-winbuild/openslide-winbuild-{{ latest-version-winbuild }}.zip
+[14]: https://github.com/downloads/openslide/openslide-winbuild/openslide-win32-{{ latest-version-winbuild }}.zip
+[15]: https://github.com/downloads/openslide/openslide-winbuild/openslide-win64-{{ latest-version-winbuild }}.zip
+[16]: https://github.com/downloads/openslide/openslide-winbuild/openslide-winbuild-{{ latest-version-winbuild }}.zip
 
 Fedora
 ------
