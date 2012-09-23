@@ -5,6 +5,12 @@ October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
 
 [baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
 
+OpenSlide now in MacPorts, 2012-09-23
+-------------------------------------
+Mac OS X users can now install OpenSlide from [MacPorts][macports].
+
+[macports]: http://www.macports.org/
+
 OpenSlide version 3.3.0, 2012-09-08
 -----------------------------------
 Version 3.3.0 adds support for Leica SCN files and preliminary support

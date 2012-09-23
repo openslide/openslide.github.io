@@ -61,6 +61,13 @@ After installing [EPEL][7], users of RHEL >=5 or RHEL-derived systems can just `
 
 [7]: https://fedoraproject.org/wiki/EPEL
 
+Mac OS X
+--------
+OpenSlide is available from [MacPorts][macports] via
+`port install openslide`.
+
+[macports]: http://www.macports.org/
+
 Version Control
 ---------------
 [Git][8] repositories for OpenSlide are available. The commands to clone are:
