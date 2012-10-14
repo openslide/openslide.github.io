@@ -2,7 +2,7 @@
 #
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
-# Copyright (c) 2010-2011 Carnegie Mellon University
+# Copyright (c) 2010-2012 Carnegie Mellon University
 #
 # This library is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -28,6 +28,7 @@ from optparse import OptionParser
 import os
 import re
 import shutil
+import subprocess
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
@@ -37,6 +38,7 @@ import zipfile
 S3_BUCKET = 'openslide-demo'
 BASE_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
+RSYNC_BASE_URL = 'rsync://openslide.cs.cmu.edu/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
 METADATA_NAME = 'info.js'
 SLIDE_METADATA_NAME = 'properties.js'
@@ -256,6 +258,15 @@ def walk_files(root, relpath=''):
     yield (relpath, files)
 
 
+def update_testdata(root):
+    """Update the openslide-testdata input directory from the archive."""
+
+    print "Updating testdata..."
+    subprocess.check_call(['rsync', '-rltP', '--delete', RSYNC_BASE_URL,
+            root + '/'])
+    print
+
+
 def sync_tiles(in_root):
     """Synchronize the specified directory tree into S3."""
 
@@ -319,6 +330,7 @@ if __name__ == '__main__':
     if command == 'generate':
         if not opts.out_root:
             parser.error('Output directory not specified')
+        update_testdata(in_root)
         tile_tree(in_root, opts.out_root, opts.workers)
     elif command == 'sync':
         sync_tiles(in_root)
