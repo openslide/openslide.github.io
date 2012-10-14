@@ -5,6 +5,12 @@ October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
 
 [baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
 
+OpenSlide version 3.3.1, 2012-10-14
+-----------------------------------
+Version 3.3.1 has been released, parallelizing concurrent
+`openslide_read_region` calls, improving performance on MIRAX and Hamamatsu
+VMS, and adding experimental tile size properties.
+
 OpenSlide now in MacPorts, 2012-09-23
 -------------------------------------
 Mac OS X users can now install OpenSlide from [MacPorts][macports].
@@ -47,15 +53,15 @@ with OpenSlide.
 
 [vips]: http://www.vips.ecs.soton.ac.uk
 
+
+{% if page.news_show_extended %}
+
 OpenSlide version 3.2.6, 2012-02-23
 -----------------------------------
 Version 3.2.6 adds support for downsampled MIRAX files, improves
 performance on some MIRAX slides, fixes a minor MIRAX drawing bug, and
 fixes a 3.2.5 regression in openslide_read_region with large
 dimensions.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide Python version 0.3.0, 2011-12-16
 ------------------------------------------
