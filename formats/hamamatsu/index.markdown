@@ -276,6 +276,7 @@ Tag          | Description      |
 65424|Unknown, always 0?|
 65425|Unknown, always 0?|
 65426|Optimisation entries, as above|
+65427|Unknown, possibly slide identifier|
 65428|Unknown, `AuthCode`?|
 65433|Unknown, I have seen 1500 in this tag|
 65439|Unknown, perhaps some polygon ROI?|
@@ -284,8 +285,9 @@ Tag          | Description      |
 65442|Seems to be `Model`|
 65443|Unknown, always 0?|
 65444|Unknown, always 80?|
-65445|Unknown, always 2?|
+65445|Unknown, have seen 0 or 2|
 65446|Unknown, always 0?|
+65449|ASCII metadata block, not always present|
 
 
 Unlike in VMS, JPEG files in NDPI are not necessarily valid. If
