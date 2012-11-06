@@ -1,10 +1,3 @@
-OpenSlide user meeting in Baltimore
------------------------------------
-There will be an [informal gathering][baltimore] of OpenSlide users on
-October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
-
-[baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
-
 OpenSlide version 3.3.1, 2012-10-14
 -----------------------------------
 Version 3.3.1 has been released, parallelizing concurrent
@@ -38,6 +31,13 @@ OpenSlide Python version 0.4.0, 2012-09-08
 Version 0.3.0 of the Python bindings renames some methods and properties,
 adds a property for the OpenSlide library version, fixes error handling
 under OpenSlide 3.3.0, and fixes initialization on Mac OS X.
+
+OpenSlide user meeting in Baltimore
+-----------------------------------
+There will be an [informal gathering][baltimore] of OpenSlide users on
+October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
+
+[baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
 
 Windows binaries now available, 2012-08-10
 ------------------------------------------
