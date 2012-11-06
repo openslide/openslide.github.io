@@ -146,6 +146,13 @@ corresponding to level 0 (typically
 :normalized `mirax.GENERAL.OBJECTIVE_MAGNIFICATION`
 
 
+See Also
+--------
+[Introduction to MIRAX/MRXS][1]
+
+[1]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000373.html
+
+
 Test Data
 ---------
 <http://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>
