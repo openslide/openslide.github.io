@@ -111,8 +111,15 @@ The slide position file is referenced by the
 `VIMSLIDE_POSITION_BUFFER.default` nonhierarchical section.  It contains
 one entry for each camera position (*not* each tile position) in row-major
 order.  Each entry is nine bytes: a flag byte, the `X` pixel coordinate of
-the photo (4 bytes, little-endian), and the `Y` coordinate (4 bytes,
-little-endian).
+the photo (4 bytes, little-endian, may be negative), and the `Y` coordinate
+(4 bytes, little-endian, may be negative).  In slides with
+`CURRENT_SLIDE_VERSION` &ge; 1.9, the flag byte is 1 if the slide file
+contains tiles for this camera position, 0 otherwise.  In older slides,
+the flag byte is always 0.
+
+In slides with `CURRENT_SLIDE_VERSION` &ge; 2.2, the slide position file is
+compressed with DEFLATE and referenced by the
+`StitchingIntensityLayer.StitchingIntensityLevel` nonhierarchical section.
 
 Associated Images
 -----------------
