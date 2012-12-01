@@ -240,6 +240,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Do a quick check to see if a whole slide image is valid. </p>
+<p>This function is more efficient than <a class="el" href="openslide_8h.html#a6d49bdccc0883d8cfc7d9e8085384b6d" title="Open a whole slide image.">openslide_open()</a> if you do not necessarily intend to open the specified file (for example, when creating a list of available slide files). If you definitely intend to open the file, calling this function will only reduce performance; you should call <a class="el" href="openslide_8h.html#a6d49bdccc0883d8cfc7d9e8085384b6d" title="Open a whole slide image.">openslide_open()</a> directly.</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>The filename to check. </td></tr>

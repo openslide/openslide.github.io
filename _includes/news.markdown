@@ -1,3 +1,12 @@
+OpenSlide version 3.3.2, 2012-12-01
+-----------------------------------
+Version 3.3.2 fixes seams in MIRAX 2.2 slides, fixes associated images in
+single-level Aperio slides, and improves performance on MIRAX and Hamamatsu
+VMU.
+
+Windows build 20121201 also fixes a serious, Windows-specific thread safety
+issue.
+
 OpenSlide version 3.3.1, 2012-10-14
 -----------------------------------
 Version 3.3.1 has been released, parallelizing concurrent
