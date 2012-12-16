@@ -1,10 +1,55 @@
 ---
 layout: default
 title: Downloading OpenSlide
+releases:
+  c:
+    - {version: 3.3.2, date: 2012-12-01}
+    - {version: 3.3.1, date: 2012-10-14}
+    - {version: 3.3.0, date: 2012-09-08}
+    - {version: 3.2.6, date: 2012-02-23}
+    - {version: 3.2.5, date: 2011-12-16}
+    - {version: 3.2.4, date: 2011-03-07}
+    - {version: 3.2.3, date: 2010-09-09}
+    - {version: 3.2.2, date: 2010-06-16}
+    - {version: 3.2.1, date: 2010-06-03}
+    - {version: 3.2.0, date: 2010-06-01}
+    - {version: 3.1.1, date: 2010-04-27}
+    - {version: 3.1.0, date: 2010-04-01}
+    - {version: 3.0.3, date: 2010-03-01}
+    - {version: 3.0.2, date: 2010-02-17}
+    - {version: 3.0.1, date: 2010-02-04}
+    - {version: 3.0.0, date: 2010-01-28}
+    - {version: 2.3.1, date: 2009-12-14}
+    - {version: 2.3.0, date: 2009-12-11}
+    - {version: 2.2.1, date: 2009-10-23}
+    - {version: 2.2.0, date: 2009-09-15}
+    - {version: 2.1.0, date: 2009-08-18, no_xz: 1}
+    - {version: 2.0.0, date: 2009-07-16, no_xz: 1}
+  java:
+    - {version: 0.11.0, date: 2012-09-08}
+    - {version: 0.10.0, date: 2011-12-16}
+    - {version: 0.9.2, date: 2010-08-10}
+    - {version: 0.9.1, date: 2010-06-16}
+    - {version: 0.9.0, date: 2010-06-01}
+    - {version: 0.8.0, date: 2010-01-28}
+    - {version: 0.7.2, date: 2009-12-09}
+    - {version: 0.7.1, date: 2009-11-19}
+    - {version: 0.7.0, date: 2009-09-15}
+    - {version: 0.6.1, date: 2009-08-25, no_xz: 1}
+    - {version: 0.6.0, date: 2009-08-17, no_xz: 1}
+    - {version: 0.5.0, date: 2009-07-15, no_xz: 1}
+  python:
+    - {version: 0.4.0, date: 2012-09-08}
+    - {version: 0.3.0, date: 2011-12-16}
+    - {version: 0.2.0, date: 2011-09-02}
+  winbuild:
+    - {date: 2012-12-01}
+    - {date: 2012-10-14}
+    - {date: 2012-09-08}
+    - {date: 2012-08-02}
 ---
 
 {% include links.markdown %}
-{% include versions.markdown %}
 
 OpenSlide is available under the terms of the GNU Lesser General Public License, version 2.1.
 
@@ -13,38 +58,36 @@ Source
 
 Source code is available for the following releases:
 
- * OpenSlide {{ latest-version }} (stable API)
-   * [`openslide-{{ latest-version }}.tar.gz`][1]
-   * [`openslide-{{ latest-version }}.tar.xz`][2]
- * OpenSlide Java interface {{ latest-version-java }} (still unstable API, subject to change)
-   * [`openslide-java-{{ latest-version-java }}.tar.gz`][3]
-   * [`openslide-java-{{ latest-version-java }}.tar.xz`][4]
- * OpenSlide Python interface {{ latest-version-python }} (still unstable API, subject to change)
-   * [`openslide-python-{{ latest-version-python }}.tar.gz`][12]
-   * [`openslide-python-{{ latest-version-python }}.tar.xz`][13]
+#### OpenSlide (stable API)
+{% assign package = 'openslide' %}
+{% assign releases = page.releases.c %}
+{% include source-release-table.markdown %}
 
-[1]: https://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.gz
-[2]: https://github.com/downloads/openslide/openslide/openslide-{{ latest-version }}.tar.xz
-[3]: https://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.gz
-[4]: https://github.com/downloads/openslide/openslide-java/openslide-java-{{ latest-version-java }}.tar.xz
-[12]: https://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.gz
-[13]: https://github.com/downloads/openslide/openslide-python/openslide-python-{{ latest-version-python }}.tar.xz
+#### OpenSlide Java interface (still unstable API, subject to change)
+{% assign package = 'openslide-java' %}
+{% assign releases = page.releases.java %}
+{% include source-release-table.markdown %}
 
+#### OpenSlide Python interface (still unstable API, subject to change)
+{% assign package = 'openslide-python' %}
+{% assign releases = page.releases.python %}
+{% include source-release-table.markdown %}
 
 Windows Binaries
 ----------------
 
-The latest build is dated {{ latest-version-winbuild }}:
-
- * [32-bit binaries][14]
- * [64-bit binaries][15]
- * [Corresponding sources][16]
-
 Problems with these binaries can be reported [here][winbuild-issues].
 
-[14]: https://github.com/downloads/openslide/openslide-winbuild/openslide-win32-{{ latest-version-winbuild }}.zip
-[15]: https://github.com/downloads/openslide/openslide-winbuild/openslide-win64-{{ latest-version-winbuild }}.zip
-[16]: https://github.com/downloads/openslide/openslide-winbuild/openslide-winbuild-{{ latest-version-winbuild }}.zip
+<table class="releases">
+  {% for release in page.releases.winbuild %}
+    <tr class="{% cycle 'winbuild': 'odd', 'even' %}">
+      <th>{{ release.date }}</th>
+      <td><a href="https://github.com/downloads/openslide/openslide-winbuild/openslide-win32-{{ release.date|remove:'-' }}.zip">32-bit</a></td>
+      <td><a href="https://github.com/downloads/openslide/openslide-winbuild/openslide-win64-{{ release.date|remove:'-' }}.zip">64-bit</a></td>
+      <td><a href="https://github.com/downloads/openslide/openslide-winbuild/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Corresponding sources</a></td>
+    </tr>
+  {% endfor %}
+</table>
 
 Fedora
 ------

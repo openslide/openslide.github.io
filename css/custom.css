@@ -1,0 +1,16 @@
+div.releases {
+  margin-left: 2em;
+}
+.releases table, table.releases {
+  border: 0;
+}
+.releases tr.odd {
+  background-color: #d8f8d8;
+}
+.releases th {
+  text-align: right;
+}
+.releases th, .releases td {
+  padding: 0.8em;
+  border: 0;
+}
