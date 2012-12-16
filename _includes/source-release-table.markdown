@@ -1,4 +1,4 @@
-<div class="releases">
+<div class="releases indent">
   <table>
     {% for release in releases %}
       <tr class="{% cycle package: 'odd', 'even' %}">

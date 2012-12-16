@@ -1,8 +1,16 @@
 div.releases {
+  display: inline-block;
+  height: 9em;
+  overflow-y: scroll;
+}
+div.releases.indent {
   margin-left: 2em;
 }
-.releases table, table.releases {
+.releases table {
   border: 0;
+}
+.releases tr {
+  height: 3em;
 }
 .releases tr.odd {
   background-color: #d8f8d8;
@@ -11,6 +19,6 @@ div.releases {
   text-align: right;
 }
 .releases th, .releases td {
-  padding: 0.8em;
+  padding: 0 1em;
   border: 0;
 }
