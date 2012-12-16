@@ -56,8 +56,6 @@ OpenSlide is available under the terms of the GNU Lesser General Public License,
 Source
 ------
 
-Source code is available for the following releases:
-
 #### OpenSlide (stable API)
 {% assign package = 'openslide' %}
 {% assign releases = page.releases.c %}
