@@ -81,9 +81,9 @@ Problems with these binaries can be reported [here][winbuild-issues].
     {% for release in page.releases.winbuild %}
       <tr class="{% cycle 'winbuild': 'odd', 'even' %}">
         <th>{{ release.date }}</th>
-        <td><a href="https://github.com/downloads/openslide/openslide-winbuild/openslide-win32-{{ release.date|remove:'-' }}.zip">32-bit</a></td>
-        <td><a href="https://github.com/downloads/openslide/openslide-winbuild/openslide-win64-{{ release.date|remove:'-' }}.zip">64-bit</a></td>
-        <td><a href="https://github.com/downloads/openslide/openslide-winbuild/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Corresponding sources</a></td>
+        <td><a href="http://download.openslide.org/releases/openslide-winbuild/openslide-win32-{{ release.date|remove:'-' }}.zip">32-bit</a></td>
+        <td><a href="http://download.openslide.org/releases/openslide-winbuild/openslide-win64-{{ release.date|remove:'-' }}.zip">64-bit</a></td>
+        <td><a href="http://download.openslide.org/releases/openslide-winbuild/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Corresponding sources</a></td>
       </tr>
     {% endfor %}
   </table>
