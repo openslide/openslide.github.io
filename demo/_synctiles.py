@@ -52,6 +52,20 @@ GROUP_NAME_MAP = {
     'Hamamatsu-vms': 'Hamamatsu VMS',
     'Mirax': 'MIRAX',
 }
+BUCKET_STATIC = {
+    'index.html': {
+        'headers': {
+            'Content-Type': 'text/html',
+            'x-amz-website-redirect-location': 'http://openslide.org/demo/',
+        },
+    },
+    'error.html': {
+        'data': '<!doctype html>\n<title>Error</title>\n<h1>Not Found</h1>\nNo such file.\n',
+        'headers': {
+            'Content-Type': 'text/html',
+        },
+    },
+}
 
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -276,6 +290,12 @@ def sync_tiles(in_root):
     conn = boto.connect_s3()
     bucket = conn.get_bucket(S3_BUCKET)
 
+    print "Storing static files..."
+    for relpath, opts in BUCKET_STATIC.iteritems():
+        key = boto.s3.key.Key(bucket, relpath)
+        key.set_contents_from_string(opts.get('data', ''),
+                headers=opts.get('headers', {}), policy='public-read')
+
     print "Enumerating S3 bucket..."
     index = {}
     for key in bucket.list():
@@ -283,7 +303,8 @@ def sync_tiles(in_root):
 
     print "Pruning S3 bucket..."
     for relpath in sorted(index):
-        if not os.path.exists(os.path.join(in_root, relpath)):
+        if (not os.path.exists(os.path.join(in_root, relpath)) and
+                relpath not in BUCKET_STATIC):
             boto.s3.key.Key(bucket, relpath).delete()
 
     for parent_relpath, files in walk_files(in_root):
