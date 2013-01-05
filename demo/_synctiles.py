@@ -35,8 +35,8 @@ from unicodedata import normalize
 import xml.dom.minidom as minidom
 import zipfile
 
-S3_BUCKET = 'openslide-demo'
-BASE_URL = 'http://%s.s3.amazonaws.com/' % S3_BUCKET
+S3_BUCKET = 'demo.openslide.org'
+BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 RSYNC_BASE_URL = 'rsync://openslide.cs.cmu.edu/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
