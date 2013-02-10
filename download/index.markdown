@@ -107,9 +107,11 @@ After installing [EPEL][7], users of RHEL >=5 or RHEL-derived systems can just `
 Mac OS X
 --------
 OpenSlide is available from [MacPorts][macports] via
-`port install openslide`.
+`port install openslide` and from [Homebrew][homebrew] via
+`brew install openslide`.
 
 [macports]: http://www.macports.org/
+[homebrew]: http://mxcl.github.com/homebrew/
 
 Version Control
 ---------------
