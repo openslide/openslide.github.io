@@ -24,24 +24,13 @@ project.
 [2]: http://www.umdnj.edu/
 
 
-Image Mining for Comparative Analysis of Expression Patterns in Tissue Microarrays
-----------------------------------------------------------------------------------
-
-The Center for Biomedical Imaging & Informatics has a joint project
-with [Emory University][3] entitled [Image Mining for Comparative
-Analysis of Expression Patterns in Tissue Microarrays][4], and they
-are investigating using OpenSlide.
-
-[3]: http://www.emory.edu/
-[4]: http://cci.emory.edu/cms/projects/image_mining.html
-
-
 In Silico Brain Tumor Research Center
 -------------------------------------
 
-The [In Silico Brain Tumor Research Center][5] at Emory uses OpenSlide
-to extract images for analysis.
+The [In Silico Brain Tumor Research Center][5] at [Emory University][3]
+uses OpenSlide to extract images for analysis.
 
+[3]: http://www.emory.edu/
 [5]: https://wiki.nci.nih.gov/pages/viewpage.action?pageId=21698609
 
 
