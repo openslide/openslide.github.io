@@ -23,12 +23,12 @@ whole-slide images (also known as virtual slides). The current version
 is 3.3.2, released 2012-12-01.
 
 Java and Python bindings are also available. The Java binding includes a
-simple image viewer. The Python binding includes a [Deep Zoom][26]
+simple image viewer. The Python binding includes a [Deep Zoom][deepzoom]
 generator and a simple web-based viewer.
 
 [Download][download]
 
-[26]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
+[deepzoom]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
 
 About OpenSlide
 ---------------
@@ -49,11 +49,11 @@ OpenSlide's support for these formats is not endorsed by their respective
 vendors and may be incomplete.  Problems should be reported to the OpenSlide
 [mailing list][users-subscribe] or [issue tracker][c-issues].
 
-OpenSlide is a product of the research group of [M. Satyanarayanan][8]
-(Satya) in the Carnegie Mellon University [School of Computer Science][9].
+OpenSlide is a product of the research group of [M. Satyanarayanan][satya]
+(Satya) in the Carnegie Mellon University [School of Computer Science][cmucs].
 
-[8]: http://www.cs.cmu.edu/~satya/
-[9]: http://www.cs.cmu.edu/
+[cmucs]: http://www.cs.cmu.edu/
+[satya]: http://www.cs.cmu.edu/~satya/
 
 
 See how [some projects use OpenSlide][other-projects].
@@ -118,11 +118,11 @@ The architecture and design of the library is described in a technical report:
 Adam Goode, M. Satyanarayanan  
 Technical Report CMU-CS-08-136, June 2008  
 Computer Science Department, Carnegie Mellon University  
-[Abstract][19]
-[PDF][20]
+[Abstract][tr-abstract]
+[PDF][tr-full]
 
-[19]: http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html
-[20]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
+[tr-abstract]: http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html
+[tr-full]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
 
 
 About whole-slide images
@@ -145,10 +145,10 @@ environments.
 
 Acknowledgements
 ----------------
-OpenSlide has been supported by the [National Institutes of Health][21] and the [Clinical and Translational Science Institute][22] at the University of Pittsburgh.
+OpenSlide has been supported by the [National Institutes of Health][nih] and the [Clinical and Translational Science Institute][ctsi] at the University of Pittsburgh.
 
-[21]: http://www.nih.gov/
-[22]: http://www.ctsi.pitt.edu/
+[nih]: http://www.nih.gov/
+[ctsi]: http://www.ctsi.pitt.edu/
 
 
-[![NIH logo](images/NIH_logo.png)][21]
+[![NIH logo](images/NIH_logo.png)][nih]
