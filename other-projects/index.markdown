@@ -6,63 +6,63 @@ title: Some Projects Using OpenSlide
 VIPS
 ----
 
-The [VIPS][11] image processing system can use OpenSlide to read
+The [VIPS][vips] image processing system can use OpenSlide to read
 slide files.
 
-[11]: http://www.vips.ecs.soton.ac.uk/
+[vips]: http://www.vips.ecs.soton.ac.uk/
 
 Collaborative Systems for Analyzing Tissue Microarrays
 ------------------------------------------------------
 
-The [Center for Biomedical Imaging & Informatics][1] at
-[UMDNJ][2] uses OpenSlide for a tissue microarray
+The [Center for Biomedical Imaging & Informatics][cbii] at
+[UMDNJ][umdnj] uses OpenSlide for a tissue microarray
 analysis and data management toolset currently under development as
 part of the "Collaborative Systems for Analyzing Tissue Microarrays"
 project.
 
-[1]: http://pleiad.umdnj.edu/CBII/index.html
-[2]: http://www.umdnj.edu/
+[cbii]: http://pleiad.umdnj.edu/CBII/index.html
+[umdnj]: http://www.umdnj.edu/
 
 
 In Silico Brain Tumor Research Center
 -------------------------------------
 
-The [In Silico Brain Tumor Research Center][5] at [Emory University][3]
-uses OpenSlide in their [Pathology Image Database System][pidb] to extract
-images for analysis.
+The [In Silico Brain Tumor Research Center][isbtrc] at
+[Emory University][emory] uses OpenSlide in their
+[Pathology Image Database System][pidb] to extract images for analysis.
 
-[3]: http://www.emory.edu/
-[5]: https://wiki.nci.nih.gov/pages/viewpage.action?pageId=21698609
+[isbtrc]: https://wiki.nci.nih.gov/pages/viewpage.action?pageId=21698609
+[emory]: http://www.emory.edu/
 [pidb]: http://confluence.cci.emory.edu:8090/display/PIDB/Home
 
 
 caMicroscope
 ------------
 
-Emory uses OpenSlide to develop [caMicroscope][6], a [caGrid][7]
-compliant pathology viewer.
+Emory uses OpenSlide to develop [caMicroscope][camicroscope], a
+[caGrid][cagrid] compliant pathology viewer.
 
-[6]: https://cabig.nci.nih.gov/tools/caMicroscope
-[7]: http://cagrid.org/
+[camicroscope]: https://cabig.nci.nih.gov/tools/caMicroscope
+[cagrid]: http://cagrid.org/
 
 
 SlideTutor
 ----------
 
-The [SlideTutor][8] project at [UPMC][9] uses
+The [SlideTutor][slidetutor] project at [UPMC][upmc] uses
 OpenSlide to read slides in various formats.
 
-[8]: http://slidetutor.upmc.edu/
-[9]: http://www.upmc.edu/
+[slidetutor]: http://slidetutor.upmc.edu/
+[upmc]: http://www.upmc.edu/
 
 
 Algum
 -----
 
-The [Algum system][10] at CMU uses OpenSlide to display whole slide
+The [Algum system][algum] at CMU uses OpenSlide to display whole slide
 images.
 
-[10]: http://algum.cs.cmu.edu/
+[algum]: http://algum.cs.cmu.edu/
 
 
 Cardiac Transplant Endomyocardial Biopsy Acute Cellular Rejection Tutorial
