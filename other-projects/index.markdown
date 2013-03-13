@@ -59,9 +59,10 @@ OpenSlide to read slides in various formats.
 Algum
 -----
 
-The [Algum system][algum] at CMU uses OpenSlide to display whole slide
-images.
+The [Algum system][algum] at [Carnegie Mellon University][cmu] uses
+OpenSlide to display whole slide images.
 
+[cmu]: http://www.cmu.edu/
 [algum]: http://algum.cs.cmu.edu/
 
 

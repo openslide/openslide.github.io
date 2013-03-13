@@ -50,7 +50,7 @@ vendors and may be incomplete.  Problems should be reported to the OpenSlide
 [mailing list][users-subscribe] or [issue tracker][c-issues].
 
 OpenSlide is a product of the research group of [M. Satyanarayanan][8]
-(Satya) in the Carnegie Mellon [School of Computer Science][9].
+(Satya) in the Carnegie Mellon University [School of Computer Science][9].
 
 [8]: http://www.cs.cmu.edu/~satya/
 [9]: http://www.cs.cmu.edu/
