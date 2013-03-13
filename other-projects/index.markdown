@@ -28,10 +28,12 @@ In Silico Brain Tumor Research Center
 -------------------------------------
 
 The [In Silico Brain Tumor Research Center][5] at [Emory University][3]
-uses OpenSlide to extract images for analysis.
+uses OpenSlide in their [Pathology Image Database System][pidb] to extract
+images for analysis.
 
 [3]: http://www.emory.edu/
 [5]: https://wiki.nci.nih.gov/pages/viewpage.action?pageId=21698609
+[pidb]: http://confluence.cci.emory.edu:8090/display/PIDB/Home
 
 
 caMicroscope
@@ -61,3 +63,26 @@ The [Algum system][10] at CMU uses OpenSlide to display whole slide
 images.
 
 [10]: http://algum.cs.cmu.edu/
+
+
+Cardiac Transplant Endomyocardial Biopsy Acute Cellular Rejection Tutorial
+--------------------------------------------------------------------------
+
+The [Society for Cardiovascular Pathology][scvp] and [Association for the
+European Cardiovascular Pathology][aecvp] are using OpenSlide in a [web
+tutorial][acr] on interpreting endomyocardial biopsy findings for cardiac
+transplant acute cellular rejection.
+
+[scvp]: http://scvp.net/
+[aecvp]: http://anpat.unipd.it/aecvp/
+[acr]: http://scvp.net/acr/
+
+
+Simagis Live
+------------
+
+[Smart Imaging Technologies][smartimtech] is using OpenSlide in their
+[Simagis Live][simagis-live] web-based image management system.
+
+[smartimtech]: http://smartimtech.com/
+[simagis-live]: http://live.simagis.com/
