@@ -42,7 +42,7 @@ In Silico Brain Tumor Research Center
 The [In Silico Brain Tumor Research Center][5] at Emory uses OpenSlide
 to extract images for analysis.
 
-[5]: https://wiki.nci.nih.gov/display/ISCRE/Emory+University+In+Silico+Brain+Tumor+Research+Center
+[5]: https://wiki.nci.nih.gov/pages/viewpage.action?pageId=21698609
 
 
 caMicroscope
