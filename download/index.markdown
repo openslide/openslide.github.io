@@ -3,6 +3,7 @@ layout: default
 title: Downloading OpenSlide
 releases:
   c:
+    - {version: 3.3.3, date: 2013-04-13}
     - {version: 3.3.2, date: 2012-12-01}
     - {version: 3.3.1, date: 2012-10-14}
     - {version: 3.3.0, date: 2012-09-08}
@@ -43,6 +44,7 @@ releases:
     - {version: 0.3.0, date: 2011-12-16}
     - {version: 0.2.0, date: 2011-09-02}
   winbuild:
+    - {date: 2013-04-13}
     - {date: 2012-12-01}
     - {date: 2012-10-14}
     - {date: 2012-09-08}

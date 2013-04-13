@@ -1,3 +1,11 @@
+OpenSlide version 3.3.3, 2013-04-13
+-----------------------------------
+Version 3.3.3 fixes inclusion of `openslide.h` with MSVC and adds minor
+compatibility improvements for Aperio JP2K and Hamamatsu slides.
+
+Windows build 20130413 also fixes a runtime crash when linked with
+`/OPT:REF`.
+
 OpenSlide version 3.3.2, 2012-12-01
 -----------------------------------
 Version 3.3.2 fixes seams in MIRAX 2.2 slides, fixes associated images in
@@ -41,6 +49,9 @@ Version 0.3.0 of the Python bindings renames some methods and properties,
 adds a property for the OpenSlide library version, fixes error handling
 under OpenSlide 3.3.0, and fixes initialization on Mac OS X.
 
+
+{% if page.news_show_extended %}
+
 OpenSlide user meeting in Baltimore
 -----------------------------------
 There will be an [informal gathering][baltimore] of OpenSlide users on
@@ -61,9 +72,6 @@ The [VIPS image processing system][vips] can now read whole-slide images
 with OpenSlide.
 
 [vips]: http://www.vips.ecs.soton.ac.uk
-
-
-{% if page.news_show_extended %}
 
 OpenSlide version 3.2.6, 2012-02-23
 -----------------------------------
