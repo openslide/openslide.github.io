@@ -2,16 +2,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>{{ page.title }}</title>
+<title>Search Results</title>
 <link rel="stylesheet" href="/css/trac.css" type="text/css"/>
-<link rel="stylesheet" href="/css/newsflash.css" type="text/css"/>
 <link rel="stylesheet" href="/css/custom.css" type="text/css"/>
+<style type="text/css">
+table {
+  border: 0;
+  border-collapse: separate;
+}
+table td {
+  border: 0;
+}
+div.results .gsc-tabsArea {
+  margin-top: 0;
+}
+div.results .gsc-cursor-box {
+  text-align: center;
+}
+</style>
 </head>
 
 <body>
 
 <div id="header">
-<a href="/"><img src="/images/openslide_logo.png" alt="OpenSlide" width="306" height="102"></a>
+<a href="/"><img class="openslide-logo" src="/images/openslide_logo.png" alt="OpenSlide" width="306" height="102"></a>
 <div class="searchbox">
 <div class="inner">
 <gcse:searchbox-only></gcse:searchbox-only>
@@ -20,13 +34,8 @@
 <hr/>
 </div>
 
-<div class="wikipage">
-<h1>{{ page.title }}</h1>
-{{ content }}
-</div>
-
-<div id="footer">
-<p class="right">Because 2<sup>126</sup> pixels should be enough for anybody.</p>
+<div class="results">
+  <gcse:searchresults-only></gcse:searchresults-only>
 </div>
 
 <script>

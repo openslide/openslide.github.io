@@ -1,3 +1,32 @@
+div.searchbox {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  height: 110px;
+  width: 300px;
+}
+div.searchbox .inner {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+div.searchbox table {
+  border: 0;
+}
+div.searchbox table td {
+  border: 0;
+}
+div.searchbox .gsc-input-box {
+  height: 28px;
+  box-shadow: none;
+}
+div.searchbox .gsc-input-box a {
+  margin-top: 4px;
+}
+div.searchbox .gsc-search-button {
+  display: none;
+}
+
 div.releases {
   display: inline-block;
   height: 9em;
