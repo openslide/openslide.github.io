@@ -65,6 +65,12 @@ BUCKET_STATIC = {
             'Content-Type': 'text/html',
         },
     },
+    'robots.txt': {
+        'data': 'User-agent: *\nDisallow: /\n',
+        'headers': {
+            'Content-Type': 'text/plain',
+        },
+    },
 }
 
 
