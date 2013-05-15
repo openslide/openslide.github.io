@@ -2,7 +2,7 @@
 #
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
-# Copyright (c) 2010-2012 Carnegie Mellon University
+# Copyright (c) 2010-2013 Carnegie Mellon University
 #
 # This library is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -164,12 +164,27 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
     doc = minidom.parseString(dzi)
     doc.documentElement.setAttribute('MinTileLevel', '8')
     dzi = doc.toxml('UTF-8')
+    # Format tile source
+    source = {
+        'Image': {
+            'xmlns': 'http://schemas.microsoft.com/deepzoom/2008',
+            'Url': os.path.join(BASE_URL, out_relpath + '_files/'),
+            'Format': FORMAT,
+            'TileSize': TILE_SIZE,
+            'Overlap': OVERLAP,
+            'Size': {
+                'Width': dz.level_dimensions[-1][0],
+                'Height': dz.level_dimensions[-1][1],
+            },
+        }
+    }
 
     # Return properties
     return {
         'name': associated,
         'dzi': dzi,
         'url': os.path.join(BASE_URL, out_relpath + '.dzi'),
+        'source': source,
     }
 
 
