@@ -87,6 +87,12 @@ div#view {
     border: 1px solid #000;
     color: white;
 }
+div#instructions {
+    position: absolute;
+    top: 48%;
+    width: 100%;
+    text-align: center;
+}
 div#properties {
     position: absolute;
     right: 0;
