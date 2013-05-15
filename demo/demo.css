@@ -87,6 +87,10 @@ div#view {
     border: 1px solid #000;
     color: white;
 }
+div#view.fullpage {
+    left: 0;
+    border: 0;
+}
 div#instructions {
     position: absolute;
     top: 48%;

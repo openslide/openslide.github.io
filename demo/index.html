@@ -117,6 +117,13 @@ $(document).ready(function() {
         viewer.addHandler("open", function() {
             viewer.source.minLevel = 8;
         });
+        viewer.addHandler("fullpage", function(_, opts) {
+            /* When exiting fullpage, OpenSeadragon gives the viewer a CSS
+               width which improperly includes the viewer's right margin. */
+            if (!opts.fullpage) {
+                $('#view').css('width', '').css('height', '');
+            }
+        });
     }
 
     function open_slide(link) {
