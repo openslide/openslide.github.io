@@ -95,6 +95,7 @@ div#instructions {
     position: absolute;
     top: 48%;
     width: 100%;
+    font-size: 13px;
     text-align: center;
 }
 div#properties {
