@@ -95,37 +95,6 @@ $(document).ready(function() {
         props.scrollTop(0).scrollLeft(0);
     }
 
-    // We always start a new viewer for each slide to avoid a timer leak
-    function reset_viewer() {
-        if (viewer) {
-            viewer.close();
-        }
-        $("#view").text("");
-        viewer = new OpenSeadragon({
-            id: "view",
-            prefixUrl: "images/",
-            showNavigator: false,
-            animationTime: 0.5,
-            blendTime: 0.1,
-            constrainDuringPan: true,
-            maxZoomPixelRatio: 2,
-            minPixelRatio: 0.5,
-            minZoomLevel: 1,
-            visibilityRatio: 1,
-            zoomPerScroll: 2
-        });
-        viewer.addHandler("open", function() {
-            viewer.source.minLevel = 8;
-        });
-        viewer.addHandler("fullpage", function(_, opts) {
-            /* When exiting fullpage, OpenSeadragon gives the viewer a CSS
-               width which improperly includes the viewer's right margin. */
-            if (!opts.fullpage) {
-                $('#view').css('width', '').css('height', '');
-            }
-        });
-    }
-
     function open_slide(link) {
         // Load info objects
         var group_id = link.data('group');
@@ -163,8 +132,36 @@ $(document).ready(function() {
                         addClass('visible-associated');
         }
 
+        // Create viewer if necessary
+        if (!viewer) {
+            $("#view").text("");
+            viewer = new OpenSeadragon({
+                id: "view",
+                prefixUrl: "images/",
+                showNavigator: false,
+                animationTime: 0.5,
+                blendTime: 0.1,
+                constrainDuringPan: true,
+                maxZoomPixelRatio: 2,
+                minPixelRatio: 0.5,
+                minZoomLevel: 1,
+                visibilityRatio: 1,
+                zoomPerScroll: 2
+            });
+            viewer.addHandler("open", function() {
+                viewer.source.minLevel = 8;
+            });
+            viewer.addHandler("fullpage", function(_, opts) {
+                /* When exiting fullpage, OpenSeadragon gives the viewer a
+                   CSS width which improperly includes the viewer's right
+                   margin. */
+                if (!opts.fullpage) {
+                    $('#view').css('width', '').css('height', '');
+                }
+            });
+        }
+
         // Load slide
-        reset_viewer();
         viewer.open(image.source);
 
         // Update selection highlight
