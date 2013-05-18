@@ -32,7 +32,6 @@ import subprocess
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
-import xml.dom.minidom as minidom
 import zipfile
 
 S3_BUCKET = 'demo.openslide.org'
@@ -156,14 +155,6 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
     progress()
     print
 
-    # Format DZI
-    dzi = dz.get_dzi(FORMAT)
-    # Hack: add MinTileLevel attribute to Image tag, in violation of
-    # the XML schema, to prevent OpenSeadragon from loading the
-    # lowest-level tiles
-    doc = minidom.parseString(dzi)
-    doc.documentElement.setAttribute('MinTileLevel', '8')
-    dzi = doc.toxml('UTF-8')
     # Format tile source
     source = {
         'Image': {
@@ -182,8 +173,6 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
     # Return properties
     return {
         'name': associated,
-        'dzi': dzi,
-        'url': os.path.join(BASE_URL, out_relpath + '.dzi'),
         'source': source,
     }
 
