@@ -37,6 +37,9 @@ Java and Python bindings are also available. The Java binding includes a
 simple image viewer. The Python binding includes a [Deep Zoom][deepzoom]
 generator and a simple web-based viewer.
 
+OpenSlide and its official language bindings are released under the
+terms of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
+
 [Download][download]
 
 [deepzoom]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx

@@ -1,5 +1,6 @@
 [news]: /news/
 [download]: /download/
+[lgplv2.1]: https://raw.github.com/openslide/openslide/master/lgpl-2.1.txt
 [api]: /api/openslide_8h.html
 [properties]: /properties/
 [demo]: /demo/
