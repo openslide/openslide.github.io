@@ -139,28 +139,22 @@ $(document).ready(function() {
             viewer = new OpenSeadragon({
                 id: "view",
                 prefixUrl: "images/",
-                showNavigator: false,
                 animationTime: 0.5,
                 blendTime: 0.1,
                 constrainDuringPan: true,
                 maxZoomPixelRatio: 2,
-                minPixelRatio: 0.5,
                 minZoomLevel: 1,
                 visibilityRatio: 1,
                 zoomPerScroll: 2
             });
             viewer.addHandler("open", function() {
                 viewer.source.minLevel = 8;
-                /* Start zoomed in, then return to home position after
-                   loading.  Workaround for blurry viewport on initial
-                   load (OpenSeadragon #95). */
+                /* Visual effect: start zoomed in, then return to home
+                   position after loading. */
                 var center = new OpenSeadragon.Point(0.5,
                         1 / (2 * viewer.source.aspectRatio));
                 viewer.viewport.zoomTo(2, center, true);
                 viewer_is_new = true;
-                /* Ensure we receive update-viewport events, OpenSeadragon
-                   #94 */
-                viewer.drawer.viewer = viewer;
             });
             viewer.addHandler("fullpage", function(_, opts) {
                 /* When exiting fullpage, OpenSeadragon gives the viewer a
