@@ -44,6 +44,7 @@ releases:
     - {version: 0.3.0, date: 2011-12-16}
     - {version: 0.2.0, date: 2011-09-02}
   winbuild:
+    - {date: 2013-07-27}
     - {date: 2013-04-13}
     - {date: 2012-12-01}
     - {date: 2012-10-14}
