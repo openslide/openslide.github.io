@@ -1,3 +1,8 @@
+New Windows build, 2013-07-27
+-----------------------------
+Windows build 20130727 prevents libtiff from opening a dialog box upon
+encountering an invalid TIFF file.
+
 OpenSlide version 3.3.3, 2013-04-13
 -----------------------------------
 Version 3.3.3 fixes inclusion of `openslide.h` with MSVC and adds minor
