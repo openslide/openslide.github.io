@@ -12,8 +12,6 @@ File extensions
 OpenSlide vendor backend
 :`trestle`
 
-OpenSlide ops backend
-:`tiff`
 
 Detection
 ---------

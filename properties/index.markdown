@@ -35,14 +35,8 @@ accurate.
 :The name of the vendor backend.
 
 
-Properties from the JPEG backend
---------------------------------
-
-No properties defined.
-
-
-Properties from the TIFF backend
---------------------------------
+Properties for TIFF-based formats
+---------------------------------
 
 `tiff.Artist`
 :The contents of the TIFF Artist tag.

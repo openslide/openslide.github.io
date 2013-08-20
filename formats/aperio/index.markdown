@@ -12,8 +12,6 @@ File extensions
 OpenSlide vendor backend
 :`aperio`
 
-OpenSlide ops backend
-:`tiff`
 
 Vendor Documentation
 --------------------

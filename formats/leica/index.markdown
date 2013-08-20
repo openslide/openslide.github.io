@@ -12,8 +12,6 @@ File extensions
 OpenSlide vendor backend
 :`leica`
 
-OpenSlide ops backend
-:`tiff`
 
 Detection
 ---------

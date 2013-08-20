@@ -12,8 +12,6 @@ File extensions
 OpenSlide vendor backend
 :`generic-tiff`
 
-OpenSlide ops backend
-:`tiff`
 
 Detection
 ---------

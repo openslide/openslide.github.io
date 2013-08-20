@@ -12,9 +12,6 @@ File extensions
 OpenSlide vendor backend
 :`mirax`
 
-OpenSlide ops backend
-:`jpeg`
-
 
 Detection
 ---------

@@ -21,9 +21,6 @@ File extensions
 OpenSlide vendor backend
 :`aperio`
 
-OpenSlide ops backend
-:`tiff`
-
 More info
 :[Aperio format][format-aperio]
 
@@ -38,9 +35,6 @@ File extensions
 
 OpenSlide vendor backend
 :`hamamatsu`
-
-OpenSlide ops backend
-:`jpeg` for `.vms`, `ngr` for `.vmu`
 
 More info
 :[Hamamatsu format][format-hamamatsu]
@@ -57,9 +51,6 @@ File extensions
 OpenSlide vendor backend
 :`leica`
 
-OpenSlide ops backend
-:`tiff`
-
 More info
 :[Leica format][format-leica]
 
@@ -74,9 +65,6 @@ File extensions
 
 OpenSlide vendor backend
 :`mirax`
-
-OpenSlide ops backend
-:`jpeg`
 
 More info
 :[MIRAX format][format-mirax]
@@ -94,9 +82,6 @@ File extensions
 OpenSlide vendor backend
 :`trestle`
 
-OpenSlide ops backend
-:`tiff`
-
 More info
 :[Trestle format][format-trestle]
 
@@ -111,9 +96,6 @@ File extensions
 
 OpenSlide vendor backend
 :`generic-tiff`
-
-OpenSlide ops backend
-:`tiff`
 
 More info
 :[Generic tiled TIFF format][format-generic-tiff]

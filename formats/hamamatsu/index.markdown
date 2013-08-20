@@ -12,9 +12,6 @@ File extensions
 OpenSlide vendor backend
 :`hamamatsu`
 
-OpenSlide ops backend
-:`jpeg` for `.vms`, `ngr` for `.vmu`
-
 
 Detection
 ---------
