@@ -43,24 +43,24 @@ OpenSlide will detect a file as MIRAX if:
 Overview
 --------
 
-Because JPEG does not allow for large files, multiple JPEG files are
-needed to encode large images.
+Because JPEG does not allow for large images, multiple JPEGs are
+needed to encode a slide.
 
-Unfortunately, (unlike TIFF) JPEG provides very poor support for
-random-access decoding of parts of a file. To avoid having many
-individual files, MIRAX packs JPEG files into a small number of data
+Unfortunately, JPEG (unlike TIFF) provides very poor support for
+random-access decoding of parts of an image. To avoid having many
+individual files, MIRAX packs JPEG images into a small number of data
 files. The index file provides offsets into the data files for each
 required piece of data.
 
 The camera on MIRAX scanners takes overlapping photos and records the
-position of each one.  Each photo is then split into multiple JPEG tiles
-which do not overlap.  Overlaps only occur between tiles that come
+position of each one.  Each photo is then split into multiple JPEG images
+which do not overlap.  Overlaps only occur between images that come
 from different photos.
 
-To generate level `n + 1`, each JPEG tile from level `n` is downsampled by
-2 and then concatenated into a new JPEG tile, 4 old tiles per new JPEG
-tile (2 x 2).  This process is repeated for each level, irrespective of
-tile overlaps.  Therefore, at sufficiently high levels, a single tile can
+To generate level `n + 1`, each JPEG image from level `n` is downsampled by
+2 and then concatenated into a new JPEG image, 4 old images per new JPEG
+image (2 x 2).  This process is repeated for each level, irrespective of
+image overlaps.  Therefore, at sufficiently high levels, a single image can
 contain one or more embedded overlaps of non-integral width.
 
 Index File
@@ -83,10 +83,10 @@ to the next page.  The first page always has 0 data items, and the last page
 has a 0 next pointer.
 
 There is one hierarchical record for each zoom level.  The record contains
-data items consisting of a tile index, offset and length within a file, and
+data items consisting of an image index, offset and length within a file, and
 a file number.  The file number can be converted to a data file name via the
-`DATAFILE` slidedat section.  The tile index is equal to `tile_y *
-GENERAL.IMAGENUMBER_X + tile_x`.  Tile coordinates which are not multiples
+`DATAFILE` slidedat section.  The image index is equal to `image_y *
+GENERAL.IMAGENUMBER_X + image_x`.  Image coordinates which are not multiples
 of the zoom level's downsample factor are omitted.
 
 Nonhierarchical records refer to associated images and additional metadata.
@@ -106,12 +106,12 @@ Slide Position File
 
 The slide position file is referenced by the
 `VIMSLIDE_POSITION_BUFFER.default` nonhierarchical section.  It contains
-one entry for each camera position (*not* each tile position) in row-major
+one entry for each camera position (*not* each image position) in row-major
 order.  Each entry is nine bytes: a flag byte, the `X` pixel coordinate of
 the photo (4 bytes, little-endian, may be negative), and the `Y` coordinate
 (4 bytes, little-endian, may be negative).  In slides with
 `CURRENT_SLIDE_VERSION` &ge; 1.9, the flag byte is 1 if the slide file
-contains tiles for this camera position, 0 otherwise.  In older slides,
+contains images for this camera position, 0 otherwise.  In older slides,
 the flag byte is always 0.
 
 In slides with `CURRENT_SLIDE_VERSION` &ge; 2.2, the slide position file is
@@ -152,7 +152,9 @@ corresponding to level 0 (typically
 
 See Also
 --------
-[Introduction to MIRAX/MRXS][1]
+[Introduction to MIRAX/MRXS][1].  Note that our terminology has changed since
+that document was written; where it says "tile", substitute "image", and
+where it says "subtile", substitute "tile".
 
 [1]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000373.html
 
