@@ -1,14 +1,17 @@
 Adding a new slide format to OpenSlide
 --------------------------------------
 
-OpenSlide supports a particular slide format via two separate modules:
+To add a new format to OpenSlide, you will need to write a new vendor driver.  When a slide is opened, the driver is responsible for parsing the slide file, loading its metadata, and locating its image tiles.  At runtime, the driver receives requests for pixel data, determines which tiles to load, decodes them to a buffer in a [Cairo-compatible pixel format](http://cairographics.org/manual/cairo-Image-Surfaces.html#cairo-format-t), and renders them to a [Cairo](http://cairographics.org/) surface.
 
-1. The vendor driver, which is responsible for parsing the slide format when the slide is opened and generating a list of tiles.
-2. The ops backend, which is responsible for painting the tiles when `openslide_read_region()` is called.  There are currently ops backends to read JPEG images, TIFF directories, and NGR tile data.  The ops backends render images to a [Cairo](http://cairographics.org/) surface, so they need to be able to render the source tiles to a [Cairo-compatible format](http://cairographics.org/manual/cairo-Image-Surfaces.html#cairo-format-t).
+Your driver can use the *grid* module to map pixel coordinates to tile addresses.  The `simple` grid is suitable for slide formats that have non-overlapping, regularly-spaced, equal-sized tiles, and do not need to record individual information about each tile.  (TIFF images often have this property.)  The `tilemap` grid is suitable for overlapping, irregular, or sparse tiles.
 
-At a minimum you will need to write a new vendor driver.  If the slide tiles are JPEGs, or if TIFF is used as the slide container and a standard compression scheme is used, you should be able to use the existing ops backends.  In this case, you may need to modify the ops backend if your slide format has unusual requirements.  (For example, Hamamatsu VMS needs to be able to start reading a JPEG from a JPEG restart marker, not just the beginning of the JPEG.)  If your slide format uses an unusual image encoding, you will need to add a new ops backend to support it.
+Your driver should use the *cache* module to cache pixel data from decoded tiles.  This prevents unnecessary decode operations if a region is accessed repeatedly.
+
+OpenSlide contains support code for reading JPEG, JPEG 2000, and TIFF images.  You may be able to use these utilities without modification.  If your driver requires additional decoding functionality, it should be added to a decoder module if it would be useful to other drivers, or implemented in your driver if not.
 
 Drivers are named after the vendor of the product that uses the format.  This is often the manufacturer of the slide scanner.
+
+For examples, consult the existing vendor drivers.  `generic-tiff` is a straightforward driver for simple TIFF images.  `trestle` is a fairly simple driver using the `tilemap` grid.
 
 Properties
 ----------
@@ -36,7 +39,7 @@ For examples of properties produced by existing drivers, see the [web demo](http
 
 When opening a slide, OpenSlide calculates a "quickhash-1" which uniquely identifies that particular slide.  (The quickhash-1 can be accessed via the `openslide.quickhash-1` property.)  It is implemented as a SHA-256 digest of a small amount of metadata and data from the slide file.  It is *not* intended as a cryptographic hash over the entire file.
 
-If you are using the TIFF ops backend, the quickhash-1 will be calculated for you.  Otherwise, you will need to handle this calculation yourself.  Your `try` function will receive an `_openslide_hash` handle; if this is non-NULL, you should use the `_openslide_hash` helper functions to add the data you wish to include in the quickhash-1.
+If you are using the TIFF utility code (`_openslide_tiff_init_properties_and_hash()`), the quickhash-1 will be calculated for you.  Otherwise, you will need to handle this calculation yourself.  Your `try` function will receive an `_openslide_hash` handle; if this is non-NULL, you should use the `_openslide_hash` helper functions to add the data you wish to include in the quickhash-1.
 
 You should carefully select the data and metadata to be included in the quickhash.  Once your driver has been included in an OpenSlide release, it will be difficult or impossible to change the quickhash definition for your slide format.  The quickhash should not cover too much data, so that it is quick to calculate, but should never produce the same value for two different slides.  To accomplish this, it may be sufficient to hash all of the slide's metadata; if not, you can include the (compressed) image data from the lowest-resolution pyramid level.
 
