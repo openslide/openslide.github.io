@@ -267,24 +267,24 @@ Tag          | Description      |
 `StripOffsets`|The offset of the JPEG file for this layer|
 `StripByteCounts`|The length of the JPEG file for this layer|
 65420|Unknown, always 1?|
-65421|Magnification? `SourceLens` from VMS? Seems correctly downsampled for each entry. (-1 for macro image, -2 for some sort of mask?)|
+65421|`SourceLens`, correctly downsampled for each entry. -1 for macro image, -2 for a map of non-empty regions.|
 65422|`XOffsetFromSlideCentre`|
 65423|`YOffsetFromSlideCentre`|
 65424|Unknown, always 0?|
 65425|Unknown, always 0?|
 65426|Optimisation entries, as above|
-65427|Unknown, possibly slide identifier|
+65427|`Reference`|
 65428|Unknown, `AuthCode`?|
 65433|Unknown, I have seen 1500 in this tag|
 65439|Unknown, perhaps some polygon ROI?|
 65440|Unknown, I have seen this: `<0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 1 9 1 10 1 11 1 12 1 13 1 14 1 15 1 16 1 17>`|
 65441|Unknown, always 0?|
-65442|Seems to be `Model`|
+65442|Scanner serial number|
 65443|Unknown, always 0?|
 65444|Unknown, always 80?|
 65445|Unknown, have seen 0 or 2|
 65446|Unknown, always 0?|
-65449|ASCII metadata block, not always present|
+65449|ASCII metadata block, `key=value` pairs, not always present|
 
 
 Unlike in VMS, JPEG files in NDPI are not necessarily valid. If
