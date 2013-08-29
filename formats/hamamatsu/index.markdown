@@ -171,6 +171,63 @@ Key                 | Description                |
 `BlobMapHeight`|Unknown|
 
 
+Preliminary NDPI Notes
+----------------------
+
+NDPI is basically VMS stuffed into a broken TIFF file. libtiff cannot
+read the headers of a TIFF file, because NDPI specifies the
+`RowsPerStrip` as the height of the file, and after doing out the
+multiplication, this typically overflows libtiff and it refuses to
+open the file. Also, the TIFF tags are not stored in sorted order
+(sometimes, they may have fixed this in later versions).
+
+Unlike the VMS format, the NDPI is stored in a pyramid format as TIFF
+directory entries. The macro image seems to come last.
+
+If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will find:
+
+Tag          | Description      |
+-------------|------------------|
+`ImageWidth`|Width of the image|
+`ImageHeight`|Height of the image|
+`Make`|"Hamamatsu"|
+`Model`|"NanoZoomer" or "C9600-12", etc|
+`XResolution`|Seemingly correct X resolution, when interpreted with `ResolutionUnit`|
+`YResolution`|Seemingly correct Y resolution, when interpreted with `ResolutionUnit`|
+`ResolutionUnit`|Seemingly correct resolution unit|
+`Software`|"NDP.scan", sometimes with a version number|
+`StripOffsets`|The offset of the JPEG file for this layer|
+`StripByteCounts`|The length of the JPEG file for this layer|
+65420|Unknown, always 1?|
+65421|`SourceLens`, correctly downsampled for each entry. -1 for macro image, -2 for a map of non-empty regions.|
+65422|`XOffsetFromSlideCentre`|
+65423|`YOffsetFromSlideCentre`|
+65424|Unknown, always 0?|
+65425|Unknown, always 0?|
+65426|Optimisation entries, as above|
+65427|`Reference`|
+65428|Unknown, `AuthCode`?|
+65433|Unknown, I have seen 1500 in this tag|
+65439|Unknown, perhaps some polygon ROI?|
+65440|Unknown, I have seen this: `<0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 1 9 1 10 1 11 1 12 1 13 1 14 1 15 1 16 1 17>`|
+65441|Unknown, always 0?|
+65442|Scanner serial number|
+65443|Unknown, always 0?|
+65444|Unknown, always 80?|
+65445|Unknown, have seen 0 or 2|
+65446|Unknown, always 0?|
+65449|ASCII metadata block, `key=value` pairs, not always present|
+
+
+Unlike in VMS, JPEG files in NDPI are not necessarily valid. If
+`ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then
+the width or height as stored in the JPEG file is 0. JPEG files are
+not split into validly-sized files like in VMS. libjpeg will refuse to
+read the header of such a file, so the JPEG data stream must be
+altered when fed into libjpeg. Since a random access source manager is
+already required to read VMS JPEG files, this change is not too bad.
+
+
 Optimisation File (only for VMS)
 --------------------------------
 
@@ -238,59 +295,3 @@ Test Data
 (ndpi format, wrapped vms format, currently not readable by OpenSlide)
 
 <http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/> (vms format)
-
-Preliminary NDPI Notes
-----------------------
-
-NDPI is basically VMS stuffed into a broken TIFF file. libtiff cannot
-read the headers of a TIFF file, because NDPI specifies the
-`RowsPerStrip` as the height of the file, and after doing out the
-multiplication, this typically overflows libtiff and it refuses to
-open the file. Also, the TIFF tags are not stored in sorted order
-(sometimes, they may have fixed this in later versions).
-
-Unlike the VMS format, the NDPI is stored in a pyramid format as TIFF
-directory entries. The macro image seems to come last.
-
-If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will find:
-
-Tag          | Description      |
--------------|------------------|
-`ImageWidth`|Width of the image|
-`ImageHeight`|Height of the image|
-`Make`|"Hamamatsu"|
-`Model`|"NanoZoomer" or "C9600-12", etc|
-`XResolution`|Seemingly correct X resolution, when interpreted with `ResolutionUnit`|
-`YResolution`|Seemingly correct Y resolution, when interpreted with `ResolutionUnit`|
-`ResolutionUnit`|Seemingly correct resolution unit|
-`Software`|"NDP.scan", sometimes with a version number|
-`StripOffsets`|The offset of the JPEG file for this layer|
-`StripByteCounts`|The length of the JPEG file for this layer|
-65420|Unknown, always 1?|
-65421|`SourceLens`, correctly downsampled for each entry. -1 for macro image, -2 for a map of non-empty regions.|
-65422|`XOffsetFromSlideCentre`|
-65423|`YOffsetFromSlideCentre`|
-65424|Unknown, always 0?|
-65425|Unknown, always 0?|
-65426|Optimisation entries, as above|
-65427|`Reference`|
-65428|Unknown, `AuthCode`?|
-65433|Unknown, I have seen 1500 in this tag|
-65439|Unknown, perhaps some polygon ROI?|
-65440|Unknown, I have seen this: `<0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 1 9 1 10 1 11 1 12 1 13 1 14 1 15 1 16 1 17>`|
-65441|Unknown, always 0?|
-65442|Scanner serial number|
-65443|Unknown, always 0?|
-65444|Unknown, always 80?|
-65445|Unknown, have seen 0 or 2|
-65446|Unknown, always 0?|
-65449|ASCII metadata block, `key=value` pairs, not always present|
-
-
-Unlike in VMS, JPEG files in NDPI are not necessarily valid. If
-`ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then
-the width or height as stored in the JPEG file is 0. JPEG files are
-not split into validly-sized files like in VMS. libjpeg will refuse to
-read the header of such a file, so the JPEG data stream must be
-altered when fed into libjpeg. Since a random access source manager is
-already required to read VMS JPEG files, this change is not too bad.
