@@ -4,10 +4,11 @@ title: Hamamatsu format
 ---
 
 Format
-:multi-file JPEG/NGR with proprietary metadata and index file formats
+:multi-file JPEG/NGR with proprietary metadata and index file formats, and
+single-file TIFF-like format with proprietary metadata
 
 File extensions
-:`.vms`, `.vmu`
+:`.vms`, `.vmu`, `.ndpi`
 
 OpenSlide vendor backend
 :`hamamatsu`
@@ -28,30 +29,41 @@ OpenSlide will detect a file as Hamamatsu if:
  8. The restart interval in each JPEG file is zero, or evenly divides into the number of MCUs per row.
  9. The image files (except the map file) all have the same "tile" sizes (see below).
 
+or if:
+
+ 1. The file has a TIFF directory structure.
+ 2. The `Software` tag starts with `NDP.scan`.
+
 
 Overview
 --------
 
-The Hamamatsu format consists of an index file (VMS or VMU), 2 or more
-image files, and (in the case of VMS) an "optimisation" file.
+The Hamamatsu format has three variants.  VMS and VMU consist of an index
+file, 2 or more image files, and (in the case of VMS) an "optimisation"
+file.  NDPI consists of a single TIFF-like file with some custom TIFF tags.
+VMS and NDPI contain JPEG images; VMU contains NGR images (a custom
+uncompressed format).
 
 Multiple focal planes are ignored, only focal plane 0 is read.
 
-Because JPEG does not allow for large files, multiple JPEG files are
-needed to encode large images. To avoid having many files, the
-Hamamatsu format uses close to maximum size (65K by 65K) JPEG files.
+JPEG does not allow for files larger than 65535 pixels on a side.  In VMS,
+multiple JPEG files are used to encode large images.  To avoid having many
+files, VMS uses close to maximum size (65K by 65K) JPEG files.  NDPI,
+instead, stuffs large levels into a single JPEG and sets the overflowed
+width/height fields to 0.
 
-Unfortunately, (unlike TIFF) JPEG provides very poor support for
+Unfortunately, JPEG provides very poor support for
 random-access decoding of parts of a file. To get around this, JPEG
 restart markers are placed at regular intervals, and these offsets are
-specified in the optimisation file. With restart markers identified,
+specified in the optimisation file (in VMS) or in a TIFF tag (in NDPI).
+With restart markers identified,
 OpenSlide can treat JPEG as a tiled format, where the height is the
 height of an MCU row, and the width is the number of MCUs per row
 divided by the restart marker interval times the width of an
 MCU. (This often leads to oddly-shaped and inefficient tiles of
-8x2048, for example.)
+4096x8, for example.)
 
-Unfortunately, the optimisation file does not give the location of
+Unfortunately, the VMS optimisation file does not give the location of
 every restart marker, only the ones found at the beginning of an MCU
 row. It also seems that the file ends early, and does not give the
 location of the restart marker at the last MCU row of the last image
@@ -63,7 +75,7 @@ markers in order to facilitate random access. OpenSlide does this
 lazily as needed, and also in a background thread that runs only when
 OpenSlide is otherwise idle.
 
-The map file is a lower-resolution version of the other images, and
+The VMS map file is a lower-resolution version of the other images, and
 can be used to make a 2-level JPEG pyramid. JPEG also allows for
 lower-resolution decoding, so further pyramid levels are synthesized
 from each JPEG file.
@@ -171,20 +183,26 @@ Key                 | Description                |
 `BlobMapHeight`|Unknown|
 
 
-Preliminary NDPI Notes
-----------------------
+NDPI File
+---------
 
-NDPI is basically VMS stuffed into a broken TIFF file. libtiff cannot
-read the headers of a TIFF file, because NDPI specifies the
-`RowsPerStrip` as the height of the file, and after doing out the
-multiplication, this typically overflows libtiff and it refuses to
-open the file. Also, the TIFF tags are not stored in sorted order
-(sometimes, they may have fixed this in later versions).
+NDPI uses a TIFF-like structure, but libtiff cannot read the headers of an
+NDPI file.  This is because NDPI specifies the `RowsPerStrip` as the height
+of the file, and after doing out the multiplication, this typically
+overflows libtiff and it refuses to open the file.  Also, the TIFF tags are
+not stored in sorted order.
 
-Unlike the VMS format, the NDPI is stored in a pyramid format as TIFF
-directory entries. The macro image seems to come last.
+NDPI stores an image pyramid in TIFF directory entries.  In some files, the
+lower-resolution pyramid levels contain no restart markers.  The macro
+image, and sometimes an active-region map, seems to come last.
 
-If one just reads the TIFF tags directly, perhaps using `tiffdump`, one will find:
+JPEG files in NDPI are not necessarily valid. If
+`ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then
+the width or height as stored in the JPEG file is 0. libjpeg will refuse
+to read the header of such a file, so the JPEG data stream must be
+altered when fed into libjpeg.
+
+Here are the observed TIFF tags:
 
 Tag          | Description      |
 -------------|------------------|
@@ -219,15 +237,6 @@ Tag          | Description      |
 65449|ASCII metadata block, `key=value` pairs, not always present|
 
 
-Unlike in VMS, JPEG files in NDPI are not necessarily valid. If
-`ImageWidth` or `ImageHeight` exceeds the JPEG limit of 65535, then
-the width or height as stored in the JPEG file is 0. JPEG files are
-not split into validly-sized files like in VMS. libjpeg will refuse to
-read the header of such a file, so the JPEG data stream must be
-altered when fed into libjpeg. Since a random access source manager is
-already required to read VMS JPEG files, this change is not too bad.
-
-
 Optimisation File (only for VMS)
 --------------------------------
 
@@ -239,8 +248,8 @@ into 1 file, even with multiple images. The order of images is
 left-to-right, top-to-bottom.
 
 
-Map File
---------
+Map File (only for VMS/VMU)
+---------------------------
 
 The VMS map file is a standard JPEG file. Its restart markers (if any)
 are not included in the optimisation file. The VMU map file is in NGR
@@ -248,10 +257,10 @@ format. This file can be used to provide a lower-resolution view of
 the slide.
 
 
-Image Files
------------
+Image Files (only for VMS/VMU)
+------------------------------
 
-These files are given by the various `ImageFile` keys. They are
+These files are given by the VMS/VMU `ImageFile` keys. They are
 assumed to have a height which is a multiple of the MCU height. They
 are assumed to have a width which is a multiple of MCUs per row
 divided by the restart interval.
@@ -277,13 +286,15 @@ Associated Images
 -----------------
 
 macro
-:the image file given by the `MacroImage` value in the VMS/VMU file
+:the image file given by the `MacroImage` value in the VMS/VMU file, or
+`SourceLens` of -1 in NDPI
 
 
 Known Properties
 ----------------
 
-All key-value data stored in the VMS/VMU file are encoded as properties prefixed with "`hamamatsu.`".
+All key-value data stored in the VMS/VMU file, and known tags from
+the NDPI file, are encoded as properties prefixed with "`hamamatsu.`".
 
 `openslide.objective-power`
 :normalized `hamamatsu.SourceLens`
@@ -291,7 +302,8 @@ All key-value data stored in the VMS/VMU file are encoded as properties prefixed
 
 Test Data
 ---------
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
-(ndpi format, wrapped vms format, currently not readable by OpenSlide)
+NDPI format
+:<http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
 
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/> (vms format)
+VMS format
+:<http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/>

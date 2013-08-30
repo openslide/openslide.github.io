@@ -50,7 +50,7 @@ About OpenSlide
 The library can read virtual slides in the following formats:
 
  * [Aperio (.svs, .tif)][format-aperio]
- * [Hamamatsu (.vms, .vmu)][format-hamamatsu]
+ * [Hamamatsu (.vms, .vmu, .ndpi)][format-hamamatsu]
  * [Leica (.scn)][format-leica]
  * [MIRAX (.mrxs)][format-mirax]
  * [Trestle (.tif)][format-trestle]

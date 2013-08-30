@@ -28,10 +28,11 @@ More info
 Hamamatsu
 ---------
 
-Multi-file JPEG/NGR with proprietary metadata and index file formats.
+Multi-file JPEG/NGR with proprietary metadata and index file formats, and
+single-file TIFF-like format with proprietary metadata.
 
 File extensions
-:`.vms`, `.vmu`
+:`.vms`, `.vmu`, `.ndpi`
 
 OpenSlide vendor backend
 :`hamamatsu`
