@@ -74,8 +74,7 @@ More info
 Trestle
 -------
 Single-file pyramidal tiled TIFF, with non-standard metadata and
-overlaps. Additional files can contain more metadata and detailed
-overlap info.
+overlaps.  Additional files contain more metadata and detailed overlap info.
 
 File extensions
 :`.tif`

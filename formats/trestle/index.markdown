@@ -4,7 +4,7 @@ title: Trestle format
 ---
 
 Format
-:single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional files can contain more metadata and detailed overlap info
+:single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional files contain more metadata and detailed overlap info
 
 File extensions
 :`.tif`
@@ -66,10 +66,17 @@ ASCII.
 
 Example: "` 64 64 32 32 16 16`" (note the initial space).
 
-These values are assumed to represent the amount of overlap between
-adjacent tiles in pixels, in both X and Y. This example encodes 3
-levels worth of overlaps. Further overlaps are assumed to have the
-value 0.
+These values represent the standard overlaps between adjacent tiles in
+X and Y, in pixels. This example encodes 3 levels worth of overlaps.
+Further overlaps are assumed to have the value 0.
+
+Individual tile overlaps may differ from the standard overlaps.  These
+individual overlaps are recorded in `.tif-Nb` files adjacent to the `.tif`
+file, where `N` is the level number.  OpenSlide does not read these files,
+though they have been partially decoded; see [issue 21][overlap-files] for
+details.
+
+[overlap-files]: https://github.com/openslide/openslide/issues/21#issuecomment-23615583
 
 
 Associated Images
