@@ -7,7 +7,7 @@ Your driver can use the *grid* module to map pixel coordinates to tile addresses
 
 Your driver should use the *cache* module to cache pixel data from decoded tiles.  This prevents unnecessary decode operations if a region is accessed repeatedly.
 
-OpenSlide contains support code for reading JPEG, JPEG 2000, and TIFF images.  You may be able to use these utilities without modification.  If your driver requires additional decoding functionality, it should be added to a decoder module if it would be useful to other drivers, or implemented in your driver if not.
+OpenSlide contains support code for reading BMP, JPEG, JPEG 2000, PNG, and TIFF images.  You may be able to use these utilities without modification.  If your driver requires additional decoding functionality, it should be added to a decoder module if it would be useful to other drivers, or implemented in your driver if not.
 
 Drivers are named after the vendor of the product that uses the format.  This is often the manufacturer of the slide scanner.
 
