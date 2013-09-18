@@ -9,6 +9,7 @@
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
 [testdata-rsync]: rsync://openslide.cs.cmu.edu/openslide-testdata/
+[snapshots-windows]: http://openslide.cs.cmu.edu/download/snapshots/windows/?C=M;O=D
 
 [formats]: /formats/
 [format-aperio]: /formats/aperio/
