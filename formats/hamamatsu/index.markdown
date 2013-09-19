@@ -220,7 +220,7 @@ Tag          | Description      |
 65421|`SourceLens`, correctly downsampled for each entry. -1 for macro image, -2 for a map of non-empty regions.|
 65422|`XOffsetFromSlideCentre`|
 65423|`YOffsetFromSlideCentre`|
-65424|Unknown, always 0?|
+65424|Seemingly the Z offset from the center focal plane, in some unit|
 65425|Unknown, always 0?|
 65426|Optimisation entries, as above|
 65427|`Reference`|
@@ -230,11 +230,15 @@ Tag          | Description      |
 65440|Unknown, I have seen this: `<0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 1 9 1 10 1 11 1 12 1 13 1 14 1 15 1 16 1 17>`|
 65441|Unknown, always 0?|
 65442|Scanner serial number|
-65443|Unknown, always 0?|
+65443|Unknown, have seen 0 or 16|
 65444|Unknown, always 80?|
-65445|Unknown, have seen 0 or 2|
+65445|Unknown, have seen 0, 2, 10|
 65446|Unknown, always 0?|
 65449|ASCII metadata block, `key=value` pairs, not always present|
+65455|Unknown, have seen 13|
+65456|Unknown, have seen 101|
+65457|Unknown, always 0?|
+65458|Unknown, always 0?|
 
 
 Optimisation File (only for VMS)
