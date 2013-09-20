@@ -80,7 +80,7 @@ Windows Binaries
 
 Problems with these binaries can be reported [here][winbuild-issues].
 If you're looking for the bleeding edge,
-[nightly snapshot builds][snapshots-windows] are also available.
+[nightly development builds][snapshots-windows] are also available.
 
 <div class="releases">
   <table>
