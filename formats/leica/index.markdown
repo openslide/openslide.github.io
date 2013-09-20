@@ -33,20 +33,49 @@ Tag                 | Description                    |
 `ImageDescription`|Stores an XML document containing various metadata|
 
 
-TIFF Image Directory Organization
----------------------------------
+File Organization
+-----------------
 
-Leica slides contain a pyramidal main image and a pyramidal macro image.
-The XML document in the `ImageDescription` tag enumerates the TIFF
-directories corresponding to each image.
+The `ImageDescription` tag of the first TIFF directory contains an XML
+document that defines the structure of the slide.
+
+Leica slides are structured as a collection of images, each of which has
+multiple dimensions (pyramid levels).  The collection has a size, and images
+have a size and position, in a high-resolution unit which OpenSlide calls
+"clicks".  Each dimension has a size in pixels, an optional focal plane
+number, and a TIFF directory containing the image data.  Fluorescence images
+have different dimensions (and thus different TIFF directories) for each
+channel.  OpenSlide currently rejects fluorescence images and ignores focal
+planes other than plane 0.
+
+Brightfield slides have at least two images: a low-resolution macro image
+and one or more main images corresponding to regions of the macro image.
+The macro image has a position of (0, 0) and a size matching the size of the
+collection.  Fluorescence slides can have two macro images: one brightfield
+and one fluorescence.
+
+The slide provides enough information to composite the various images,
+including the macro image, into a single pyramid.  However, there are some
+complications:
+
+- The resolution of the macro image is generally not related to the
+resolution of the main images by a power of two.
+- Downsampled dimensions are generally downsampled from the next larger
+dimension by a factor of 4, but main images can be scanned with distinct
+objectives that may differ by only a factor of 2.
+
+Thus, in general, the images in a collection cannot be rendered into a
+unified pyramid without scaling the original pixel data.  OpenSlide does not
+attempt to do this.  Instead, OpenSlide omits the macro image from the
+pyramid and refuses to open slides whose main images have inconsistent
+resolutions.
 
 
 Associated Images
 -----------------
 
 `macro`
-:the highest-resolution `dimension` of the `image` whose `view` has the
-same size as the containing `collection`
+:the highest-resolution dimension of the macro image
 
 
 Known Properties
