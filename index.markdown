@@ -123,10 +123,20 @@ Some freely-distributable test data is available via [HTTP][testdata] or
 [rsync][testdata-rsync].
 
 
-Tech Report
------------
+Publications
+------------
 
-The architecture and design of the library is described in a technical report:
+The design and implementation of the library are described in a published
+technical note:
+
+*OpenSlide: A Vendor-Neutral Software Foundation for Digital Pathology*  
+Adam Goode, Benjamin Gilbert, Jan Harkes, Drazen Jukic, M. Satyanarayanan  
+Journal of Pathology Informatics 2013, 4:27  
+[Abstract][paper-abstract]
+[HTML][paper-html]
+[PDF][paper-pdf]
+
+There is also an older technical report:
 
 *A Vendor-Neutral Library and Viewer for Whole-Slide Images*  
 Adam Goode, M. Satyanarayanan  
@@ -135,6 +145,9 @@ Computer Science Department, Carnegie Mellon University
 [Abstract][tr-abstract]
 [PDF][tr-full]
 
+[paper-abstract]: http://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode;type=0
+[paper-html]: http://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode
+[paper-pdf]: http://download.openslide.org/docs/JPatholInform_2013_4_1_27_119005.pdf
 [tr-abstract]: http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html
 [tr-full]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
 
