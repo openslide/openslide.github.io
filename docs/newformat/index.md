@@ -13,6 +13,15 @@ Drivers are named after the vendor of the product that uses the format.  This is
 
 For examples, consult the existing vendor drivers.  `generic-tiff` is a straightforward driver for simple TIFF images.  `trestle` is a fairly simple driver using the `tilemap` grid.
 
+Opening a slide
+---------------
+
+Opening a slide occurs in two steps, implemented via function pointers in `struct _openslide_format`.
+
+- The `detect` method should do some inexpensive tests to verify that the specified file is supported by your driver.  If `detect` fails, OpenSlide will continue trying other format drivers.  If the `OPENSLIDE_DEBUG` environment variable is set to `detection`, OpenSlide will use `g_message()` to log the error message returned by `detect`.
+
+- The `open` method initializes the `openslide_t` with the information that will be needed at runtime.  `open` will never be called unless `detect` has succeeded.  If `open` fails, OpenSlide will consider this a hard failure, and `openslide_open()` will return a `openslide_t` in error state.  This can occur if the file appears to be a slide that should be supported by your driver, but is not structured in the expected way.  (Perhaps the slide uses a variant of the format that the driver does not yet support.)  
+
 Properties
 ----------
 
