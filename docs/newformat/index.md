@@ -61,7 +61,7 @@ For examples of properties produced by existing drivers, see the [web demo](http
 
 When opening a slide, OpenSlide calculates a "quickhash-1" which uniquely identifies that particular slide.  (The quickhash-1 can be accessed via the `openslide.quickhash-1` property.)  It is implemented as a SHA-256 digest of a small amount of metadata and data from the slide file.  It is *not* intended as a cryptographic hash over the entire file.
 
-If you call `_openslide_tifflike_init_properties_and_hash()`, that function will calculate the quickhash-1 for you.  Otherwise, you will need to handle this calculation yourself.  Your `try` function will receive an `_openslide_hash` handle; if this is non-NULL, you should use the `_openslide_hash` helper functions to add the data you wish to include in the quickhash-1.
+If you call `_openslide_tifflike_init_properties_and_hash()`, that function will calculate the quickhash-1 for you.  Otherwise, you will need to handle this calculation yourself.  Your `open` function will receive an `_openslide_hash` handle; you should use the `_openslide_hash` helper functions to add the data you wish to include in the quickhash-1.
 
 You should carefully select the data and metadata to be included in the quickhash.  Once your driver has been included in an OpenSlide release, it will be difficult or impossible to change the quickhash definition for your slide format.  The quickhash should not cover too much data, so that it is quick to calculate, but should never produce the same value for two different slides.  To accomplish this, it may be sufficient to hash all of the slide's metadata; if not, you can include the (compressed) image data from the lowest-resolution pyramid level.
 
