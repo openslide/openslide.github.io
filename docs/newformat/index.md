@@ -72,15 +72,9 @@ All internal OpenSlide functions report errors using GError.  GError has a [stri
 
 When the external API glue receives a GError from a handler method, the `openslide_t` is placed into error state.  No other operations can be performed on the `openslide_t`.  The GError `message` is made available to the application via the `openslide_get_error()` API call.
 
-When producing a GError, you may use whatever error domain and code is appropriate.  If in doubt, use `OPENSLIDE_ERROR_BAD_DATA`.
+When producing a GError, you may use whatever error domain and code is appropriate.  If in doubt, use `OPENSLIDE_ERROR_FAILED`.
 
 If you receive a GError from lower-level code and intend to propagate it, consider whether the error's `message` provides enough context to diagnose the failure.  If not, you should prefix the error using `g_prefix_error()` or `g_propagate_prefixed_error()`.
-
-When opening a slide, if the file is not recognized by your driver, report an `OPENSLIDE_ERROR_FORMAT_NOT_SUPPORTED`, and OpenSlide will continue trying other backends.  If the file is recognized but contains unexpected data, report any other error code, and OpenSlide will return an `openslide_t` in error state.
-
-### Caution: openslide_can_open()
-
-Your driver's `try` function will receive a NULL `openslide_t *osr` argument when called via `openslide_can_open()`.  In this case, you must go through all the motions of opening the slide, including reading the metadata for properties, even though you may not actually use the results.  This will ensure that `openslide_can_open()` returns `true` only if `openslide_open()` will, in fact, succeed.
 
 OpenSlide limitations
 ---------------------
