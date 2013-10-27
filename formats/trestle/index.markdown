@@ -19,8 +19,9 @@ Detection
 Trestle slides are stored in single-file TIFF format. OpenSlide will detect a file as Trestle if:
 
  1. The file is TIFF.
- 2. The TIFF `Software` tag starts with "`MedScan`".
+ 2. The TIFF `Software` tag starts with `MedScan`.
  3. The `ImageDescription` tag is present.
+ 4. All images are tiled.
 
 
 Relevant TIFF tags

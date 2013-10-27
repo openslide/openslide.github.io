@@ -20,7 +20,8 @@ Leica slides are stored in single-file BigTIFF format.
 OpenSlide will detect a file as Leica if:
 
  1. The file is TIFF.
- 2. The `ImageDescription` tag contains valid XML in the namespace `http://www.leica-microsystems.com/scn/2010/10/01`.
+ 2. The initial image is tiled.
+ 3. The `ImageDescription` tag contains valid XML in the namespace `http://www.leica-microsystems.com/scn/2010/10/01`.
 
 To open Leica files, OpenSlide must be built with libtiff 4 or above.
 

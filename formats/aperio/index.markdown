@@ -25,6 +25,7 @@ Detection
 Aperio slides are stored in single-file TIFF format. OpenSlide will detect a file as Aperio if:
 
  1. The file is TIFF.
+ 2. The initial image is tiled.
  3. The `ImageDescription` tag starts with `Aperio`.
 
 
