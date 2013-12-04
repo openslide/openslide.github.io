@@ -32,12 +32,12 @@ import subprocess
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
+from urlparse import urlsplit
 import zipfile
 
 S3_BUCKET = 'demo.openslide.org'
 BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
-RSYNC_BASE_URL = 'rsync://openslide.cs.cmu.edu/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
 METADATA_NAME = 'info.js'
 SLIDE_METADATA_NAME = 'properties.js'
@@ -286,9 +286,21 @@ def update_testdata(root):
     """Update the openslide-testdata input directory from the archive."""
 
     print "Updating testdata..."
-    subprocess.check_call(['rsync', '-rltP', '--delete', RSYNC_BASE_URL,
-            root + '/'])
-    print
+    # Figure out how much of the URL to prune
+    path = urlsplit(DOWNLOAD_BASE_URL).path
+    cut_dirs = len([e for e in path.split('/') if e])
+    # Download over HTTP
+    subprocess.check_call(['wget', '--quiet', '--mirror', '--no-parent',
+            '--no-host-directories',
+            '--execute', 'robots=off',  # robots.txt is for robots
+            '--cut-dirs=%d' % cut_dirs,
+            '--directory-prefix=%s' % root,
+            DOWNLOAD_BASE_URL])
+    # Remove index files
+    for dirpath, _, filenames in os.walk(root):
+        for filename in filenames:
+            if filename.startswith('index.html'):
+                os.unlink(os.path.join(dirpath, filename))
 
 
 def sync_tiles(in_root):
