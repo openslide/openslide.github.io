@@ -8,7 +8,7 @@
 [github]: https://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
-[snapshots-windows]: http://openslide.cs.cmu.edu/download/snapshots/windows/?C=M;O=D
+[snapshots-windows]: http://openslide.cs.cmu.edu/download/snapshots/windows/
 
 [formats]: /formats/
 [format-aperio]: /formats/aperio/
