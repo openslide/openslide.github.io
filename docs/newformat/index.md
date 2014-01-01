@@ -47,7 +47,6 @@ Your driver is also responsible for setting some standard properties:
 * `openslide.mpp-x`, if possible.  Should be a double.
 * `openslide.mpp-y`, if possible.  Should be a double.
 * `openslide.objective-power`, if possible.  Should be an integer.
-* `openslide.vendor`
 
 `openslide.background-color` should be set with `_openslide_set_background_color_prop()`.
 
