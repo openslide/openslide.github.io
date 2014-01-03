@@ -156,14 +156,6 @@ $(document).ready(function() {
                 viewer.viewport.zoomTo(2, center, true);
                 viewer_is_new = true;
             });
-            viewer.addHandler("fullpage", function(_, opts) {
-                /* When exiting fullpage, OpenSeadragon gives the viewer a
-                   CSS width which improperly includes the viewer's right
-                   margin. */
-                if (!opts.fullpage) {
-                    $('#view').css('width', '').css('height', '');
-                }
-            });
             viewer.addHandler("update-viewport", function() {
                 if (viewer_is_new) {
                     setTimeout(function() {
