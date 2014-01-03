@@ -69,7 +69,8 @@ $(document).ready(function() {
         });
         var versions = $('<p id="versions">');
         versions.append('OpenSlide ' + data.openslide +
-                    '<br>OpenSlide Python ' + data.openslide_python);
+                    '<br>OpenSlide Python ' + data.openslide_python +
+                    '<br>OpenSeadragon ' + OpenSeadragon.version.versionStr);
         top.append(versions);
 
         $(".load-image").click(function(ev) {
