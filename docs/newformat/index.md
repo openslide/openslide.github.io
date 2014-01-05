@@ -43,10 +43,10 @@ Drivers for TIFF-derived formats should also call `_openslide_tifflike_init_prop
 Your driver is also responsible for setting some [standard properties](http://openslide.org/properties/), when they apply to your format:
 
 * `openslide.background-color`
-* `openslide.bounds-height`
-* `openslide.bounds-width`
-* `openslide.bounds-x`
-* `openslide.bounds-y`
+* `openslide.bounds-height` (must be an integer)
+* `openslide.bounds-width` (must be an integer)
+* `openslide.bounds-x` (must be an integer)
+* `openslide.bounds-y` (must be an integer)
 * `openslide.comment`
 * `openslide.mpp-x` (should be a double)
 * `openslide.mpp-y` (should be a double)
