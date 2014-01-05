@@ -40,13 +40,13 @@ The vendor driver is responsible for initializing a property map containing meta
 
 Drivers for TIFF-derived formats should also call `_openslide_tifflike_init_properties_and_hash()` to set some standard properties pertaining to TIFF files.
 
-Your driver is also responsible for setting some standard properties:
+Your driver is also responsible for setting some standard properties, when they apply to your format:
 
-* `openslide.background-color`, if applicable
-* `openslide.comment`, if applicable
-* `openslide.mpp-x`, if possible.  Should be a double.
-* `openslide.mpp-y`, if possible.  Should be a double.
-* `openslide.objective-power`, if possible.  Should be an integer.
+* `openslide.background-color`
+* `openslide.comment`
+* `openslide.mpp-x` (should be a double)
+* `openslide.mpp-y` (should be a double)
+* `openslide.objective-power` (should be an integer)
 
 `openslide.background-color` should be set with `_openslide_set_background_color_prop()`.
 
