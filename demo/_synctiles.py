@@ -45,6 +45,7 @@ FORMAT = 'jpeg'
 QUALITY = 75
 TILE_SIZE = 512
 OVERLAP = 1
+LIMIT_BOUNDS = True
 GROUP_NAME_MAP = {
     'Generic-TIFF': 'Generic TIFF',
     'Hamamatsu': 'Hamamatsu NDPI',
@@ -93,7 +94,7 @@ class GeneratorCache(object):
     def get_dz(self, in_path, associated=None):
         if in_path != self._in_path:
             generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
-                        OVERLAP)
+                        OVERLAP, limit_bounds=LIMIT_BOUNDS)
             slide = OpenSlide(in_path)
             self._in_path = in_path
             self._generators = {
@@ -182,7 +183,8 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
     """Generate tiles and metadata for all images in a slide."""
     slide = OpenSlide(in_phys_path)
     def do_tile(associated, image, out_relpath):
-        dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP)
+        dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
+                    limit_bounds=LIMIT_BOUNDS)
         return tile_image(pool, in_phys_path, associated, dz, out_root,
                     out_relpath)
     properties = {
