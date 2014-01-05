@@ -43,12 +43,18 @@ Drivers for TIFF-derived formats should also call `_openslide_tifflike_init_prop
 Your driver is also responsible for setting some standard properties, when they apply to your format:
 
 * `openslide.background-color`
+* `openslide.bounds-height`
+* `openslide.bounds-width`
+* `openslide.bounds-x`
+* `openslide.bounds-y`
 * `openslide.comment`
 * `openslide.mpp-x` (should be a double)
 * `openslide.mpp-y` (should be a double)
 * `openslide.objective-power` (should be an integer)
 
 `openslide.background-color` should be set with `_openslide_set_background_color_prop()`.
+
+The `openslide.bounds-*` properties should be set for formats that do not store image data for every pixel in the level.  Drivers that use a single `tilemap` grid per level can set these properties with `_openslide_set_bounds_props_from_grid()`.
 
 `openslide.mpp-x`, `openslide.mpp-y`, and `openslide.objective-power` should be a copy of, or otherwise derived from, another vendor-specific property.  The vendor-specific property should be the uninterpreted value from the slide file, while the `openslide.` property should be the validated or calculated value, often produced with `_openslide_duplicate_{int,double}_prop()`.
 
