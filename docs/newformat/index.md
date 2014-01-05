@@ -40,7 +40,7 @@ The vendor driver is responsible for initializing a property map containing meta
 
 Drivers for TIFF-derived formats should also call `_openslide_tifflike_init_properties_and_hash()` to set some standard properties pertaining to TIFF files.
 
-Your driver is also responsible for setting some standard properties, when they apply to your format:
+Your driver is also responsible for setting some [standard properties](http://openslide.org/properties/), when they apply to your format:
 
 * `openslide.background-color`
 * `openslide.bounds-height`
@@ -58,7 +58,7 @@ The `openslide.bounds-*` properties should be set for formats that do not store 
 
 `openslide.mpp-x`, `openslide.mpp-y`, and `openslide.objective-power` should be a copy of, or otherwise derived from, another vendor-specific property.  The vendor-specific property should be the uninterpreted value from the slide file, while the `openslide.` property should be the validated or calculated value, often produced with `_openslide_duplicate_{int,double}_prop()`.
 
-You should not set `openslide.quickhash-1` yourself; see below.
+You should not set `openslide.quickhash-1` or `openslide.vendor` directly.
 
 For examples of properties produced by existing drivers, see the [web demo](http://openslide.org/demo/).
 
