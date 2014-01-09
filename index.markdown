@@ -80,6 +80,27 @@ There is a [web-based demo][demo] of OpenSlide rendering various slide
 formats.
 
 
+Documentation
+-------------
+
+Some documentation is included within the downloadable files. Additionally there is:
+ * [C API Documentation][api]
+ * [Supported Virtual Slide Formats][formats]
+ * [List of Known Properties][properties]
+ * [OpenSlide Wiki][wiki]
+
+
+Getting Help
+------------
+
+First, try the search box at the top of the page.  It covers the OpenSlide
+website, mailing list, issue tracker, and wiki.
+
+Questions should be sent to the [users mailing list](#mailing_lists).  If
+you think you have found a bug, please report it in the appropriate [issue
+tracker](#development).
+
+
 Mailing Lists
 -------------
 
@@ -92,16 +113,6 @@ There are two mailing lists for OpenSlide:
  * Announcement mailing list. It is a low-volume list and is moderated. All users are recommended to subscribe to this list.
    * [Announcement list subscription info][announce-subscribe]
    * [Announcement list archive][announce-archive]
-
-
-Documentation
--------------
-
-Some documentation is included within the downloadable files. Additionally there is:
- * [C API Documentation][api]
- * [Supported Virtual Slide Formats][formats]
- * [List of Known Properties][properties]
- * [OpenSlide Wiki][wiki]
 
 
 Development
