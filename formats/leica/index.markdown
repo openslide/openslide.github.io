@@ -104,10 +104,12 @@ Known Properties
 :the `objective` of the main image
 
 `openslide.mpp-x`
-:calculated as `10000/tiff.XResolution`
+:calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit` is
+`centimeter`
 
 `openslide.mpp-y`
-:calculated as `10000/tiff.YResolution`
+:calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit` is
+`centimeter`
 
 `openslide.objective-power`
 :normalized `leica.objective`

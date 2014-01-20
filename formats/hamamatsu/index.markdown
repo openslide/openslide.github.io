@@ -294,6 +294,14 @@ Known Properties
 All key-value data stored in the VMS/VMU file, and known tags from
 the NDPI file, are encoded as properties prefixed with "`hamamatsu.`".
 
+`openslide.mpp-x`
+:for NDPI, calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit`
+is `centimeter`
+
+`openslide.mpp-y`
+:for NDPI, calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit`
+is `centimeter`
+
 `openslide.objective-power`
 :normalized `hamamatsu.SourceLens`
 
