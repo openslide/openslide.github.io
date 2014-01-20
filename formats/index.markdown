@@ -59,7 +59,7 @@ More info
 MIRAX
 -----
 
-Multi-file JPEG with very complicated proprietary metadata and indexes.
+Multi-file with very complicated proprietary metadata and indexes.
 
 File extensions
 :`.mrxs`

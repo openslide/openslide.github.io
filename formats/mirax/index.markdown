@@ -4,7 +4,7 @@ title: MIRAX format
 ---
 
 Format
-:multi-file JPEG with very complicated proprietary metadata and indexes
+:multi-file with very complicated proprietary metadata and indexes
 
 File extensions
 :`.mrxs`
@@ -27,22 +27,20 @@ OpenSlide will detect a file as MIRAX if:
 Overview
 --------
 
-Because JPEG does not allow for large images, multiple JPEGs are
-needed to encode a slide.
-
-Unfortunately, JPEG (unlike TIFF) provides very poor support for
-random-access decoding of parts of an image. To avoid having many
-individual files, MIRAX packs JPEG images into a small number of data
-files. The index file provides offsets into the data files for each
-required piece of data.
+MIRAX can store slides in JPEG, PNG, or BMP formats.  Because JPEG does not
+allow for large images, and JPEG and PNG provide very poor support for
+random-access decoding of part of an image, multiple images are needed to
+encode a slide.  To avoid having many individual files, MIRAX packs these
+images into a small number of data files.  The index file provides offsets
+into the data files for each required piece of data.
 
 The camera on MIRAX scanners takes overlapping photos and records the
-position of each one.  Each photo is then split into multiple JPEG images
+position of each one.  Each photo is then split into multiple images
 which do not overlap.  Overlaps only occur between images that come
 from different photos.
 
-To generate level `n + 1`, each JPEG image from level `n` is downsampled by
-2 and then concatenated into a new JPEG image, 4 old images per new JPEG
+To generate level `n + 1`, each image from level `n` is downsampled by
+2 and then concatenated into a new image, 4 old images per new
 image (2 x 2).  This process is repeated for each level, irrespective of
 image overlaps.  Therefore, at sufficiently high levels, a single image can
 contain one or more embedded overlaps of non-integral width.
