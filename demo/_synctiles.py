@@ -292,7 +292,7 @@ def update_testdata(root):
     path = urlsplit(DOWNLOAD_BASE_URL).path
     cut_dirs = len([e for e in path.split('/') if e])
     # Download over HTTP
-    subprocess.check_call(['wget', '--quiet', '--mirror', '--no-parent',
+    subprocess.check_call(['wget', '--mirror', '--no-parent',
             '--no-host-directories',
             '--execute', 'robots=off',  # robots.txt is for robots
             '--cut-dirs=%d' % cut_dirs,
