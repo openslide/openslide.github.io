@@ -359,7 +359,7 @@ def sync_info(in_root):
 
 
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options] {generate|sync|syncinfo} <in_dir>')
+    parser = OptionParser(usage='Usage: %prog [options] {download|generate|sync|syncinfo} <in_dir>')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
@@ -372,7 +372,9 @@ if __name__ == '__main__':
     except ValueError:
         parser.error('Missing argument')
 
-    if command == 'generate':
+    if command == 'download':
+        update_testdata(in_root)
+    elif command == 'generate':
         if not opts.out_root:
             parser.error('Output directory not specified')
         update_testdata(in_root)
