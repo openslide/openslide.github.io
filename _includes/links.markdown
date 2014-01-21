@@ -16,6 +16,7 @@
 [format-hamamatsu]: /formats/hamamatsu/
 [format-leica]: /formats/leica/
 [format-mirax]: /formats/mirax/
+[format-sakura]: /formats/sakura/
 [format-trestle]: /formats/trestle/
 
 [announce-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/

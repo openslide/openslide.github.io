@@ -71,6 +71,20 @@ More info
 :[MIRAX format][format-mirax]
 
 
+Sakura
+------
+SQLite database containing pyramid tiles and metadata.
+
+File extensions
+:`.svslide`
+
+OpenSlide vendor backend
+:`sakura`
+
+More info
+:[Sakura format][format-sakura]
+
+
 Trestle
 -------
 Single-file pyramidal tiled TIFF, with non-standard metadata and

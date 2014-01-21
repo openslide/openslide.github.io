@@ -53,6 +53,7 @@ The library can read virtual slides in the following formats:
  * [Hamamatsu (.vms, .vmu, .ndpi)][format-hamamatsu]
  * [Leica (.scn)][format-leica]
  * [MIRAX (.mrxs)][format-mirax]
+ * [Sakura (.svslide)][format-sakura]
  * [Trestle (.tif)][format-trestle]
  * [Generic tiled TIFF (.tif)][format-generic-tiff]
 
