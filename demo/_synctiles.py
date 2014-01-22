@@ -324,10 +324,14 @@ def sync_tiles(in_root):
         index[key.name] = key.etag.strip('"')
 
     print "Pruning S3 bucket..."
+    delete = []
     for relpath in sorted(index):
         if (not os.path.exists(os.path.join(in_root, relpath)) and
                 relpath not in BUCKET_STATIC):
-            boto.s3.key.Key(bucket, relpath).delete()
+            delete.append(relpath)
+    delete_result = bucket.delete_keys(delete, quiet=True)
+    if delete_result.errors:
+        raise Exception('Failed to delete %d keys' % len(delete_result.errors))
 
     for parent_relpath, files in walk_files(in_root):
         count = 0
