@@ -22,7 +22,7 @@ import boto
 import json
 from multiprocessing import Pool
 import openslide
-from openslide import OpenSlide, ImageSlide
+from openslide import OpenSlide, ImageSlide, OpenSlideError
 from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
@@ -74,16 +74,10 @@ BUCKET_STATIC = {
 }
 
 
-_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 def slugify(text):
     """Generate an ASCII-only slug."""
-    # Based on Flask snippet 5
-    result = []
-    for word in _punct_re.split(unicode(text, 'UTF-8').lower()):
-        word = normalize('NFKD', word).encode('ascii', 'ignore')
-        if word:
-            result.append(word)
-    return unicode(u'_'.join(result))
+    text = normalize('NFKD', text.lower()).encode('ascii', 'ignore').decode()
+    return re.sub('[^a-z0-9]+', '_', text)
 
 
 class GeneratorCache(object):
@@ -181,7 +175,10 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
 def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
             out_relpath):
     """Generate tiles and metadata for all images in a slide."""
-    slide = OpenSlide(in_phys_path)
+    try:
+        slide = OpenSlide(in_phys_path)
+    except OpenSlideError:
+        return None
     def do_tile(associated, image, out_relpath):
         dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
                     limit_bounds=LIMIT_BOUNDS)
@@ -215,19 +212,20 @@ def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath):
         in_cur_path = os.path.join(in_root, in_cur_relpath)
         out_name = os.path.splitext(in_name)[0]
         out_cur_relpath = os.path.join(out_relpath, out_name.lower())
-        if OpenSlide.can_open(in_cur_path):
-            slides.append(tile_slide(pool, in_cur_relpath, in_cur_path,
-                        out_name, out_root, out_cur_relpath))
-        elif os.path.splitext(in_cur_path)[1] == '.zip':
+        slide = tile_slide(pool, in_cur_relpath, in_cur_path, out_name,
+                    out_root, out_cur_relpath)
+        if not slide and os.path.splitext(in_cur_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_cur_relpath
             zipfile.ZipFile(in_cur_path).extractall(path=temp_path)
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
-                if OpenSlide.can_open(sub_path):
-                    slides.append(tile_slide(pool, in_cur_relpath, sub_path,
-                                out_name, out_root, out_cur_relpath))
+                slide = tile_slide(pool, in_cur_relpath, sub_path,
+                            out_name, out_root, out_cur_relpath)
+                if slide:
                     break
+        if slide:
+            slides.append(slide)
     return slides
 
 
