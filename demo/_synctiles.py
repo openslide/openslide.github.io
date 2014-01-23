@@ -99,7 +99,7 @@ class GeneratorCache(object):
         return self._generators[associated]
 
 
-def pool_init():
+def generate_pool_init():
     global generator_cache
     generator_cache = GeneratorCache()
 
@@ -237,7 +237,7 @@ def tile_tree(in_root, out_root, workers):
         # over time, so after each OpenSlide release the output tree should
         # be rebuilt from scratch.
         raise ValueError('This is a complete tree; please regenerate from scratch.')
-    pool = Pool(workers, pool_init)
+    pool = Pool(workers, generate_pool_init)
     data = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
@@ -303,7 +303,24 @@ def update_testdata(root):
                 os.unlink(os.path.join(dirpath, filename))
 
 
-def sync_tiles(in_root):
+def upload_pool_init(index):
+    global upload_bucket, bucket_index
+    conn = boto.connect_s3()
+    upload_bucket = conn.get_bucket(S3_BUCKET)
+    bucket_index = index
+
+
+def upload_tile(args):
+    path, relpath = args
+    key = boto.s3.key.Key(upload_bucket, relpath)
+    with open(path, 'rb') as fh:
+        md5_hex, md5_b64 = key.compute_md5(fh)
+        if bucket_index.get(relpath, '') != md5_hex:
+            key.set_contents_from_file(fh, md5=(md5_hex, md5_b64),
+                        policy='public-read')
+
+
+def sync_tiles(in_root, workers):
     """Synchronize the specified directory tree into S3."""
 
     if not os.path.exists(os.path.join(in_root, METADATA_NAME)):
@@ -333,21 +350,22 @@ def sync_tiles(in_root):
     if delete_result.errors:
         raise Exception('Failed to delete %d keys' % len(delete_result.errors))
 
+    pool = Pool(workers, upload_pool_init, [index])
     for parent_relpath, files in walk_files(in_root):
         count = 0
         total = len(files)
-        for cur_path, cur_relpath in files:
-            key = boto.s3.key.Key(bucket, cur_relpath)
-            with open(cur_path, 'rb') as fh:
-                md5_hex, md5_b64 = key.compute_md5(fh)
-                if index.get(cur_relpath, '') != md5_hex:
-                    key.set_contents_from_file(fh, md5=(md5_hex, md5_b64),
-                                policy='public-read')
-            count += 1
+        def progress():
             print >> sys.stderr, "Synchronizing %s: %d/%d files\r" % (
                         parent_relpath or 'root', count, total),
-        if total:
-            print
+        progress()
+        for ret in pool.imap_unordered(upload_tile, files, 32):
+            count += 1
+            if count % 100 == 0:
+                progress()
+        progress()
+        print
+    pool.close()
+    pool.join()
 
 
 def sync_info(in_root):
@@ -382,7 +400,7 @@ if __name__ == '__main__':
         update_testdata(in_root)
         tile_tree(in_root, opts.out_root, opts.workers)
     elif command == 'sync':
-        sync_tiles(in_root)
+        sync_tiles(in_root, opts.workers)
     elif command == 'syncinfo':
         sync_info(in_root)
     else:
