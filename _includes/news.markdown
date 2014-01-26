@@ -1,3 +1,28 @@
+OpenSlide version 3.4.0, 2014-01-25
+-----------------------------------
+OpenSlide 3.4.0 adds support for Hamamatsu NDPI, Leica slides with multiple
+coplanar main images, MIRAX slides with PNG and BMP encodings, Sakura
+SVSLIDE, and Ventana BIF (preliminary).  It also changes the Leica level
+size/origin to encompass the entire slide, and improves compatibility with
+certain MIRAX slides.
+
+**API changes**: added new properties giving the bounds of the non-empty
+slide region, added `openslide_detect_vendor()`, deprecated
+`openslide_can_open()`.
+
+OpenSlide Java version 0.12.0, 2014-01-25
+-----------------------------------------
+OpenSlide Java 0.12.0 updates the API for OpenSlide 3.4.0 and fixes a
+`NullPointerException` when opening slides without a quickhash1.
+
+OpenSlide Python version 0.5.0, 2014-01-25
+------------------------------------------
+OpenSlide Python 0.5.0 updates the API for OpenSlide 3.4.0, adds Python 3
+support, returns Unicode strings on Python 2, adds a `DeepZoomGenerator`
+option to render only the non-empty slide region, corrects Deep Zoom tile
+positions for Aperio slides, fixes initialization on MacPorts, and improves
+the Deep Zoom example tools.
+
 New Windows build, 2013-07-27
 -----------------------------
 Windows build 20130727 prevents libtiff from opening a dialog box upon
@@ -19,6 +44,9 @@ VMU.
 
 Windows build 20121201 also fixes a serious, Windows-specific thread safety
 issue.
+
+
+{% if page.news_show_extended %}
 
 OpenSlide version 3.3.1, 2012-10-14
 -----------------------------------
@@ -53,9 +81,6 @@ OpenSlide Python version 0.4.0, 2012-09-08
 Version 0.3.0 of the Python bindings renames some methods and properties,
 adds a property for the OpenSlide library version, fixes error handling
 under OpenSlide 3.3.0, and fixes initialization on Mac OS X.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide user meeting in Baltimore
 -----------------------------------

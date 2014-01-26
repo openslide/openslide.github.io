@@ -3,6 +3,7 @@ layout: default
 title: Downloading OpenSlide
 releases:
   c:
+    - {version: 3.4.0, date: 2014-01-25}
     - {version: 3.3.3, date: 2013-04-13}
     - {version: 3.3.2, date: 2012-12-01}
     - {version: 3.3.1, date: 2012-10-14}
@@ -27,6 +28,7 @@ releases:
     - {version: 2.1.0, date: 2009-08-18, no_xz: 1}
     - {version: 2.0.0, date: 2009-07-16, no_xz: 1}
   java:
+    - {version: 0.12.0, date: 2014-01-25}
     - {version: 0.11.0, date: 2012-09-08}
     - {version: 0.10.0, date: 2011-12-16}
     - {version: 0.9.2, date: 2010-08-10}
@@ -40,10 +42,12 @@ releases:
     - {version: 0.6.0, date: 2009-08-17, no_xz: 1}
     - {version: 0.5.0, date: 2009-07-15, no_xz: 1}
   python:
+    - {version: 0.5.0, date: 2014-01-25}
     - {version: 0.4.0, date: 2012-09-08}
     - {version: 0.3.0, date: 2011-12-16}
     - {version: 0.2.0, date: 2011-09-02}
   winbuild:
+    - {date: 2014-01-25}
     - {date: 2013-07-27}
     - {date: 2013-04-13}
     - {date: 2012-12-01}
