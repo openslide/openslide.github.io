@@ -42,6 +42,7 @@ releases:
     - {version: 0.6.0, date: 2009-08-17, no_xz: 1}
     - {version: 0.5.0, date: 2009-07-15, no_xz: 1}
   python:
+    - {version: 0.5.1, date: 2014-01-26}
     - {version: 0.5.0, date: 2014-01-25}
     - {version: 0.4.0, date: 2012-09-08}
     - {version: 0.3.0, date: 2011-12-16}

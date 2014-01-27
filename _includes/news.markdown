@@ -1,3 +1,8 @@
+OpenSlide Python version 0.5.1, 2014-01-26
+------------------------------------------
+OpenSlide Python 0.5.1 fixes exceptions on Python 2.6 and with the classic
+PIL library.
+
 OpenSlide version 3.4.0, 2014-01-25
 -----------------------------------
 OpenSlide 3.4.0 adds support for Hamamatsu NDPI, Leica slides with multiple
