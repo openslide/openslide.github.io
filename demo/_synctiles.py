@@ -2,7 +2,7 @@
 #
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
-# Copyright (c) 2010-2013 Carnegie Mellon University
+# Copyright (c) 2010-2014 Carnegie Mellon University
 #
 # This library is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
