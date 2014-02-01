@@ -19,6 +19,7 @@
 #
 
 import boto
+from datetime import datetime
 import json
 from multiprocessing import Pool
 import openslide
@@ -241,6 +242,7 @@ def tile_tree(in_root, out_root, workers):
     data = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
+        'serial': datetime.utcnow().strftime('%Y%m%d%H%M'),
         'groups': [],
     }
     print 'OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % data
