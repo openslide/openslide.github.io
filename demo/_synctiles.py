@@ -174,7 +174,7 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
 
 
 def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
-            out_relpath):
+            out_relpath, serial):
     """Generate tiles and metadata for all images in a slide."""
     try:
         slide = OpenSlide(in_phys_path)
@@ -191,7 +191,7 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
                     os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
         'properties_url': os.path.join(BASE_URL, out_relpath,
-                    SLIDE_METADATA_NAME),
+                    SLIDE_METADATA_NAME) + '?v=' + serial,
         'download_url': os.path.join(DOWNLOAD_BASE_URL, in_relpath),
     }
     for associated, image in sorted(slide.associated_images.items()):
@@ -205,7 +205,8 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
     return properties
 
 
-def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath):
+def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath,
+            serial):
     """Build a directory of tiled images from a directory of slides."""
     slides = []
     for in_name in sorted(os.listdir(os.path.join(in_root, in_relpath))):
@@ -214,7 +215,7 @@ def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath):
         out_name = os.path.splitext(in_name)[0]
         out_cur_relpath = os.path.join(out_relpath, out_name.lower())
         slide = tile_slide(pool, in_cur_relpath, in_cur_path, out_name,
-                    out_root, out_cur_relpath)
+                    out_root, out_cur_relpath, serial)
         if not slide and os.path.splitext(in_cur_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_cur_relpath
@@ -222,7 +223,7 @@ def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath):
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
                 slide = tile_slide(pool, in_cur_relpath, sub_path,
-                            out_name, out_root, out_cur_relpath)
+                            out_name, out_root, out_cur_relpath, serial)
                 if slide:
                     break
         if slide:
@@ -251,7 +252,7 @@ def tile_tree(in_root, out_root, workers):
         for in_name in sorted(os.listdir(in_root)):
             if os.path.isdir(os.path.join(in_root, in_name)):
                 slides = walk_slides(pool, tempdir, in_root, in_name,
-                            out_root, in_name.lower())
+                            out_root, in_name.lower(), data['serial'])
                 if slides:
                     data['groups'].append({
                         'name': GROUP_NAME_MAP.get(in_name, in_name),
