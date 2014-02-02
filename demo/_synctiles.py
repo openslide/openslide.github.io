@@ -73,6 +73,12 @@ BUCKET_STATIC = {
         },
     },
 }
+METADATA_HEADERS = {
+    'Cache-Control': 'no-cache',
+}
+TILE_HEADERS = {
+    'Cache-Control': 'public, max-age=31536000',
+}
 
 
 def slugify(text):
@@ -315,12 +321,16 @@ def upload_pool_init(index):
 
 def upload_tile(args):
     path, relpath = args
+    if relpath == METADATA_NAME:
+        headers = METADATA_HEADERS
+    else:
+        headers = TILE_HEADERS
     key = boto.s3.key.Key(upload_bucket, relpath)
     with open(path, 'rb') as fh:
         md5_hex, md5_b64 = key.compute_md5(fh)
         if bucket_index.get(relpath, '') != md5_hex:
             key.set_contents_from_file(fh, md5=(md5_hex, md5_b64),
-                        policy='public-read')
+                        policy='public-read', headers=headers)
 
 
 def sync_tiles(in_root, workers):
@@ -378,7 +388,7 @@ def sync_info(in_root):
     bucket = conn.get_bucket(S3_BUCKET)
     with open(os.path.join(in_root, METADATA_NAME), 'rb') as fh:
         boto.s3.key.Key(bucket, METADATA_NAME).set_contents_from_file(fh,
-                    policy='public-read')
+                    policy='public-read', headers=METADATA_HEADERS)
 
 
 if __name__ == '__main__':
