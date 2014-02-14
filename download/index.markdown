@@ -102,16 +102,20 @@ If you're looking for the bleeding edge,
 
 Fedora
 ------
-Fedora users can install OpenSlide with `yum install openslide`.
+To install OpenSlide, run `yum install openslide`.
 
 Debian/Ubuntu
 -------------
-Users of Ubuntu and Debian testing can install OpenSlide and its command-line
-utilities with `apt-get install openslide-tools`.
+To install OpenSlide and its command-line utilities, run
+`apt-get install openslide-tools`.
+Users of Debian `testing` or Ubuntu &ge; 14.04 can install OpenSlide Python
+with `apt-get install python-openslide` (Python 2) or
+`apt-get install python3-openslide` (Python 3).
 
 Red Hat Enterprise Linux / CentOS / Scientific Linux
 ----------------------------------------------------
-After installing [EPEL][7], users of RHEL >=5 or RHEL-derived systems can just `yum install openslide`.
+After installing [EPEL][7], users of RHEL &ge; 5 or RHEL-derived systems
+can install OpenSlide with `yum install openslide`.
 
 [7]: https://fedoraproject.org/wiki/EPEL
 
@@ -122,7 +126,7 @@ OpenSlide is available from [MacPorts][macports] via
 `brew install openslide`.
 
 [macports]: http://www.macports.org/
-[homebrew]: http://mxcl.github.com/homebrew/
+[homebrew]: http://brew.sh/
 
 Version Control
 ---------------
