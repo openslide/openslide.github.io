@@ -27,6 +27,7 @@ div.searchbox .gsc-search-button {
   display: none;
 }
 
+/* Scrollable releases table, fixed-height rows */
 div.releases {
   display: inline-block;
   height: 9em;
@@ -50,4 +51,29 @@ div.releases.indent {
 .releases th, .releases td {
   padding: 0 1em;
   border: 0;
+}
+
+/* Package info table, vertical padding around cells, looks like
+   releases table */
+.pinfo {
+  border: 0;
+  line-height: 1.4;
+}
+.pinfo th, .pinfo td {
+  border: 0;
+}
+.pinfo thead tr {
+  background-color: #c8e8c8;
+}
+.pinfo thead th {
+  padding: 0.3em 1em;
+}
+.pinfo tbody tr:nth-child(2n + 1) {
+  background-color: #d8f8d8;
+}
+.pinfo tbody th, .pinfo tbody td {
+  padding: 0.85em 1em;
+}
+.pinfo tbody th {
+  text-align: left;
 }
