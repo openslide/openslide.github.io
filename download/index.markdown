@@ -175,11 +175,40 @@ Distribution Packages
 
 Version Control
 ---------------
-[Git][8] repositories for OpenSlide are available. The commands to clone are:
+[Git][git] repositories are available:
 
- * `git clone git://github.com/openslide/openslide.git` ([GitHub][c-github])
- * `git clone git://github.com/openslide/openslide-java.git` ([GitHub][java-github])
- * `git clone git://github.com/openslide/openslide-python.git` ([GitHub][python-github])
- * `git clone git://github.com/openslide/openslide-winbuild.git` ([GitHub][winbuild-github])
+<table class="pinfo">
+  <thead>
+    <tr>
+      <th>Repository</th>
+      <th>Clone command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide">OpenSlide</a></th>
+      <td><code>git clone https://github.com/openslide/openslide.git</code></td>
+    </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide-java">OpenSlide Java</a></th>
+      <td><code>git clone https://github.com/openslide/openslide-java.git</code></td>
+    </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide-python">OpenSlide Python</a></th>
+      <td><code>git clone https://github.com/openslide/openslide-python.git</code></td>
+    </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide-winbuild">Windows build scripts</a></th>
+      <td><code>git clone https://github.com/openslide/openslide-winbuild.git</code></td>
+    </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide.github.com">Website</a></th>
+      <td><code>git clone https://github.com/openslide/openslide.github.com.git</code></td>
+    </tr>
+  </tbody>
+</table>
 
-[8]: http://git-scm.com/
+<!-- Ensure spacing above footer -->
+<span></span>
+
+[git]: http://git-scm.com/
