@@ -25,13 +25,13 @@
 [users-archive]: http://lists.andrew.cmu.edu/pipermail/openslide-users/
 
 [c-github]: https://github.com/openslide/openslide
-[java-github]: https://github.com/openslide/openslide-java
 [python-github]: https://github.com/openslide/openslide-python
+[java-github]: https://github.com/openslide/openslide-java
 [winbuild-github]: https://github.com/openslide/openslide-winbuild
 [site-github]: https://github.com/openslide/openslide.github.com
 
 [c-issues]: https://github.com/openslide/openslide/issues
-[java-issues]: https://github.com/openslide/openslide-java/issues
 [python-issues]: https://github.com/openslide/openslide-python/issues
+[java-issues]: https://github.com/openslide/openslide-java/issues
 [winbuild-issues]: https://github.com/openslide/openslide-winbuild/issues
 [site-issues]: https://github.com/openslide/openslide.github.com/issues

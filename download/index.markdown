@@ -27,6 +27,12 @@ releases:
     - {version: 2.2.0, date: 2009-09-15}
     - {version: 2.1.0, date: 2009-08-18, no_xz: 1}
     - {version: 2.0.0, date: 2009-07-16, no_xz: 1}
+  python:
+    - {version: 0.5.1, date: 2014-01-26}
+    - {version: 0.5.0, date: 2014-01-25}
+    - {version: 0.4.0, date: 2012-09-08}
+    - {version: 0.3.0, date: 2011-12-16}
+    - {version: 0.2.0, date: 2011-09-02}
   java:
     - {version: 0.12.0, date: 2014-01-25}
     - {version: 0.11.0, date: 2012-09-08}
@@ -41,12 +47,6 @@ releases:
     - {version: 0.6.1, date: 2009-08-25, no_xz: 1}
     - {version: 0.6.0, date: 2009-08-17, no_xz: 1}
     - {version: 0.5.0, date: 2009-07-15, no_xz: 1}
-  python:
-    - {version: 0.5.1, date: 2014-01-26}
-    - {version: 0.5.0, date: 2014-01-25}
-    - {version: 0.4.0, date: 2012-09-08}
-    - {version: 0.3.0, date: 2011-12-16}
-    - {version: 0.2.0, date: 2011-09-02}
   winbuild:
     - {date: 2014-01-25}
     - {date: 2013-07-27}
@@ -70,14 +70,14 @@ Source
 {% assign releases = page.releases.c %}
 {% include source-release-table.markdown %}
 
-#### OpenSlide Java interface (still unstable API, subject to change)
-{% assign package = 'openslide-java' %}
-{% assign releases = page.releases.java %}
-{% include source-release-table.markdown %}
-
 #### OpenSlide Python interface (still unstable API, subject to change)
 {% assign package = 'openslide-python' %}
 {% assign releases = page.releases.python %}
+{% include source-release-table.markdown %}
+
+#### OpenSlide Java interface (still unstable API, subject to change)
+{% assign package = 'openslide-java' %}
+{% assign releases = page.releases.java %}
 {% include source-release-table.markdown %}
 
 Windows Binaries
@@ -204,12 +204,12 @@ Version Control
       <td><code>git clone https://github.com/openslide/openslide.git</code></td>
     </tr>
     <tr>
-      <th><a href="https://github.com/openslide/openslide-java">OpenSlide Java</a></th>
-      <td><code>git clone https://github.com/openslide/openslide-java.git</code></td>
-    </tr>
-    <tr>
       <th><a href="https://github.com/openslide/openslide-python">OpenSlide Python</a></th>
       <td><code>git clone https://github.com/openslide/openslide-python.git</code></td>
+    </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide-java">OpenSlide Java</a></th>
+      <td><code>git clone https://github.com/openslide/openslide-java.git</code></td>
     </tr>
     <tr>
       <th><a href="https://github.com/openslide/openslide-winbuild">Windows build scripts</a></th>
