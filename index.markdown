@@ -1,21 +1,11 @@
 ---
 layout: default
 title: OpenSlide
+classes: forkme
 news_show_extended: false
 ---
 
 {% include links.markdown %}
-
-<style type="text/css">
-{% raw %}
-div.searchbox {
-  right: 85px;
-}
-div.searchbox .inner {
-  z-index: 1000;
-}
-{% endraw %}
-</style>
 
 <a href="https://github.com/openslide">
 <img style="position: absolute; top: 0; right: 0; border: 0;"

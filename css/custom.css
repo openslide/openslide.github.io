@@ -5,10 +5,16 @@ div.searchbox {
   height: 110px;
   width: 300px;
 }
+.forkme div.searchbox {
+  right: 85px;
+}
 div.searchbox .inner {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+.forkme div.searchbox .inner {
+  z-index: 1000;
 }
 div.searchbox table {
   border: 0;
