@@ -1,7 +1,6 @@
 [news]: /news/
 [download]: /download/
 [lgplv2.1]: https://raw.github.com/openslide/openslide/master/lgpl-2.1.txt
-[api]: /api/openslide_8h.html
 [properties]: /properties/
 [demo]: /demo/
 [other-projects]: /other-projects/
@@ -9,6 +8,9 @@
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
 [snapshots-windows]: http://openslide.cs.cmu.edu/download/snapshots/windows/
+
+[c-api]: /api/openslide_8h.html
+[python-api]: /api/python/
 
 [formats]: /formats/
 [format-aperio]: /formats/aperio/

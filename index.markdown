@@ -75,7 +75,8 @@ Documentation
 -------------
 
 Some documentation is included within the downloadable files. Additionally there is:
- * [C API Documentation][api]
+ * [C API Documentation][c-api]
+ * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][properties]
  * [OpenSlide Wiki][wiki]

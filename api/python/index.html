@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>OpenSlide Python &mdash; OpenSlide Python 0.5.1 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.5.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="OpenSlide Python 0.5.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="#">OpenSlide Python 0.5.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="openslide-python">
+<h1>OpenSlide Python<a class="headerlink" href="#openslide-python" title="Permalink to this headline">¶</a></h1>
+<p>OpenSlide Python is a Python interface to the <a class="reference external" href="http://openslide.org/">OpenSlide</a> library.</p>
+<p>OpenSlide is a C library that provides a simple interface for reading
+whole-slide images, also known as virtual slides, which are high-resolution
+images used in digital pathology.  These images can occupy tens of gigabytes
+when uncompressed, and so cannot be easily read using standard tools or
+libraries, which are designed for images that can be comfortably
+uncompressed into RAM.  Whole-slide images are typically multi-resolution;
+OpenSlide allows reading a small amount of image data at the resolution
+closest to a desired zoom level.</p>
+<p>OpenSlide can read virtual slides in several formats:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://openslide.org/formats/aperio/">Aperio</a> (<tt class="docutils literal"><span class="pre">.svs</span></tt>, <tt class="docutils literal"><span class="pre">.tif</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/hamamatsu/">Hamamatsu</a> (<tt class="docutils literal"><span class="pre">.ndpi</span></tt>, <tt class="docutils literal"><span class="pre">.vms</span></tt>, <tt class="docutils literal"><span class="pre">.vmu</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/leica/">Leica</a> (<tt class="docutils literal"><span class="pre">.scn</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/mirax/">MIRAX</a> (<tt class="docutils literal"><span class="pre">.mrxs</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/sakura/">Sakura</a> (<tt class="docutils literal"><span class="pre">.svslide</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/trestle/">Trestle</a> (<tt class="docutils literal"><span class="pre">.tif</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/ventana/">Ventana</a> (<tt class="docutils literal"><span class="pre">.bif</span></tt>)</li>
+<li><a class="reference external" href="http://openslide.org/formats/generic-tiff/">Generic tiled TIFF</a> (<tt class="docutils literal"><span class="pre">.tif</span></tt>)</li>
+</ul>
+<p>OpenSlide Python is released under the terms of the <a class="reference external" href="https://raw.github.com/openslide/openslide-python/master/lgpl-2.1.txt">GNU Lesser General
+Public License, version 2.1</a>.</p>
+<div class="section" id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-openslide">
+<span id="openslide-objects"></span><h3>OpenSlide objects<a class="headerlink" href="#module-openslide" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="openslide.OpenSlide">
+<em class="property">class </em><tt class="descclassname">openslide.</tt><tt class="descname">OpenSlide</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide" title="Permalink to this definition">¶</a></dt>
+<dd><p>An open whole-slide image.</p>
+<p>If any operation on the object fails, <a class="reference internal" href="#openslide.OpenSlideError" title="openslide.OpenSlideError"><tt class="xref py py-exc docutils literal"><span class="pre">OpenSlideError</span></tt></a> is raised.
+OpenSlide has latching error semantics: once <a class="reference internal" href="#openslide.OpenSlideError" title="openslide.OpenSlideError"><tt class="xref py py-exc docutils literal"><span class="pre">OpenSlideError</span></tt></a> is
+raised, all future operations on the <a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a>, other than
+<a class="reference internal" href="#openslide.OpenSlide.close" title="openslide.OpenSlide.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a>, will also raise <a class="reference internal" href="#openslide.OpenSlideError" title="openslide.OpenSlideError"><tt class="xref py py-exc docutils literal"><span class="pre">OpenSlideError</span></tt></a>.</p>
+<p><a class="reference internal" href="#openslide.OpenSlide.close" title="openslide.OpenSlide.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a> is called automatically when the object is deleted.
+The object may be used as a context manager, in which case it will be
+closed upon exiting the context.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the file to open</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>OpenSlideUnsupportedFormatError</strong> &#8211; if the file is not recognized by
+OpenSlide</li>
+<li><strong>OpenSlideError</strong> &#8211; if the file is recognized but an error occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="classmethod">
+<dt id="openslide.OpenSlide.detect_format">
+<em class="property">classmethod </em><tt class="descname">detect_format</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide.detect_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string describing the format vendor of the specified file.
+This string is also accessible via the <a class="reference internal" href="#openslide.PROPERTY_NAME_VENDOR" title="openslide.PROPERTY_NAME_VENDOR"><tt class="xref py py-data docutils literal"><span class="pre">PROPERTY_NAME_VENDOR</span></tt></a>
+property.</p>
+<p>If the file is not recognized, return <a class="reference external" href="http://docs.python.org/library/constants.html#None" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">None</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the file to examine</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.OpenSlide.level_count">
+<tt class="descname">level_count</tt><a class="headerlink" href="#openslide.OpenSlide.level_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of levels in the slide.  Levels are numbered from <tt class="docutils literal"><span class="pre">0</span></tt>
+(highest resolution) to <tt class="docutils literal"><span class="pre">level_count</span> <span class="pre">-</span> <span class="pre">1</span></tt> (lowest resolution).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.OpenSlide.dimensions">
+<tt class="descname">dimensions</tt><a class="headerlink" href="#openslide.OpenSlide.dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt> tuple for level 0 of the slide.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.OpenSlide.level_dimensions">
+<tt class="descname">level_dimensions</tt><a class="headerlink" href="#openslide.OpenSlide.level_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt> tuples, one for each level of the slide.
+<tt class="docutils literal"><span class="pre">level_dimensions[k]</span></tt> are the dimensions of level <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.OpenSlide.level_downsamples">
+<tt class="descname">level_downsamples</tt><a class="headerlink" href="#openslide.OpenSlide.level_downsamples" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of downsample factors for each level of the slide.
+<tt class="docutils literal"><span class="pre">level_downsamples[k]</span></tt> is the downsample factor of level <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.OpenSlide.properties">
+<tt class="descname">properties</tt><a class="headerlink" href="#openslide.OpenSlide.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metadata about the slide, in the form of a
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Mapping</span></tt></a> from OpenSlide property name to
+property value.  Property values are always strings.  OpenSlide
+provides some <a class="reference internal" href="#standard-properties"><em>standard properties</em></a>, plus
+additional properties that vary by slide format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.OpenSlide.associated_images">
+<tt class="descname">associated_images</tt><a class="headerlink" href="#openslide.OpenSlide.associated_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Images, such as label or macro images, which are associated with this
+slide.  This is a <a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Mapping</span></tt></a> from image
+name to RGBA <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a>.</p>
+<p>Unlike in the C interface, these images are not premultiplied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.OpenSlide.read_region">
+<tt class="descname">read_region</tt><big>(</big><em>location</em>, <em>level</em>, <em>size</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide.read_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an RGBA <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> containing the
+contents of the specified region.</p>
+<p>Unlike in the C interface, the image data is not premultiplied.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; <tt class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></tt> tuple giving the top left pixel in
+the level 0 reference frame</li>
+<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the level number</li>
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; <tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt> tuple giving the region size</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.OpenSlide.get_best_level_for_downsample">
+<tt class="descname">get_best_level_for_downsample</tt><big>(</big><em>downsample</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide.get_best_level_for_downsample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the best level for displaying the given downsample.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>downsample</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the desired downsample factor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.OpenSlide.get_thumbnail">
+<tt class="descname">get_thumbnail</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide.get_thumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> containing an RGB thumbnail
+of the slide.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the maximum size of the thumbnail as a
+<tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt> tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.OpenSlide.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#openslide.OpenSlide.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the OpenSlide object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="standard-properties">
+<span id="id1"></span><h3>Standard properties<a class="headerlink" href="#standard-properties" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#module-openslide" title="openslide"><tt class="xref py py-mod docutils literal"><span class="pre">openslide</span></tt></a> module provides attributes containing the names of
+some commonly-used OpenSlide properties.</p>
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_COMMENT">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_COMMENT</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_COMMENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing a slide&#8217;s comment, if any.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_VENDOR">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_VENDOR</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_VENDOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing an identification of the vendor.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_QUICKHASH1">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_QUICKHASH1</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_QUICKHASH1" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the &#8220;quickhash-1&#8221; sum.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_BACKGROUND_COLOR">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_BACKGROUND_COLOR</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_BACKGROUND_COLOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing a slide&#8217;s background color, if any.
+It is represented as an RGB hex triplet.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_OBJECTIVE_POWER">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_OBJECTIVE_POWER</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_OBJECTIVE_POWER" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing a slide&#8217;s objective power, if known.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_MPP_X">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_MPP_X</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_MPP_X" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the number of microns per pixel in
+the X dimension of level 0, if known.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_MPP_Y">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_MPP_Y</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_MPP_Y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the number of microns per pixel in
+the Y dimension of level 0, if known.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_BOUNDS_X">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_BOUNDS_X</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_BOUNDS_X" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the X coordinate of the rectangle
+bounding the non-empty region of the slide, if available.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_BOUNDS_Y">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_BOUNDS_Y</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_BOUNDS_Y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the Y coordinate of the rectangle
+bounding the non-empty region of the slide, if available.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_BOUNDS_WIDTH">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_BOUNDS_WIDTH</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_BOUNDS_WIDTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the width of the rectangle bounding
+the non-empty region of the slide, if available.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="openslide.PROPERTY_NAME_BOUNDS_HEIGHT">
+<tt class="descclassname">openslide.</tt><tt class="descname">PROPERTY_NAME_BOUNDS_HEIGHT</tt><a class="headerlink" href="#openslide.PROPERTY_NAME_BOUNDS_HEIGHT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the property containing the height of the rectangle bounding
+the non-empty region of the slide, if available.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h3>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
+<dl class="exception">
+<dt id="openslide.OpenSlideError">
+<em class="property">exception </em><tt class="descclassname">openslide.</tt><tt class="descname">OpenSlideError</tt><a class="headerlink" href="#openslide.OpenSlideError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error produced by the OpenSlide library.</p>
+<p>Once <a class="reference internal" href="#openslide.OpenSlideError" title="openslide.OpenSlideError"><tt class="xref py py-exc docutils literal"><span class="pre">OpenSlideError</span></tt></a> has been raised by a particular
+<a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a>, all future operations on that <a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a>
+(other than <a class="reference internal" href="#openslide.OpenSlide.close" title="openslide.OpenSlide.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a>) will also raise
+<a class="reference internal" href="#openslide.OpenSlideError" title="openslide.OpenSlideError"><tt class="xref py py-exc docutils literal"><span class="pre">OpenSlideError</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="openslide.OpenSlideUnsupportedFormatError">
+<em class="property">exception </em><tt class="descclassname">openslide.</tt><tt class="descname">OpenSlideUnsupportedFormatError</tt><a class="headerlink" href="#openslide.OpenSlideUnsupportedFormatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenSlide does not support the requested file.  Subclass of
+<a class="reference internal" href="#openslide.OpenSlideError" title="openslide.OpenSlideError"><tt class="xref py py-exc docutils literal"><span class="pre">OpenSlideError</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="wrapping-a-pil-image">
+<h2>Wrapping a PIL Image<a class="headerlink" href="#wrapping-a-pil-image" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="openslide.ImageSlide">
+<em class="property">class </em><tt class="descclassname">openslide.</tt><tt class="descname">ImageSlide</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#openslide.ImageSlide" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper around an <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> object that
+provides an <a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a>-compatible API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; a filename or <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises IOError:</th><td class="field-body">if the file cannot be opened</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="openslide.open_slide">
+<tt class="descclassname">openslide.</tt><tt class="descname">open_slide</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openslide.open_slide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an <a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a> for whole-slide images and an
+<a class="reference internal" href="#openslide.ImageSlide" title="openslide.ImageSlide"><tt class="xref py py-class docutils literal"><span class="pre">ImageSlide</span></tt></a> for other types of images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the file to open</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>OpenSlideError</strong> &#8211; if the file is recognized by OpenSlide but an
+error occurred</li>
+<li><strong>IOError</strong> &#8211; if the file is not recognized at all</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-openslide.deepzoom">
+<span id="deep-zoom-support"></span><h2>Deep Zoom support<a class="headerlink" href="#module-openslide.deepzoom" title="Permalink to this headline">¶</a></h2>
+<p>OpenSlide Python provides functionality for generating individual
+<a class="reference external" href="http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx">Deep Zoom</a> tiles from slide objects.  This is useful for displaying
+whole-slide images in a web browser without converting the entire slide to
+Deep Zoom or a similar format.</p>
+<dl class="class">
+<dt id="openslide.deepzoom.DeepZoomGenerator">
+<em class="property">class </em><tt class="descclassname">openslide.deepzoom.</tt><tt class="descname">DeepZoomGenerator</tt><big>(</big><em>osr</em>, <em>tile_size=256</em>, <em>overlap=1</em>, <em>limit_bounds=False</em><big>)</big><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Deep Zoom generator that wraps an
+<a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a> or
+<a class="reference internal" href="#openslide.ImageSlide" title="openslide.ImageSlide"><tt class="xref py py-class docutils literal"><span class="pre">ImageSlide</span></tt></a> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>osr</strong> &#8211; the slide object</li>
+<li><strong>tile_size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the width and height of a single tile</li>
+<li><strong>overlap</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the number of extra pixels to add to each interior edge
+of a tile</li>
+<li><strong>limit_bounds</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; <tt class="docutils literal"><span class="pre">True</span></tt> to render only the non-empty slide
+region</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="openslide.deepzoom.DeepZoomGenerator.level_count">
+<tt class="descname">level_count</tt><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.level_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of Deep Zoom levels in the image.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.deepzoom.DeepZoomGenerator.tile_count">
+<tt class="descname">tile_count</tt><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.tile_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of Deep Zoom tiles in the image.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.deepzoom.DeepZoomGenerator.level_tiles">
+<tt class="descname">level_tiles</tt><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.level_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <tt class="docutils literal"><span class="pre">(tiles_x,</span> <span class="pre">tiles_y)</span></tt> tuples for each Deep Zoom level.
+<tt class="docutils literal"><span class="pre">level_tiles[k]</span></tt> are the tile counts of level <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="openslide.deepzoom.DeepZoomGenerator.level_dimensions">
+<tt class="descname">level_dimensions</tt><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.level_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <tt class="docutils literal"><span class="pre">(pixels_x,</span> <span class="pre">pixels_y)</span></tt> tuples for each Deep Zoom level.
+<tt class="docutils literal"><span class="pre">level_dimensions[k]</span></tt> are the dimensions of level <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.deepzoom.DeepZoomGenerator.get_dzi">
+<tt class="descname">get_dzi</tt><big>(</big><em>format</em><big>)</big><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.get_dzi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string containing the XML metadata for the Deep Zoom <tt class="docutils literal"><span class="pre">.dzi</span></tt>
+file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>format</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; the delivery format of the individual tiles
+(<tt class="docutils literal"><span class="pre">png</span></tt> or <tt class="docutils literal"><span class="pre">jpeg</span></tt>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.deepzoom.DeepZoomGenerator.get_tile">
+<tt class="descname">get_tile</tt><big>(</big><em>level</em>, <em>address</em><big>)</big><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.get_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an RGB <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> for a tile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
+<li><strong>address</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the address of the tile within the level as a
+<tt class="docutils literal"><span class="pre">(column,</span> <span class="pre">row)</span></tt> tuple</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.deepzoom.DeepZoomGenerator.get_tile_coordinates">
+<tt class="descname">get_tile_coordinates</tt><big>(</big><em>level</em>, <em>address</em><big>)</big><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.get_tile_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#openslide.OpenSlide.read_region" title="openslide.OpenSlide.read_region"><tt class="xref py py-meth docutils literal"><span class="pre">OpenSlide.read_region()</span></tt></a> arguments corresponding to the
+specified tile.</p>
+<p>Most applications should use <a class="reference internal" href="#openslide.deepzoom.DeepZoomGenerator.get_tile" title="openslide.deepzoom.DeepZoomGenerator.get_tile"><tt class="xref py py-meth docutils literal"><span class="pre">get_tile()</span></tt></a> instead.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
+<li><strong>address</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the address of the tile within the level as a
+<tt class="docutils literal"><span class="pre">(column,</span> <span class="pre">row)</span></tt> tuple</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openslide.deepzoom.DeepZoomGenerator.get_tile_dimensions">
+<tt class="descname">get_tile_dimensions</tt><big>(</big><em>level</em>, <em>address</em><big>)</big><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.get_tile_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <tt class="docutils literal"><span class="pre">(pixels_x,</span> <span class="pre">pixels_y)</span></tt> tuple for the specified tile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
+<li><strong>address</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the address of the tile within the level as a
+<tt class="docutils literal"><span class="pre">(column,</span> <span class="pre">row)</span></tt> tuple</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="example-programs">
+<h3>Example programs<a class="headerlink" href="#example-programs" title="Permalink to this headline">¶</a></h3>
+<p>Several <a class="reference external" href="https://github.com/openslide/openslide-python/tree/master/examples/deepzoom">Deep Zoom examples</a> are included with OpenSlide Python:</p>
+<dl class="docutils">
+<dt><a class="reference external" href="https://github.com/openslide/openslide-python/blob/master/examples/deepzoom/deepzoom_server.py">deepzoom_server.py</a></dt>
+<dd>A basic server for a single slide.  It serves a web page with a zoomable
+slide viewer, a list of slide properties, and the ability to view
+associated images.</dd>
+<dt><a class="reference external" href="https://github.com/openslide/openslide-python/blob/master/examples/deepzoom/deepzoom_multiserver.py">deepzoom_multiserver.py</a></dt>
+<dd>A basic server for a directory tree of slides.  It serves an index page
+which links to zoomable slide viewers for all slides in the tree.</dd>
+<dt><a class="reference external" href="https://github.com/openslide/openslide-python/blob/master/examples/deepzoom/deepzoom_tile.py">deepzoom_tile.py</a></dt>
+<dd><p class="first">A program to generate and store a complete Deep Zoom directory tree for a
+slide.  It can optionally store an HTML page with a zoomable slide viewer,
+a list of slide properties, and the ability to view associated images.</p>
+<p class="last">This program is intended as an example.  If you need to generate Deep Zoom
+trees for production applications, consider <a class="reference external" href="https://github.com/openslide/openslide/wiki/OpenSlideAndVIPS">using VIPS</a> instead.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">OpenSlide Python</a><ul>
+<li><a class="reference internal" href="#basic-usage">Basic usage</a><ul>
+<li><a class="reference internal" href="#module-openslide">OpenSlide objects</a></li>
+<li><a class="reference internal" href="#standard-properties">Standard properties</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrapping-a-pil-image">Wrapping a PIL Image</a></li>
+<li><a class="reference internal" href="#module-openslide.deepzoom">Deep Zoom support</a><ul>
+<li><a class="reference internal" href="#example-programs">Example programs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="#">OpenSlide Python 0.5.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2014 Carnegie Mellon University.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
