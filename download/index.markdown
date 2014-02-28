@@ -121,8 +121,8 @@ Distribution Packages
       <th>Linux</th>
       <th><a href="http://fedoraproject.org/">Fedora</a></th>
       <td><code>yum install openslide</code></td>
-      <td></td>
-      <td></td>
+      <td><code>yum install openslide-python</code></td>
+      <td><code>yum install openslide-python3</code></td>
     </tr>
     <tr>
       <th>Linux</th>
