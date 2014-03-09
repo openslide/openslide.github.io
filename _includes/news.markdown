@@ -1,3 +1,7 @@
+OpenSlide Python version 1.0.0, 2014-03-09
+------------------------------------------
+OpenSlide Python 1.0.0 declares a stable API and adds documentation.
+
 OpenSlide Python version 0.5.1, 2014-01-26
 ------------------------------------------
 OpenSlide Python 0.5.1 fixes exceptions on Python 2.6 and with the classic
@@ -41,6 +45,9 @@ compatibility improvements for Aperio JP2K and Hamamatsu slides.
 Windows build 20130413 also fixes a runtime crash when linked with
 `/OPT:REF`.
 
+
+{% if page.news_show_extended %}
+
 OpenSlide version 3.3.2, 2012-12-01
 -----------------------------------
 Version 3.3.2 fixes seams in MIRAX 2.2 slides, fixes associated images in
@@ -49,9 +56,6 @@ VMU.
 
 Windows build 20121201 also fixes a serious, Windows-specific thread safety
 issue.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide version 3.3.1, 2012-10-14
 -----------------------------------

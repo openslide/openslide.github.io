@@ -28,6 +28,7 @@ releases:
     - {version: 2.1.0, date: 2009-08-18, no_xz: 1}
     - {version: 2.0.0, date: 2009-07-16, no_xz: 1}
   python:
+    - {version: 1.0.0, date: 2014-03-09}
     - {version: 0.5.1, date: 2014-01-26}
     - {version: 0.5.0, date: 2014-01-25}
     - {version: 0.4.0, date: 2012-09-08}
@@ -70,7 +71,7 @@ Source
 {% assign releases = page.releases.c %}
 {% include source-release-table.markdown %}
 
-#### OpenSlide Python interface (still unstable API, subject to change)
+#### OpenSlide Python interface (stable API)
 {% assign package = 'openslide-python' %}
 {% assign releases = page.releases.python %}
 {% include source-release-table.markdown %}
