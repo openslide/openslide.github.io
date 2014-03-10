@@ -1,3 +1,7 @@
+OpenSlide Python version 1.0.1, 2014-03-09
+------------------------------------------
+OpenSlide Python 1.0.1 fixes documentation build failures.
+
 OpenSlide Python version 1.0.0, 2014-03-09
 ------------------------------------------
 OpenSlide Python 1.0.0 declares a stable API and adds documentation.

@@ -28,6 +28,7 @@ releases:
     - {version: 2.1.0, date: 2009-08-18, no_xz: 1}
     - {version: 2.0.0, date: 2009-07-16, no_xz: 1}
   python:
+    - {version: 1.0.1, date: 2014-03-09}
     - {version: 1.0.0, date: 2014-03-09}
     - {version: 0.5.1, date: 2014-01-26}
     - {version: 0.5.0, date: 2014-01-25}
