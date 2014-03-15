@@ -1,6 +1,9 @@
 ---
 layout: default
 title: Downloading OpenSlide
+permalink: /download/
+redirect_from:
+  - /Download/
 releases:
   c:
     - {version: 3.4.0, date: 2014-01-25}
