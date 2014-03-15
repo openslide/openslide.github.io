@@ -1,6 +1,9 @@
 ---
 layout: default
 title: MIRAX format
+permalink: /formats/mirax/
+redirect_from:
+  - /MIRAX format/
 ---
 
 Format

@@ -1,6 +1,9 @@
 ---
 layout: default
 title: Trestle format
+permalink: /formats/trestle/
+redirect_from:
+  - /Trestle format/
 ---
 
 Format

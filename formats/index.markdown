@@ -1,6 +1,9 @@
 ---
 layout: default
 title: Virtual slide formats understood by OpenSlide
+permalink: /formats/
+redirect_from:
+  - /Supported Virtual Slide Formats/
 ---
 
 {% include links.markdown %}

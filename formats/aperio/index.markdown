@@ -1,6 +1,9 @@
 ---
 layout: default
 title: Aperio format
+permalink: /formats/aperio/
+redirect_from:
+  - /Aperio format/
 ---
 
 Format
