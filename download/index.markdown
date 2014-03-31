@@ -138,11 +138,11 @@ Distribution Packages
       <td><code>apt-get install openslide-tools</code></td>
       <td>
         <code>apt-get install python-openslide</code><br>
-        <i>(Debian</i> <code>unstable</code><i>, Ubuntu &ge; 14.04)</i>
+        <i>(Debian</i> <code>testing</code><i>/</i><code>unstable</code><i>, Ubuntu &ge; 14.04)</i>
       </td>
       <td>
         <code>apt-get install python3-openslide</code><br>
-        <i>(Debian</i> <code>unstable</code><i>, Ubuntu &ge; 14.04)</i>
+        <i>(Debian</i> <code>testing</code><i>/</i><code>unstable</code><i>, Ubuntu &ge; 14.04)</i>
       </td>
     </tr>
     <tr>
