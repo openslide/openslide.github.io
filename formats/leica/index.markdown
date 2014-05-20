@@ -4,13 +4,13 @@ title: Leica format
 ---
 
 Format
-:single-file pyramidal tiled BigTIFF with non-standard metadata
+: single-file pyramidal tiled BigTIFF with non-standard metadata
 
 File extensions
-:`.scn`
+: `.scn`
 
 OpenSlide vendor backend
-:`leica`
+: `leica`
 
 
 Detection
@@ -76,43 +76,43 @@ Associated Images
 -----------------
 
 `macro`
-:the highest-resolution dimension of the macro image
+: the highest-resolution dimension of the macro image
 
 
 Known Properties
 ----------------
 
 `leica.aperture`
-:the `numericalAperture` of the main image
+: the `numericalAperture` of the main image
 
 `leica.barcode`
-:the `barcode` text
+: the `barcode` text
 
 `leica.creation-date`
-:the `creationDate` of the main image
+: the `creationDate` of the main image
 
 `leica.device-model`
-:the `device` `model` of the main image
+: the `device` `model` of the main image
 
 `leica.device-version`
-:the `device` `version` of the main image
+: the `device` `version` of the main image
 
 `leica.illumination-source`
-:the `illuminationSource` of the main image
+: the `illuminationSource` of the main image
 
 `leica.objective`
-:the `objective` of the main image
+: the `objective` of the main image
 
 `openslide.mpp-x`
-:calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit` is
+: calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit` is
 `centimeter`
 
 `openslide.mpp-y`
-:calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit` is
+: calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit` is
 `centimeter`
 
 `openslide.objective-power`
-:normalized `leica.objective`
+: normalized `leica.objective`
 
 
 Test Data

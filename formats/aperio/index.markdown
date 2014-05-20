@@ -7,13 +7,13 @@ redirect_from:
 ---
 
 Format
-:single-file pyramidal tiled TIFF, with non-standard metadata and compression
+: single-file pyramidal tiled TIFF, with non-standard metadata and compression
 
 File extensions
-:`.svs`, `.tif`
+: `.svs`, `.tif`
 
 OpenSlide vendor backend
-:`aperio`
+: `aperio`
 
 
 Vendor Documentation
@@ -95,13 +95,13 @@ subsampling can be found in the JPEG 2000 codestream.
 Associated Images
 -----------------
 thumbnail
-:the second image in the file
+: the second image in the file
 
 label
-:optional, the name "label" is given in `ImageDescription`
+: optional, the name "label" is given in `ImageDescription`
 
 macro
-:optional, the name "macro" is given in `ImageDescription`
+: optional, the name "macro" is given in `ImageDescription`
 
 
 Known Properties
@@ -111,13 +111,13 @@ All key-value data encoded in the `ImageDescription` TIFF field is
 represented as properties prefixed with "`aperio.`".
 
 `openslide.mpp-x`
-:normalized `aperio.MPP`
+: normalized `aperio.MPP`
 
 `openslide.mpp-y`
-:normalized `aperio.MPP`
+: normalized `aperio.MPP`
 
 `openslide.objective-power`
-:normalized `aperio.AppMag`
+: normalized `aperio.AppMag`
 
 
 Test Data

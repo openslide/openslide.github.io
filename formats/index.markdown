@@ -19,13 +19,13 @@ Aperio
 Single-file pyramidal tiled TIFF, with non-standard metadata and compression.
 
 File extensions
-:`.svs`, `.tif`
+: `.svs`, `.tif`
 
 OpenSlide vendor backend
-:`aperio`
+: `aperio`
 
 More info
-:[Aperio format][format-aperio]
+: [Aperio format][format-aperio]
 
 
 Hamamatsu
@@ -35,13 +35,13 @@ Multi-file JPEG/NGR with proprietary metadata and index file formats, and
 single-file TIFF-like format with proprietary metadata.
 
 File extensions
-:`.vms`, `.vmu`, `.ndpi`
+: `.vms`, `.vmu`, `.ndpi`
 
 OpenSlide vendor backend
-:`hamamatsu`
+: `hamamatsu`
 
 More info
-:[Hamamatsu format][format-hamamatsu]
+: [Hamamatsu format][format-hamamatsu]
 
 
 Leica
@@ -50,13 +50,13 @@ Leica
 Single-file pyramidal tiled BigTIFF with non-standard metadata.
 
 File extensions
-:`.scn`
+: `.scn`
 
 OpenSlide vendor backend
-:`leica`
+: `leica`
 
 More info
-:[Leica format][format-leica]
+: [Leica format][format-leica]
 
 
 MIRAX
@@ -65,13 +65,13 @@ MIRAX
 Multi-file with very complicated proprietary metadata and indexes.
 
 File extensions
-:`.mrxs`
+: `.mrxs`
 
 OpenSlide vendor backend
-:`mirax`
+: `mirax`
 
 More info
-:[MIRAX format][format-mirax]
+: [MIRAX format][format-mirax]
 
 
 Sakura
@@ -79,13 +79,13 @@ Sakura
 SQLite database containing pyramid tiles and metadata.
 
 File extensions
-:`.svslide`
+: `.svslide`
 
 OpenSlide vendor backend
-:`sakura`
+: `sakura`
 
 More info
-:[Sakura format][format-sakura]
+: [Sakura format][format-sakura]
 
 
 Trestle
@@ -94,13 +94,13 @@ Single-file pyramidal tiled TIFF, with non-standard metadata and
 overlaps.  Additional files contain more metadata and detailed overlap info.
 
 File extensions
-:`.tif`
+: `.tif`
 
 OpenSlide vendor backend
-:`trestle`
+: `trestle`
 
 More info
-:[Trestle format][format-trestle]
+: [Trestle format][format-trestle]
 
 
 Generic tiled TIFF
@@ -109,10 +109,10 @@ Generic tiled TIFF
 Single-file pyramidal tiled TIFF.
 
 File extensions
-:`.tif`
+: `.tif`
 
 OpenSlide vendor backend
-:`generic-tiff`
+: `generic-tiff`
 
 More info
-:[Generic tiled TIFF format][format-generic-tiff]
+: [Generic tiled TIFF format][format-generic-tiff]

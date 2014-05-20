@@ -7,13 +7,13 @@ redirect_from:
 ---
 
 Format
-:single-file pyramidal tiled TIFF
+: single-file pyramidal tiled TIFF
 
 File extensions
-:`.tif`
+: `.tif`
 
 OpenSlide vendor backend
-:`generic-tiff`
+: `generic-tiff`
 
 
 Detection

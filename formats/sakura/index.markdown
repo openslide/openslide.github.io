@@ -6,13 +6,13 @@ title: Sakura format
 {% include links.markdown %}
 
 Format
-:SQLite database containing pyramid tiles and metadata
+: SQLite database containing pyramid tiles and metadata
 
 File extensions
-:`.svslide`
+: `.svslide`
 
 OpenSlide vendor backend
-:`sakura`
+: `sakura`
 
 
 Detection
@@ -148,56 +148,56 @@ Associated Images
 -----------------
 
 `label`
-:`SVScannedImageDataXPO.Image` corresponding to `SVSlideDataXPO.m_labelScan`
+: `SVScannedImageDataXPO.Image` corresponding to `SVSlideDataXPO.m_labelScan`
 
 `macro`
-:`SVScannedImageDataXPO.Image` corresponding to `SVSlideDataXPO.m_overviewScan`
+: `SVScannedImageDataXPO.Image` corresponding to `SVSlideDataXPO.m_overviewScan`
 
 `thumbnail`
-:`SVHRScanDataXPO.ThumbnailImage`
+: `SVHRScanDataXPO.ThumbnailImage`
 
 
 Known Properties
 ----------------
 
 `sakura.Creator`
-:`SVSlideDataXPO.Creator`
+: `SVSlideDataXPO.Creator`
 
 `sakura.Date`
-:`SVSlideDataXPO.Date`
+: `SVSlideDataXPO.Date`
 
 `sakura.Description`
-:`SVSlideDataXPO.Description`
+: `SVSlideDataXPO.Description`
 
 `sakura.DiagnosisCode`
-:`SVSlideDataXPO.DiagnosisCode`
+: `SVSlideDataXPO.DiagnosisCode`
 
 `sakura.FocussingMethod`
-:`SVHRScanDataXPO.FocussingMethod`
+: `SVHRScanDataXPO.FocussingMethod`
 
 `sakura.Keywords`
-:`SVSlideDataXPO.Keywords`
+: `SVSlideDataXPO.Keywords`
 
 `sakura.NominalLensMagnification`
-:`SVHRScanDataXPO.NominalLensMagnification`
+: `SVHRScanDataXPO.NominalLensMagnification`
 
 `sakura.ResolutionMmPerPix`
-:`SVHRScanDataXPO.ResolutionMmPerPix`
+: `SVHRScanDataXPO.ResolutionMmPerPix`
 
 `sakura.ScanId`
-:`SVHRScanDataXPO.ScanId`
+: `SVHRScanDataXPO.ScanId`
 
 `sakura.SlideId`
-:`SVSlideDataXPO.SlideId`
+: `SVSlideDataXPO.SlideId`
 
 `openslide.mpp-x`
-:calculated as `1000 * sakura.ResolutionMmPerPix`
+: calculated as `1000 * sakura.ResolutionMmPerPix`
 
 `openslide.mpp-y`
-:calculated as `1000 * sakura.ResolutionMmPerPix`
+: calculated as `1000 * sakura.ResolutionMmPerPix`
 
 `openslide.objective-power`
-:normalized `sakura.NominalLensMagnification`
+: normalized `sakura.NominalLensMagnification`
 
 
 Test Data

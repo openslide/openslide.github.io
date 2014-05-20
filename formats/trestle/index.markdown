@@ -7,13 +7,13 @@ redirect_from:
 ---
 
 Format
-:single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional files contain more metadata and detailed overlap info
+: single-file pyramidal tiled TIFF, with non-standard metadata and overlaps; additional files contain more metadata and detailed overlap info
 
 File extensions
-:`.tif`
+: `.tif`
 
 OpenSlide vendor backend
-:`trestle`
+: `trestle`
 
 
 Detection
@@ -87,7 +87,7 @@ Associated Images
 -----------------
 
 macro
-:the image with a filename extension of "`.Full`" (optional)
+: the image with a filename extension of "`.Full`" (optional)
 
 
 Known Properties
@@ -97,15 +97,15 @@ All data encoded in the `ImageDescription` TIFF field is represented
 as properties prefixed with "`trestle.`".
 
 `openslide.mpp-x`
-:copy of `tiff.XResolution` (note that this is a totally non-standard use
+: copy of `tiff.XResolution` (note that this is a totally non-standard use
 of this TIFF tag)
 
 `openslide.mpp-y`
-:copy of `tiff.YResolution` (note that this is a totally non-standard use
+: copy of `tiff.YResolution` (note that this is a totally non-standard use
 of this TIFF tag)
 
 `openslide.objective-power`
-:normalized `trestle.Objective Power`
+: normalized `trestle.Objective Power`
 
 
 Test Data

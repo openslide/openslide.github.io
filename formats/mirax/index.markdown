@@ -7,13 +7,13 @@ redirect_from:
 ---
 
 Format
-:multi-file with very complicated proprietary metadata and indexes
+: multi-file with very complicated proprietary metadata and indexes
 
 File extensions
-:`.mrxs`
+: `.mrxs`
 
 OpenSlide vendor backend
-:`mirax`
+: `mirax`
 
 
 Detection
@@ -107,13 +107,13 @@ Associated Images
 -----------------
 
 thumbnail
-:the image named "`ScanDataLayer_SlidePreview`" in `Slidedat.ini` (optional)
+: the image named "`ScanDataLayer_SlidePreview`" in `Slidedat.ini` (optional)
 
 label
-:the image named "`ScanDataLayer_SlideBarcode`" in `Slidedat.ini` (optional)
+: the image named "`ScanDataLayer_SlideBarcode`" in `Slidedat.ini` (optional)
 
 macro
-:the image named "`ScanDataLayer_SlideThumbnail`" in `Slidedat.ini` (optional)
+: the image named "`ScanDataLayer_SlideThumbnail`" in `Slidedat.ini` (optional)
 
 Known Properties
 ----------------
@@ -122,17 +122,17 @@ All key-value data stored in the `Slidedat.ini` file are encoded as
 properties prefixed with "`mirax.`".
 
 `openslide.mpp-x`
-:normalized `MICROMETER_PER_PIXEL_X` from the Slidedat section
+: normalized `MICROMETER_PER_PIXEL_X` from the Slidedat section
 corresponding to level 0 (typically
 `mirax.LAYER_0_LEVEL_0_SECTION.MICROMETER_PER_PIXEL_X`)
 
 `openslide.mpp-y`
-:normalized `MICROMETER_PER_PIXEL_Y` from the Slidedat section
+: normalized `MICROMETER_PER_PIXEL_Y` from the Slidedat section
 corresponding to level 0 (typically
 `mirax.LAYER_0_LEVEL_0_SECTION.MICROMETER_PER_PIXEL_Y`)
 
 `openslide.objective-power`
-:normalized `mirax.GENERAL.OBJECTIVE_MAGNIFICATION`
+: normalized `mirax.GENERAL.OBJECTIVE_MAGNIFICATION`
 
 
 See Also

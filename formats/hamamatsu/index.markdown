@@ -7,14 +7,14 @@ redirect_from:
 ---
 
 Format
-:multi-file JPEG/NGR with proprietary metadata and index file formats, and
+: multi-file JPEG/NGR with proprietary metadata and index file formats, and
 single-file TIFF-like format with proprietary metadata
 
 File extensions
-:`.vms`, `.vmu`, `.ndpi`
+: `.vms`, `.vmu`, `.ndpi`
 
 OpenSlide vendor backend
-:`hamamatsu`
+: `hamamatsu`
 
 
 Detection
@@ -287,7 +287,7 @@ Associated Images
 -----------------
 
 macro
-:the image file given by the `MacroImage` value in the VMS/VMU file, or
+: the image file given by the `MacroImage` value in the VMS/VMU file, or
 `SourceLens` of -1 in NDPI
 
 
@@ -298,21 +298,21 @@ All key-value data stored in the VMS/VMU file, and known tags from
 the NDPI file, are encoded as properties prefixed with "`hamamatsu.`".
 
 `openslide.mpp-x`
-:for NDPI, calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit`
+: for NDPI, calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit`
 is `centimeter`
 
 `openslide.mpp-y`
-:for NDPI, calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit`
+: for NDPI, calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit`
 is `centimeter`
 
 `openslide.objective-power`
-:normalized `hamamatsu.SourceLens`
+: normalized `hamamatsu.SourceLens`
 
 
 Test Data
 ---------
 NDPI format
-:<http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
+: <http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
 
 VMS format
-:<http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/>
+: <http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/>
