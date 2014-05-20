@@ -168,7 +168,7 @@ Distribution Packages
       <th>Mac OS X</th>
       <th><a href="http://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
-      <td></td>
+      <td><code>port install py-openslide</code></td>
       <td></td>
     </tr>
     <tr>
