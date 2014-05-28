@@ -147,6 +147,13 @@ Distribution Packages
     </tr>
     <tr>
       <th>Linux</th>
+      <th><a href="http://www.opensuse.org/">openSUSE</a></th>
+      <td><code>zypper install openslide-tools</code></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
       <th>
         <a href="http://www.redhat.com/products/enterprise-linux/">Red Hat Enterprise Linux</a><br>
         <a href="https://www.centos.org/">CentOS</a><br>
