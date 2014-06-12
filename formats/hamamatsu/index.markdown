@@ -222,6 +222,7 @@ Tag          | Description      |
 65426|Optimisation entries, as above|
 65427|`Reference`|
 65428|Unknown, `AuthCode`?|
+65430|Unknown, have seen 0.0|
 65433|Unknown, I have seen 1500 in this tag|
 65439|Unknown, perhaps some polygon ROI?|
 65440|Unknown, I have seen this: `<0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 1 9 1 10 1 11 1 12 1 13 1 14 1 15 1 16 1 17>`|
