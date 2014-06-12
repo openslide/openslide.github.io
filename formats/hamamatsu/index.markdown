@@ -29,7 +29,7 @@ OpenSlide will detect a file as Hamamatsu if:
 or if:
 
  1. The file has a TIFF directory structure.
- 2. The `Software` tag starts with `NDP.scan`.
+ 2. TIFF tag 65420 is present.
 
 
 Overview
@@ -213,7 +213,7 @@ Tag          | Description      |
 `Software`|"NDP.scan", sometimes with a version number|
 `StripOffsets`|The offset of the JPEG file for this layer|
 `StripByteCounts`|The length of the JPEG file for this layer|
-65420|Unknown, always 1?|
+65420|Always exists, always 1.  File format version?|
 65421|`SourceLens`, correctly downsampled for each entry. -1 for macro image, -2 for a map of non-empty regions.|
 65422|`XOffsetFromSlideCentre`|
 65423|`YOffsetFromSlideCentre`|
