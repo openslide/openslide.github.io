@@ -90,7 +90,7 @@ Getting Help
 First, try the search box at the top of the page.  It covers the OpenSlide
 website, mailing list, issue tracker, and wiki.
 
-Questions should be sent to the [users mailing list](#mailing_lists).  If
+Questions should be sent to the [users mailing list](#mailing-lists).  If
 you think you have found a bug, please report it in the appropriate [issue
 tracker](#development).
 

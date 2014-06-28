@@ -107,7 +107,7 @@ Windows binaries now available, 2012-08-10
 Compiled binaries for 32-bit and 64-bit Windows are now available from the
 [download][download_win] page.
 
-[download_win]: /download/#windows_binaries
+[download_win]: /download/#windows-binaries
 
 VIPS now supports OpenSlide, 2012-04-17
 ---------------------------------------
