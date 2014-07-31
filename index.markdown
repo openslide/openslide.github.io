@@ -20,7 +20,8 @@ Older news is available [here][news].
 
 OpenSlide is a C library that provides a simple interface to read
 whole-slide images (also known as virtual slides). The current version
-is 3.4.0, released 2014-01-25.
+is {{ site.data.releases.c[0].version }}, released
+{{ site.data.releases.c[0].date }}.
 
 Python and Java bindings are also available. The Python binding includes a
 [Deep Zoom][deepzoom] generator and a simple web-based viewer. The Java

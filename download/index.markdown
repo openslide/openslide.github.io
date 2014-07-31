@@ -3,62 +3,6 @@ title: Downloading OpenSlide
 permalink: /download/
 redirect_from:
   - /Download/
-releases:
-  c:
-    - {version: 3.4.0, date: 2014-01-25}
-    - {version: 3.3.3, date: 2013-04-13}
-    - {version: 3.3.2, date: 2012-12-01}
-    - {version: 3.3.1, date: 2012-10-14}
-    - {version: 3.3.0, date: 2012-09-08}
-    - {version: 3.2.6, date: 2012-02-23}
-    - {version: 3.2.5, date: 2011-12-16}
-    - {version: 3.2.4, date: 2011-03-07}
-    - {version: 3.2.3, date: 2010-09-09}
-    - {version: 3.2.2, date: 2010-06-16}
-    - {version: 3.2.1, date: 2010-06-03}
-    - {version: 3.2.0, date: 2010-06-01}
-    - {version: 3.1.1, date: 2010-04-27}
-    - {version: 3.1.0, date: 2010-04-01}
-    - {version: 3.0.3, date: 2010-03-01}
-    - {version: 3.0.2, date: 2010-02-17}
-    - {version: 3.0.1, date: 2010-02-04}
-    - {version: 3.0.0, date: 2010-01-28}
-    - {version: 2.3.1, date: 2009-12-14}
-    - {version: 2.3.0, date: 2009-12-11}
-    - {version: 2.2.1, date: 2009-10-23}
-    - {version: 2.2.0, date: 2009-09-15}
-    - {version: 2.1.0, date: 2009-08-18, no_xz: 1}
-    - {version: 2.0.0, date: 2009-07-16, no_xz: 1}
-  python:
-    - {version: 1.0.1, date: 2014-03-09}
-    - {version: 1.0.0, date: 2014-03-09}
-    - {version: 0.5.1, date: 2014-01-26}
-    - {version: 0.5.0, date: 2014-01-25}
-    - {version: 0.4.0, date: 2012-09-08}
-    - {version: 0.3.0, date: 2011-12-16}
-    - {version: 0.2.0, date: 2011-09-02}
-  java:
-    - {version: 0.12.0, date: 2014-01-25}
-    - {version: 0.11.0, date: 2012-09-08}
-    - {version: 0.10.0, date: 2011-12-16}
-    - {version: 0.9.2, date: 2010-08-10}
-    - {version: 0.9.1, date: 2010-06-16}
-    - {version: 0.9.0, date: 2010-06-01}
-    - {version: 0.8.0, date: 2010-01-28}
-    - {version: 0.7.2, date: 2009-12-09}
-    - {version: 0.7.1, date: 2009-11-19}
-    - {version: 0.7.0, date: 2009-09-15}
-    - {version: 0.6.1, date: 2009-08-25, no_xz: 1}
-    - {version: 0.6.0, date: 2009-08-17, no_xz: 1}
-    - {version: 0.5.0, date: 2009-07-15, no_xz: 1}
-  winbuild:
-    - {date: 2014-01-25}
-    - {date: 2013-07-27}
-    - {date: 2013-04-13}
-    - {date: 2012-12-01}
-    - {date: 2012-10-14}
-    - {date: 2012-09-08}
-    - {date: 2012-08-02}
 ---
 
 {% include links.markdown %}
@@ -71,17 +15,17 @@ Source
 
 #### OpenSlide (stable API)
 {% assign package = 'openslide' %}
-{% assign releases = page.releases.c %}
+{% assign releases = site.data.releases.c %}
 {% include source-release-table.markdown %}
 
 #### OpenSlide Python interface (stable API)
 {% assign package = 'openslide-python' %}
-{% assign releases = page.releases.python %}
+{% assign releases = site.data.releases.python %}
 {% include source-release-table.markdown %}
 
 #### OpenSlide Java interface (still unstable API, subject to change)
 {% assign package = 'openslide-java' %}
-{% assign releases = page.releases.java %}
+{% assign releases = site.data.releases.java %}
 {% include source-release-table.markdown %}
 
 Windows Binaries
@@ -93,7 +37,7 @@ If you're looking for the bleeding edge,
 
 <div class="releases">
   <table>
-    {% for release in page.releases.winbuild %}
+    {% for release in site.data.releases.winbuild %}
       <tr class="{% cycle 'winbuild': 'odd', 'even' %}">
         <th>{{ release.date }}</th>
         <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">32-bit</a></td>
