@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Some Projects Using OpenSlide
 permalink: /other-projects/
 redirect_from:

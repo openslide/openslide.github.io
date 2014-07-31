@@ -1,5 +1,4 @@
 ---
-layout: default
 title: List of Known Properties
 permalink: /properties/
 redirect_from:

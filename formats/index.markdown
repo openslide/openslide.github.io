@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Virtual slide formats understood by OpenSlide
 permalink: /formats/
 redirect_from:

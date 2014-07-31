@@ -1,5 +1,4 @@
 ---
-layout: default
 title: OpenSlide
 classes: forkme
 news_show_extended: false

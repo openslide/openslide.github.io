@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Downloading OpenSlide
 permalink: /download/
 redirect_from:

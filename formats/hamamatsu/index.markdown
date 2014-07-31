@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Hamamatsu format
 permalink: /formats/hamamatsu/
 redirect_from:

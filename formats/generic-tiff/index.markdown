@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Generic tiled TIFF format
 permalink: /formats/generic-tiff/
 redirect_from:

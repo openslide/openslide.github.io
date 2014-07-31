@@ -1,5 +1,4 @@
 ---
-layout: default
 title: OpenSlide News
 permalink: /news/
 redirect_from:
