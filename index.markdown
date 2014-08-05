@@ -101,12 +101,10 @@ Mailing Lists
 There are two mailing lists for OpenSlide:
 
  * Users mailing list. Once subscribed, anyone can post. This list is for asking questions about OpenSlide.
-
    * [Users list subscription info][users-subscribe]
    * [Users list archive][users-archive]
 
  * Announcement mailing list. It is a low-volume list and is moderated. All users are recommended to subscribe to this list.
-
    * [Announcement list subscription info][announce-subscribe]
    * [Announcement list archive][announce-archive]
 
