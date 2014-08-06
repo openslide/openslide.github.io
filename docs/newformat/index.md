@@ -9,6 +9,8 @@ Your driver should use the *cache* module to cache pixel data from decoded tiles
 
 OpenSlide contains support code for reading BMP, JPEG, JPEG 2000, PNG, TIFF, and TIFF-like images.  You may be able to use these utilities without modification.  If your driver requires additional decoding functionality, it should be added to a decoder module if it would be useful to other drivers, or implemented in your driver if not.
 
+At runtime, your driver can receive concurrent read requests from multiple threads.  Most drivers can handle this locklessly by fully initializing their data structures at open time (when they have exclusive access to the `openslide_t`) and then treating them as immutable at runtime.  This approach requires that every read request operates on private (or thread-safe) instances of any necessary system resources, such as file handles.
+
 Drivers are named after the vendor of the product that uses the format.  This is often the manufacturer of the slide scanner.
 
 For examples, consult the existing vendor drivers.  `generic-tiff` is a straightforward driver for simple TIFF images.  `trestle` is a fairly simple driver using the `tilemap` grid.
@@ -27,7 +29,7 @@ TIFF and TIFF-like
 
 OpenSlide has two decoders for TIFF-derived slide formats: `tiff` and `tifflike`.
 
-- `tiff` uses libtiff to read the slide file.  Most drivers for TIFF-based formats use this decoder.  libtiff can parse TIFF directories, decode image data in compression formats described in the TIFF specification, and return compressed image data for all other compression formats.  Because libtiff has a deep understanding of the TIFF tag values, it will reject files that use the TIFF directory structure but make creative use of the standard tags.
+- `tiff` uses libtiff to read the slide file.  Most drivers for TIFF-based formats use this decoder.  libtiff can parse TIFF directories, decode image data in compression formats described in the TIFF specification, and return compressed image data for all other compression formats.  Because libtiff has a deep understanding of the TIFF tag values, it will reject files that use the TIFF directory structure but make creative use of the standard tags.  Since libtiff handles are not safe for concurrent access by multiple threads, the `tiff` decoder provides a cache of libtiff handles that can be acquired for exclusive use by a thread while it is servicing a read request.
 
 - `tifflike` is a TIFF directory parser built into OpenSlide.  It does not understand tag values and cannot decode compressed image data; it simply reads the TIFF directories and reports on what they contain.  This decoder can be used for formats that use the standard TIFF tags in unusual ways.
 
