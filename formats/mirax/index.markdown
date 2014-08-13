@@ -82,8 +82,10 @@ Data Files
 
 A data file begins with a header containing a five-character ASCII version
 string, the `SLIDE_ID` from the slidedat file, the file number encoded into
-three ASCII characters, and 256 bytes of padding.  The remainder of the
-file contains packed data referenced by the index file.
+three ASCII characters, and 256 bytes of padding.  (In newer slides, the
+`SLIDE_ID` and file number are encoded as UTF-16LE, so the second half of
+each value is truncated away.)  The remainder of the file contains packed
+data referenced by the index file.
 
 Slide Position File
 -------------------
