@@ -108,6 +108,8 @@ Column | Type | Description |
 
 This table is most naturally used to map tile coordinates to tile IDs, but
 is not suitable for individual lookups because it has no useful indexes.
+In addition, some Sakura slides don't have it.  OpenSlide ignores the table
+and constructs tile IDs directly from tile coordinates.
 
 Column | Type | Description |
 -------|------|-------------|
@@ -128,10 +130,7 @@ Column | Type | Description |
 `size`|integer|Length of `data` field|
 `data`|blob|Data item|
 
-This table stores a variety of blob types.  IDs for image tiles appear to be
-mechanically generated from the tile coordinates, but OpenSlide does not
-construct them directly.  Instead, it uses the `tile` table to obtain IDs
-for each tile.
+This table stores a variety of blob types.
 
 `id` | Description |
 -----|-------------|
