@@ -102,6 +102,21 @@ More info
 : [Trestle format][format-trestle]
 
 
+Ventana
+-------
+Single-file pyramidal tiled BigTIFF, with non-standard metadata and
+overlaps.
+
+File extensions
+: `.bif`
+
+OpenSlide vendor backend
+: `ventana`
+
+More info
+: [Ventana format][format-ventana]
+
+
 Generic tiled TIFF
 ------------------
 

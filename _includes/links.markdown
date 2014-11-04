@@ -21,6 +21,7 @@
 [format-mirax]: /formats/mirax/
 [format-sakura]: /formats/sakura/
 [format-trestle]: /formats/trestle/
+[format-ventana]: /formats/ventana/
 
 [announce-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
 [users-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
