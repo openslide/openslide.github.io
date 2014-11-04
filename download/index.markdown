@@ -174,6 +174,10 @@ Version Control
       <th><a href="https://github.com/openslide/openslide.github.com">Website</a></th>
       <td><code>git clone https://github.com/openslide/openslide.github.com.git</code></td>
     </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/openslide-automation">Buildbot configuration</a></th>
+      <td><code>git clone https://github.com/openslide/openslide-automation.git</code></td>
+    </tr>
   </tbody>
 </table>
 
