@@ -41,8 +41,8 @@ document that defines the structure of the slide.
 
 Leica slides are structured as a collection of images, each of which has
 multiple dimensions (pyramid levels).  The collection has a size, and images
-have a size and position, in a high-resolution unit which OpenSlide calls
-"clicks".  Each dimension has a size in pixels, an optional focal plane
+have a size and position, measured in nanometers.
+Each dimension has a size in pixels, an optional focal plane
 number, and a TIFF directory containing the image data.  Fluorescence images
 have different dimensions (and thus different TIFF directories) for each
 channel.  OpenSlide currently rejects fluorescence images and ignores focal
