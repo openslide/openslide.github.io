@@ -97,15 +97,15 @@ Key                    | Description                     |
 `MapFile`|A lower-resolution version of all the ImageFiles|
 `OptimisationFile`|File specifying some of the restart marker offsets in each ImageFile|
 `AuthCode`|Unknown|
-`SourceLens`|Apparently the magnification|
-`PhysicalWidth`|Width of the slide in some unit?|
-`PhysicalHeight`|Height of the slide in some unit?|
+`SourceLens`|Apparently the objective power|
+`PhysicalWidth`|Width of the main image in nm|
+`PhysicalHeight`|Height of the main image in nm|
 `LayerSpacing`|Unknown|
 `MacroImage`|Image file for the "macro" associated image|
-`PhysicalMacroWidth`|Unknown|
-`PhysicalMacroHeight`|Unknown|
-`XOffsetFromSlideCentre`|Unknown|
-`YOffsetFromSlideCentre`|Unknown|
+`PhysicalMacroWidth`|Width of the macro image in nm|
+`PhysicalMacroHeight`|Height of the macro image in nm, sometimes with a trailing semicolon|
+`XOffsetFromSlideCentre`|Distance in X from the center of the entire slide (i.e., the macro image) to the center of the main image, in nm|
+`YOffsetFromSlideCentre`|Distance in Y from the center of the entire slide to the center of the main image, in nm|
 
 
 VMU File
@@ -216,7 +216,7 @@ Tag          | Description      |
 65421|`SourceLens`, correctly downsampled for each entry. -1 for macro image, -2 for a map of non-empty regions.|
 65422|`XOffsetFromSlideCentre`|
 65423|`YOffsetFromSlideCentre`|
-65424|Seemingly the Z offset from the center focal plane, in some unit|
+65424|Seemingly the Z offset from the center focal plane (in nm?)|
 65425|Unknown, always 0?|
 65426|Optimisation entries, as above|
 65427|`Reference`|
