@@ -8,7 +8,7 @@
 [wiki]: https://github.com/openslide/openslide/wiki
 [buildbot]: http://buildbot.openslide.org/
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
-[snapshots-windows]: http://openslide.cs.cmu.edu/download/snapshots/windows/
+[snapshots-windows]: http://buildbot.openslide.org/snapshots/windows/
 
 [c-api]: /api/openslide_8h.html
 [python-api]: /api/python/
