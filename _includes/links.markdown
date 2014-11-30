@@ -27,6 +27,8 @@
 [users-subscribe]: http://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
 [announce-archive]: http://lists.andrew.cmu.edu/pipermail/openslide-announce/
 [users-archive]: http://lists.andrew.cmu.edu/pipermail/openslide-users/
+[announce-archive-gmane]: http://news.gmane.org/gmane.comp.graphics.openslide.announce
+[users-archive-gmane]: http://news.gmane.org/gmane.comp.graphics.openslide.user
 
 [c-github]: https://github.com/openslide/openslide
 [python-github]: https://github.com/openslide/openslide-python
