@@ -105,7 +105,7 @@ Distribution Packages
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
         <code>yum install openslide</code><br>
-        <i>(RHEL/CentOS/Scientific Linux &ge; 5)</i>
+        <i>(RHEL/CentOS/Scientific Linux &ge; 6)</i>
       </td>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
