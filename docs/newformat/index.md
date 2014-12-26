@@ -3,7 +3,11 @@ Adding a new slide format to OpenSlide
 
 To add a new format to OpenSlide, you will need to write a new vendor driver.  When a slide is opened, the driver is responsible for parsing the slide file, loading its metadata, and locating its image tiles.  At runtime, the driver receives requests for pixel data, determines which tiles to load, decodes them to a buffer in a [Cairo-compatible pixel format](http://cairographics.org/manual/cairo-Image-Surfaces.html#cairo-format-t), and renders them to a [Cairo](http://cairographics.org/) surface.
 
-Your driver can use the *grid* module to map pixel coordinates to tile addresses.  The `simple` grid is suitable for slide formats that have non-overlapping, regularly-spaced, equal-sized tiles, and do not need to record individual information about each tile.  (TIFF images often have this property.)  The `tilemap` grid is suitable for overlapping, irregular, or sparse tiles.
+Your driver can use the *grid* module to map pixel coordinates to tile addresses:
+
+- The `simple` grid is suitable for slide formats that have non-overlapping, regularly-spaced, equal-sized tiles, and do not need to record individual information about each tile.  (TIFF images often have this property.)
+- The `tilemap` grid is suitable for formats in which each tile is assigned a row and column on a regular grid, but the tiles may be offset from their ideal positions on the grid, overlapping, irregular, or sparse.  (Formats that directly store the pixels recorded from each camera position, as the camera steps over the slide, often have this property.)
+- The `range` grid is suitable for formats with arbitrarily-placed tiles.
 
 Your driver should use the *cache* module to cache pixel data from decoded tiles.  This prevents unnecessary decode operations if a region is accessed repeatedly.
 
