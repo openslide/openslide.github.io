@@ -57,12 +57,18 @@ Your driver is also responsible for setting some [standard properties](http://op
 * `openslide.mpp-x` (should be a double)
 * `openslide.mpp-y` (should be a double)
 * `openslide.objective-power` (should be an integer)
+* `openslide.region[i].height` (must be an integer)
+* `openslide.region[i].width` (must be an integer)
+* `openslide.region[i].x` (must be an integer)
+* `openslide.region[i].y` (must be an integer)
 
 `openslide.background-color` should be set with `_openslide_set_background_color_prop()`.
 
-The `openslide.bounds-*` properties should be set for formats that do not store image data for every pixel in the level.  Drivers that use a single `tilemap` grid per level can set these properties with `_openslide_set_bounds_props_from_grid()`.
+The `openslide.bounds-*` properties should be set for formats that do not store image data for every pixel in the level.  Drivers that use a single `tilemap` or `range` grid per level can set these properties with `_openslide_set_bounds_props_from_grid()`.
 
 `openslide.mpp-x`, `openslide.mpp-y`, and `openslide.objective-power` should be a copy of, or otherwise derived from, another vendor-specific property.  The vendor-specific property should be the uninterpreted value from the slide file, while the `openslide.` property should be the validated or calculated value, often produced with `_openslide_duplicate_{int,double}_prop()`.
+
+The `openslide.region[i].*` properties should be set when a format can include image pyramids for multiple regions of the slide, and its driver handles this by combining the regions into a single main image.  One group of dimension properties should be set for each region in the slide file, even if the slide contains only one region.
 
 You should not set `openslide.quickhash-1` or `openslide.vendor` directly.
 
