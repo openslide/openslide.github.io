@@ -73,6 +73,21 @@ More info
 : [MIRAX format][format-mirax]
 
 
+Philips
+-------
+
+Single-file pyramidal tiled TIFF or BigTIFF with non-standard metadata.
+
+File extensions
+: `.tiff`
+
+OpenSlide vendor backend
+: `philips`
+
+More info
+: [Philips format][format-philips]
+
+
 Sakura
 ------
 SQLite database containing pyramid tiles and metadata.

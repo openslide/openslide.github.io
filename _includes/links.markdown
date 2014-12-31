@@ -19,6 +19,7 @@
 [format-hamamatsu]: /formats/hamamatsu/
 [format-leica]: /formats/leica/
 [format-mirax]: /formats/mirax/
+[format-philips]: /formats/philips/
 [format-sakura]: /formats/sakura/
 [format-trestle]: /formats/trestle/
 [format-ventana]: /formats/ventana/
