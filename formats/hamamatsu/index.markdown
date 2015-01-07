@@ -198,6 +198,26 @@ the width or height as stored in the JPEG file is 0. libjpeg will refuse
 to read the header of such a file, so the JPEG data stream must be
 altered when fed into libjpeg.
 
+NDPI is based on the classic TIFF format, which does not support files
+larger than 4 GB.  However, NDPI files can be larger than 4 GB.  NDPI
+generally handles this by overflowing the corresponding TIFF fields,
+requiring the reader to guess the high-order bits.  This affects TIFF Value
+Offsets with pointers to out-of-line values, as well as the value of the
+`StripOffsets` field.  Some TIFF fields (e.g. `Software`) have the same
+Value Offset in every directory; for these, no concatenation of high-order
+bits is necessary.  For the others (primarily field 65426) it seems
+reasonable to select high-order bits which place the value at the largest
+offset below the directory itself, since the TIFF directory is positioned
+after the data it points to.  NDPI always stores next-directory offsets (in
+the TIFF header and at the end of each directory) as 64-bit quantities, even
+though TIFF specifies them as 32 bits; this is possible because the TIFF
+standard places them at the end of their parent data structures.
+
+It is not clear whether NDPI can support individual directories larger than
+4 GB.  Such files would require additional inferences for the
+`StripByteCounts` field, for Value Offsets that are identical across
+directories, and for the optimisation entries.
+
 Here are the observed TIFF tags:
 
 Tag          | Description      |
