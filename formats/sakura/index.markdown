@@ -29,12 +29,12 @@ File Organization
 
 Sakura slides are SQLite 3 database files written by the eXpress Persistent
 Objects ORM.  Tables contain slide metadata, associated images, and JPEG
-tiles.  Tiles are addressed as `(downsample, level-0 X coordinate, level-0 Y
-coordinate, color channel)`, with separate grayscale JPEGs for each color
-channel.  Despite the generality of the address format, tiles appear to be
-organized in a regular grid, with power-of-two level downsamples and without
-overlapping tiles.  The structure of the file allows scans to be sparse, but
-it is not clear if this is actually done.
+tiles.  Tiles are addressed as `(focal plane, downsample, level-0 X
+coordinate, level-0 Y coordinate, color channel)`, with separate grayscale
+JPEGs for each color channel.  Despite the generality of the address format,
+tiles appear to be organized in a regular grid, with power-of-two level
+downsamples and without overlapping tiles.  The structure of the file allows
+scans to be sparse, but it is not clear if this is actually done.
 
 SQL Tables
 ----------
@@ -88,7 +88,7 @@ Column | Type | Description |
 `ThumbnailImage`|blob|`thumbnail` associated image data|
 `TotalDataSizeBytes`|integer|Same as `TOTAL_SIZE` blob in unique table|
 `FocussingMethod`|integer|Unknown; have seen "1"|
-`FocusStack`|blob|8 bytes; have seen all zeros|
+`FocusStack`|blob|8 bytes of binary per focal plane; the center focal plane apparently has all zeroes|
 
 #### `SVScannedImageDataXPO`
 
@@ -136,10 +136,32 @@ This table stores a variety of blob types.
 -----|-------------|
 `++MagicBytes`|`SVGigaPixelImage`|
 `++VersionBytes`|Format version, e.g. `1.0.0`|
-`Header`|A small binary structure.  The first 12 bytes are little-endian 32-bit integers: tile size in pixels, image width in pixels, image height in pixels.|
+`Header`|See below|
 `TOTAL_SIZE`|The `data` field is empty.  The `size` field is the sum of all other `size` fields except `++MagicBytes` and `++VersionBytes`.|
-T;2048&#124;4096;4;2;0|Image tile with downsample 4, X coordinate 2048, Y coordinate 4096, channel 2 (blue)|
+T;2048&#124;4096;4;2;0|Image tile with downsample 4, X coordinate 2048, Y coordinate 4096, channel 2 (blue), focal plane 0|
 T;2048&#124;4096;4;2;0#|MD5 hash of the T;2048&#124;4096;4;2;0 image tile|
+
+##### `Header` blob
+
+The `Header` blob is a small binary structure containing little-endian
+integers as follows:
+
+Offset | Size | Description |
+-----|-------------|
+0|4|Tile size in pixels|
+4|4|Image width in pixels|
+8|4|Image height in pixels|
+12|4|Unknown; have seen "8" (bits per channel?)|
+16|4|Number of focal planes|
+20|4|Unknown; have seen "3" (number of channels?)|
+24|4|Unknown; have seen "1"|
+28|2|Unknown; have seen "256"|
+30|4|Unknown; have seen "1"|
+34|4|Unknown; have seen "2"|
+38|4|Unknown; have seen "3"|
+42|4|Unknown; have seen "4"|
+46|4|Unknown; have seen "5"|
+50|4|Unknown; have seen "6"|
 
 
 Associated Images
