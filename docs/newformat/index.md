@@ -115,6 +115,12 @@ When producing a GError, you may use whatever error domain and code is appropria
 
 If you receive a GError from lower-level code and intend to propagate it, consider whether the error's `message` provides enough context to diagnose the failure.  If not, you should prefix the error using `g_prefix_error()` or `g_propagate_prefixed_error()`.
 
+### Slow-path warnings
+
+Sometimes a slide format will include an optional feature that allows a slide to be processed more efficiently.  Files that do not contain this feature can still be read, but at a performance penalty.  Similarly, image decoders may be designed with "fast paths" for common image parameters (for example, certain chroma subsampling ratios) and fallback paths for others.  If it is impossible to determine from OpenSlide's output whether the optimized or fallback path is being used -- for example, by looking at a property value -- the fallback code should emit a warning message so a bug in the decision-making code does not become a silent failure.
+
+To emit a warning, use `_openslide_warn()` (at open time) or `_openslide_warn_once()` (at runtime).  Warnings can be enabled by setting the `OPENSLIDE_DEBUG` environment variable to `warnings`.
+
 OpenSlide limitations
 ---------------------
 
