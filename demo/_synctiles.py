@@ -29,11 +29,9 @@ from optparse import OptionParser
 import os
 import re
 import shutil
-import subprocess
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
-from urlparse import urlsplit
 import zipfile
 
 S3_BUCKET = 'demo.openslide.org'
@@ -291,27 +289,6 @@ def walk_files(root, relpath=''):
     yield (relpath, files)
 
 
-def update_testdata(root):
-    """Update the openslide-testdata input directory from the archive."""
-
-    print "Updating testdata..."
-    # Figure out how much of the URL to prune
-    path = urlsplit(DOWNLOAD_BASE_URL).path
-    cut_dirs = len([e for e in path.split('/') if e])
-    # Download over HTTP
-    subprocess.check_call(['wget', '--mirror', '--no-parent',
-            '--no-host-directories',
-            '--execute', 'robots=off',  # robots.txt is for robots
-            '--cut-dirs=%d' % cut_dirs,
-            '--directory-prefix=%s' % root,
-            DOWNLOAD_BASE_URL])
-    # Remove index files
-    for dirpath, _, filenames in os.walk(root):
-        for filename in filenames:
-            if filename.startswith('index.html'):
-                os.unlink(os.path.join(dirpath, filename))
-
-
 def upload_pool_init(index):
     global upload_bucket, bucket_index
     conn = boto.connect_s3()
@@ -392,7 +369,7 @@ def sync_info(in_root):
 
 
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options] {download|generate|sync|syncinfo} <in_dir>')
+    parser = OptionParser(usage='Usage: %prog [options] {generate|sync|syncinfo} <in_dir>')
     parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
                 type='int', default=4,
                 help='number of worker processes to start [4]')
@@ -405,12 +382,9 @@ if __name__ == '__main__':
     except ValueError:
         parser.error('Missing argument')
 
-    if command == 'download':
-        update_testdata(in_root)
-    elif command == 'generate':
+    if command == 'generate':
         if not opts.out_root:
             parser.error('Output directory not specified')
-        update_testdata(in_root)
         tile_tree(in_root, opts.out_root, opts.workers)
     elif command == 'sync':
         sync_tiles(in_root, opts.workers)
