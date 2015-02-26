@@ -40,7 +40,7 @@ BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
 METADATA_NAME = 'info.js'
-SLIDE_METADATA_NAME = 'properties.js'
+SLIDE_PROPERTIES_NAME = 'properties.js'
 FORMAT = 'jpeg'
 QUALITY = 75
 TILE_SIZE = 512
@@ -171,7 +171,7 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
         }
     }
 
-    # Return properties
+    # Return metadata
     return {
         'name': associated,
         'source': source,
@@ -190,24 +190,24 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
                     limit_bounds=LIMIT_BOUNDS)
         return tile_image(pool, in_phys_path, associated, dz, out_root,
                     out_relpath)
-    properties = {
+    metadata = {
         'name': out_name,
         'slide': do_tile(None, slide,
                     os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
         'properties_url': os.path.join(BASE_URL, out_relpath,
-                    SLIDE_METADATA_NAME) + '?v=' + stamp,
+                    SLIDE_PROPERTIES_NAME) + '?v=' + stamp,
         'download_url': os.path.join(DOWNLOAD_BASE_URL, in_relpath),
     }
     for associated, image in sorted(slide.associated_images.items()):
         cur_props = do_tile(associated, ImageSlide(image),
                     os.path.join(out_relpath, slugify(associated)))
-        properties['associated'].append(cur_props)
-    with open(os.path.join(out_root, out_relpath, SLIDE_METADATA_NAME),
+        metadata['associated'].append(cur_props)
+    with open(os.path.join(out_root, out_relpath, SLIDE_PROPERTIES_NAME),
                 'w') as fh:
         buf = json.dumps(dict(slide.properties), indent=1)
         fh.write('set_slide_properties(%s);\n' % buf)
-    return properties
+    return metadata
 
 
 def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath,
