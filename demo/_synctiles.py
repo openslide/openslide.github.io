@@ -19,7 +19,7 @@
 #
 
 import boto
-from datetime import datetime
+from hashlib import sha256
 import json
 from multiprocessing import Pool
 import openslide
@@ -34,6 +34,7 @@ from tempfile import mkdtemp
 from unicodedata import normalize
 import zipfile
 
+STAMP_VERSION = 'initial'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'demo.openslide.org'
 BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
@@ -178,7 +179,7 @@ def tile_image(pool, in_path, associated, dz, out_root, out_relpath):
 
 
 def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
-            out_relpath, serial):
+            out_relpath, stamp):
     """Generate tiles and metadata for all images in a slide."""
     try:
         slide = OpenSlide(in_phys_path)
@@ -195,7 +196,7 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
                     os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
         'properties_url': os.path.join(BASE_URL, out_relpath,
-                    SLIDE_METADATA_NAME) + '?v=' + serial,
+                    SLIDE_METADATA_NAME) + '?v=' + stamp,
         'download_url': os.path.join(DOWNLOAD_BASE_URL, in_relpath),
     }
     for associated, image in sorted(slide.associated_images.items()):
@@ -210,7 +211,7 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
 
 
 def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath,
-            serial):
+            stamp):
     """Build a directory of tiled images from a directory of slides."""
     slides = []
     for in_name in sorted(os.listdir(os.path.join(in_root, in_relpath))):
@@ -219,7 +220,7 @@ def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath,
         out_name = os.path.splitext(in_name)[0]
         out_cur_relpath = os.path.join(out_relpath, out_name.lower())
         slide = tile_slide(pool, in_cur_relpath, in_cur_path, out_name,
-                    out_root, out_cur_relpath, serial)
+                    out_root, out_cur_relpath, stamp)
         if not slide and os.path.splitext(in_cur_path)[1] == '.zip':
             temp_path = mkdtemp(dir=tempdir)
             print 'Extracting %s...' % out_cur_relpath
@@ -227,7 +228,7 @@ def walk_slides(pool, tempdir, in_root, in_relpath, out_root, out_relpath,
             for sub_name in os.listdir(temp_path):
                 sub_path = os.path.join(temp_path, sub_name)
                 slide = tile_slide(pool, in_cur_relpath, sub_path,
-                            out_name, out_root, out_cur_relpath, serial)
+                            out_name, out_root, out_cur_relpath, stamp)
                 if slide:
                     break
         if slide:
@@ -247,7 +248,8 @@ def tile_tree(in_root, out_root, workers):
     data = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
-        'serial': datetime.utcnow().strftime('%Y%m%d%H%M'),
+        'stamp': sha256('%s %s %s' % (openslide.__library_version__,
+                openslide.__version__, STAMP_VERSION)).hexdigest()[:8],
         'groups': [],
     }
     print 'OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % data
@@ -256,7 +258,7 @@ def tile_tree(in_root, out_root, workers):
         for in_name in sorted(os.listdir(in_root)):
             if os.path.isdir(os.path.join(in_root, in_name)):
                 slides = walk_slides(pool, tempdir, in_root, in_name,
-                            out_root, in_name.lower(), data['serial'])
+                            out_root, in_name.lower(), data['stamp'])
                 if slides:
                     data['groups'].append({
                         'name': GROUP_NAME_MAP.get(in_name, in_name),

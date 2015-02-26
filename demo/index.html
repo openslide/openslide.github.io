@@ -35,13 +35,13 @@
 <script type="text/javascript" src="openseadragon.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    var serial;
+    var stamp;
     var groups;
     var viewer;
     var viewer_is_new;
 
     function populate_images(data, status, xhr) {
-        serial = data.serial;
+        stamp = data.stamp;
         groups = data.groups;
         var top = $('<div class="scroll"/>')
         $('#images').removeClass('loading').html('<h1>Slides</h1>').
@@ -153,7 +153,7 @@ $(document).ready(function() {
             viewer.addHandler("open", function() {
                 var getTileUrl = viewer.source.getTileUrl;
                 viewer.source.getTileUrl = function() {
-                    return getTileUrl.apply(this, arguments) + '?v=' + serial;
+                    return getTileUrl.apply(this, arguments) + '?v=' + stamp;
                 };
                 viewer.source.minLevel = 8;
                 /* Visual effect: start zoomed in, then return to home
