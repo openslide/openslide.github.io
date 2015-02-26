@@ -41,6 +41,7 @@ DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 VIEWER_SLIDE_NAME = 'slide'
 METADATA_NAME = 'info.js'
 SLIDE_PROPERTIES_NAME = 'properties.js'
+SLIDE_METADATA_NAME = 'slide.json'
 FORMAT = 'jpeg'
 QUALITY = 75
 TILE_SIZE = 512
@@ -192,9 +193,11 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
                     out_relpath)
     metadata = {
         'name': out_name,
+        'stamp': stamp,
         'slide': do_tile(None, slide,
                     os.path.join(out_relpath, VIEWER_SLIDE_NAME)),
         'associated': [],
+        'properties': dict(slide.properties),
         'properties_url': os.path.join(BASE_URL, out_relpath,
                     SLIDE_PROPERTIES_NAME) + '?v=' + stamp,
         'download_url': os.path.join(DOWNLOAD_BASE_URL, in_relpath),
@@ -203,10 +206,14 @@ def tile_slide(pool, in_relpath, in_phys_path, out_name, out_root,
         cur_props = do_tile(associated, ImageSlide(image),
                     os.path.join(out_relpath, slugify(associated)))
         metadata['associated'].append(cur_props)
+    with open(os.path.join(out_root, out_relpath, SLIDE_METADATA_NAME),
+                'w') as fh:
+        json.dump(metadata, fh, indent=1, sort_keys=True)
     with open(os.path.join(out_root, out_relpath, SLIDE_PROPERTIES_NAME),
                 'w') as fh:
-        buf = json.dumps(dict(slide.properties), indent=1)
+        buf = json.dumps(metadata['properties'], indent=1, sort_keys=True)
         fh.write('set_slide_properties(%s);\n' % buf)
+    del metadata['properties']
     return metadata
 
 
