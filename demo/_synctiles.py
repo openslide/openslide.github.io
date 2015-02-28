@@ -260,7 +260,7 @@ def tile_tree(in_root, out_root, workers):
         'groups': [],
     }
     print 'OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % data
-    tempdir = mkdtemp(prefix='tiler-')
+    tempdir = mkdtemp(prefix='tiler-', dir='/var/tmp')
     try:
         for in_name in sorted(os.listdir(in_root)):
             if os.path.isdir(os.path.join(in_root, in_name)):
