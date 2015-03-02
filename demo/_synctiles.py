@@ -291,7 +291,6 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         metadata = {
             'name': urlpath.splitext(urlpath.basename(slide_relpath))[0],
             'stamp': stamp,
-            'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
         }
 
         if slide is not None:
@@ -396,6 +395,9 @@ def sync_slides(workers):
                 # Rearrange slide-level metadata for top-level metadata
                 slide.pop('properties', None)
                 slide.pop('stamp', None)
+                slide.update({
+                    'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
+                })
                 cur_slides.append(slide)
     except:
         pool.terminate()
