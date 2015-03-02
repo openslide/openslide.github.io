@@ -89,8 +89,8 @@ td.size {
   {% if has_parent %}
     {{ row('fa-level-up', '..', '[Parent Directory]') }}
   {% endif %}
-  {% for name, description in (dirs or {}).items()|sort %}
-    {{ row('fa-folder', name + '/', name, description=description) }}
+  {% for name, format in (dirs or {}).items()|sort %}
+    {{ row('fa-folder', name + '/', name, description=format) }}
   {% endfor %}
   {% for name, info in (files or {}).items()|sort %}
     {{ row('fa-file-archive-o' if name.endswith('.zip') else 'fa-file-image-o',
@@ -136,7 +136,7 @@ def process_dir(dirpath, check_hashes=False):
     yamlpath = os.path.join(dirpath, 'index.yaml')
     with open(yamlpath, 'rb') as fh:
         info = yaml.safe_load(fh)
-        description = info['description']
+        format = info['format']
         slides = info['slides']
 
     # Check slides against directory
@@ -170,7 +170,7 @@ def process_dir(dirpath, check_hashes=False):
     with open(os.path.join(dirpath, 'index.html'), 'w') as fh:
         index_template.stream(
             has_parent=True,
-            title=description,
+            title=format,
             files=slides,
             extras=[
                 {
@@ -181,7 +181,7 @@ def process_dir(dirpath, check_hashes=False):
             ],
         ).dump(fh)
 
-    return description, slides
+    return format, slides
 
 
 def process_repo(basepath, check_hashes=False):
@@ -190,12 +190,13 @@ def process_repo(basepath, check_hashes=False):
             if os.path.isdir(os.path.join(basepath, name))]
 
     # Descend into directories
-    dir_descs = {}
+    dir_formats = {}
     slides = {}
     for dirname in dirnames:
         dirpath = os.path.join(basepath, dirname)
-        dir_desc, dir_slides = process_dir(dirpath, check_hashes=check_hashes)
-        dir_descs[dirname] = dir_desc
+        dir_format, dir_slides = process_dir(dirpath,
+                check_hashes=check_hashes)
+        dir_formats[dirname] = dir_format
         for filename, info in dir_slides.items():
             slides['%s/%s' % (dirname, filename)] = info
 
@@ -208,7 +209,7 @@ def process_repo(basepath, check_hashes=False):
     with open(os.path.join(basepath, 'index.html'), 'w') as fh:
         index_template.stream(
             title='openslide-testdata',
-            dirs=dir_descs,
+            dirs=dir_formats,
             extras=[
                 {
                     'name': 'index.json',
