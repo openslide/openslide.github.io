@@ -39,7 +39,7 @@ from unicodedata import normalize
 from urlparse import urljoin
 from zipfile import ZipFile
 
-STAMP_VERSION = 'initial'  # change to retile without OpenSlide version bump
+STAMP_VERSION = 'mpp'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'demo.openslide.org'
 BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
