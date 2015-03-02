@@ -164,6 +164,7 @@ def process_dir(dirpath, check_hashes=False):
                     sha.update(buf)
                 if sha.hexdigest() != info['sha256']:
                     raise ValidationError('%s: Hash mismatch' % filepath)
+        info['format'] = format
         info['size'] = os.stat(filepath).st_size
 
     # Write index.html
