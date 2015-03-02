@@ -127,7 +127,7 @@ def sync_tile(args):
         buf = StringIO()
         tile.save(buf, FORMAT, quality=QUALITY)
         buf.seek(0)
-        key = boto.s3.key.Key(upload_bucket, key_name)
+        key = upload_bucket.new_key(key_name)
         md5_hex, md5_b64 = key.compute_md5(buf)
         if cur_md5 != md5_hex:
             key.content_type = 'image/%s' % FORMAT
@@ -203,7 +203,7 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
 
 
 def upload_metadata(bucket, path, item, jsonp=None, cache=True):
-    key = boto.s3.key.Key(bucket, path)
+    key = bucket.new_key(path)
     buf = json.dumps(item, indent=1, sort_keys=True)
     if jsonp:
         buf = '%s(%s);\n' % (jsonp, buf)
@@ -223,8 +223,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
 
     # Get current metadata
     try:
-        metadata = boto.s3.key.Key(bucket,
-                metadata_key_name).get_contents_as_string()
+        metadata = bucket.new_key(metadata_key_name).get_contents_as_string()
         metadata = json.loads(metadata)
     except S3ResponseError, e:
         if e.status == 404:
@@ -361,7 +360,7 @@ def sync_slides(workers):
     # Store static files
     print "Storing static files..."
     for relpath, opts in BUCKET_STATIC.iteritems():
-        key = boto.s3.key.Key(bucket, relpath)
+        key = bucket.new_key(relpath)
         key.set_contents_from_string(opts.get('data', ''),
                 headers=opts.get('headers', {}), policy='public-read')
 
