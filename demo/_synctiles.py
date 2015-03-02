@@ -396,6 +396,8 @@ def sync_slides(workers):
                 slide.pop('properties', None)
                 slide.pop('stamp', None)
                 slide.update({
+                    'credit': slide_info.get('credit'),
+                    'description': slide_info['description'],
                     'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
                 })
                 cur_slides.append(slide)
