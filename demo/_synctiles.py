@@ -29,6 +29,7 @@ from openslide import OpenSlide, ImageSlide, OpenSlideError
 from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
+import posixpath as urlpath
 import re
 import requests
 import shutil
@@ -141,11 +142,11 @@ def sync_tile(args):
 def enumerate_tiles(slide_path, associated, dz, key_imagepath, key_md5sums):
     """Enumerate tiles in a single image."""
     for level in xrange(dz.level_count):
-        key_levelpath = os.path.join(key_imagepath, str(level))
+        key_levelpath = urlpath.join(key_imagepath, str(level))
         cols, rows = dz.level_tiles[level]
         for row in xrange(rows):
             for col in xrange(cols):
-                key_name = os.path.join(key_levelpath, '%d_%d.%s' % (
+                key_name = urlpath.join(key_levelpath, '%d_%d.%s' % (
                                 col, row, FORMAT))
                 yield (slide_path, associated, level, (col, row), key_name,
                         key_md5sums.get(key_name))
@@ -159,7 +160,7 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
     count = 0
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
-    key_imagepath = os.path.join(key_basepath, '%s_files' % associated_slug)
+    key_imagepath = urlpath.join(key_basepath, '%s_files' % associated_slug)
     iterator = enumerate_tiles(slide_path, associated, dz, key_imagepath,
             key_md5sums)
 
@@ -217,9 +218,9 @@ def upload_metadata(bucket, path, item, jsonp=None, cache=True):
 def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     """Generate and upload tiles and metadata for a single slide."""
 
-    key_basepath = os.path.splitext(slide_relpath)[0].lower()
-    metadata_key_name = os.path.join(key_basepath, SLIDE_METADATA_NAME)
-    properties_key_name = os.path.join(key_basepath, SLIDE_PROPERTIES_NAME)
+    key_basepath = urlpath.splitext(slide_relpath)[0].lower()
+    metadata_key_name = urlpath.join(key_basepath, SLIDE_METADATA_NAME)
+    properties_key_name = urlpath.join(key_basepath, SLIDE_PROPERTIES_NAME)
 
     # Get current metadata
     try:
@@ -241,7 +242,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         print 'Fetching %s...' % slide_relpath
         count = 0
         hash = sha256()
-        slide_path = os.path.join(tempdir, os.path.basename(slide_relpath))
+        slide_path = os.path.join(tempdir, urlpath.basename(slide_relpath))
         with open(slide_path, 'wb') as fh:
             r = requests.get(urljoin(DOWNLOAD_BASE_URL, slide_relpath),
                     stream=True)
@@ -262,7 +263,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         try:
             slide = OpenSlide(slide_path)
         except OpenSlideError:
-            if os.path.splitext(slide_relpath)[1] == '.zip':
+            if urlpath.splitext(slide_relpath)[1] == '.zip':
                 # Unzip slide
                 print 'Extracting %s...' % slide_relpath
                 temp_path = mkdtemp(dir=tempdir)
@@ -287,7 +288,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
 
         # Initialize metadata
         metadata = {
-            'name': os.path.splitext(os.path.basename(slide_relpath))[0],
+            'name': urlpath.splitext(urlpath.basename(slide_relpath))[0],
             'stamp': stamp,
             'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
         }
@@ -374,7 +375,7 @@ def sync_slides(workers):
                     slide_info)
             # Skip unreadable slides
             if 'slide' in slide:
-                group_name = '/'.join(slide_relpath.split('/')[:-1])
+                group_name = urlpath.dirname(slide_relpath)
                 if group_name != cur_group_name:
                     cur_group_name = group_name
                     cur_slides = []
