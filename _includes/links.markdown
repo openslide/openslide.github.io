@@ -30,6 +30,8 @@
 [users-archive]: http://lists.andrew.cmu.edu/pipermail/openslide-users/
 [announce-archive-gmane]: http://news.gmane.org/gmane.comp.graphics.openslide.announce
 [users-archive-gmane]: http://news.gmane.org/gmane.comp.graphics.openslide.user
+[announce-archive-marc]: https://marc.info/?l=openslide-announce
+[users-archive-marc]: https://marc.info/?l=openslide-users
 
 [c-github]: https://github.com/openslide/openslide
 [python-github]: https://github.com/openslide/openslide-python
