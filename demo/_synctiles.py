@@ -153,7 +153,7 @@ def enumerate_tiles(slide_path, associated, dz, key_imagepath, key_md5sums):
 
 
 def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
-        key_md5sums):
+        key_md5sums, mpp=None):
     """Generate and upload tiles, and generate metadata, for a single image.
     Delete valid tiles from key_md5sums."""
 
@@ -199,6 +199,7 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
     # Return metadata
     return {
         'name': associated,
+        'mpp': mpp,
         'source': source,
     }
 
@@ -302,12 +303,21 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
                         '?v=' + stamp,
             })
 
+            # Calculate microns per pixel
+            try:
+                mpp_x = slide.properties[openslide.PROPERTY_NAME_MPP_X]
+                mpp_y = slide.properties[openslide.PROPERTY_NAME_MPP_Y]
+                mpp = (float(mpp_x) + float(mpp_y)) / 2
+            except (KeyError, ValueError):
+                mpp = None
+
             # Tile slide
             def do_tile(associated, image):
                 dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
                             limit_bounds=LIMIT_BOUNDS)
                 return sync_image(pool, slide_relpath, slide_path,
-                        associated, dz, key_basepath, key_md5sums)
+                        associated, dz, key_basepath, key_md5sums,
+                        mpp if associated is None else None)
             metadata['slide'] = do_tile(None, slide)
 
             # Tile associated images
