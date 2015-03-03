@@ -39,7 +39,6 @@ $(document).ready(function() {
     var stamp;
     var groups;
     var viewer;
-    var viewer_is_new;
 
     function populate_images(data, status, xhr) {
         stamp = data.stamp;
@@ -157,22 +156,6 @@ $(document).ready(function() {
                     return getTileUrl.apply(this, arguments) + '?v=' + stamp;
                 };
                 viewer.source.minLevel = 8;
-                /* Visual effect: start zoomed in, then return to home
-                   position after loading. */
-                var center = new OpenSeadragon.Point(0.5,
-                        1 / (2 * viewer.source.aspectRatio));
-                viewer.viewport.zoomTo(2, center, true);
-                viewer_is_new = true;
-            });
-            viewer.addHandler("update-viewport", function() {
-                if (viewer_is_new) {
-                    setTimeout(function() {
-                        if (viewer.viewport) {
-                            viewer.viewport.goHome(false);
-                        }
-                    }, 1);
-                    viewer_is_new = false;
-                }
             });
             viewer.scalebar({
                 xOffset: 10,
