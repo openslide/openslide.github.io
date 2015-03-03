@@ -33,6 +33,7 @@
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="openseadragon.min.js"></script>
+<script type="text/javascript" src="openseadragon-scalebar.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     var stamp;
@@ -173,10 +174,23 @@ $(document).ready(function() {
                     viewer_is_new = false;
                 }
             });
+            viewer.scalebar({
+                xOffset: 10,
+                yOffset: 10,
+                barThickness: 3,
+                color: '#555555',
+                fontColor: '#333333',
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            });
         }
 
         // Load slide
         viewer.open(image.source);
+
+        // Update scale
+        viewer.scalebar({
+            pixelsPerMeter: image.mpp ? (1e6 / image.mpp) : 0,
+        });
 
         // Update selection highlight
         $(".current-slide").removeClass("current-slide");
