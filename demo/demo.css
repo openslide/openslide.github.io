@@ -46,6 +46,9 @@ div#header img {
 }
 div#help-text {
     margin-left: 330px;
+    /* Disable Font Boosting on Chrome for Android to avoid overly large
+       text */
+    max-height: 100000px;
 }
 div#content {
     position: relative;
