@@ -101,7 +101,7 @@ div#instructions {
     font-size: 13px;
     text-align: center;
 }
-div#properties {
+div#details {
     position: absolute;
     right: 0;
     width: 25%;
@@ -110,15 +110,15 @@ div#properties {
     font-size: small;
     margin: 0.5em 0;
 }
-div#properties dl {
+div#details dl {
     font-size: small;
     margin: 0;
 }
-div#properties dt {
+div#details dt {
     font-weight: bold;
     border-top: 1px solid #000;
     background-color: #eee;
 }
-div#properties dd {
+div#details dd {
     margin-left: 0;
 }

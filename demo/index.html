@@ -29,7 +29,7 @@
             Select a slide from the list at left.
         </div>
     </div>
-    <div id="properties" class="scroll-parent"></div>
+    <div id="details" class="scroll-parent"></div>
 </div>
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -82,22 +82,22 @@ $(document).ready(function() {
         });
     }
 
-    function populate_properties(download_url, data) {
-        var props = $("#properties").removeClass('loading').
+    function populate_details(download_url, properties) {
+        var details = $("#details").removeClass('loading').
                     html("<h1>Slide properties</h1>");
         $('<a href="' + download_url + '">Download original slide</a>').
-                    appendTo(props).wrap('<div class="download-link"/>');
+                    appendTo(details).wrap('<div class="download-link"/>');
         var dl = $('<dl/>');
-        dl.appendTo(props).wrap('<div class="scroll"/>');
+        dl.appendTo(details).wrap('<div class="scroll"/>');
         keys = [];
-        $.each(data, function(k, v) {
+        $.each(properties, function(k, v) {
             keys.push(k);
         });
         keys.sort();
         $.each(keys, function(i, k) {
-            dl.append("<dt>" + k + "<dd>" + data[k]);
+            dl.append("<dt>" + k + "<dd>" + properties[k]);
         });
-        props.scrollTop(0).scrollLeft(0);
+        details.scrollTop(0).scrollLeft(0);
     }
 
     function open_slide(link) {
@@ -118,14 +118,14 @@ $(document).ready(function() {
         if (prev.data('group') !== group_id ||
                     prev.data('slide') !== slide_id) {
             // Load properties
-            $("#properties").html('').addClass('loading');
+            $("#details").html('').addClass('loading');
             $.ajax({
                 'cache': true,
                 'dataType': 'jsonp',
                 'jsonp': false,  // don't append callback argument
                 'jsonpCallback': 'set_slide_properties',
                 'success': function(data, status, xhr) {
-                    populate_properties(slide.download_url, data);
+                    populate_details(slide.download_url, data);
                 },
                 'url': slide.properties_url
             });
