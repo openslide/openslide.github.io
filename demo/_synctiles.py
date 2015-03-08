@@ -165,8 +165,9 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
             key_md5sums)
 
     def progress():
-        print >> sys.stderr, "Tiling %s %s: %d/%d tiles\r" % (
-                    slide_relpath, associated_slug, count, total),
+        print "Tiling %s %s: %d/%d tiles\r" % (slide_relpath,
+                associated_slug, count, total),
+        sys.stdout.flush()
 
     # Sync tiles
     progress()
