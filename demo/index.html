@@ -82,11 +82,29 @@ $(document).ready(function() {
         });
     }
 
-    function populate_details(download_url, properties) {
-        var details = $("#details").removeClass('loading').
-                    html("<h1>Slide properties</h1>");
-        $('<a href="' + download_url + '">Download original slide</a>').
-                    appendTo(details).wrap('<div class="download-link"/>');
+    function populate_details(slide, properties) {
+        var details = $("#details").removeClass('loading').html('');
+
+        // Heading
+        var heading = $('<h1>Slide details</h1>').appendTo(details);
+
+        // Download link
+        $('<a class="download-link" href="' + slide.download_url +
+                    '">Download slide</a>').appendTo(heading);
+
+        // Description and credit
+        function add_info(title, body) {
+            if (!body) {
+                return;
+            }
+            $('<h2/>').text(title).appendTo(details);
+            $('<div class="info"/>').text(body).appendTo(details);
+        }
+        add_info('Description', slide.description);
+        add_info('Credit', slide.credit);
+
+        // Properties
+        details.append('<h2>OpenSlide properties</h2>');
         var dl = $('<dl/>');
         dl.appendTo(details).wrap('<div class="scroll"/>');
         keys = [];
@@ -97,6 +115,7 @@ $(document).ready(function() {
         $.each(keys, function(i, k) {
             dl.append("<dt>" + k + "<dd>" + properties[k]);
         });
+
         details.scrollTop(0).scrollLeft(0);
     }
 
@@ -125,7 +144,7 @@ $(document).ready(function() {
                 'jsonp': false,  // don't append callback argument
                 'jsonpCallback': 'set_slide_properties',
                 'success': function(data, status, xhr) {
-                    populate_details(slide.download_url, data);
+                    populate_details(slide, data);
                 },
                 'url': slide.properties_url
             });

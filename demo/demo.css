@@ -106,9 +106,19 @@ div#details {
     right: 0;
     width: 25%;
 }
-.download-link {
-    font-size: small;
+div#details h2 {
+    font-size: 1em;
     margin: 0.5em 0;
+}
+div#details .download-link {
+    float: right;
+    font-size: small;
+    font-weight: normal;
+    margin-top: 0.3em;
+    margin-right: 0.5em;
+}
+div#details .info {
+    font-size: small;
 }
 div#details dl {
     font-size: small;
