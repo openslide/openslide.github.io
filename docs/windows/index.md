@@ -35,9 +35,7 @@ openslide.jar
 openslide-jni.dll
 ```
 
-### Debug symbols
-
-The Windows binaries include debug symbols.  To reduce space requirements, you may wish to strip these symbols before distributing OpenSlide with your software.
+Files with names ending in `.debug` contain debug symbols for GDB, and can also be omitted.
 
 ### Licensing
 
