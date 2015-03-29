@@ -87,7 +87,14 @@ Known Properties
 : the `numericalAperture` of the main image
 
 `leica.barcode`
-: the `barcode` text
+: the `barcode` text.  *(For slides in the* `2010/10/01` *namespace,
+OpenSlide 3.4.0 and earlier report this property as a Base64-encoded string;
+OpenSlide 3.4.1 and later report it in plain text.  For slides in the*
+`2010/03/10` *namespace, OpenSlide reports the barcode as it is stored in
+the XML, since we do not know whether those barcodes are Base64-encoded.  If
+you have a* `2010/03/10` *slide with a bar code, please comment in [this
+bug](https://github.com/openslide/openslide/issues/155) or contact the
+OpenSlide mailing list.)*
 
 `leica.creation-date`
 : the `creationDate` of the main image
