@@ -23,7 +23,7 @@ OpenSlide will detect a file as Philips if:
  1. The file is TIFF.
  2. The TIFF `Software` tag starts with `Philips`.
  3. The `ImageDescription` tag contains valid XML.
- 4. The root tag of the XML is `DataObject` and has an `ObjectType` attribute with a value of `DPUfsImport`.
+ 4. The root element of the XML is `DataObject` and has an `ObjectType` attribute with a value of `DPUfsImport`.
 
 To open BigTIFF files, OpenSlide must be built with libtiff 4 or above.
 
