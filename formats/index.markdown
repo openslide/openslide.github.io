@@ -123,7 +123,7 @@ Single-file pyramidal tiled BigTIFF, with non-standard metadata and
 overlaps.
 
 File extensions
-: `.bif`
+: `.bif`, `.tif`
 
 OpenSlide vendor backend
 : `ventana`

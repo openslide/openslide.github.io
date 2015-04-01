@@ -7,7 +7,7 @@ Format
 : single-file pyramidal tiled BigTIFF with non-standard metadata and overlaps
 
 File extensions
-: `.bif`
+: `.bif`, `.tif`
 
 OpenSlide vendor backend
 : `ventana`
@@ -20,8 +20,8 @@ Ventana slides are stored in single-file BigTIFF format.
 OpenSlide will detect a file as Ventana if:
 
  1. The file is TIFF.
- 2. One of the TIFF levels has an `ImageDescription` containing the string `level=0`.
- 3. That level has an XMP field containing valid XML, with a root tag of `EncodeInfo` and containing the string `iScan`.
+ 2. The `XMP` tag contains valid XML.
+ 3. The XML contains an `iScan` element, either as the root element or as a child of a `Metadata` root element.
 
 To open Ventana files, OpenSlide must be built with libtiff 4 or above.
 
@@ -39,8 +39,8 @@ Associated Images
 Known Properties
 ----------------
 
-All XML attributes in the `/EncodeInfo/SlideInfo/iScan` element are
-represented as properties prefixed with "`ventana.`".
+All XML attributes in the `iScan` element are represented as properties
+prefixed with "`ventana.`".
 
 `openslide.mpp-x`
 : normalized `ventana.ScanRes`
