@@ -53,7 +53,8 @@ $(document).ready(function() {
             var slides = $('<ul/>');
             top.append(slides);
             $.each(group.slides, function(j, slide) {
-                var a = $('<a class="load-image" href="#"/>').text(slide.name);
+                var a = $('<a class="load-image" href="#"/>').attr('title',
+                            slide.description).text(slide.name);
                 a.data('group', i);
                 a.data('slide', j);
                 var images = $('<ul class="associated"/>').hide();
