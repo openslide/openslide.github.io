@@ -49,20 +49,19 @@ $(document).ready(function() {
                     append(top);
 
         $.each(groups, function(i, group) {
-            top.append('<h2>' + group.name + '</h2>');
+            $('<h2/>').text(group.name).appendTo(top);
             var slides = $('<ul/>');
             top.append(slides);
             $.each(group.slides, function(j, slide) {
-                var a = $('<a class="load-image" href="#">' + slide.name +
-                            '</a>');
+                var a = $('<a class="load-image" href="#"/>').text(slide.name);
                 a.data('group', i);
                 a.data('slide', j);
                 var images = $('<ul class="associated"/>').hide();
                 $('<li/>').appendTo(slides).append(a).append(images);
                 a.wrap('<div/>');
                 $.each(slide.associated, function(k, image) {
-                    var a = $('<a class="load-image" href="#">' +
-                                image.name + '</a>');
+                    var a = $('<a class="load-image" href="#"/>').text(
+                                image.name);
                     a.data('group', i);
                     a.data('slide', j);
                     a.data('image', k);
@@ -89,8 +88,8 @@ $(document).ready(function() {
         var heading = $('<h1>Slide details</h1>').appendTo(details);
 
         // Download link
-        $('<a class="download-link" href="' + slide.download_url +
-                    '">Download slide</a>').appendTo(heading);
+        $('<a class="download-link">Download slide</a>').attr('href',
+                    slide.download_url).appendTo(heading);
 
         // Description and credit
         function add_info(title, body) {
@@ -113,7 +112,8 @@ $(document).ready(function() {
         });
         keys.sort();
         $.each(keys, function(i, k) {
-            dl.append("<dt>" + k + "<dd>" + properties[k]);
+            $('<dt>').text(k).appendTo(dl);
+            $('<dd>').text(properties[k]).appendTo(dl);
         });
 
         details.scrollTop(0).scrollLeft(0);
