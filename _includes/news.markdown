@@ -1,3 +1,23 @@
+OpenSlide version 3.4.1, 2015-04-20
+-----------------------------------
+OpenSlide 3.4.1 adds support for Philips TIFF and Ventana TIFF, improves the
+performance of JPEG and JP2K decoding, and adds support for OpenJPEG 2.1.0.
+It also includes fixes and improvements for Aperio, Hamamatsu, Leica,
+Sakura, and Ventana slides, as well as many portability fixes.
+
+Windows build 20150420 also adds separate debug symbols for all binaries.
+
+OpenSlide Python version 1.1.0, 2015-04-20
+------------------------------------------
+OpenSlide Python 1.1.0 adds an extension module which significantly improves
+pixel read performance.  The example viewers now display a scale bar via the
+OpenSeadragonScalebar plugin.
+
+OpenSlide Java version 0.12.1, 2015-04-20
+-----------------------------------------
+OpenSlide Java 0.12.1 improves support for cross-building for Windows from
+newer Linux distributions.
+
 OpenSlide Python version 1.0.1, 2014-03-09
 ------------------------------------------
 OpenSlide Python 1.0.1 fixes documentation build failures.
@@ -36,6 +56,9 @@ option to render only the non-empty slide region, corrects Deep Zoom tile
 positions for Aperio slides, fixes initialization on MacPorts, and improves
 the Deep Zoom example tools.
 
+
+{% if page.news_show_extended %}
+
 New Windows build, 2013-07-27
 -----------------------------
 Windows build 20130727 prevents libtiff from opening a dialog box upon
@@ -48,9 +71,6 @@ compatibility improvements for Aperio JP2K and Hamamatsu slides.
 
 Windows build 20130413 also fixes a runtime crash when linked with
 `/OPT:REF`.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide version 3.3.2, 2012-12-01
 -----------------------------------
