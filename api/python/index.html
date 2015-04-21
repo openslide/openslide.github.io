@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>OpenSlide Python &mdash; OpenSlide Python 1.0.1 documentation</title>
+    <title>OpenSlide Python &mdash; OpenSlide Python 1.1.0 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1.0.1',
+        URL_ROOT:    './',
+        VERSION:     '1.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,13 +23,13 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="OpenSlide Python 1.0.1 documentation" href="#" /> 
+    <link rel="top" title="OpenSlide Python 1.1.0 documentation" href="#" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="#">OpenSlide Python 1.0.1 documentation</a> &raquo;</li> 
+        <li><a href="#">OpenSlide Python 1.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -154,14 +152,14 @@ additional properties that vary by slide format.</p>
 <tt class="descname">associated_images</tt><a class="headerlink" href="#openslide.OpenSlide.associated_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Images, such as label or macro images, which are associated with this
 slide.  This is a <a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Mapping</span></tt></a> from image
-name to RGBA <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a>.</p>
+name to RGBA <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a>.</p>
 <p>Unlike in the C interface, these images are not premultiplied.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="openslide.OpenSlide.read_region">
 <tt class="descname">read_region</tt><big>(</big><em>location</em>, <em>level</em>, <em>size</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide.read_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an RGBA <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> containing the
+<dd><p>Return an RGBA <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> containing the
 contents of the specified region.</p>
 <p>Unlike in the C interface, the image data is not premultiplied.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -171,7 +169,7 @@ contents of the specified region.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>location</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; <tt class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></tt> tuple giving the top left pixel in
 the level 0 reference frame</li>
-<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the level number</li>
+<li><strong>level</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#int" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>int</em></a>) &#8211; the level number</li>
 <li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; <tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt> tuple giving the region size</li>
 </ul>
 </td>
@@ -188,7 +186,7 @@ the level 0 reference frame</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>downsample</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the desired downsample factor</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>downsample</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#float" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>float</em></a>) &#8211; the desired downsample factor</td>
 </tr>
 </tbody>
 </table>
@@ -197,7 +195,7 @@ the level 0 reference frame</li>
 <dl class="method">
 <dt id="openslide.OpenSlide.get_thumbnail">
 <tt class="descname">get_thumbnail</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#openslide.OpenSlide.get_thumbnail" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> containing an RGB thumbnail
+<dd><p>Return an <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> containing an RGB thumbnail
 of the slide.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -323,13 +321,13 @@ the non-empty region of the slide, if available.</p>
 <dl class="class">
 <dt id="openslide.ImageSlide">
 <em class="property">class </em><tt class="descclassname">openslide.</tt><tt class="descname">ImageSlide</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#openslide.ImageSlide" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper around an <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> object that
+<dd><p>A wrapper around an <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> object that
 provides an <a class="reference internal" href="#openslide.OpenSlide" title="openslide.OpenSlide"><tt class="xref py py-class docutils literal"><span class="pre">OpenSlide</span></tt></a>-compatible API.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; a filename or <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; a filename or <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> object</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises IOError:</th><td class="field-body">if the file cannot be opened</td>
 </tr>
@@ -379,8 +377,8 @@ Deep Zoom or a similar format.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>osr</strong> &#8211; the slide object</li>
-<li><strong>tile_size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the width and height of a single tile</li>
-<li><strong>overlap</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the number of extra pixels to add to each interior edge
+<li><strong>tile_size</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#int" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>int</em></a>) &#8211; the width and height of a single tile</li>
+<li><strong>overlap</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#int" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>int</em></a>) &#8211; the number of extra pixels to add to each interior edge
 of a tile</li>
 <li><strong>limit_bounds</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; <tt class="docutils literal"><span class="pre">True</span></tt> to render only the non-empty slide
 region</li>
@@ -434,13 +432,13 @@ file.</p>
 <dl class="method">
 <dt id="openslide.deepzoom.DeepZoomGenerator.get_tile">
 <tt class="descname">get_tile</tt><big>(</big><em>level</em>, <em>address</em><big>)</big><a class="headerlink" href="#openslide.deepzoom.DeepZoomGenerator.get_tile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an RGB <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL fork) v2.3.0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> for a tile.</p>
+<dd><p>Return an RGB <a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/Image.html#PIL.Image.Image" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><tt class="xref py py-class docutils literal"><span class="pre">Image</span></tt></a> for a tile.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
+<li><strong>level</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#int" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
 <li><strong>address</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the address of the tile within the level as a
 <tt class="docutils literal"><span class="pre">(column,</span> <span class="pre">row)</span></tt> tuple</li>
 </ul>
@@ -461,7 +459,7 @@ specified tile.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
+<li><strong>level</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#int" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
 <li><strong>address</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the address of the tile within the level as a
 <tt class="docutils literal"><span class="pre">(column,</span> <span class="pre">row)</span></tt> tuple</li>
 </ul>
@@ -480,7 +478,7 @@ specified tile.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>level</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
+<li><strong>level</strong> (<a class="reference external" href="http://pillow.readthedocs.org/en/latest/reference/ImageMath.html#int" title="(in Pillow (PIL Fork) v2.9.0.dev0)"><em>int</em></a>) &#8211; the Deep Zoom level</li>
 <li><strong>address</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; the address of the tile within the level as a
 <tt class="docutils literal"><span class="pre">(column,</span> <span class="pre">row)</span></tt> tuple</li>
 </ul>
@@ -551,12 +549,12 @@ trees for production applications, consider <a class="reference external" href="
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="#">OpenSlide Python 1.0.1 documentation</a> &raquo;</li> 
+        <li><a href="#">OpenSlide Python 1.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2014 Carnegie Mellon University.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
