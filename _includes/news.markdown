@@ -1,3 +1,7 @@
+New Windows build, 2015-05-27
+-----------------------------
+Windows build 20150527 fixes crashes in the 32-bit binaries.
+
 OpenSlide version 3.4.1, 2015-04-20
 -----------------------------------
 OpenSlide 3.4.1 adds support for Philips TIFF and Ventana TIFF, improves the
