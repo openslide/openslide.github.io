@@ -10,6 +10,13 @@
             <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.xz">tar.xz</a>
           {% endif %}
         </td>
+        {% if package == 'openslide-python' %}
+          <td>
+            {% if release.no_whl == null %}
+              <a href="https://pypi.python.org/pypi/{{ package }}/{{ release.version }}#downloads">Wheels (PyPI)</a>
+            {% endif %}
+          </td>
+        {% endif %}
       </tr>
     {% endfor %}
   </table>
