@@ -185,6 +185,3 @@ OpenSlide has been supported by the [National Institutes of Health][nih] and the
 
 [nih]: http://www.nih.gov/
 [ctsi]: http://www.ctsi.pitt.edu/
-
-
-[![NIH logo](images/NIH_logo.png)][nih]
