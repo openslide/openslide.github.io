@@ -103,6 +103,5 @@ Properties for TIFF-based formats
 Vendor-specific properties
 --------------------------
 
-A list of vendor-specific properties can be found on the pages for
-each vendor format, linked from [Supported Virtual Slide
-Formats][formats].
+A list of vendor-specific properties can be found on the [pages for
+each vendor format][formats].
