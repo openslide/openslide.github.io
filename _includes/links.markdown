@@ -2,7 +2,6 @@
 [download]: /download/
 [download-windows]: /download/#windows-binaries
 [lgplv2.1]: https://raw.github.com/openslide/openslide/master/lgpl-2.1.txt
-[properties]: /properties/
 [demo]: /demo/
 [other-projects]: /other-projects/
 [github]: https://github.com/openslide
@@ -13,6 +12,7 @@
 
 [doc-debugopts]: /docs/debugopts/
 [doc-newformat]: /docs/newformat/
+[doc-properties]: /docs/properties/
 [doc-windows]: /docs/windows/
 
 [c-api]: /api/openslide_8h.html

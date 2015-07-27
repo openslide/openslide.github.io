@@ -120,7 +120,7 @@ Drivers for TIFF-derived formats should also call
 properties pertaining to TIFF files.
 
 Your driver is also responsible for setting some
-[standard properties][properties], when they apply to your format:
+[standard properties][doc-properties], when they apply to your format:
 
 - `openslide.background-color`
 - `openslide.bounds-height` (must be an integer)

@@ -82,7 +82,7 @@ Additionally there is:
  * [C API Documentation][c-api]
  * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
- * [List of Known Properties][properties]
+ * [List of Known Properties][doc-properties]
  * [Using OpenSlide on Windows][doc-windows]
  * [Adding Support for a New Slide Format][doc-newformat]
  * [Debug Options][doc-debugopts]

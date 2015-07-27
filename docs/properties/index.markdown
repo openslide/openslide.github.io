@@ -1,9 +1,10 @@
 ---
 title: List of Known Properties
-permalink: /properties/
+permalink: /docs/properties/
 redirect_from:
   - /List of Known Properties/
   - /Requested Properties/
+  - /properties/
 ---
 
 {% include links.markdown %}
