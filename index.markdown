@@ -83,6 +83,9 @@ Additionally there is:
  * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][properties]
+ * [Using OpenSlide on Windows][doc-windows]
+ * [Adding Support for a New Slide Format][doc-newformat]
+ * [Debug Options][doc-debugopts]
  * [OpenSlide Wiki][wiki]
 
 

@@ -11,6 +11,10 @@
 [testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
 [snapshots-windows]: https://buildbot.openslide.org/snapshots/windows/
 
+[doc-debugopts]: /docs/debugopts/
+[doc-newformat]: /docs/newformat/
+[doc-windows]: /docs/windows/
+
 [c-api]: /api/openslide_8h.html
 [python-api]: /api/python/
 
