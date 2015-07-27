@@ -21,8 +21,10 @@ natively on Windows via [Cygwin](http://www.cygwin.com/).
 
 ### Python
 
-OpenSlide Python should work on Windows, but is not included in the
-OpenSlide binary distributions.
+OpenSlide Python is not included in the OpenSlide binary distributions,
+but prebuilt wheels are [available on PyPI][download-pypi].  Install with
+`pip install openslide-python` and make sure OpenSlide is in the DLL search
+path.
 
 ## Using OpenSlide on Windows
 
