@@ -1,3 +1,5 @@
+{% include links.markdown %}
+
 New Windows build, 2015-05-27
 -----------------------------
 Windows build 20150527 fixes crashes in the 32-bit binaries.
@@ -129,9 +131,7 @@ October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
 Windows binaries now available, 2012-08-10
 ------------------------------------------
 Compiled binaries for 32-bit and 64-bit Windows are now available from the
-[download][download_win] page.
-
-[download_win]: /download/#windows-binaries
+[download][download-windows] page.
 
 VIPS now supports OpenSlide, 2012-04-17
 ---------------------------------------

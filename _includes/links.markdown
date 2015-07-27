@@ -1,5 +1,6 @@
 [news]: /news/
 [download]: /download/
+[download-windows]: /download/#windows-binaries
 [lgplv2.1]: https://raw.github.com/openslide/openslide/master/lgpl-2.1.txt
 [properties]: /properties/
 [demo]: /demo/
