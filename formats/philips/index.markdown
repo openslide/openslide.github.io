@@ -101,8 +101,5 @@ prefixed with "`philips.`".
 Test Data
 ---------
 
-Some data is available in
-[#137](https://github.com/openslide/openslide/issues/137) and
-[#145](https://github.com/openslide/openslide/issues/145).  No
-redistributable data is available.  Contact the
-[mailing list][users-subscribe] if you can contribute some.
+No public data available.  Contact the [mailing list][users-subscribe] if
+you have some.
