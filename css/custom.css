@@ -8,6 +8,14 @@ div.searchbox {
 .forkme div.searchbox {
   right: 85px;
 }
+.forkme-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  width: 135px;
+  height: 135px;
+}
 div.searchbox .inner {
   position: absolute;
   bottom: 0;

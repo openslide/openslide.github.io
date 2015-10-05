@@ -13,8 +13,7 @@ extra_credits:
 {% include links.markdown %}
 
 <a href="https://github.com/openslide">
-<img style="position: absolute; top: 0; right: 0; border: 0; width: 135px; height: 135px;"
-src="/images/fork-me.png" alt="Fork me on GitHub">
+  <img class="forkme-ribbon" src="/images/fork-me.png" alt="Fork me on GitHub">
 </a>
 
 <div markdown="1" class="newsflash">
