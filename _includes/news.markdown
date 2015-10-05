@@ -24,6 +24,9 @@ OpenSlide Java version 0.12.1, 2015-04-20
 OpenSlide Java 0.12.1 improves support for cross-building for Windows from
 newer Linux distributions.
 
+
+{% if page.news_show_extended %}
+
 OpenSlide Python version 1.0.1, 2014-03-09
 ------------------------------------------
 OpenSlide Python 1.0.1 fixes documentation build failures.
@@ -61,9 +64,6 @@ support, returns Unicode strings on Python 2, adds a `DeepZoomGenerator`
 option to render only the non-empty slide region, corrects Deep Zoom tile
 positions for Aperio slides, fixes initialization on MacPorts, and improves
 the Deep Zoom example tools.
-
-
-{% if page.news_show_extended %}
 
 New Windows build, 2013-07-27
 -----------------------------
