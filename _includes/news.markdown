@@ -97,7 +97,7 @@ OpenSlide now in MacPorts, 2012-09-23
 -------------------------------------
 Mac OS X users can now install OpenSlide from [MacPorts][macports].
 
-[macports]: http://www.macports.org/
+[macports]: https://www.macports.org/
 
 OpenSlide version 3.3.0, 2012-09-08
 -----------------------------------
@@ -126,7 +126,7 @@ OpenSlide user meeting in Baltimore
 There will be an [informal gathering][baltimore] of OpenSlide users on
 October 29, 2012 in Baltimore, MD.  Come by and introduce yourself!
 
-[baltimore]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
+[baltimore]: https://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000387.html
 
 Windows binaries now available, 2012-08-10
 ------------------------------------------

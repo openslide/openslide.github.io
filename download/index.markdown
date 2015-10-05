@@ -67,7 +67,7 @@ Distribution Packages
   <tbody>
     <tr>
       <th>Linux</th>
-      <th><a href="http://fedoraproject.org/">Fedora</a></th>
+      <th><a href="https://fedoraproject.org/">Fedora</a></th>
       <td><code>yum install openslide</code></td>
       <td><code>yum install openslide-python</code></td>
       <td><code>yum install openslide-python3</code></td>
@@ -75,7 +75,7 @@ Distribution Packages
     <tr>
       <th>Linux</th>
       <th>
-        <a href="http://www.debian.org/">Debian</a><br>
+        <a href="https://www.debian.org/">Debian</a><br>
         <a href="http://www.ubuntu.com/">Ubuntu</a>
       </th>
       <td><code>apt-get install openslide-tools</code></td>
@@ -90,7 +90,7 @@ Distribution Packages
     </tr>
     <tr>
       <th>Linux</th>
-      <th><a href="http://www.opensuse.org/">openSUSE</a></th>
+      <th><a href="https://www.opensuse.org/">openSUSE</a></th>
       <td><code>zypper install openslide-tools</code></td>
       <td></td>
       <td></td>
@@ -98,7 +98,7 @@ Distribution Packages
     <tr>
       <th>Linux</th>
       <th>
-        <a href="http://www.redhat.com/products/enterprise-linux/">Red Hat Enterprise Linux</a><br>
+        <a href="https://www.redhat.com/products/enterprise-linux/">Red Hat Enterprise Linux</a><br>
         <a href="https://www.centos.org/">CentOS</a><br>
         <a href="https://www.scientificlinux.org/">Scientific Linux</a>
       </th>
@@ -116,7 +116,7 @@ Distribution Packages
     </tr>
     <tr>
       <th>Mac OS X</th>
-      <th><a href="http://www.macports.org/">MacPorts</a></th>
+      <th><a href="https://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
       <td><code>port install py-openslide</code></td>
       <td><code>port install py34-openslide</code></td>
@@ -184,4 +184,4 @@ Version Control
 <!-- Ensure spacing above footer -->
 <span></span>
 
-[git]: http://git-scm.com/
+[git]: https://git-scm.com/

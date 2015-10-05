@@ -142,7 +142,7 @@ See Also
 that document was written; where it says "tile", substitute "image", and
 where it says "subtile", substitute "tile".
 
-[1]: http://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000373.html
+[1]: https://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000373.html
 
 
 Test Data

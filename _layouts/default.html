@@ -29,7 +29,7 @@
 <div id="footer">
 <p>
   This page is published under the
-  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+  <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">
     Creative Commons Attribution-ShareAlike 4.0 International</a>
   license.
   {{ page.extra_credits }}
@@ -42,8 +42,7 @@
     var gcse = document.createElement('script');
     gcse.type = 'text/javascript';
     gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//www.google.com/cse/cse.js?cx=' + cx;
+    gcse.src = 'https://www.google.com/cse/cse.js?cx=' + cx;
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(gcse, s);
   })();

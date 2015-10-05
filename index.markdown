@@ -6,7 +6,7 @@ extra_credits:
   <a href="https://github.com/aral/fork-me-on-github-retina-ribbons/">
   "Fork me on GitHub" ribbon</a> copyright &copy; 2013 Aral Balkan,
   released under a
-  <a href="http://creativecommons.org/licenses/by/2.0/uk/">
+  <a href="https://creativecommons.org/licenses/by/2.0/uk/">
   Creative Commons Attribution 2.0&#58; England & Wales</a> license.
 ---
 
@@ -63,8 +63,8 @@ vendors and may be incomplete.  Problems should be reported to the OpenSlide
 OpenSlide is a product of the research group of [M. Satyanarayanan][satya]
 (Satya) in the Carnegie Mellon University [School of Computer Science][cmucs].
 
-[cmucs]: http://www.cs.cmu.edu/
-[satya]: http://www.cs.cmu.edu/~satya/
+[cmucs]: https://www.cs.cmu.edu/
+[satya]: https://www.cs.cmu.edu/~satya/
 
 
 See how [some projects use OpenSlide][other-projects].

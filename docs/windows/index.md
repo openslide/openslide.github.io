@@ -17,7 +17,7 @@ OpenSlide is built for Windows using
 [MinGW-w64](http://mingw-w64.sourceforge.net/).  The easiest way to build
 OpenSlide and its dependencies is by using the
 [openslide-winbuild][winbuild-github] script, which can run on Linux or
-natively on Windows via [Cygwin](http://www.cygwin.com/).
+natively on Windows via [Cygwin](https://www.cygwin.com/).
 
 ### Python
 
