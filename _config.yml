@@ -6,6 +6,3 @@ defaults:
 
 gems:
   - jekyll-redirect-from
-
-relative_permalinks: false
-markdown: kramdown
