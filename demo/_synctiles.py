@@ -40,6 +40,8 @@ from urlparse import urljoin
 from zipfile import ZipFile
 
 STAMP_VERSION = 'mpp'  # change to retile without OpenSlide version bump
+# work around https://github.com/boto/boto/issues/2836
+S3_CALLING_FORMAT = 'boto.s3.connection.OrdinaryCallingFormat'
 S3_BUCKET = 'demo.openslide.org'
 BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
@@ -112,11 +114,15 @@ class GeneratorCache(object):
         return self._generators[associated]
 
 
+def connect_bucket():
+    conn = boto.connect_s3(calling_format=S3_CALLING_FORMAT)
+    return conn.get_bucket(S3_BUCKET)
+
+
 def pool_init():
     global generator_cache, upload_bucket
     generator_cache = GeneratorCache()
-    conn = boto.connect_s3()
-    upload_bucket = conn.get_bucket(S3_BUCKET)
+    upload_bucket = connect_bucket()
 
 
 def sync_tile(args):
@@ -365,8 +371,7 @@ def sync_slides(workers):
     slides = r.json()
 
     # Connect to S3
-    conn = boto.connect_s3()
-    bucket = conn.get_bucket(S3_BUCKET)
+    bucket = connect_bucket()
 
     # Store static files
     print "Storing static files..."
