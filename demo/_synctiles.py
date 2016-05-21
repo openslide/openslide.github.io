@@ -20,6 +20,7 @@
 
 import boto
 from boto.exception import S3ResponseError
+from boto.s3.cors import CORSConfiguration
 from cStringIO import StringIO
 from hashlib import sha256
 import json
@@ -44,6 +45,7 @@ STAMP_VERSION = 'mpp'  # change to retile without OpenSlide version bump
 S3_CALLING_FORMAT = 'boto.s3.connection.OrdinaryCallingFormat'
 S3_BUCKET = 'demo.openslide.org'
 BASE_URL = 'http://%s/' % S3_BUCKET
+CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
 VIEWER_SLIDE_NAME = 'slide'
@@ -367,6 +369,12 @@ def sync_slides(workers):
 
     # Connect to S3
     bucket = connect_bucket()
+
+    # Set bucket configuration
+    print "Configuring bucket..."
+    cors = CORSConfiguration()
+    cors.add_rule(['GET'], CORS_ORIGINS)
+    bucket.set_cors(cors)
 
     # Store static files
     print "Storing static files..."
