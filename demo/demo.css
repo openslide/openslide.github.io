@@ -55,11 +55,6 @@ a img {
     display: inline-block;
     width: 100%;
 }
-div#header {
-    /* Force hasLayout on IE7 to avoid the JS believing the header has
-       a computed height of 4000 */
-    min-width: 0;
-}
 div#header img {
     float: left;
 }
