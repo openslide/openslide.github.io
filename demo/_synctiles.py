@@ -47,8 +47,8 @@ BASE_URL = 'http://%s/' % S3_BUCKET
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
 VIEWER_SLIDE_NAME = 'slide'
-METADATA_NAME = 'info.js'
-SLIDE_PROPERTIES_NAME = 'properties.js'
+METADATA_NAME = 'info.json'
+SLIDE_PROPERTIES_NAME = 'properties.json'
 SLIDE_METADATA_NAME = 'slide.json'
 FORMAT = 'jpeg'
 QUALITY = 75
@@ -211,14 +211,10 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
     }
 
 
-def upload_metadata(bucket, path, item, jsonp=None, cache=True):
+def upload_metadata(bucket, path, item, cache=True):
     key = bucket.new_key(path)
+    key.content_type = 'application/json'
     buf = json.dumps(item, indent=1, sort_keys=True)
-    if jsonp:
-        buf = '%s(%s);\n' % (jsonp, buf)
-        key.content_type = 'application/javascript'
-    else:
-        key.content_type = 'application/json'
     key.set_contents_from_string(buf, policy='public-read',
             headers=HEADERS_CACHE if cache else HEADERS_NOCACHE)
 
@@ -345,8 +341,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
 
     # Update metadata
     if 'properties' in metadata:
-        upload_metadata(bucket, properties_key_name, metadata['properties'],
-                'set_slide_properties')
+        upload_metadata(bucket, properties_key_name, metadata['properties'])
     upload_metadata(bucket, metadata_key_name, metadata, cache=False)
 
     return metadata
@@ -416,7 +411,7 @@ def sync_slides(workers):
 
     # Upload metadata
     print 'Storing metadata...'
-    upload_metadata(bucket, METADATA_NAME, metadata, 'set_slide_info', False)
+    upload_metadata(bucket, METADATA_NAME, metadata, False)
 
 
 if __name__ == '__main__':
