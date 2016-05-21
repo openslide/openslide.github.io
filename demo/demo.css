@@ -146,3 +146,9 @@ div#details dt {
 div#details dd {
     margin-left: 0;
 }
+div.error {
+    margin-top: 40px;
+    color: #dd0044;
+    text-align: center;
+    font-weight: bold;
+}
