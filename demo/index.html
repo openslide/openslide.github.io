@@ -160,9 +160,8 @@ $(document).ready(function() {
             $("#details").html('').addClass('loading');
             $.ajax({
                 'cache': true,
-                'dataType': 'jsonp',
-                'jsonp': false,  // don't append callback argument
-                'jsonpCallback': 'set_slide_properties',
+                'dataType': 'json',
+                'jsonp': false,  // use CORS
                 'success': function(data, status, xhr) {
                     populate_details(slide, data);
                 },
@@ -222,11 +221,10 @@ $(document).ready(function() {
 
     $.ajax({
         'cache': true,
-        'dataType': 'jsonp',
-        'jsonp': false,  // don't append callback argument
-        'jsonpCallback': 'set_slide_info',
+        'dataType': 'json',
+        'jsonp': false,  // use CORS
         'success': populate_images,
-        'url': 'http://demo.openslide.org/info.js'
+        'url': 'http://demo.openslide.org/info.json'
     });
 
     // CSS doesn't provide a good way to specify a div of height
