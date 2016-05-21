@@ -41,7 +41,7 @@ from unicodedata import normalize
 from urlparse import urljoin
 from zipfile import ZipFile
 
-STAMP_VERSION = 'mpp'  # change to retile without OpenSlide version bump
+STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 # work around https://github.com/boto/boto/issues/2836
 S3_CALLING_FORMAT = 'boto.s3.connection.OrdinaryCallingFormat'
 S3_BUCKET = 'demo.openslide.org'
@@ -56,7 +56,7 @@ SLIDE_PROPERTIES_NAME = 'properties.json'
 SLIDE_METADATA_NAME = 'slide.json'
 FORMAT = 'jpeg'
 QUALITY = 75
-TILE_SIZE = 512
+TILE_SIZE = 510
 OVERLAP = 1
 LIMIT_BOUNDS = True
 GROUP_NAME_MAP = {
