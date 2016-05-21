@@ -240,11 +240,6 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
 
     # Return if metadata is current
     if metadata is not None and metadata['stamp'] == stamp:
-        if 'properties' in metadata:
-            upload_metadata(bucket, properties_key_name, metadata['properties'])
-        metadata['properties_url'] = (urljoin(BASE_URL, properties_key_name) +
-                '?v=' + stamp)
-        upload_metadata(bucket, metadata_key_name, metadata, cache=False)
         return metadata
 
     tempdir = mkdtemp(prefix='synctiles-', dir='/var/tmp')
