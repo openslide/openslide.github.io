@@ -159,7 +159,6 @@ $(document).ready(function() {
             // Load properties
             $("#details").html('').addClass('loading');
             $.ajax({
-                'cache': true,
                 'dataType': 'json',
                 'jsonp': false,  // use CORS
                 'success': function(data, status, xhr) {
@@ -225,7 +224,6 @@ $(document).ready(function() {
     }
 
     $.ajax({
-        'cache': true,
         'dataType': 'json',
         'jsonp': false,  // use CORS
         'success': populate_images,
