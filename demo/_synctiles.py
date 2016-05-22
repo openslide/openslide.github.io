@@ -393,8 +393,7 @@ def sync_slides(workers):
         key.set_contents_from_string(opts.get('data', ''),
                 headers=opts.get('headers', {}), policy='public-read')
 
-    # Mark bucket dirty
-    print 'Marking bucket dirty...'
+    # If the stamp is changing, mark bucket dirty
     try:
         old_stamp = json.loads(bucket.new_key(METADATA_NAME).
                 get_contents_as_string()).get('stamp')
@@ -403,7 +402,9 @@ def sync_slides(workers):
             old_stamp = None
         else:
             raise
-    upload_status(bucket, dirty=True, stamp=old_stamp)
+    if metadata['stamp'] != old_stamp:
+        print 'Marking bucket dirty...'
+        upload_status(bucket, dirty=True, stamp=old_stamp)
 
     # Tile and upload slides
     cur_group_name = None
