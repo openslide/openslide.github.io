@@ -68,8 +68,20 @@ $(document).ready(function() {
     var stamp;
     var groups;
     var viewer;
+    var status_skipped;
 
     function check_status() {
+        if (!stamp) {
+            // still starting up
+            return;
+        }
+        if (document.hidden) {
+            // to reduce complexity, we don't cancel/reschedule the timer
+            // when hidden
+            status_skipped = true;
+            return;
+        }
+        status_skipped = false;
         $.ajax({
             'dataType': 'json',
             'jsonp': false,  // use CORS
@@ -90,13 +102,16 @@ $(document).ready(function() {
                     }
                 }
             },
-            'complete': function() {
-                setTimeout(check_status, 300000);
-            },
             'timeout': 60000,
             'url': 'http://demo.openslide.org/status.json',
         });
     }
+    $(window).on('visibilitychange', function() {
+        if (!document.hidden && status_skipped) {
+            check_status();
+        }
+    });
+    setInterval(check_status, 300000);
 
     function populate_images(data, status, xhr) {
         stamp = data.stamp;
