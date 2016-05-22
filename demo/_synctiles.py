@@ -3,6 +3,7 @@
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2015 Carnegie Mellon University
+# Copyright (c) 2016 Benjamin Gilbert
 #
 # This library is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -50,6 +51,7 @@ DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
 VIEWER_SLIDE_NAME = 'slide'
 METADATA_NAME = 'info.json'
+STATUS_NAME = 'status.json'
 SLIDE_PROPERTIES_NAME = 'properties.json'
 SLIDE_METADATA_NAME = 'slide.json'
 FORMAT = 'jpeg'
@@ -349,6 +351,14 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     return metadata
 
 
+def upload_status(bucket, dirty=False, stamp=None):
+    status = {
+        'dirty': dirty,
+        'stamp': stamp,
+    }
+    upload_metadata(bucket, STATUS_NAME, status, False)
+
+
 def sync_slides(workers):
     """Tile openslide-testdata and synchronize into S3."""
 
@@ -382,6 +392,18 @@ def sync_slides(workers):
         key = bucket.new_key(relpath)
         key.set_contents_from_string(opts.get('data', ''),
                 headers=opts.get('headers', {}), policy='public-read')
+
+    # Mark bucket dirty
+    print 'Marking bucket dirty...'
+    try:
+        old_stamp = json.loads(bucket.new_key(METADATA_NAME).
+                get_contents_as_string()).get('stamp')
+    except S3ResponseError, e:
+        if e.status == 404:
+            old_stamp = None
+        else:
+            raise
+    upload_status(bucket, dirty=True, stamp=old_stamp)
 
     # Tile and upload slides
     cur_group_name = None
@@ -420,6 +442,10 @@ def sync_slides(workers):
     # Upload metadata
     print 'Storing metadata...'
     upload_metadata(bucket, METADATA_NAME, metadata, False)
+
+    # Mark bucket clean
+    print 'Marking bucket clean...'
+    upload_status(bucket, stamp=metadata['stamp'])
 
 
 if __name__ == '__main__':

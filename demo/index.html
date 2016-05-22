@@ -2,6 +2,7 @@
   OpenSlide demo site
 
   Copyright (c) 2010-2015 Carnegie Mellon University
+  Copyright (c) 2016 Benjamin Gilbert
 
   This program is free software; you can redistribute it and/or modify it
   under the terms of version 2.1 of the GNU Lesser General Public License
@@ -43,9 +44,17 @@
 </div>
 <div id="content">
     <div id="images" class="scroll-parent loading"></div>
-    <div id="view">
-        <div id="instructions">
-            Select a slide from the list at left.
+    <div id="viewpane">
+        <div id="retiling">
+            <div id="retiling-inner">
+                We're currently retiling the demo slides.  Things may be
+                broken for a bit.
+            </div>
+        </div>
+        <div id="view">
+            <div id="instructions">
+                Select a slide from the list at left.
+            </div>
         </div>
     </div>
     <div id="details" class="scroll-parent"></div>
@@ -59,6 +68,35 @@ $(document).ready(function() {
     var stamp;
     var groups;
     var viewer;
+
+    function check_status() {
+        $.ajax({
+            'dataType': 'json',
+            'jsonp': false,  // use CORS
+            'success': function(data, status, xhr) {
+                if (data.stamp && data.stamp !== stamp) {
+                    // retiled existing slides, so reload page
+                    document.location.reload();
+                }
+                if ($('#retiling').is(':visible') !== data.dirty) {
+                    // show/hide retiling message
+                    if (data.dirty) {
+                        $('#retiling').slideDown(200, function() {
+                            $(window).resize();
+                        });
+                    } else {
+                        $('#retiling').hide();
+                        $(window).resize();
+                    }
+                }
+            },
+            'complete': function() {
+                setTimeout(check_status, 300000);
+            },
+            'timeout': 60000,
+            'url': 'http://demo.openslide.org/status.json',
+        });
+    }
 
     function populate_images(data, status, xhr) {
         stamp = data.stamp;
@@ -99,6 +137,8 @@ $(document).ready(function() {
             open_slide($(this));
             ev.preventDefault();
         });
+
+        check_status();
     }
 
     function populate_details(slide, properties) {
@@ -239,6 +279,8 @@ $(document).ready(function() {
     $(window).resize(function() {
         $('#content').height($(window).height() -
                     $('#header').outerHeight() - 20);
+        $('#view').height($('#viewpane').height() -
+                    $('#retiling:visible').outerHeight());
     }).resize();
 });
 </script>
