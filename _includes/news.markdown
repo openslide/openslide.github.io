@@ -1,5 +1,11 @@
 {% include links.markdown %}
 
+OpenSlide Python version 1.1.1, 2016-06-11
+------------------------------------------
+OpenSlide Python 1.1.1 changes the default Deep Zoom tile size to 254 pixels
+to improve viewer performance.  It also fixes exceptions with Pillow 3.x and
+with large reads when the extension module is not installed.
+
 New Windows build, 2015-05-27
 -----------------------------
 Windows build 20150527 fixes crashes in the 32-bit binaries.
