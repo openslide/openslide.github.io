@@ -1,5 +1,10 @@
 {% include links.markdown %}
 
+New Windows build, 2016-06-12
+-----------------------------
+Windows build 20160612 fixes crashes in the 32-bit binaries when called
+from code compiled with MSVC.
+
 OpenSlide Python version 1.1.1, 2016-06-11
 ------------------------------------------
 OpenSlide Python 1.1.1 changes the default Deep Zoom tile size to 254 pixels
