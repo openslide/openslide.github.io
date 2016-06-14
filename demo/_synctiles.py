@@ -42,10 +42,8 @@ from urlparse import urljoin
 from zipfile import ZipFile
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
-# work around https://github.com/boto/boto/issues/2836
-S3_CALLING_FORMAT = 'boto.s3.connection.OrdinaryCallingFormat'
-S3_BUCKET = 'demo.openslide.org'
-BASE_URL = 'http://%s/' % S3_BUCKET
+S3_BUCKET = 'openslide-demo'
+BASE_URL = 'https://%s.s3.amazonaws.com/' % S3_BUCKET
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -66,18 +64,6 @@ GROUP_NAME_MAP = {
     'Mirax': 'MIRAX',
 }
 BUCKET_STATIC = {
-    'index.html': {
-        'headers': {
-            'Content-Type': 'text/html',
-            'x-amz-website-redirect-location': 'http://openslide.org/demo/',
-        },
-    },
-    'error.html': {
-        'data': '<!doctype html>\n<title>Error</title>\n<h1>Not Found</h1>\nNo such file.\n',
-        'headers': {
-            'Content-Type': 'text/html',
-        },
-    },
     'robots.txt': {
         'data': 'User-agent: *\nDisallow: /\n',
         'headers': {
@@ -119,7 +105,7 @@ class GeneratorCache(object):
 
 
 def connect_bucket():
-    conn = boto.connect_s3(calling_format=S3_CALLING_FORMAT)
+    conn = boto.connect_s3()
     return conn.get_bucket(S3_BUCKET)
 
 
