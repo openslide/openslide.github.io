@@ -1,5 +1,9 @@
 {% include links.markdown %}
 
+New Windows build, 2016-07-17
+-----------------------------
+Windows build 20160717 updates OpenJPEG to version 2.1.1.
+
 New Windows build, 2016-06-12
 -----------------------------
 Windows build 20160612 fixes crashes in the 32-bit binaries when called
