@@ -1,5 +1,9 @@
 {% include links.markdown %}
 
+OpenSlide Java version 0.12.2, 2016-09-11
+-----------------------------------------
+OpenSlide Java 0.12.2 fixes builds on JDK 9 and on Mac OS X.
+
 New Windows build, 2016-07-17
 -----------------------------
 Windows build 20160717 updates OpenJPEG to version 2.1.1.
