@@ -3,6 +3,7 @@
 # testdata_index - Check metadata and build indexes for openslide-testdata
 #
 # Copyright (c) 2013-2015 Carnegie Mellon University
+# Copyright (c) 2016 Benjamin Gilbert
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -32,6 +33,7 @@ IGNORE_FILENAMES = frozenset((
 ))
 MANDATORY_FIELDS = frozenset((
     'description',
+    'license',
     'sha256',
 ))
 OPTIONAL_FIELDS = frozenset((
@@ -47,6 +49,10 @@ table {
 }
 tr:nth-child(2n + 3) {
   background: #f4f4f4;
+}
+th {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 td {
   padding-top: 0.5em;
@@ -73,9 +79,11 @@ td.size {
     <th>Name</th>
     <th>Size</th>
     <th>Description</th>
+    <th>License</th>
     <th>Credit</th>
   </tr>
-  {% macro row(icon, href, name, size='', description='', credit='') %}
+  {% macro row(icon, href, name, size='', description='', license='',
+      credit='') %}
     <tr>
       <td class="filename">
         <i class="filetype fa {{ icon }}"></i>
@@ -83,6 +91,20 @@ td.size {
       </td>
       <td class="size">{{ size }}</td>
       <td class="description">{{ description }}</td>
+      <td class="license">
+        {% if license == 'distributable' %}
+          Free to use and distribute, with or without modification
+        {% elif license == 'CC0-1.0' %}
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
+        {% elif license == 'CC0-1.0-with-OpenSeadragon' %}
+          <a href="https://openseadragon.github.io/license/">3-clause BSD</a>
+          for bundled OpenSeadragon,
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>
+          otherwise
+        {% elif license != '' %}
+          Unknown
+        {% endif %}
+      </td>
       <td class="credit">{{ credit }}</td>
     </tr>
   {% endmacro %}
@@ -95,7 +117,7 @@ td.size {
   {% for name, info in (files or {}).items()|sort %}
     {{ row('fa-file-archive-o' if name.endswith('.zip') else 'fa-file-image-o',
         name, name, info.size|file_size_units, info.description,
-        info.credit) }}
+        info.license, info.credit) }}
   {% endfor %}
   {% for extra in extras %}
     {{ row('fa-file-code-o', extra.name, extra.name,
