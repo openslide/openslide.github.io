@@ -43,7 +43,8 @@ from zipfile import ZipFile
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'
-BASE_URL = 'https://%s.s3.amazonaws.com/' % S3_BUCKET
+S3_REGION = 'us-east-1'
+BASE_URL = 'https://%s.s3.dualstack.%s.amazonaws.com/' % (S3_BUCKET, S3_REGION)
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'

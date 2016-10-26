@@ -103,7 +103,7 @@ $(document).ready(function() {
                 }
             },
             'timeout': 60000,
-            'url': 'https://openslide-demo.s3.amazonaws.com/status.json',
+            'url': 'https://openslide-demo.s3.dualstack.us-east-1.amazonaws.com/status.json',
         });
     }
     $(window).on('visibilitychange', function() {
@@ -286,7 +286,7 @@ $(document).ready(function() {
             $('#images').removeClass('loading').
                     html("<div class='error'>Couldn't load slides</div>");
         },
-        'url': 'https://openslide-demo.s3.amazonaws.com/info.json'
+        'url': 'https://openslide-demo.s3.dualstack.us-east-1.amazonaws.com/info.json'
     });
 
     // CSS doesn't provide a good way to specify a div of height
