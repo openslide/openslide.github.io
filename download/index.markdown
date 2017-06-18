@@ -68,9 +68,9 @@ Distribution Packages
     <tr>
       <th>Linux</th>
       <th><a href="https://fedoraproject.org/">Fedora</a></th>
-      <td><code>yum install openslide</code></td>
-      <td><code>yum install openslide-python</code></td>
-      <td><code>yum install openslide-python3</code></td>
+      <td><code>dnf install openslide</code></td>
+      <td><code>dnf install python2-openslide</code></td>
+      <td><code>dnf install python3-openslide</code></td>
     </tr>
     <tr>
       <th>Linux</th>
