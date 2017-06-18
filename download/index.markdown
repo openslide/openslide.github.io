@@ -81,11 +81,9 @@ Distribution Packages
       <td><code>apt-get install openslide-tools</code></td>
       <td>
         <code>apt-get install python-openslide</code><br>
-        <i>(Debian &ge; 8, Ubuntu &ge; 14.04)</i>
       </td>
       <td>
         <code>apt-get install python3-openslide</code><br>
-        <i>(Debian &ge; 8, Ubuntu &ge; 14.04)</i>
       </td>
     </tr>
     <tr>
