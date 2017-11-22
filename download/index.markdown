@@ -117,7 +117,7 @@ Distribution Packages
       <th><a href="https://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
       <td><code>port install py-openslide</code></td>
-      <td><code>port install py35-openslide</code></td>
+      <td><code>port install py36-openslide</code></td>
     </tr>
     <tr>
       <th>Mac OS X</th>
@@ -133,7 +133,7 @@ Distribution Packages
       <td><code>pip install openslide-python</code></td>
       <td>
         <code>pip-python3 install openslide-python</code><br>
-        <i>(or </i><code>pip-3.3</code><i>, </i><code>pip</code><i>, etc.)</i>
+        <i>(or </i><code>pip-3.6</code><i>, </i><code>pip</code><i>, etc.)</i>
       </td>
     </tr>
   </tbody>
