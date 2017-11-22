@@ -32,6 +32,9 @@ Sakura, and Ventana slides, as well as many portability fixes.
 
 Windows build 20150420 also adds separate debug symbols for all binaries.
 
+
+{% if page.news_show_extended %}
+
 OpenSlide Python version 1.1.0, 2015-04-20
 ------------------------------------------
 OpenSlide Python 1.1.0 adds an extension module which significantly improves
@@ -42,9 +45,6 @@ OpenSlide Java version 0.12.1, 2015-04-20
 -----------------------------------------
 OpenSlide Java 0.12.1 improves support for cross-building for Windows from
 newer Linux distributions.
-
-
-{% if page.news_show_extended %}
 
 OpenSlide Python version 1.0.1, 2014-03-09
 ------------------------------------------
