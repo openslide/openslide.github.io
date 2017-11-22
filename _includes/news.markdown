@@ -1,5 +1,9 @@
 {% include links.markdown %}
 
+New Windows build, 2017-11-22
+-----------------------------
+Windows build 20171122 updates the versions of many dependencies.
+
 OpenSlide Java version 0.12.2, 2016-09-11
 -----------------------------------------
 OpenSlide Java 0.12.2 fixes builds on JDK 9 and on Mac OS X.
