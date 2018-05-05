@@ -7,5 +7,5 @@ documentation for [OpenSlide Python][2] and the [OpenSeadragon][3] image
 viewer.
 
 [1]: https://github.com/openslide/openslide-python/tree/master/examples/deepzoom
-[2]: http://openslide.org/api/python/
+[2]: https://openslide.org/api/python/
 [3]: http://openseadragon.github.io/docs/
