@@ -9,7 +9,6 @@ title: OpenSlide on Windows
 ### Precompiled binaries
 
 Regular releases are available from the [OpenSlide website][download-windows].
-Nightly development builds are [also available][snapshots-windows].
 
 ### Building from source
 

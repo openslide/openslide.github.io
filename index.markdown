@@ -128,9 +128,7 @@ Development of OpenSlide happens on [GitHub][github]:
  * [OpenSlide Java][java-github] ([issue tracker][java-issues])
  * [Windows build scripts][winbuild-github] ([issue tracker][winbuild-issues])
  * [Website][site-github] ([issue tracker][site-issues])
- * [Buildbot configuration][automation-github] ([issue tracker][automation-issues])
-
-Nightly builds are handled by [Buildbot][buildbot].
+ * [Old Buildbot configuration][automation-github] ([issue tracker][automation-issues])
 
 
 Test Data

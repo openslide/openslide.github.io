@@ -32,8 +32,6 @@ Windows Binaries
 ----------------
 
 Problems with these binaries can be reported [here][winbuild-issues].
-If you're looking for the bleeding edge,
-[nightly development builds][snapshots-windows] are also available.
 
 <div class="releases">
   <table>
@@ -173,7 +171,7 @@ Version Control
       <td><code>git clone https://github.com/openslide/openslide.github.com.git</code></td>
     </tr>
     <tr>
-      <th><a href="https://github.com/openslide/openslide-automation">Buildbot configuration</a></th>
+      <th><a href="https://github.com/openslide/openslide-automation">Old Buildbot configuration</a></th>
       <td><code>git clone https://github.com/openslide/openslide-automation.git</code></td>
     </tr>
   </tbody>
