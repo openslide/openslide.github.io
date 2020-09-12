@@ -18,7 +18,7 @@ OpenSlide vendor backend
 Vendor Documentation
 --------------------
 
-<http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf>
+[Documentation PDF](https://web.archive.org/web/20120420105738/http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf)
 
 
 Detection
