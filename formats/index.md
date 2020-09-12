@@ -5,7 +5,7 @@ redirect_from:
   - /Supported Virtual Slide Formats/
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 OpenSlide's support for these formats is not endorsed by their respective
 vendors and may be incomplete.  Problems should be reported to the OpenSlide

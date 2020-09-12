@@ -2,7 +2,7 @@
 title: OpenSlide on Windows
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 ## Getting OpenSlide for Windows
 

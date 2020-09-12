@@ -1,4 +1,4 @@
-{% include links.markdown %}
+{% include links.md %}
 
 New Windows build, 2017-11-22
 -----------------------------

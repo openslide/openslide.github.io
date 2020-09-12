@@ -10,14 +10,14 @@ extra_credits:
   Creative Commons Attribution 2.0&#58; England & Wales</a> license.
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 <a href="https://github.com/openslide">
   <img class="forkme-ribbon" src="/images/fork-me.png" alt="Fork me on GitHub">
 </a>
 
 <div markdown="1" class="newsflash">
-{% include news.markdown %}
+{% include news.md %}
 ***
 Older news is available [here][news].
 </div>

@@ -2,7 +2,7 @@
 title: Philips format
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 Format
 : single-file pyramidal tiled TIFF or BigTIFF with non-standard metadata

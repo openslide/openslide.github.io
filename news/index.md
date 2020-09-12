@@ -6,4 +6,4 @@ redirect_from:
 news_show_extended: true
 ---
 
-{% include news.markdown %}
+{% include news.md %}

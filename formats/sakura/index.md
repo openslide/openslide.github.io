@@ -2,7 +2,7 @@
 title: Sakura format
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 Format
 : SQLite database containing pyramid tiles and metadata

@@ -2,7 +2,7 @@
 title: Adding a New Slide Format to OpenSlide
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 To add a new format to OpenSlide, you will need to write a new vendor
 driver.  When a slide is opened, the driver is responsible for parsing the

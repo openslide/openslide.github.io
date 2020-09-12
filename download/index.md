@@ -5,7 +5,7 @@ redirect_from:
   - /Download/
 ---
 
-{% include links.markdown %}
+{% include links.md %}
 
 OpenSlide and its official language bindings are available under the terms
 of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
@@ -16,17 +16,17 @@ Source
 #### OpenSlide (stable API)
 {% assign package = 'openslide' %}
 {% assign releases = site.data.releases.c %}
-{% include source-release-table.markdown %}
+{% include source-release-table.md %}
 
 #### OpenSlide Python interface (stable API)
 {% assign package = 'openslide-python' %}
 {% assign releases = site.data.releases.python %}
-{% include source-release-table.markdown %}
+{% include source-release-table.md %}
 
 #### OpenSlide Java interface (still unstable API, subject to change)
 {% assign package = 'openslide-java' %}
 {% assign releases = site.data.releases.java %}
-{% include source-release-table.markdown %}
+{% include source-release-table.md %}
 
 Windows Binaries
 ----------------
