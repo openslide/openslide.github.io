@@ -32,8 +32,6 @@
 [users-subscribe]: https://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/
 [announce-archive]: https://lists.andrew.cmu.edu/pipermail/openslide-announce/
 [users-archive]: https://lists.andrew.cmu.edu/pipermail/openslide-users/
-[announce-archive-gmane]: http://news.gmane.org/gmane.comp.graphics.openslide.announce
-[users-archive-gmane]: http://news.gmane.org/gmane.comp.graphics.openslide.user
 [announce-archive-marc]: https://marc.info/?l=openslide-announce
 [users-archive-marc]: https://marc.info/?l=openslide-users
 
