@@ -1,5 +1,10 @@
 {% include links.md %}
 
+OpenSlide Python version 1.1.2, 2020-09-13
+------------------------------------------
+OpenSlide Python 1.1.2 fixes compatibility with setuptools &ge; 46, Python
+3.9, and Sphinx 2.x.
+
 New Windows build, 2017-11-22
 -----------------------------
 Windows build 20171122 updates the versions of many dependencies.
