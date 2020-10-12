@@ -67,7 +67,7 @@ Distribution Packages
       <th>Linux</th>
       <th><a href="https://fedoraproject.org/">Fedora</a></th>
       <td><code>dnf install openslide</code></td>
-      <td><code>dnf install python2-openslide</code></td>
+      <td></td>
       <td><code>dnf install python3-openslide</code></td>
     </tr>
     <tr>
