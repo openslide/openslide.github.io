@@ -167,8 +167,8 @@ Version Control
       <td><code>git clone https://github.com/openslide/openslide-winbuild.git</code></td>
     </tr>
     <tr>
-      <th><a href="https://github.com/openslide/openslide.github.com">Website</a></th>
-      <td><code>git clone https://github.com/openslide/openslide.github.com.git</code></td>
+      <th><a href="https://github.com/openslide/openslide.github.io">Website</a></th>
+      <td><code>git clone https://github.com/openslide/openslide.github.io.git</code></td>
     </tr>
     <tr>
       <th><a href="https://github.com/openslide/openslide-automation">Old Buildbot configuration</a></th>
