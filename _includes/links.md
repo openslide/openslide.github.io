@@ -2,7 +2,7 @@
 [download]: /download/
 [download-windows]: /download/#windows-binaries
 [download-pypi]: https://pypi.python.org/pypi/openslide-python#downloads
-[lgplv2.1]: https://raw.github.com/openslide/openslide/master/lgpl-2.1.txt
+[lgplv2.1]: https://raw.github.com/openslide/openslide/main/lgpl-2.1.txt
 [demo]: /demo/
 [other-projects]: /other-projects/
 [github]: https://github.com/openslide
