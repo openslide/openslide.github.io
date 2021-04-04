@@ -23,8 +23,6 @@ OpenSlide will detect a file as Ventana if:
  2. The `XMP` tag contains valid XML.
  3. The XML contains an `iScan` element, either as the root element or as a child of a `Metadata` root element.
 
-To open Ventana files, OpenSlide must be built with libtiff 4 or above.
-
 
 Associated Images
 -----------------

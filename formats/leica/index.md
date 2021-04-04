@@ -24,8 +24,6 @@ OpenSlide will detect a file as Leica if:
     - `http://www.leica-microsystems.com/scn/2010/03/10`
     - `http://www.leica-microsystems.com/scn/2010/10/01`
 
-To open Leica files, OpenSlide must be built with libtiff 4 or above.
-
 
 Relevant TIFF tags
 ------------------
