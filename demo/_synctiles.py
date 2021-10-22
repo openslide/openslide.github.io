@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
