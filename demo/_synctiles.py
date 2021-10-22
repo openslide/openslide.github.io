@@ -19,6 +19,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from argparse import ArgumentParser
 import base64
 import boto3
 from hashlib import md5, sha256
@@ -28,7 +29,6 @@ from multiprocessing import Pool
 import openslide
 from openslide import OpenSlide, ImageSlide, OpenSlideError
 from openslide.deepzoom import DeepZoomGenerator
-from optparse import OptionParser
 import os
 import posixpath as urlpath
 import re
@@ -441,13 +441,10 @@ def sync_slides(workers):
 
 
 if __name__ == '__main__':
-    parser = OptionParser(usage='Usage: %prog [options]')
-    parser.add_option('-j', '--jobs', metavar='COUNT', dest='workers',
-                type='int', default=4,
+    parser = ArgumentParser()
+    parser.add_argument('-j', '--jobs', metavar='COUNT', dest='workers',
+                type=int, default=4,
                 help='number of worker processes to start [4]')
 
-    (opts, args) = parser.parse_args()
-    if args:
-        parser.error('Too many arguments')
-
-    sync_slides(opts.workers)
+    args = parser.parse_args()
+    sync_slides(args.workers)
