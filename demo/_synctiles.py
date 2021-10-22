@@ -22,8 +22,8 @@
 import boto
 from boto.exception import S3ResponseError
 from boto.s3.cors import CORSConfiguration
-from io import StringIO
 from hashlib import sha256
+from io import BytesIO
 import json
 from multiprocessing import Pool
 import openslide
@@ -122,7 +122,7 @@ def sync_tile(args):
         slide_path, associated, level, address, key_name, cur_md5 = args
         dz = generator_cache.get_dz(slide_path, associated)
         tile = dz.get_tile(level, address)
-        buf = StringIO()
+        buf = BytesIO()
         tile.save(buf, FORMAT, quality=QUALITY)
         buf.seek(0)
         key = upload_bucket.new_key(key_name)
@@ -351,7 +351,7 @@ def sync_slides(workers):
     metadata = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
-        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}') \
+        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()) \
                 .hexdigest()[:8],
         'groups': [],
     }
