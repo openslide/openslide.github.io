@@ -22,7 +22,7 @@
 import boto
 from boto.exception import S3ResponseError
 from boto.s3.cors import CORSConfiguration
-from cStringIO import StringIO
+from io import StringIO
 from hashlib import sha256
 import json
 from multiprocessing import Pool
@@ -38,7 +38,7 @@ import shutil
 import sys
 from tempfile import mkdtemp
 from unicodedata import normalize
-from urlparse import urljoin
+from urllib.parse import urljoin
 from zipfile import ZipFile
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
@@ -100,7 +100,7 @@ class GeneratorCache(object):
             self._generators = {
                 None: generator(slide)
             }
-            for name, image in slide.associated_images.iteritems():
+            for name, image in slide.associated_images.items():
                 self._generators[name] = generator(ImageSlide(image))
         return self._generators[associated]
 
@@ -132,17 +132,17 @@ def sync_tile(args):
             key.set_contents_from_file(buf, md5=(md5_hex, md5_b64),
                         policy='public-read', headers=HEADERS_CACHE)
         return key_name
-    except BaseException, e:
+    except BaseException as e:
         return e
 
 
 def enumerate_tiles(slide_path, associated, dz, key_imagepath, key_md5sums):
     """Enumerate tiles in a single image."""
-    for level in xrange(dz.level_count):
+    for level in range(dz.level_count):
         key_levelpath = urlpath.join(key_imagepath, str(level))
         cols, rows = dz.level_tiles[level]
-        for row in xrange(rows):
-            for col in xrange(cols):
+        for row in range(rows):
+            for col in range(cols):
                 key_name = urlpath.join(key_levelpath, '%d_%d.%s' % (
                                 col, row, FORMAT))
                 yield (slide_path, associated, level, (col, row), key_name,
@@ -162,8 +162,8 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
             key_md5sums)
 
     def progress():
-        print "Tiling %s %s: %d/%d tiles\r" % (slide_relpath,
-                associated_slug, count, total),
+        print("Tiling %s %s: %d/%d tiles\r" % (slide_relpath,
+                associated_slug, count, total), end=' ')
         sys.stdout.flush()
 
     # Sync tiles
@@ -177,7 +177,7 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
         if count % 100 == 0:
             progress()
     progress()
-    print
+    print()
 
     # Format tile source
     source = {
@@ -221,7 +221,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     try:
         metadata = bucket.new_key(metadata_key_name).get_contents_as_string()
         metadata = json.loads(metadata)
-    except S3ResponseError, e:
+    except S3ResponseError as e:
         if e.status == 404:
             metadata = None
         else:
@@ -234,7 +234,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     tempdir = mkdtemp(prefix='synctiles-', dir='/var/tmp')
     try:
         # Fetch slide
-        print 'Fetching %s...' % slide_relpath
+        print('Fetching %s...' % slide_relpath)
         count = 0
         hash = sha256()
         slide_path = os.path.join(tempdir, urlpath.basename(slide_relpath))
@@ -260,7 +260,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         except OpenSlideError:
             if urlpath.splitext(slide_relpath)[1] == '.zip':
                 # Unzip slide
-                print 'Extracting %s...' % slide_relpath
+                print('Extracting %s...' % slide_relpath)
                 temp_path = mkdtemp(dir=tempdir)
                 with ZipFile(slide_path) as zf:
                     zf.extractall(path=temp_path)
@@ -276,7 +276,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         # slide will be None if we can't read it
 
         # Enumerate existing keys
-        print "Enumerating keys for %s..." % slide_relpath
+        print("Enumerating keys for %s..." % slide_relpath)
         key_md5sums = {}
         for key in bucket.list(prefix=key_basepath + '/'):
             key_md5sums[key.name] = key.etag.strip('"')
@@ -324,7 +324,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     for name in metadata_key_name, properties_key_name:
         key_md5sums.pop(name, None)
     if key_md5sums:
-        print "Pruning %d keys for %s..." % (len(key_md5sums), slide_relpath)
+        print("Pruning %d keys for %s..." % (len(key_md5sums), slide_relpath))
         delete_result = bucket.delete_keys(key_md5sums, quiet=True)
         if delete_result.errors:
             raise IOError('Failed to delete %d keys' %
@@ -357,7 +357,7 @@ def sync_slides(workers):
                 openslide.__version__, STAMP_VERSION)).hexdigest()[:8],
         'groups': [],
     }
-    print 'OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % metadata
+    print('OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % metadata)
 
     # Get openslide-testdata index
     r = requests.get(urljoin(DOWNLOAD_BASE_URL, DOWNLOAD_INDEX))
@@ -368,14 +368,14 @@ def sync_slides(workers):
     bucket = connect_bucket()
 
     # Set bucket configuration
-    print "Configuring bucket..."
+    print("Configuring bucket...")
     cors = CORSConfiguration()
     cors.add_rule(['GET'], CORS_ORIGINS)
     bucket.set_cors(cors)
 
     # Store static files
-    print "Storing static files..."
-    for relpath, opts in BUCKET_STATIC.iteritems():
+    print("Storing static files...")
+    for relpath, opts in BUCKET_STATIC.items():
         key = bucket.new_key(relpath)
         key.set_contents_from_string(opts.get('data', ''),
                 headers=opts.get('headers', {}), policy='public-read')
@@ -384,13 +384,13 @@ def sync_slides(workers):
     try:
         old_stamp = json.loads(bucket.new_key(METADATA_NAME).
                 get_contents_as_string()).get('stamp')
-    except S3ResponseError, e:
+    except S3ResponseError as e:
         if e.status == 404:
             old_stamp = None
         else:
             raise
     if metadata['stamp'] != old_stamp:
-        print 'Marking bucket dirty...'
+        print('Marking bucket dirty...')
         upload_status(bucket, dirty=True, stamp=old_stamp)
 
     # Tile and upload slides
@@ -428,11 +428,11 @@ def sync_slides(workers):
         pool.join()
 
     # Upload metadata
-    print 'Storing metadata...'
+    print('Storing metadata...')
     upload_metadata(bucket, METADATA_NAME, metadata, False)
 
     # Mark bucket clean
-    print 'Marking bucket clean...'
+    print('Marking bucket clean...')
     upload_status(bucket, stamp=metadata['stamp'])
 
 
