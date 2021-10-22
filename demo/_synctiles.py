@@ -44,7 +44,7 @@ from zipfile import ZipFile
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'
 S3_REGION = 'us-east-1'
-BASE_URL = 'https://%s.s3.dualstack.%s.amazonaws.com/' % (S3_BUCKET, S3_REGION)
+BASE_URL = f'https://{S3_BUCKET}.s3.dualstack.{S3_REGION}.amazonaws.com/'
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -128,7 +128,7 @@ def sync_tile(args):
         key = upload_bucket.new_key(key_name)
         md5_hex, md5_b64 = key.compute_md5(buf)
         if cur_md5 != md5_hex:
-            key.content_type = 'image/%s' % FORMAT
+            key.content_type = f'image/{FORMAT}'
             key.set_contents_from_file(buf, md5=(md5_hex, md5_b64),
                         policy='public-read', headers=HEADERS_CACHE)
         return key_name
@@ -143,8 +143,7 @@ def enumerate_tiles(slide_path, associated, dz, key_imagepath, key_md5sums):
         cols, rows = dz.level_tiles[level]
         for row in range(rows):
             for col in range(cols):
-                key_name = urlpath.join(key_levelpath, '%d_%d.%s' % (
-                                col, row, FORMAT))
+                key_name = urlpath.join(key_levelpath, f'{col}_{row}.{FORMAT}')
                 yield (slide_path, associated, level, (col, row), key_name,
                         key_md5sums.get(key_name))
 
@@ -157,13 +156,13 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
     count = 0
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
-    key_imagepath = urlpath.join(key_basepath, '%s_files' % associated_slug)
+    key_imagepath = urlpath.join(key_basepath, f'{associated_slug}_files')
     iterator = enumerate_tiles(slide_path, associated, dz, key_imagepath,
             key_md5sums)
 
     def progress():
-        print("Tiling %s %s: %d/%d tiles\r" % (slide_relpath,
-                associated_slug, count, total), end=' ')
+        print(f"Tiling {slide_relpath} {associated_slug}: {count}/{total} tiles\r",
+                end='')
         sys.stdout.flush()
 
     # Sync tiles
@@ -234,7 +233,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     tempdir = mkdtemp(prefix='synctiles-', dir='/var/tmp')
     try:
         # Fetch slide
-        print('Fetching %s...' % slide_relpath)
+        print(f'Fetching {slide_relpath}...')
         count = 0
         hash = sha256()
         slide_path = os.path.join(tempdir, urlpath.basename(slide_relpath))
@@ -249,9 +248,9 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
                 hash.update(buf)
                 count += len(buf)
         if count != int(r.headers['Content-Length']):
-            raise IOError('Short read fetching %s' % slide_relpath)
+            raise IOError(f'Short read fetching {slide_relpath}')
         if hash.hexdigest() != slide_info['sha256']:
-            raise IOError('Hash mismatch fetching %s' % slide_relpath)
+            raise IOError(f'Hash mismatch fetching {slide_relpath}')
 
         # Open slide
         slide = None
@@ -260,7 +259,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         except OpenSlideError:
             if urlpath.splitext(slide_relpath)[1] == '.zip':
                 # Unzip slide
-                print('Extracting %s...' % slide_relpath)
+                print(f'Extracting {slide_relpath}...')
                 temp_path = mkdtemp(dir=tempdir)
                 with ZipFile(slide_path) as zf:
                     zf.extractall(path=temp_path)
@@ -276,7 +275,7 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         # slide will be None if we can't read it
 
         # Enumerate existing keys
-        print("Enumerating keys for %s..." % slide_relpath)
+        print(f"Enumerating keys for {slide_relpath}...")
         key_md5sums = {}
         for key in bucket.list(prefix=key_basepath + '/'):
             key_md5sums[key.name] = key.etag.strip('"')
@@ -324,11 +323,10 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     for name in metadata_key_name, properties_key_name:
         key_md5sums.pop(name, None)
     if key_md5sums:
-        print("Pruning %d keys for %s..." % (len(key_md5sums), slide_relpath))
+        print(f"Pruning {len(key_md5sums)} keys for {slide_relpath}...")
         delete_result = bucket.delete_keys(key_md5sums, quiet=True)
         if delete_result.errors:
-            raise IOError('Failed to delete %d keys' %
-                    len(delete_result.errors))
+            raise IOError(f'Failed to delete {len(delete_result.errors)} keys')
 
     # Update metadata
     if 'properties' in metadata:
@@ -353,11 +351,11 @@ def sync_slides(workers):
     metadata = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
-        'stamp': sha256('%s %s %s' % (openslide.__library_version__,
-                openslide.__version__, STAMP_VERSION)).hexdigest()[:8],
+        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}') \
+                .hexdigest()[:8],
         'groups': [],
     }
-    print('OpenSlide %(openslide)s, OpenSlide Python %(openslide_python)s' % metadata)
+    print(f'OpenSlide {metadata["openslide"]}, OpenSlide Python {metadata["openslide_python"]}')
 
     # Get openslide-testdata index
     r = requests.get(urljoin(DOWNLOAD_BASE_URL, DOWNLOAD_INDEX))
