@@ -3,7 +3,7 @@
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2015 Carnegie Mellon University
-# Copyright (c) 2016 Benjamin Gilbert
+# Copyright (c) 2016-2021 Benjamin Gilbert
 #
 # This library is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -19,10 +19,9 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import boto
-from boto.exception import S3ResponseError
-from boto.s3.cors import CORSConfiguration
-from hashlib import sha256
+import base64
+import boto3
+from hashlib import md5, sha256
 from io import BytesIO
 import json
 from multiprocessing import Pool
@@ -67,17 +66,11 @@ GROUP_NAME_MAP = {
 BUCKET_STATIC = {
     'robots.txt': {
         'data': 'User-agent: *\nDisallow: /\n',
-        'headers': {
-            'Content-Type': 'text/plain',
-        },
+        'content-type': 'text/plain',
     },
 }
-HEADERS_NOCACHE = {
-    'Cache-Control': 'no-cache',
-}
-HEADERS_CACHE = {
-    'Cache-Control': 'public, max-age=31536000',
-}
+CACHE_CONTROL_NOCACHE = 'no-cache'
+CACHE_CONTROL_CACHE = 'public, max-age=31536000'
 
 
 def slugify(text):
@@ -106,14 +99,14 @@ class GeneratorCache(object):
 
 
 def connect_bucket():
-    conn = boto.connect_s3()
-    return conn.get_bucket(S3_BUCKET)
+    conn = boto3.resource('s3')
+    return conn, conn.Bucket(S3_BUCKET)
 
 
 def pool_init():
     global generator_cache, upload_bucket
     generator_cache = GeneratorCache()
-    upload_bucket = connect_bucket()
+    _, upload_bucket = connect_bucket()
 
 
 def sync_tile(args):
@@ -124,13 +117,15 @@ def sync_tile(args):
         tile = dz.get_tile(level, address)
         buf = BytesIO()
         tile.save(buf, FORMAT, quality=QUALITY)
-        buf.seek(0)
-        key = upload_bucket.new_key(key_name)
-        md5_hex, md5_b64 = key.compute_md5(buf)
-        if cur_md5 != md5_hex:
-            key.content_type = f'image/{FORMAT}'
-            key.set_contents_from_file(buf, md5=(md5_hex, md5_b64),
-                        policy='public-read', headers=HEADERS_CACHE)
+        new_md5 = md5(buf.getbuffer())
+        if cur_md5 != new_md5.hexdigest():
+            upload_bucket.Object(key_name).put(
+                ACL='public-read',
+                Body=buf.getvalue(),
+                CacheControl=CACHE_CONTROL_CACHE,
+                ContentMD5=base64.b64encode(new_md5.digest()).decode(),
+                ContentType=f'image/{FORMAT}',
+            )
         return key_name
     except BaseException as e:
         return e
@@ -202,14 +197,15 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
 
 
 def upload_metadata(bucket, path, item, cache=True):
-    key = bucket.new_key(path)
-    key.content_type = 'application/json'
-    buf = json.dumps(item, indent=1, sort_keys=True)
-    key.set_contents_from_string(buf, policy='public-read',
-            headers=HEADERS_CACHE if cache else HEADERS_NOCACHE)
+    bucket.Object(path).put(
+        ACL='public-read',
+        Body=json.dumps(item, indent=1, sort_keys=True).encode(),
+        CacheControl=CACHE_CONTROL_CACHE if cache else CACHE_CONTROL_NOCACHE,
+        ContentType='application/json',
+    )
 
 
-def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
+def sync_slide(stamp, pool, conn, bucket, slide_relpath, slide_info):
     """Generate and upload tiles and metadata for a single slide."""
 
     key_basepath = urlpath.splitext(slide_relpath)[0].lower()
@@ -218,13 +214,9 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
 
     # Get current metadata
     try:
-        metadata = bucket.new_key(metadata_key_name).get_contents_as_string()
-        metadata = json.loads(metadata)
-    except S3ResponseError as e:
-        if e.status == 404:
-            metadata = None
-        else:
-            raise
+        metadata = json.load(bucket.Object(metadata_key_name).get()['Body'])
+    except conn.meta.client.exceptions.NoSuchKey:
+        metadata = None
 
     # Return if metadata is current
     if metadata is not None and metadata['stamp'] == stamp:
@@ -277,8 +269,8 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
         # Enumerate existing keys
         print(f"Enumerating keys for {slide_relpath}...")
         key_md5sums = {}
-        for key in bucket.list(prefix=key_basepath + '/'):
-            key_md5sums[key.name] = key.etag.strip('"')
+        for obj in bucket.objects.filter(Prefix=key_basepath + '/'):
+            key_md5sums[obj.key] = obj.e_tag.strip('"')
 
         # Initialize metadata
         metadata = {
@@ -323,10 +315,18 @@ def sync_slide(stamp, pool, bucket, slide_relpath, slide_info):
     for name in metadata_key_name, properties_key_name:
         key_md5sums.pop(name, None)
     if key_md5sums:
-        print(f"Pruning {len(key_md5sums)} keys for {slide_relpath}...")
-        delete_result = bucket.delete_keys(key_md5sums, quiet=True)
-        if delete_result.errors:
-            raise IOError(f'Failed to delete {len(delete_result.errors)} keys')
+        to_delete = [k for k in key_md5sums]
+        print(f"Pruning {len(to_delete)} keys for {slide_relpath}...")
+        while to_delete:
+            cur_delete, to_delete = to_delete[0:1000], to_delete[1000:]
+            delete_result = bucket.delete_objects(
+                Delete={
+                    'Objects': [{'Key': k} for k in cur_delete],
+                    'Quiet': True,
+                },
+            )
+            if 'Errors' in delete_result:
+                raise IOError(f'Failed to delete {len(delete_result["Errors"])} keys')
 
     # Update metadata
     if 'properties' in metadata:
@@ -363,30 +363,36 @@ def sync_slides(workers):
     slides = r.json()
 
     # Connect to S3
-    bucket = connect_bucket()
+    conn, bucket = connect_bucket()
 
     # Set bucket configuration
     print("Configuring bucket...")
-    cors = CORSConfiguration()
-    cors.add_rule(['GET'], CORS_ORIGINS)
-    bucket.set_cors(cors)
+    bucket.Cors().put(
+        CORSConfiguration={
+            'CORSRules': [
+                {
+                    'AllowedMethods': ['GET'],
+                    'AllowedOrigins': CORS_ORIGINS,
+                },
+            ],
+        }
+    )
 
     # Store static files
     print("Storing static files...")
     for relpath, opts in BUCKET_STATIC.items():
-        key = bucket.new_key(relpath)
-        key.set_contents_from_string(opts.get('data', ''),
-                headers=opts.get('headers', {}), policy='public-read')
+        bucket.Object(relpath).put(
+            ACL='public-read',
+            Body=opts.get('data', '').encode(),
+            ContentType=opts.get('content-type'),
+        )
 
     # If the stamp is changing, mark bucket dirty
     try:
-        old_stamp = json.loads(bucket.new_key(METADATA_NAME).
-                get_contents_as_string()).get('stamp')
-    except S3ResponseError as e:
-        if e.status == 404:
-            old_stamp = None
-        else:
-            raise
+        stream = bucket.Object(METADATA_NAME).get()['Body']
+        old_stamp = json.load(stream).get('stamp')
+    except conn.meta.client.exceptions.NoSuchKey:
+        old_stamp = None
     if metadata['stamp'] != old_stamp:
         print('Marking bucket dirty...')
         upload_status(bucket, dirty=True, stamp=old_stamp)
@@ -397,8 +403,8 @@ def sync_slides(workers):
     pool = Pool(workers, pool_init)
     try:
         for slide_relpath, slide_info in sorted(slides.items()):
-            slide = sync_slide(metadata['stamp'], pool, bucket, slide_relpath,
-                    slide_info)
+            slide = sync_slide(metadata['stamp'], pool, conn, bucket,
+                    slide_relpath, slide_info)
             # Skip unreadable slides
             if 'slide' in slide:
                 group_name = urlpath.dirname(slide_relpath)
