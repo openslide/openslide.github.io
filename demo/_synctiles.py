@@ -205,7 +205,7 @@ def upload_metadata(bucket, path, item, cache=True):
     )
 
 
-def sync_slide(stamp, pool, conn, bucket, slide_relpath, slide_info):
+def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
     """Generate and upload tiles and metadata for a single slide."""
 
     key_basepath = urlpath.splitext(slide_relpath)[0].lower()
@@ -295,19 +295,28 @@ def sync_slide(stamp, pool, conn, bucket, slide_relpath, slide_info):
             except (KeyError, ValueError):
                 mpp = None
 
-            # Tile slide
-            def do_tile(associated, image):
-                dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
-                            limit_bounds=LIMIT_BOUNDS)
-                return sync_image(pool, slide_relpath, slide_path,
-                        associated, dz, key_basepath, key_md5sums,
-                        mpp if associated is None else None)
-            metadata['slide'] = do_tile(None, slide)
+            # Start compute pool
+            pool = Pool(workers, pool_init)
+            try:
+                # Tile slide
+                def do_tile(associated, image):
+                    dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
+                                limit_bounds=LIMIT_BOUNDS)
+                    return sync_image(pool, slide_relpath, slide_path,
+                            associated, dz, key_basepath, key_md5sums,
+                            mpp if associated is None else None)
+                metadata['slide'] = do_tile(None, slide)
 
-            # Tile associated images
-            for associated, image in sorted(slide.associated_images.items()):
-                cur_props = do_tile(associated, ImageSlide(image))
-                metadata['associated'].append(cur_props)
+                # Tile associated images
+                for associated, image in sorted(slide.associated_images.items()):
+                    cur_props = do_tile(associated, ImageSlide(image))
+                    metadata['associated'].append(cur_props)
+            except:
+                pool.terminate()
+                raise
+            finally:
+                pool.close()
+                pool.join()
     finally:
         shutil.rmtree(tempdir)
 
@@ -422,16 +431,8 @@ def retile_slide(ctxfile, slide_relpath, summarydir, workers):
     slide_info = context['slides'].get(slide_relpath)
     if slide_info is None:
         raise Exception(f'No such slide {slide_relpath}')
-    pool = Pool(workers, pool_init)
-    try:
-        summary = sync_slide(context['stamp'], pool, conn, bucket,
-                slide_relpath, slide_info)
-    except:
-        pool.terminate()
-        raise
-    finally:
-        pool.close()
-        pool.join()
+    summary = sync_slide(context['stamp'], conn, bucket, slide_relpath,
+            slide_info, workers)
 
     # Write summary if the slide was readable
     if 'slide' in summary:
