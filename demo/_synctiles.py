@@ -344,23 +344,24 @@ def upload_status(bucket, dirty=False, stamp=None):
     upload_metadata(bucket, STATUS_NAME, status, False)
 
 
-def sync_slides(workers):
-    """Tile openslide-testdata and synchronize into S3."""
-
-    # Initialize metadata
-    metadata = {
-        'openslide': openslide.__library_version__,
-        'openslide_python': openslide.__version__,
-        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()) \
-                .hexdigest()[:8],
-        'groups': [],
-    }
-    print(f'OpenSlide {metadata["openslide"]}, OpenSlide Python {metadata["openslide_python"]}')
+def start_retile(ctxfile, matrixfile):
+    """Subcommand to initialize a retiling run.  Writes common state into
+    ctxfile and a list of slides to be retiled into matrixfile."""
 
     # Get openslide-testdata index
     r = requests.get(urljoin(DOWNLOAD_BASE_URL, DOWNLOAD_INDEX))
     r.raise_for_status()
     slides = r.json()
+
+    # Initialize context for the run
+    context = {
+        'openslide': openslide.__library_version__,
+        'openslide_python': openslide.__version__,
+        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()) \
+                .hexdigest()[:8],
+        'slides': slides,
+    }
+    print(f'OpenSlide {context["openslide"]}, OpenSlide Python {context["openslide_python"]}')
 
     # Connect to S3
     conn, bucket = connect_bucket()
@@ -393,37 +394,38 @@ def sync_slides(workers):
         old_stamp = json.load(stream).get('stamp')
     except conn.meta.client.exceptions.NoSuchKey:
         old_stamp = None
-    if metadata['stamp'] != old_stamp:
+    if context['stamp'] != old_stamp:
         print('Marking bucket dirty...')
         upload_status(bucket, dirty=True, stamp=old_stamp)
 
-    # Tile and upload slides
-    cur_group_name = None
-    cur_slides = None
+    # Write output files
+    with open(ctxfile, 'w') as fh:
+        json.dump(context, fh)
+    with open(matrixfile, 'w') as fh:
+        json.dump({
+            "slide": sorted(slides.keys()),
+        }, fh)
+
+
+def retile_slide(ctxfile, slide_relpath, summarydir, workers):
+    """Subcommand to retile one slide into S3.  Writes summary data into
+    summarydir."""
+
+    # Load context
+    with open(ctxfile) as fh:
+        context = json.load(fh)
+
+    # Connect to S3
+    conn, bucket = connect_bucket()
+
+    # Tile slide
+    slide_info = context['slides'].get(slide_relpath)
+    if slide_info is None:
+        raise Exception(f'No such slide {slide_relpath}')
     pool = Pool(workers, pool_init)
     try:
-        for slide_relpath, slide_info in sorted(slides.items()):
-            slide = sync_slide(metadata['stamp'], pool, conn, bucket,
-                    slide_relpath, slide_info)
-            # Skip unreadable slides
-            if 'slide' in slide:
-                group_name = urlpath.dirname(slide_relpath)
-                if group_name != cur_group_name:
-                    cur_group_name = group_name
-                    cur_slides = []
-                    metadata['groups'].append({
-                        'name': GROUP_NAME_MAP.get(group_name, group_name),
-                        'slides': cur_slides
-                    })
-                # Rearrange slide-level metadata for top-level metadata
-                slide.pop('properties', None)
-                slide.pop('stamp', None)
-                slide.update({
-                    'credit': slide_info.get('credit'),
-                    'description': slide_info['description'],
-                    'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
-                })
-                cur_slides.append(slide)
+        summary = sync_slide(context['stamp'], pool, conn, bucket,
+                slide_relpath, slide_info)
     except:
         pool.terminate()
         raise
@@ -431,20 +433,106 @@ def sync_slides(workers):
         pool.close()
         pool.join()
 
+    # Write summary if the slide was readable
+    if 'slide' in summary:
+        summary.pop('properties', None)
+        summary.pop('stamp', None)
+        summary.update({
+            'credit': slide_info.get('credit'),
+            'description': slide_info['description'],
+            'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
+        })
+        summaryfile = os.path.join(summarydir, slide_relpath)
+        os.makedirs(os.path.dirname(summaryfile), exist_ok=True)
+        with open(summaryfile, 'w') as fh:
+            json.dump(summary, fh)
+
+
+def finish_retile(ctxfile, summarydir):
+    """Subcommand to finish a retiling run.  Reads context file and summary
+    dir and writes metadata to S3."""
+
+    # Load context
+    with open(ctxfile) as fh:
+        context = json.load(fh)
+
+    # Connect to S3
+    conn, bucket = connect_bucket()
+
+    # Build group list
+    groups = []
+    cur_group_name = None
+    cur_slides = None
+    for slide_relpath, slide_info in sorted(context['slides'].items()):
+        summaryfile = os.path.join(summarydir, slide_relpath)
+        if os.path.exists(summaryfile):
+            with open(summaryfile) as fh:
+                summary = json.load(fh)
+            group_name = urlpath.dirname(slide_relpath)
+            if group_name != cur_group_name:
+                cur_group_name = group_name
+                cur_slides = []
+                groups.append({
+                    'name': GROUP_NAME_MAP.get(group_name, group_name),
+                    'slides': cur_slides
+                })
+            cur_slides.append(summary)
+
     # Upload metadata
     print('Storing metadata...')
+    metadata = {
+        'openslide': context['openslide'],
+        'openslide_python': context['openslide_python'],
+        'stamp': context['stamp'],
+        'groups': groups,
+    }
     upload_metadata(bucket, METADATA_NAME, metadata, False)
 
     # Mark bucket clean
     print('Marking bucket clean...')
-    upload_status(bucket, stamp=metadata['stamp'])
+    upload_status(bucket, stamp=context['stamp'])
 
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('-j', '--jobs', metavar='COUNT', dest='workers',
+    subparsers = parser.add_subparsers(metavar='subcommand', required=True)
+
+    parser_start = subparsers.add_parser('start',
+            help='start a retiling run')
+    parser_start.add_argument('context_file',
+            help='path to context file (output)')
+    parser_start.add_argument('matrix_file',
+            help='path to list of slides to tile (output)')
+    parser_start.set_defaults(cmd='start')
+
+    parser_tile = subparsers.add_parser('tile',
+            help='retile one slide')
+    parser_tile.add_argument('context_file',
+            help='path to context file')
+    parser_tile.add_argument('slide',
+            help='slide identifier (from matrix file)')
+    parser_tile.add_argument('summary_dir',
+            help='path to summary directory (output)')
+    parser_tile.add_argument('-j', '--jobs', metavar='COUNT', dest='workers',
                 type=int, default=4,
                 help='number of worker processes to start [4]')
+    parser_tile.set_defaults(cmd='tile')
+
+    parser_finish = subparsers.add_parser('finish',
+            help='finish a retiling run')
+    parser_finish.add_argument('context_file',
+            help='path to context file')
+    parser_finish.add_argument('summary_dir',
+            help='path to summary directory')
+    parser_finish.set_defaults(cmd='finish')
 
     args = parser.parse_args()
-    sync_slides(args.workers)
+    if args.cmd == 'start':
+        start_retile(args.context_file, args.matrix_file)
+    elif args.cmd == 'tile':
+        retile_slide(args.context_file, args.slide, args.summary_dir,
+                args.workers)
+    elif args.cmd == 'finish':
+        finish_retile(args.context_file, args.summary_dir)
+    else:
+        raise Exception('unimplemented subcommand')
