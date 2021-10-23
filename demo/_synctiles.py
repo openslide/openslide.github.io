@@ -79,41 +79,29 @@ def slugify(text):
     return re.sub('[^a-z0-9]+', '_', text)
 
 
-class GeneratorCache(object):
-    def __init__(self):
-        self._slide_path = ''
-        self._generators = {}
-
-    def get_dz(self, slide_path, associated=None):
-        if slide_path != self._slide_path:
-            generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
-                        OVERLAP, limit_bounds=LIMIT_BOUNDS)
-            slide = OpenSlide(slide_path)
-            self._slide_path = slide_path
-            self._generators = {
-                None: generator(slide)
-            }
-            for name, image in slide.associated_images.items():
-                self._generators[name] = generator(ImageSlide(image))
-        return self._generators[associated]
-
-
 def connect_bucket():
     conn = boto3.resource('s3')
     return conn, conn.Bucket(S3_BUCKET)
 
 
-def pool_init():
-    global generator_cache, upload_bucket
-    generator_cache = GeneratorCache()
+def pool_init(slide_path):
+    global upload_bucket, dz_generators
     _, upload_bucket = connect_bucket()
+    generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
+            OVERLAP, limit_bounds=LIMIT_BOUNDS)
+    slide = OpenSlide(slide_path)
+    dz_generators = {
+        None: generator(slide)
+    }
+    for name, image in slide.associated_images.items():
+        dz_generators[name] = generator(ImageSlide(image))
 
 
 def sync_tile(args):
     """Generate and possibly upload a tile."""
     try:
-        slide_path, associated, level, address, key_name, cur_md5 = args
-        dz = generator_cache.get_dz(slide_path, associated)
+        associated, level, address, key_name, cur_md5 = args
+        dz = dz_generators[associated]
         tile = dz.get_tile(level, address)
         buf = BytesIO()
         tile.save(buf, FORMAT, quality=QUALITY)
@@ -131,7 +119,7 @@ def sync_tile(args):
         return e
 
 
-def enumerate_tiles(slide_path, associated, dz, key_imagepath, key_md5sums):
+def enumerate_tiles(associated, dz, key_imagepath, key_md5sums):
     """Enumerate tiles in a single image."""
     for level in range(dz.level_count):
         key_levelpath = urlpath.join(key_imagepath, str(level))
@@ -139,12 +127,12 @@ def enumerate_tiles(slide_path, associated, dz, key_imagepath, key_md5sums):
         for row in range(rows):
             for col in range(cols):
                 key_name = urlpath.join(key_levelpath, f'{col}_{row}.{FORMAT}')
-                yield (slide_path, associated, level, (col, row), key_name,
+                yield (associated, level, (col, row), key_name,
                         key_md5sums.get(key_name))
 
 
-def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
-        key_md5sums, mpp=None):
+def sync_image(pool, slide_relpath, associated, dz, key_basepath, key_md5sums,
+        mpp=None):
     """Generate and upload tiles, and generate metadata, for a single image.
     Delete valid tiles from key_md5sums."""
 
@@ -152,8 +140,7 @@ def sync_image(pool, slide_relpath, slide_path, associated, dz, key_basepath,
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
     key_imagepath = urlpath.join(key_basepath, f'{associated_slug}_files')
-    iterator = enumerate_tiles(slide_path, associated, dz, key_imagepath,
-            key_md5sums)
+    iterator = enumerate_tiles(associated, dz, key_imagepath, key_md5sums)
 
     def progress():
         print(f"Tiling {slide_relpath} {associated_slug}: {count}/{total} tiles\r",
@@ -296,14 +283,14 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 mpp = None
 
             # Start compute pool
-            pool = Pool(workers, pool_init)
+            pool = Pool(workers, lambda: pool_init(slide_path))
             try:
                 # Tile slide
                 def do_tile(associated, image):
                     dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
                                 limit_bounds=LIMIT_BOUNDS)
-                    return sync_image(pool, slide_relpath, slide_path,
-                            associated, dz, key_basepath, key_md5sums,
+                    return sync_image(pool, slide_relpath, associated, dz,
+                            key_basepath, key_md5sums,
                             mpp if associated is None else None)
                 metadata['slide'] = do_tile(None, slide)
 
