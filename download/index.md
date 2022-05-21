@@ -106,9 +106,13 @@ Distribution Packages
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
         <code>yum install openslide-python</code><br>
-        <i>(RHEL/CentOS/Scientific Linux &ge; 7)</i>
+        <i>(RHEL/CentOS/Scientific Linux 7)</i>
       </td>
-      <td></td>
+      <td>
+        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
+        <code>yum install python3-openslide</code><br>
+        <i>(RHEL/CentOS Stream &ge; 8)</i>
+      </td>
     </tr>
     <tr>
       <th>Mac OS X</th>
