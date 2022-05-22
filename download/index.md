@@ -77,9 +77,7 @@ Distribution Packages
         <a href="http://www.ubuntu.com/">Ubuntu</a>
       </th>
       <td><code>apt-get install openslide-tools</code></td>
-      <td>
-        <code>apt-get install python-openslide</code><br>
-      </td>
+      <td></td>
       <td>
         <code>apt-get install python3-openslide</code><br>
       </td>
