@@ -52,14 +52,10 @@ Distribution Packages
 <table class="pinfo">
   <thead>
     <tr>
-      <th rowspan="2">Platform</th>
-      <th rowspan="2">Distribution</th>
-      <th rowspan="2">OpenSlide</th>
-      <th colspan="2">OpenSlide Python</th>
-    </tr>
-    <tr>
-      <th>Python 2</th>
-      <th>Python 3</th>
+      <th>Platform</th>
+      <th>Distribution</th>
+      <th>OpenSlide</th>
+      <th>OpenSlide Python</th>
     </tr>
   </thead>
   <tbody>
@@ -67,7 +63,6 @@ Distribution Packages
       <th>Linux</th>
       <th><a href="https://fedoraproject.org/">Fedora</a></th>
       <td><code>dnf install openslide</code></td>
-      <td></td>
       <td><code>dnf install python3-openslide</code></td>
     </tr>
     <tr>
@@ -77,7 +72,6 @@ Distribution Packages
         <a href="http://www.ubuntu.com/">Ubuntu</a>
       </th>
       <td><code>apt-get install openslide-tools</code></td>
-      <td></td>
       <td>
         <code>apt-get install python3-openslide</code><br>
       </td>
@@ -86,7 +80,6 @@ Distribution Packages
       <th>Linux</th>
       <th><a href="https://www.opensuse.org/">openSUSE</a></th>
       <td><code>zypper install openslide-tools</code></td>
-      <td></td>
       <td></td>
     </tr>
     <tr>
@@ -103,11 +96,6 @@ Distribution Packages
       </td>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install openslide-python</code><br>
-        <i>(RHEL/CentOS/Scientific Linux 7)</i>
-      </td>
-      <td>
-        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
         <code>yum install python3-openslide</code><br>
         <i>(RHEL/CentOS Stream &ge; 8)</i>
       </td>
@@ -116,7 +104,6 @@ Distribution Packages
       <th>Mac OS X</th>
       <th><a href="https://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
-      <td><code></code></td>
       <td><code>port install py310-openslide</code></td>
     </tr>
     <tr>
@@ -124,13 +111,11 @@ Distribution Packages
       <th><a href="http://brew.sh/">Homebrew</a></th>
       <td><code>brew install openslide</code></td>
       <td></td>
-      <td></td>
     </tr>
     <tr>
       <th>Python</th>
       <th><a href="https://pypi.python.org/pypi">PyPI</a></th>
       <td></td>
-      <td><code>pip install openslide-python</code></td>
       <td>
         <code>pip-python3 install openslide-python</code><br>
         <i>(or </i><code>pip-3.6</code><i>, </i><code>pip</code><i>, etc.)</i>
