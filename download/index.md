@@ -116,10 +116,7 @@ Distribution Packages
       <th>Python</th>
       <th><a href="https://pypi.python.org/pypi">PyPI</a></th>
       <td></td>
-      <td>
-        <code>pip-python3 install openslide-python</code><br>
-        <i>(or </i><code>pip-3.6</code><i>, </i><code>pip</code><i>, etc.)</i>
-      </td>
+      <td><code>python3 -m pip install openslide-python</code></td>
     </tr>
   </tbody>
 </table>
