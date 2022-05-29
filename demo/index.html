@@ -64,7 +64,7 @@
 <script type="text/javascript" src="openseadragon.min.js"></script>
 <script type="text/javascript" src="openseadragon-scalebar.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
+$(function() {
     var stamp;
     var groups;
     var viewer;
@@ -94,11 +94,11 @@ $(document).ready(function() {
                     // show/hide retiling message
                     if (data.dirty) {
                         $('#retiling').slideDown(200, function() {
-                            $(window).resize();
+                            $(window).trigger("resize");
                         });
                     } else {
                         $('#retiling').hide();
-                        $(window).resize();
+                        $(window).trigger("resize");
                     }
                 }
             },
@@ -148,7 +148,7 @@ $(document).ready(function() {
                     '<br>OpenSeadragon ' + OpenSeadragon.version.versionStr);
         top.append(versions);
 
-        $(".load-image").click(function(ev) {
+        $(".load-image").on("click", function(ev) {
             open_slide($(this));
             ev.preventDefault();
         });
@@ -291,12 +291,12 @@ $(document).ready(function() {
 
     // CSS doesn't provide a good way to specify a div of height
     // (100% - height(header))
-    $(window).resize(function() {
+    $(window).on("resize", function() {
         $('#content').height($(window).height() -
                     $('#header').outerHeight() - 20);
         $('#view').height($('#viewpane').height() -
                     $('#retiling:visible').outerHeight());
-    }).resize();
+    }).trigger("resize");
 });
 </script>
 </body>
