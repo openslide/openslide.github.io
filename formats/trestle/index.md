@@ -110,4 +110,4 @@ of this TIFF tag)
 Test Data
 ---------
 
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Trestle/>
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Trestle/>

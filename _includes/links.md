@@ -7,7 +7,7 @@
 [other-projects]: /other-projects/
 [github]: https://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
-[testdata]: http://openslide.cs.cmu.edu/download/openslide-testdata/
+[testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/
 
 [doc-debugopts]: /docs/debugopts/
 [doc-newformat]: /docs/newformat/

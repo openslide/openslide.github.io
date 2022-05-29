@@ -124,4 +124,4 @@ OpenSlide mailing list.)*
 Test Data
 ---------
 
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Leica/>
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Leica/>

@@ -69,7 +69,7 @@ Distribution Packages
       <th>Linux</th>
       <th>
         <a href="https://www.debian.org/">Debian</a><br>
-        <a href="http://www.ubuntu.com/">Ubuntu</a>
+        <a href="https://ubuntu.com/">Ubuntu</a>
       </th>
       <td><code>apt-get install openslide-tools</code></td>
       <td>
@@ -108,7 +108,7 @@ Distribution Packages
     </tr>
     <tr>
       <th>Mac OS X</th>
-      <th><a href="http://brew.sh/">Homebrew</a></th>
+      <th><a href="https://brew.sh/">Homebrew</a></th>
       <td><code>brew install openslide</code></td>
       <td></td>
     </tr>

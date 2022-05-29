@@ -336,7 +336,7 @@ calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit` is
 Test Data
 ---------
 NDPI format
-: <http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
+: <https://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
 
 VMS format
-: <http://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/>
+: <https://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/>

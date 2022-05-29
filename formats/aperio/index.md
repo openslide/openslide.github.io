@@ -122,4 +122,4 @@ represented as properties prefixed with "`aperio.`".
 Test Data
 ---------
 
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/>
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/>

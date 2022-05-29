@@ -34,8 +34,8 @@ The [In Silico Brain Tumor Research Center][isbtrc] at
 [Pathology Image Database System][pidb] to extract images for analysis.
 
 [isbtrc]: https://wiki.nci.nih.gov/pages/viewpage.action?pageId=21698609
-[emory]: http://www.emory.edu/
-[pidb]: http://confluence.cci.emory.edu:8090/display/PIDB/Home
+[emory]: https://www.emory.edu/
+[pidb]: https://confluence.cci.emory.edu:8090/display/PIDB/Home
 
 
 caMicroscope
@@ -64,7 +64,7 @@ Algum
 The [Algum system][algum] at [Carnegie Mellon University][cmu] uses
 OpenSlide to display whole slide images.
 
-[cmu]: http://www.cmu.edu/
+[cmu]: https://www.cmu.edu/
 [algum]: http://algum.cs.cmu.edu/
 
 
@@ -87,5 +87,5 @@ Simagis Live
 [Smart Imaging Technologies][smartimtech] is using OpenSlide in their
 [Simagis Live][simagis-live] web-based image management system.
 
-[smartimtech]: http://smartimtech.com/
+[smartimtech]: https://smartimtech.com/
 [simagis-live]: http://live.simagis.com/

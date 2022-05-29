@@ -27,7 +27,7 @@ import os
 import requests
 from urlparse import urljoin
 
-TESTDATA_BASEURL = 'http://openslide.cs.cmu.edu/download/openslide-testdata/'
+TESTDATA_BASEURL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 BUFSIZE = 10 << 20
 IGNORE_FILENAMES = frozenset((
     'index.html',

@@ -159,8 +159,8 @@ Computer Science Department, Carnegie Mellon University
 [Abstract][tr-abstract]
 [PDF][tr-full]
 
-[paper-abstract]: http://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode;type=0
-[paper-html]: http://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode
+[paper-abstract]: https://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode;type=0
+[paper-html]: https://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode
 [paper-pdf]: http://download.openslide.org/docs/JPatholInform_2013_4_1_27_119005.pdf
 [tr-abstract]: http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html
 [tr-full]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
@@ -188,5 +188,5 @@ Acknowledgements
 ----------------
 OpenSlide has been supported by the [National Institutes of Health][nih] and the [Clinical and Translational Science Institute][ctsi] at the University of Pittsburgh.
 
-[nih]: http://www.nih.gov/
-[ctsi]: http://www.ctsi.pitt.edu/
+[nih]: https://www.nih.gov/
+[ctsi]: https://ctsi.pitt.edu/

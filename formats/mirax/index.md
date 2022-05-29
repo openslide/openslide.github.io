@@ -147,4 +147,4 @@ where it says "subtile", substitute "tile".
 
 Test Data
 ---------
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>

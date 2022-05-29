@@ -44,4 +44,4 @@ Many TIFF tags are encoded as properties starting with "`tiff.`".
 Test Data
 ---------
 
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Generic-TIFF/>
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Generic-TIFF/>

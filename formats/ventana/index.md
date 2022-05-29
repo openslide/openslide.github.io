@@ -53,4 +53,4 @@ prefixed with "`ventana.`".
 Test Data
 ---------
 
-<http://openslide.cs.cmu.edu/download/openslide-testdata/Ventana/>
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Ventana/>

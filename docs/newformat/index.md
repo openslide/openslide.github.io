@@ -9,8 +9,8 @@ driver.  When a slide is opened, the driver is responsible for parsing the
 slide file, loading its metadata, and locating its image tiles.  At runtime,
 the driver receives requests for pixel data, determines which tiles to load,
 decodes them to a buffer in a
-[Cairo-compatible pixel format](http://cairographics.org/manual/cairo-Image-Surfaces.html#cairo-format-t),
-and renders them to a [Cairo](http://cairographics.org/) surface.
+[Cairo-compatible pixel format](https://cairographics.org/manual/cairo-Image-Surfaces.html#cairo-format-t),
+and renders them to a [Cairo](https://cairographics.org/) surface.
 
 Your driver can use the *grid* module to map pixel coordinates to tile
 addresses:
@@ -265,7 +265,7 @@ OpenSlide's output is currently
 [limited to three color channels plus an alpha channel](https://github.com/openslide/openslide/issues/42),
 with a
 [maximum of 8 bits per channel](https://github.com/openslide/openslide/issues/41).
-These restrictions are partially due to [Cairo](http://cairographics.org/)
+These restrictions are partially due to [Cairo](https://cairographics.org/)
 limitations, but correcting them would also require changes to the OpenSlide
 API.
 
