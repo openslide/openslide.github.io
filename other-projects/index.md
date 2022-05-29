@@ -11,7 +11,7 @@ VIPS
 The [VIPS][vips] image processing system can use OpenSlide to read
 slide files.
 
-[vips]: http://www.vips.ecs.soton.ac.uk/
+[vips]: https://www.libvips.org/
 
 Collaborative Systems for Analyzing Tissue Microarrays
 ------------------------------------------------------

@@ -36,7 +36,7 @@ terms of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
 
 [Download][download]
 
-[deepzoom]: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
+[deepzoom]: https://docs.microsoft.com/en-us/previous-versions/windows/silverlight/dotnet-windows-silverlight/cc645050(v=vs.95)
 
 About OpenSlide
 ---------------

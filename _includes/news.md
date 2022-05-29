@@ -166,7 +166,7 @@ VIPS now supports OpenSlide, 2012-04-17
 The [VIPS image processing system][vips] can now read whole-slide images
 with OpenSlide.
 
-[vips]: http://www.vips.ecs.soton.ac.uk
+[vips]: https://www.libvips.org/
 
 OpenSlide version 3.2.6, 2012-02-23
 -----------------------------------
