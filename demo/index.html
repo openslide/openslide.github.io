@@ -244,7 +244,7 @@ $(function() {
                 blendTime: 0.1,
                 constrainDuringPan: true,
                 maxZoomPixelRatio: 2,
-                minZoomLevel: 1,
+                minZoomImageRatio: 1,
                 visibilityRatio: 1,
                 zoomPerScroll: 2
             });
@@ -253,7 +253,6 @@ $(function() {
                 viewer.source.getTileUrl = function() {
                     return getTileUrl.apply(this, arguments) + '?v=' + stamp;
                 };
-                viewer.source.minLevel = 8;
             });
             viewer.scalebar({
                 xOffset: 10,
