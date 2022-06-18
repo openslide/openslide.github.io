@@ -1,5 +1,11 @@
 {% include links.md %}
 
+OpenSlide Python version 1.2.0, 2022-06-17
+------------------------------------------
+OpenSlide Python 1.2.0 drops support for Python older than 3.7.  It also
+supports cache customization with OpenSlide 3.5.0, improves pixel read
+performance, and improves installation documentation.
+
 OpenSlide Python version 1.1.2, 2020-09-13
 ------------------------------------------
 OpenSlide Python 1.1.2 fixes compatibility with setuptools &ge; 46, Python
