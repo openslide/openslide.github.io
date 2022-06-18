@@ -277,10 +277,8 @@ This would also require API changes to fix.
 ## Contributing your code
 
 Please discuss your changes on the [openslide-users][users-subscribe]
-mailing list, *before* you are ready to submit them, so that we can help you
-integrate your code into the existing codebase.  You may also find the
-[generic advice on contributing to OpenSlide](https://github.com/openslide/openslide/wiki/ContributingPatches)
-helpful.
+mailing list or in a GitHub issue, *before* you are ready to submit them, so
+that we can help you integrate your code into the existing codebase.
 
 When contributing support for a new format, we *strongly* prefer that you
 also contribute example slide files for our [openslide-testdata][testdata]
