@@ -38,8 +38,8 @@ terms of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
 
 [deepzoom]: https://docs.microsoft.com/en-us/previous-versions/windows/silverlight/dotnet-windows-silverlight/cc645050(v=vs.95)
 
-About OpenSlide
----------------
+
+## About OpenSlide
 
 The library can read virtual slides in the following formats:
 
@@ -70,15 +70,13 @@ OpenSlide is a product of the research group of [M. Satyanarayanan][satya]
 See how [some projects use OpenSlide][other-projects].
 
 
-Demo
-----
+## Demo
 
 There is a [web-based demo][demo] of OpenSlide rendering various slide
 formats.
 
 
-Documentation
--------------
+## Documentation
 
 Some documentation is included within the downloadable files.
 Additionally there is:
@@ -93,8 +91,7 @@ Additionally there is:
  * [OpenSlide Wiki][wiki]
 
 
-Getting Help
-------------
+## Getting Help
 
 First, try the search box at the top of the page.  It covers the OpenSlide
 website, mailing list, issue tracker, and wiki.
@@ -104,8 +101,7 @@ you think you have found a bug, please report it in the appropriate [issue
 tracker](#development).
 
 
-Mailing Lists
--------------
+## Mailing Lists
 
 There are two mailing lists for OpenSlide:
 
@@ -118,8 +114,7 @@ There are two mailing lists for OpenSlide:
    * [Announcement list archive][announce-archive] (also available on [MARC][announce-archive-marc])
 
 
-Development
------------
+## Development
 
 Development of OpenSlide happens on [GitHub][github]:
 
@@ -131,14 +126,12 @@ Development of OpenSlide happens on [GitHub][github]:
  * [Old Buildbot configuration][automation-github] ([issue tracker][automation-issues])
 
 
-Test Data
----------
+## Test Data
 
 Some [freely-distributable test data][testdata] is available.
 
 
-Publications
-------------
+## Publications
 
 The design and implementation of the library are described in a published
 technical note:
@@ -166,8 +159,7 @@ Computer Science Department, Carnegie Mellon University
 [tr-full]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
 
 
-About whole-slide images
-------------------------
+## About whole-slide images
 
 Whole-slide images, also known as virtual slides, are large, high resolution images used in digital
 pathology. Reading these images using standard image tools or libraries is a challenge because
@@ -184,8 +176,9 @@ tied to a particular vendor. Finally, few (if any) vendors provide libraries and
 or using Java applets, but these approaches have shortcomings in high-latency or non-networked
 environments.
 
-Acknowledgements
-----------------
+
+## Acknowledgements
+
 OpenSlide has been supported by the [National Institutes of Health][nih] and the [Clinical and Translational Science Institute][ctsi] at the University of Pittsburgh.
 
 [nih]: https://www.nih.gov/
