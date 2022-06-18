@@ -38,7 +38,46 @@ Public License, version 2.1`_.
 .. _Trestle: https://openslide.org/formats/trestle/
 .. _Ventana: https://openslide.org/formats/ventana/
 .. _`Generic tiled TIFF`: https://openslide.org/formats/generic-tiff/
-.. _`GNU Lesser General Public License, version 2.1`: https://raw.github.com/openslide/openslide-python/master/lgpl-2.1.txt
+.. _`GNU Lesser General Public License, version 2.1`: https://raw.github.com/openslide/openslide-python/main/lgpl-2.1.txt
+
+
+Installing
+==========
+
+OpenSlide Python requires OpenSlide_, which must be installed separately.
+
+On Linux and macOS, the easiest way to get both components is to install_
+with a package manager that packages both, such as Anaconda_, DNF or Apt on
+Linux systems, or MacPorts_ on macOS systems.  You can also install
+OpenSlide Python with pip_ after installing OpenSlide with a package manager
+or from source_.  Except for pip, do not mix OpenSlide and OpenSlide Python
+from different package managers (for example, OpenSlide from MacPorts and
+OpenSlide Python from Anaconda), since you'll get library conflicts.
+
+On Windows, download the OpenSlide `Windows binaries`_ and extract them
+to a known path.  Then, import ``openslide`` inside a
+``with os.add_dll_directory()`` statement::
+
+    # The path can also be read from a config file, etc.
+    OPENSLIDE_PATH = r'c:\path\to\openslide-win64\bin'
+
+    import os
+    if hasattr(os, 'add_dll_directory'):
+        # Python >= 3.8 on Windows
+        with os.add_dll_directory(OPENSLIDE_PATH):
+            import openslide
+    else:
+        import openslide
+
+This won't work with Python 3.7 or earlier; you'll need to add the OpenSlide
+``bin`` directory to your ``PATH`` instead.
+
+.. _install: https://openslide.org/download/#distribution-packages
+.. _Anaconda: https://anaconda.org/
+.. _MacPorts: https://www.macports.org/
+.. _pip: https://pip.pypa.io/en/stable/
+.. _source: https://openslide.org/download/#source
+.. _`Windows binaries`: https://openslide.org/download/#windows-binaries
 
 
 Basic usage
@@ -53,12 +92,12 @@ OpenSlide objects
 
    An open whole-slide image.
 
-   If any operation on the object fails, :exc:`OpenSlideError` is raised. 
+   If any operation on the object fails, :exc:`OpenSlideError` is raised.
    OpenSlide has latching error semantics: once :exc:`OpenSlideError` is
    raised, all future operations on the :class:`OpenSlide`, other than
    :meth:`close()`, will also raise :exc:`OpenSlideError`.
 
-   :meth:`close()` is called automatically when the object is deleted. 
+   :meth:`close()` is called automatically when the object is deleted.
    The object may be used as a context manager, in which case it will be
    closed upon exiting the context.
 
@@ -101,7 +140,7 @@ OpenSlide objects
       Metadata about the slide, in the form of a
       :class:`~collections.abc.Mapping` from OpenSlide property name to
       property value.  Property values are always strings.  OpenSlide
-      provides some :ref:`standard properties <Standard properties>`, plus
+      provides some :ref:`standard-properties`, plus
       additional properties that vary by slide format.
 
    .. attribute:: associated_images
@@ -138,12 +177,36 @@ OpenSlide objects
       :param tuple size: the maximum size of the thumbnail as a
          ``(width, height)`` tuple
 
+   .. method:: set_cache(cache)
+
+      Use the specified :class:`OpenSlideCache` to store recently decoded
+      slide tiles.  By default, the :class:`OpenSlide` has a private cache
+      with a default size.
+
+      :param OpenSlideCache cache: a cache object
+      :raises OpenSlideVersionError: if OpenSlide is older than version 3.5.0
+
    .. method:: close()
 
       Close the OpenSlide object.
 
 
-.. _`Standard properties`:
+Caching
+-------
+
+.. class:: OpenSlideCache(capacity)
+
+   An in-memory tile cache.
+
+   Tile caches can be attached to one or more :class:`OpenSlide` objects
+   with :meth:`OpenSlide.set_cache` to cache recently-decoded tiles.  By
+   default, each :class:`OpenSlide` has its own cache with a default size.
+
+   :param int capacity: the cache capacity in bytes
+   :raises OpenSlideVersionError: if OpenSlide is older than version 3.5.0
+
+
+.. _standard-properties:
 
 Standard properties
 -------------------
@@ -220,6 +283,11 @@ Exceptions
    OpenSlide does not support the requested file.  Subclass of
    :exc:`OpenSlideError`.
 
+.. exception:: OpenSlideVersionError
+
+   This version of OpenSlide does not support the requested functionality.
+   Subclass of :exc:`OpenSlideError`.
+
 
 Wrapping a PIL Image
 ====================
@@ -230,7 +298,7 @@ Wrapping a PIL Image
    provides an :class:`OpenSlide`-compatible API.
 
    :param file: a filename or :class:`Image <PIL.Image.Image>` object
-   :raises IOError: if the file cannot be opened
+   :raises OSError: if the file cannot be opened
 
 .. function:: open_slide(filename)
 
@@ -240,7 +308,7 @@ Wrapping a PIL Image
    :param str filename: the file to open
    :raises OpenSlideError: if the file is recognized by OpenSlide but an
       error occurred
-   :raises IOError: if the file is not recognized at all
+   :raises OSError: if the file is not recognized at all
 
 
 Deep Zoom support
@@ -346,8 +414,8 @@ deepzoom_tile.py_
   This program is intended as an example.  If you need to generate Deep Zoom
   trees for production applications, consider `using VIPS`_ instead.
 
-.. _`Deep Zoom examples`: https://github.com/openslide/openslide-python/tree/master/examples/deepzoom
-.. _deepzoom_server.py: https://github.com/openslide/openslide-python/blob/master/examples/deepzoom/deepzoom_server.py
-.. _deepzoom_multiserver.py: https://github.com/openslide/openslide-python/blob/master/examples/deepzoom/deepzoom_multiserver.py
-.. _deepzoom_tile.py: https://github.com/openslide/openslide-python/blob/master/examples/deepzoom/deepzoom_tile.py
+.. _`Deep Zoom examples`: https://github.com/openslide/openslide-python/tree/main/examples/deepzoom
+.. _deepzoom_server.py: https://github.com/openslide/openslide-python/blob/main/examples/deepzoom/deepzoom_server.py
+.. _deepzoom_multiserver.py: https://github.com/openslide/openslide-python/blob/main/examples/deepzoom/deepzoom_multiserver.py
+.. _deepzoom_tile.py: https://github.com/openslide/openslide-python/blob/main/examples/deepzoom/deepzoom_tile.py
 .. _`using VIPS`: https://github.com/openslide/openslide/wiki/OpenSlideAndVIPS
