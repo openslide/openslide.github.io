@@ -15,14 +15,12 @@ OpenSlide vendor backend
 : `aperio`
 
 
-Vendor Documentation
---------------------
+## Vendor Documentation
 
 [Documentation PDF](https://web.archive.org/web/20120420105738/http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf)
 
 
-Detection
----------
+## Detection
 
 Aperio slides are stored in single-file TIFF format. OpenSlide will detect a file as Aperio if:
 
@@ -31,8 +29,7 @@ Aperio slides are stored in single-file TIFF format. OpenSlide will detect a fil
  3. The `ImageDescription` tag starts with `Aperio`.
 
 
-Relevant TIFF tags
-------------------
+## Relevant TIFF tags
 
 Tag                 | Description                    |
 --------------------|--------------------------------|
@@ -40,8 +37,7 @@ Tag                 | Description                    |
 `Compression`|May be 33003 or 33005, which represent specific kinds of JPEG 2000 compression, see below|
 
 
-Extra data stored in `ImageDescription`
----------------------------------------
+## Extra data stored in `ImageDescription`
 
 For tiled images, the `ImageDescription` tag contains some dimensional
 downsample information as well as what look like
@@ -56,8 +52,8 @@ followed by a carriage return. This is used for naming the associated
 images. The second image in the file does not have a name, though it
 is an associated image.
 
-TIFF Image Directory Organization
----------------------------------
+
+## TIFF Image Directory Organization
 
 <http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf>
 page 14:
@@ -79,8 +75,7 @@ page 14:
 > always stripped.
 
 
-JPEG 2000 (compression types 33003 or 33005)
---------------------------------------------
+## JPEG 2000 (compression types 33003 or 33005)
 
 Some Aperio files use compression type 33003 or 33005. Images using
 this compression need to be decoded as a JPEG 2000 codestream. For
@@ -91,8 +86,9 @@ colorspace or subsampling parameters in the
 even though the TIFF standard seems to require this. The correct
 subsampling can be found in the JPEG 2000 codestream.
 
-Associated Images
------------------
+
+## Associated Images
+
 thumbnail
 : the second image in the file
 
@@ -103,8 +99,7 @@ macro
 : optional, the name "macro" is given in `ImageDescription`
 
 
-Known Properties
-----------------
+## Known Properties
 
 All key-value data encoded in the `ImageDescription` TIFF field is
 represented as properties prefixed with "`aperio.`".
@@ -119,7 +114,6 @@ represented as properties prefixed with "`aperio.`".
 : normalized `aperio.AppMag`
 
 
-Test Data
----------
+## Test Data
 
 <https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/>

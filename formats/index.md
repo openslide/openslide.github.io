@@ -12,8 +12,7 @@ vendors and may be incomplete.  Problems should be reported to the OpenSlide
 [mailing list][users-subscribe] or [issue tracker][c-issues].
 
 
-Aperio
-------
+## Aperio
 
 Single-file pyramidal tiled TIFF, with non-standard metadata and compression.
 
@@ -27,8 +26,7 @@ More info
 : [Aperio format][format-aperio]
 
 
-Hamamatsu
----------
+## Hamamatsu
 
 Multi-file JPEG/NGR with proprietary metadata and index file formats, and
 single-file TIFF-like format with proprietary metadata.
@@ -43,8 +41,7 @@ More info
 : [Hamamatsu format][format-hamamatsu]
 
 
-Leica
------
+## Leica
 
 Single-file pyramidal tiled BigTIFF with non-standard metadata.
 
@@ -58,8 +55,7 @@ More info
 : [Leica format][format-leica]
 
 
-MIRAX
------
+## MIRAX
 
 Multi-file with very complicated proprietary metadata and indexes.
 
@@ -73,8 +69,7 @@ More info
 : [MIRAX format][format-mirax]
 
 
-Philips
--------
+## Philips
 
 Single-file pyramidal tiled TIFF or BigTIFF with non-standard metadata.
 
@@ -88,8 +83,8 @@ More info
 : [Philips format][format-philips]
 
 
-Sakura
-------
+## Sakura
+
 SQLite database containing pyramid tiles and metadata.
 
 File extensions
@@ -102,8 +97,8 @@ More info
 : [Sakura format][format-sakura]
 
 
-Trestle
--------
+## Trestle
+
 Single-file pyramidal tiled TIFF, with non-standard metadata and
 overlaps.  Additional files contain more metadata and detailed overlap info.
 
@@ -117,8 +112,8 @@ More info
 : [Trestle format][format-trestle]
 
 
-Ventana
--------
+## Ventana
+
 Single-file pyramidal tiled BigTIFF, with non-standard metadata and
 overlaps.
 
@@ -132,8 +127,7 @@ More info
 : [Ventana format][format-ventana]
 
 
-Generic tiled TIFF
-------------------
+## Generic tiled TIFF
 
 Single-file pyramidal tiled TIFF.
 

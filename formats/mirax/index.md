@@ -15,8 +15,7 @@ OpenSlide vendor backend
 : `mirax`
 
 
-Detection
----------
+## Detection
 
 OpenSlide will detect a file as MIRAX if:
 
@@ -26,8 +25,7 @@ OpenSlide will detect a file as MIRAX if:
  4. A file named `Slidedat.ini` exists in the directory.
 
 
-Overview
---------
+## Overview
 
 MIRAX can store slides in JPEG, PNG, or BMP formats.  Because JPEG does not
 allow for large images, and JPEG and PNG provide very poor support for
@@ -47,8 +45,8 @@ image (2 x 2).  This process is repeated for each level, irrespective of
 image overlaps.  Therefore, at sufficiently high levels, a single image can
 contain one or more embedded overlaps of non-integral width.
 
-Index File
-----------
+
+## Index File
 
 The index file starts with a five-character ASCII version string, followed
 by the `SLIDE_ID` from the slidedat file.  The rest of the file consists of
@@ -77,8 +75,8 @@ Nonhierarchical records refer to associated images and additional metadata.
 Nonhierarchical data items consist of three zero values followed by an
 offset, length, and file number as in hierarchical records.
 
-Data Files
-----------
+
+## Data Files
 
 A data file begins with a header containing a five-character ASCII version
 string, the `SLIDE_ID` from the slidedat file, the file number encoded into
@@ -87,8 +85,8 @@ three ASCII characters, and 256 bytes of padding.  (In newer slides, the
 each value is truncated away.)  The remainder of the file contains packed
 data referenced by the index file.
 
-Slide Position File
--------------------
+
+## Slide Position File
 
 The slide position file is referenced by the
 `VIMSLIDE_POSITION_BUFFER.default` nonhierarchical section.  It contains
@@ -104,8 +102,8 @@ In slides with `CURRENT_SLIDE_VERSION` &ge; 2.2, the slide position file is
 compressed with DEFLATE and referenced by the
 `StitchingIntensityLayer.StitchingIntensityLevel` nonhierarchical section.
 
-Associated Images
------------------
+
+## Associated Images
 
 thumbnail
 : the image named "`ScanDataLayer_SlidePreview`" in `Slidedat.ini` (optional)
@@ -116,8 +114,8 @@ label
 macro
 : the image named "`ScanDataLayer_SlideThumbnail`" in `Slidedat.ini` (optional)
 
-Known Properties
-----------------
+
+## Known Properties
 
 All key-value data stored in the `Slidedat.ini` file are encoded as
 properties prefixed with "`mirax.`".
@@ -136,8 +134,8 @@ corresponding to level 0 (typically
 : normalized `mirax.GENERAL.OBJECTIVE_MAGNIFICATION`
 
 
-See Also
---------
+## See Also
+
 [Introduction to MIRAX/MRXS][1].  Note that our terminology has changed since
 that document was written; where it says "tile", substitute "image", and
 where it says "subtile", substitute "tile".
@@ -145,6 +143,6 @@ where it says "subtile", substitute "tile".
 [1]: https://lists.andrew.cmu.edu/pipermail/openslide-users/2012-July/000373.html
 
 
-Test Data
----------
+## Test Data
+
 <https://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>

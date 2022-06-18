@@ -5,16 +5,15 @@ redirect_from:
   - /Some Projects Using OpenSlide/
 ---
 
-VIPS
-----
+## VIPS
 
 The [VIPS][vips] image processing system can use OpenSlide to read
 slide files.
 
 [vips]: https://www.libvips.org/
 
-Collaborative Systems for Analyzing Tissue Microarrays
-------------------------------------------------------
+
+## Collaborative Systems for Analyzing Tissue Microarrays
 
 The [Center for Biomedical Imaging & Informatics][cbii] at
 [UMDNJ][umdnj] uses OpenSlide for a tissue microarray
@@ -26,8 +25,7 @@ project.
 [umdnj]: http://www.umdnj.edu/
 
 
-In Silico Brain Tumor Research Center
--------------------------------------
+## In Silico Brain Tumor Research Center
 
 The [In Silico Brain Tumor Research Center][isbtrc] at
 [Emory University][emory] uses OpenSlide in their
@@ -38,8 +36,7 @@ The [In Silico Brain Tumor Research Center][isbtrc] at
 [pidb]: https://confluence.cci.emory.edu:8090/display/PIDB/Home
 
 
-caMicroscope
-------------
+## caMicroscope
 
 Emory uses OpenSlide to develop [caMicroscope][camicroscope], a
 [caGrid][cagrid] compliant pathology viewer.
@@ -48,8 +45,7 @@ Emory uses OpenSlide to develop [caMicroscope][camicroscope], a
 [cagrid]: http://cagrid.org/
 
 
-SlideTutor
-----------
+## SlideTutor
 
 The [SlideTutor][slidetutor] project at [UPMC][upmc] uses
 OpenSlide to read slides in various formats.
@@ -58,8 +54,7 @@ OpenSlide to read slides in various formats.
 [upmc]: http://www.upmc.edu/
 
 
-Algum
------
+## Algum
 
 The [Algum system][algum] at [Carnegie Mellon University][cmu] uses
 OpenSlide to display whole slide images.
@@ -68,8 +63,7 @@ OpenSlide to display whole slide images.
 [algum]: http://algum.cs.cmu.edu/
 
 
-Cardiac Transplant Endomyocardial Biopsy Acute Cellular Rejection Tutorial
---------------------------------------------------------------------------
+## Cardiac Transplant Endomyocardial Biopsy Acute Cellular Rejection Tutorial
 
 The [Society for Cardiovascular Pathology][scvp] and [Association for the
 European Cardiovascular Pathology][aecvp] are using OpenSlide in a [web
@@ -81,8 +75,7 @@ transplant acute cellular rejection.
 [acr]: http://scvp.net/acr/
 
 
-Simagis Live
-------------
+## Simagis Live
 
 [Smart Imaging Technologies][smartimtech] is using OpenSlide in their
 [Simagis Live][simagis-live] web-based image management system.

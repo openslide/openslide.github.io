@@ -52,8 +52,8 @@ For examples, consult the existing vendor drivers.  `generic-tiff` is a
 straightforward driver for simple TIFF images.  `trestle` is a fairly simple
 driver using the `tilemap` grid.
 
-Opening a slide
----------------
+
+## Opening a slide
 
 Opening a slide occurs in two steps, implemented via function pointers in
 `struct _openslide_format`.
@@ -73,8 +73,8 @@ Opening a slide occurs in two steps, implemented via function pointers in
   (Perhaps the slide uses a variant of the format that the driver does not
   yet support.)
 
-TIFF and TIFF-like
-------------------
+
+## TIFF and TIFF-like
 
 OpenSlide has two decoders for TIFF-derived slide formats: `tiff` and
 `tifflike`.
@@ -102,8 +102,8 @@ handle, and should not use the `tiff` decoder.  `open`, however, can use the
 handle when the `open` method completes, so the driver should copy any
 information it needs out of the `tifflike` handle during `open`.
 
-Properties
-----------
+
+## Properties
 
 The vendor driver is responsible for initializing a property map containing
 metadata about the slide.  A property has a name (a string) and a value
@@ -185,8 +185,8 @@ different slides.  To accomplish this, it may be sufficient to hash all of
 the slide's metadata; if not, you can include the (compressed) image data
 from the lowest-resolution pyramid level.
 
-Associated images
------------------
+
+## Associated images
 
 In some slide formats, a slide file includes not only the primary,
 high-resolution slide image, but additional ancillary images.  For example,
@@ -215,8 +215,8 @@ associated image is loaded into memory in its entirety.  If an associated
 image is pyramidal but is not too large, your driver can simply provide the
 highest-resolution level.
 
-Error handling
---------------
+
+## Error handling
 
 OpenSlide takes a conservative approach to error handling.  Where feasible,
 a vendor driver should validate any slide metadata it is relying upon.  If
@@ -258,8 +258,8 @@ To emit a warning, use `_openslide_performance_warn()` (at open time) or
 `_openslide_performance_warn_once()` (at runtime).  Warnings can be enabled
 by setting the `OPENSLIDE_DEBUG` environment variable to `performance`.
 
-OpenSlide limitations
----------------------
+
+## OpenSlide limitations
 
 OpenSlide's output is currently
 [limited to three color channels plus an alpha channel](https://github.com/openslide/openslide/issues/42),
@@ -273,8 +273,8 @@ In addition, OpenSlide currently
 [cannot return data from more than one focal plane per slide](https://github.com/openslide/openslide/issues/31).
 This would also require API changes to fix.
 
-Contributing your code
-----------------------
+
+## Contributing your code
 
 Please discuss your changes on the [openslide-users][users-subscribe]
 mailing list, *before* you are ready to submit them, so that we can help you

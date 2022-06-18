@@ -14,8 +14,7 @@ OpenSlide vendor backend
 : `sakura`
 
 
-Detection
----------
+## Detection
 
 OpenSlide will detect a file as Sakura if:
 
@@ -24,8 +23,7 @@ OpenSlide will detect a file as Sakura if:
  3. The unique table contains a row with `id = "++MagicBytes"` and `data = "SVGigaPixelImage"`.
 
 
-File Organization
------------------
+## File Organization
 
 Sakura slides are SQLite 3 database files written by the eXpress Persistent
 Objects ORM.  Tables contain slide metadata, associated images, and JPEG
@@ -36,8 +34,8 @@ tiles appear to be organized in a regular grid, with power-of-two level
 downsamples and without overlapping tiles.  The structure of the file allows
 scans to be sparse, but it is not clear if this is actually done.
 
-SQL Tables
-----------
+
+## SQL Tables
 
 Some irrelevant tables and columns have been omitted from the summary below.
 
@@ -164,8 +162,7 @@ Offset | Size | Description |
 50|4|Unknown; have seen "6"|
 
 
-Associated Images
------------------
+## Associated Images
 
 `label`
 : `SVScannedImageDataXPO.Image` corresponding to `SVSlideDataXPO.m_labelScan`
@@ -177,8 +174,7 @@ Associated Images
 : `SVHRScanDataXPO.ThumbnailImage`
 
 
-Known Properties
-----------------
+## Known Properties
 
 `sakura.Creator`
 : `SVSlideDataXPO.Creator`
@@ -220,8 +216,7 @@ Known Properties
 : normalized `sakura.NominalLensMagnification`
 
 
-Test Data
----------
+## Test Data
 
 No public data available.  Contact the [mailing list][users-subscribe] if
 you have some.

@@ -14,8 +14,7 @@ OpenSlide vendor backend
 : `philips`
 
 
-Detection
----------
+## Detection
 
 Philips TIFF files are stored in single-file TIFF or BigTIFF format.
 OpenSlide will detect a file as Philips if:
@@ -26,8 +25,7 @@ OpenSlide will detect a file as Philips if:
  4. The root element of the XML is `DataObject` and has an `ObjectType` attribute with a value of `DPUfsImport`.
 
 
-File Organization
------------------
+## File Organization
 
 Philips TIFF is an export format.  The native Philips format, iSyntax,
 is a custom multi-file format not currently supported by OpenSlide.
@@ -58,8 +56,7 @@ TIFF directories whose `ImageDescription`s start with `Label` and `Macro`,
 respectively.
 
 
-Relevant TIFF tags
-------------------
+## Relevant TIFF tags
 
 Tag                 | Description                    |
 --------------------|--------------------------------|
@@ -67,8 +64,7 @@ Tag                 | Description                    |
 `Software`          |Starts with `Philips`           |
 
 
-Associated Images
------------------
+## Associated Images
 
 `label`
 : the TIFF directory with an `ImageDescription` starting with `Label`, or
@@ -81,8 +77,7 @@ the image data in the `DPScannedImage` with a `PIM_DP_IMAGE_TYPE` of
 `MACROIMAGE`
 
 
-Known Properties
-----------------
+## Known Properties
 
 All key-value data encoded in the `DPUfsImport` object, in the first
 `DPScannedImage` object with a `PIM_DP_IMAGE_TYPE` of `WSI`, and in that
@@ -96,8 +91,7 @@ prefixed with "`philips.`".
 : calculated as `1000 * philips.DICOM_PIXEL_SPACING[0]`
 
 
-Test Data
----------
+## Test Data
 
 No public data available.  Contact the [mailing list][users-subscribe] if
 you have some.

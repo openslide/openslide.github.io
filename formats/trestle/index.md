@@ -15,8 +15,7 @@ OpenSlide vendor backend
 : `trestle`
 
 
-Detection
----------
+## Detection
 
 Trestle slides are stored in single-file TIFF format. OpenSlide will detect a file as Trestle if:
 
@@ -26,8 +25,7 @@ Trestle slides are stored in single-file TIFF format. OpenSlide will detect a fi
  4. All images are tiled.
 
 
-Relevant TIFF tags
-------------------
+## Relevant TIFF tags
 
 Tag                         | Description                                    |
 ----------------------------|------------------------------------------------|
@@ -36,8 +34,7 @@ Tag                         | Description                                    |
 `XResolution`, `YResolution`|Seems to store microns-per-pixel (MPP), which may or may not take into account the correct objective power. Note that this is inverted from standard TIFF, which stores pixels-per-unit, not units-per-pixel.|
 
 
-Extra data stored in `ImageDescription`
----------------------------------------
+## Extra data stored in `ImageDescription`
 
 The `ImageDescription` tag contains semicolon-delimited key-value
 pairs. A key-value pair is equals-delimited. We use the `OverlapsXY`
@@ -53,16 +50,15 @@ Key              | Description                              |
 `JPEG Quality`|The JPEG quality value.|
 `OverlapsXY`|Overlaps, see below.|
 
-TIFF Image Directory Organization
----------------------------------
+
+## TIFF Image Directory Organization
 
 The first image in the TIFF file is the full-resolution image. The
 subsequent images are assumed to be decreasingly sized
 reduced-resolution images.
 
 
-Overlaps
---------
+## Overlaps
 
 The `OverlapsXY` pseudo-field encodes a list of tile overlap values as
 ASCII.
@@ -82,15 +78,13 @@ details.
 [overlap-files]: https://github.com/openslide/openslide/issues/21#issuecomment-23615583
 
 
-Associated Images
------------------
+## Associated Images
 
 macro
 : the image with a filename extension of "`.Full`" (optional)
 
 
-Known Properties
-----------------
+## Known Properties
 
 All data encoded in the `ImageDescription` TIFF field is represented
 as properties prefixed with "`trestle.`".
@@ -107,7 +101,6 @@ of this TIFF tag)
 : normalized `trestle.Objective Power`
 
 
-Test Data
----------
+## Test Data
 
 <https://openslide.cs.cmu.edu/download/openslide-testdata/Trestle/>

@@ -12,8 +12,7 @@ OpenSlide vendor backend
 : `leica`
 
 
-Detection
----------
+## Detection
 
 Leica slides are stored in single-file BigTIFF format.
 OpenSlide will detect a file as Leica if:
@@ -25,16 +24,14 @@ OpenSlide will detect a file as Leica if:
     - `http://www.leica-microsystems.com/scn/2010/10/01`
 
 
-Relevant TIFF tags
-------------------
+## Relevant TIFF tags
 
 Tag                 | Description                    |
 --------------------|--------------------------------|
 `ImageDescription`|Stores an XML document containing various metadata|
 
 
-File Organization
------------------
+## File Organization
 
 The `ImageDescription` tag of the first TIFF directory contains an XML
 document that defines the structure of the slide.
@@ -71,15 +68,13 @@ pyramid and refuses to open slides whose main images have inconsistent
 resolutions.
 
 
-Associated Images
------------------
+## Associated Images
 
 `macro`
 : the highest-resolution dimension of the macro image
 
 
-Known Properties
-----------------
+## Known Properties
 
 `leica.aperture`
 : the `numericalAperture` of the main image
@@ -121,7 +116,6 @@ OpenSlide mailing list.)*
 : normalized `leica.objective`
 
 
-Test Data
----------
+## Test Data
 
 <https://openslide.cs.cmu.edu/download/openslide-testdata/Leica/>

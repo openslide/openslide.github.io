@@ -16,8 +16,7 @@ OpenSlide vendor backend
 : `hamamatsu`
 
 
-Detection
----------
+## Detection
 
 OpenSlide will detect a file as Hamamatsu if:
 
@@ -31,8 +30,7 @@ or if:
  2. TIFF tag 65420 is present.
 
 
-Overview
---------
+## Overview
 
 The Hamamatsu format has three variants.  VMS and VMU consist of an index
 file, 2 or more image files, and (in the case of VMS) an "optimisation"
@@ -77,8 +75,7 @@ lower-resolution decoding, so further pyramid levels are synthesized
 from each JPEG file.
 
 
-VMS File
---------
+## VMS File
 
 The `.vms` file is the main index file for the VMS format. It is a
 Windows INI-style key-value pair file, with sections. Only keys in the
@@ -108,8 +105,7 @@ Key                    | Description                     |
 `YOffsetFromSlideCentre`|Distance in Y from the center of the entire slide to the center of the main image, in nm|
 
 
-VMU File
---------
+## VMU File
 
 The `.vmu` file is the main index file for the VMU format. Only keys in the `Uncompressed Virtual Microscope Specimen` group are read by OpenSlide.
 
@@ -179,8 +175,7 @@ Key                 | Description                |
 `BlobMapHeight`|Unknown|
 
 
-NDPI File
----------
+## NDPI File
 
 NDPI uses a TIFF-like structure, but libtiff cannot read the headers of an
 NDPI file.  This is because NDPI specifies the `RowsPerStrip` as the height
@@ -258,8 +253,7 @@ Tag          | Description      |
 65458|Unknown, always 0?|
 
 
-Optimisation File (only for VMS)
---------------------------------
+## Optimisation File (only for VMS)
 
 The optimisation file contains a list of 32- (or 64- or 320- ?) bit
 little endian values, giving the file offset into an MCU row, each
@@ -269,8 +263,7 @@ into 1 file, even with multiple images. The order of images is
 left-to-right, top-to-bottom.
 
 
-Map File (only for VMS/VMU)
----------------------------
+## Map File (only for VMS/VMU)
 
 The VMS map file is a standard JPEG file. Its restart markers (if any)
 are not included in the optimisation file. The VMU map file is in NGR
@@ -278,8 +271,7 @@ format. This file can be used to provide a lower-resolution view of
 the slide.
 
 
-Image Files (only for VMS/VMU)
-------------------------------
+## Image Files (only for VMS/VMU)
 
 These files are given by the VMS/VMU `ImageFile` keys. They are
 assumed to have a height which is a multiple of the MCU height. They
@@ -289,8 +281,7 @@ divided by the restart interval.
 For VMS, these files are in JPEG, for VMU they are in NGR format.
 
 
-NGR Format
-----------
+## NGR Format
 
 The NGR file contains uncompressed 16-bit RGB data, with a small
 header. The files we have encountered start with `GN`, two more bytes,
@@ -303,16 +294,14 @@ files. Columns are painted left-to-right.
 At offset 24 is another 32-bit integer which gives the offset in the file to the start of the image data. The image data we have encountered is in 16-bit little endian format.
 
 
-Associated Images
------------------
+## Associated Images
 
 macro
 : the image file given by the `MacroImage` value in the VMS/VMU file, or
 `SourceLens` of -1 in NDPI
 
 
-Known Properties
-----------------
+## Known Properties
 
 All key-value data stored in the VMS/VMU file, and known tags from
 the NDPI file, are encoded as properties prefixed with "`hamamatsu.`".
@@ -333,8 +322,8 @@ calculated as `10000/tiff.YResolution`, if `tiff.ResolutionUnit` is
 : normalized `hamamatsu.SourceLens`
 
 
-Test Data
----------
+## Test Data
+
 NDPI format
 : <https://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu/>
 

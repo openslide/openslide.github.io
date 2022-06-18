@@ -10,8 +10,7 @@ redirect_from:
 OpenSlide and its official language bindings are available under the terms
 of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
 
-Source
-------
+## Source
 
 #### OpenSlide (stable API)
 {% assign package = 'openslide' %}
@@ -28,8 +27,8 @@ Source
 {% assign releases = site.data.releases.java %}
 {% include source-release-table.md %}
 
-Windows Binaries
-----------------
+
+## Windows Binaries
 
 Problems with these binaries can be reported [here][winbuild-issues].
 
@@ -46,8 +45,8 @@ Problems with these binaries can be reported [here][winbuild-issues].
   </table>
 </div>
 
-Distribution Packages
----------------------
+
+## Distribution Packages
 
 <table class="pinfo">
   <thead>
@@ -122,8 +121,8 @@ Distribution Packages
 </table>
 
 
-Version Control
----------------
+## Version Control
+
 [Git][git] repositories are available:
 
 <table class="pinfo">
