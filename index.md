@@ -78,17 +78,21 @@ formats.
 
 ## Documentation
 
-Some documentation is included within the downloadable files.
-Additionally there is:
+In addition to the documentation listed here, there is some documentation
+in the downloadable files, and also an [OpenSlide wiki][wiki].
+
+### Using OpenSlide
 
  * [C API Documentation][c-api]
  * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][doc-properties]
  * [Using OpenSlide on Windows][doc-windows]
+
+### Developing OpenSlide
+
  * [Adding Support for a New Slide Format][doc-newformat]
  * [Debug Options][doc-debugopts]
- * [OpenSlide Wiki][wiki]
 
 
 ## Getting Help
