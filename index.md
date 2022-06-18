@@ -87,6 +87,7 @@ in the downloadable files, and also an [OpenSlide wiki][wiki].
  * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][doc-properties]
+ * [Using Premultiplied ARGB Pixel Data][doc-premultiplied]
  * [Using OpenSlide on Windows][doc-windows]
 
 ### Developing OpenSlide

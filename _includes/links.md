@@ -11,6 +11,7 @@
 
 [doc-debugopts]: /docs/debugopts/
 [doc-newformat]: /docs/newformat/
+[doc-premultiplied]: /docs/premultiplied-argb/
 [doc-properties]: /docs/properties/
 [doc-windows]: /docs/windows/
 
