@@ -93,6 +93,7 @@ in the downloadable files, and also an [OpenSlide wiki][wiki].
 ### Developing OpenSlide
 
  * [Adding Support for a New Slide Format][doc-newformat]
+ * [Using the OpenSlide Test Suite][doc-testsuite]
  * [Debug Options][doc-debugopts]
 
 

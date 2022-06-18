@@ -13,6 +13,7 @@
 [doc-newformat]: /docs/newformat/
 [doc-premultiplied]: /docs/premultiplied-argb/
 [doc-properties]: /docs/properties/
+[doc-testsuite]: /docs/testsuite/
 [doc-windows]: /docs/windows/
 
 [c-api]: /api/openslide_8h.html
@@ -49,3 +50,5 @@
 [winbuild-issues]: https://github.com/openslide/openslide-winbuild/issues
 [site-issues]: https://github.com/openslide/openslide.github.io/issues
 [automation-issues]: https://github.com/openslide/openslide-automation/issues
+
+[c-readme]: https://raw.githubusercontent.com/openslide/openslide/main/README.txt
