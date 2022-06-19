@@ -78,15 +78,13 @@ formats.
 
 ## Documentation
 
-In addition to the documentation listed here, there is some documentation
-in the downloadable files, and also an [OpenSlide wiki][wiki].
-
  * [C API Documentation][c-api]
  * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][doc-properties]
  * [Using Premultiplied ARGB Pixel Data][doc-premultiplied]
  * [Using OpenSlide on Windows][doc-windows]
+ * [OpenSlide Wiki][wiki]
 
 
 ## Getting Help
