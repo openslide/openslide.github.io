@@ -81,20 +81,12 @@ formats.
 In addition to the documentation listed here, there is some documentation
 in the downloadable files, and also an [OpenSlide wiki][wiki].
 
-### Using OpenSlide
-
  * [C API Documentation][c-api]
  * [Python API Documentation][python-api]
  * [Supported Virtual Slide Formats][formats]
  * [List of Known Properties][doc-properties]
  * [Using Premultiplied ARGB Pixel Data][doc-premultiplied]
  * [Using OpenSlide on Windows][doc-windows]
-
-### Developing OpenSlide
-
- * [Adding Support for a New Slide Format][doc-newformat]
- * [Using the OpenSlide Test Suite][doc-testsuite]
- * [Debug Options][doc-debugopts]
 
 
 ## Getting Help
@@ -121,6 +113,12 @@ There are two mailing lists for OpenSlide:
 
 
 ## Development
+
+Some developer documentation is available:
+
+ * [Adding Support for a New Slide Format][doc-newformat]
+ * [Using the OpenSlide Test Suite][doc-testsuite]
+ * [Debug Options][doc-debugopts]
 
 Development of OpenSlide happens on [GitHub][github]:
 
