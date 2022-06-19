@@ -6,8 +6,29 @@ title: Using the OpenSlide test suite
 
 ## Setting up your system
 
-The software packages required by the test suite are listed in the
-[README][c-readme].
+To run the test suite, you will need:
+
+- A Git checkout of OpenSlide
+- &ge; 120 GB of disk space
+- PyYAML
+- python-requests
+- `xdelta3`
+- `cjpeg` and `djpeg`, from libjpeg
+- At least one installed font
+
+Valgrind mode requires:
+
+- Valgrind
+- Debug symbols for library dependencies (particularly glib2) and Fontconfig
+
+Profile mode requires:
+
+- Valgrind
+
+Coverage mode requires:
+
+- gcov
+- Doxygen
 
 
 ## Running test cases

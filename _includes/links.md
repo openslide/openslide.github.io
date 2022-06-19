@@ -48,5 +48,3 @@
 [java-issues]: https://github.com/openslide/openslide-java/issues
 [winbuild-issues]: https://github.com/openslide/openslide-winbuild/issues
 [site-issues]: https://github.com/openslide/openslide.github.io/issues
-
-[c-readme]: https://raw.githubusercontent.com/openslide/openslide/main/README.txt
