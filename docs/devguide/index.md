@@ -11,6 +11,20 @@ section on error handling, but the entire page is worth reading.
 The [other developer docs][doc-dev] may also be useful.
 
 
+## Contributing your code
+
+Please discuss your changes on the [openslide-users][users-subscribe]
+mailing list or in a GitHub issue, *before* you are ready to submit them, so
+that we can help you integrate your code into the existing codebase.
+
+When contributing support for a new format, we *strongly* prefer that you
+also contribute example slide files for our [openslide-testdata][testdata]
+repository.  The example files must be data that you are entitled to
+contribute, and the OpenSlide project must receive permission to
+redistribute them with or without modification.  Email the mailing list for
+instructions on how to accomplish this.
+
+
 ## Original development guide
 
 _This section contains the original development guide written by Adam Goode

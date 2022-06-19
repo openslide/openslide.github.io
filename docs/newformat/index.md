@@ -272,17 +272,3 @@ API.
 In addition, OpenSlide currently
 [cannot return data from more than one focal plane per slide](https://github.com/openslide/openslide/issues/31).
 This would also require API changes to fix.
-
-
-## Contributing your code
-
-Please discuss your changes on the [openslide-users][users-subscribe]
-mailing list or in a GitHub issue, *before* you are ready to submit them, so
-that we can help you integrate your code into the existing codebase.
-
-When contributing support for a new format, we *strongly* prefer that you
-also contribute example slide files for our [openslide-testdata][testdata]
-repository.  The example files must be data that you are entitled to
-contribute, and the OpenSlide project must receive permission to
-redistribute them with or without modification.  Email the mailing list for
-instructions on how to accomplish this.
