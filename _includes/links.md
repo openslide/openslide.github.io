@@ -9,7 +9,9 @@
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/
 
+[doc-dev]: /#development
 [doc-debugopts]: /docs/debugopts/
+[doc-devguide]: /docs/devguide/
 [doc-newformat]: /docs/newformat/
 [doc-premultiplied]: /docs/premultiplied-argb/
 [doc-properties]: /docs/properties/
