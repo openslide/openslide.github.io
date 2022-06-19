@@ -80,7 +80,7 @@ Edit the test metadata:
 
     vi config.yaml
 
-If the slide should open successfully, change `success` to `true`. 
+If the slide should open successfully, change `success` to `true`.
 Otherwise, set `error` to a regular expression matching the error string
 that should be returned by `openslide_get_error()` after `openslide_open()`
 returns.
