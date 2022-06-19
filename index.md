@@ -32,7 +32,7 @@ Python and Java bindings are also available. The Python binding includes a
 binding includes a simple image viewer.
 
 OpenSlide and its official language bindings are released under the
-terms of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
+terms of the [GNU Lesser General Public License, version 2.1][license].
 
 [Download][download]
 

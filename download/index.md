@@ -8,7 +8,7 @@ redirect_from:
 {% include links.md %}
 
 OpenSlide and its official language bindings are available under the terms
-of the [GNU Lesser General Public License, version 2.1][lgplv2.1].
+of the [GNU Lesser General Public License, version 2.1][license].
 
 ## Source
 
