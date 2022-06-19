@@ -17,6 +17,7 @@
 [doc-properties]: /docs/properties/
 [doc-testsuite]: /docs/testsuite/
 [doc-windows]: /docs/windows/
+[gerror-rules]: https://docs.gtk.org/glib/error-reporting.html#rules-for-use-of-gerror
 
 [c-api]: /api/openslide_8h.html
 [python-api]: /api/python/

@@ -226,8 +226,8 @@ enumerated field has an unknown value -- it should report an error and give
 up rather than attempting to muddle onward.
 
 All internal OpenSlide functions report errors using GError.  GError has a
-[strict set of rules](https://docs.gtk.org/glib/error-reporting.html#rules-for-use-of-gerror)
-that **must** be followed when producing or consuming errors.
+[strict set of rules][gerror-rules] that **must** be followed when producing
+or consuming errors.
 
 When the external API glue receives a GError from a handler method, the
 `openslide_t` is placed into error state.  No other operations can be
