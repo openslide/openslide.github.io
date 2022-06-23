@@ -15,6 +15,7 @@
 [doc-newformat]: /docs/newformat/
 [doc-premultiplied]: /docs/premultiplied-argb/
 [doc-properties]: /docs/properties/
+[doc-signoff]: /docs/signoff/
 [doc-testsuite]: /docs/testsuite/
 [doc-windows]: /docs/windows/
 [gerror-rules]: https://docs.gtk.org/glib/error-reporting.html#rules-for-use-of-gerror
