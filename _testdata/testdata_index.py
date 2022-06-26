@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #
 # testdata_index - Check metadata and build indexes for openslide-testdata
 #
-# Copyright (c) 2013-2015 Carnegie Mellon University
+# Copyright (c) 2013-2015,2022 Carnegie Mellon University
 # Copyright (c) 2016 Benjamin Gilbert
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -19,26 +19,28 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from __future__ import division
 import argparse
 from hashlib import sha256
 from jinja2 import Environment, Template
+from pathlib import Path
 import json
 import os
 import yaml
 
-IGNORE_FILENAMES = frozenset((
-    'index.html',
-    'index.yaml',
-))
-MANDATORY_FIELDS = frozenset((
-    'description',
-    'license',
-    'sha256',
-))
-OPTIONAL_FIELDS = frozenset((
-    'credit',
-))
+IGNORE_FILENAMES = frozenset(
+    (
+        'index.html',
+        'index.yaml',
+    )
+)
+MANDATORY_FIELDS = frozenset(
+    (
+        'description',
+        'license',
+        'sha256',
+    )
+)
+OPTIONAL_FIELDS = frozenset(('credit',))
 
 INDEX_TEMPLATE = '''<!doctype html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -132,11 +134,11 @@ class ValidationError(Exception):
 
 
 def file_size_units(value):
-    for shift, unit in (40, 'TB'), (30, 'GB'), (20, 'MB'), (10, 'KB'):
+    for shift, unit in (40, ' TB'), (30, ' GB'), (20, ' MB'), (10, ' KB'):
         if value >= (1 << shift):
             in_units = value / (1 << shift)
-            return ('%.2f' % in_units).rstrip('0').rstrip('.') + ' ' + unit
-    return '%d bytes' % value
+            return f'{in_units:.2f}'.rstrip('0').rstrip('.') + unit
+    return f'{value} bytes'
 
 
 environment = Environment(autoescape=True)
@@ -146,36 +148,36 @@ index_template = environment.from_string(INDEX_TEMPLATE)
 
 def ensure_empty(items, msg_prefix):
     if items:
-        raise ValidationError('%s: %s' % (msg_prefix,
-                ', '.join(sorted(items))))
+        raise ValidationError('{}: {}'.format(msg_prefix, ', '.join(sorted(items))))
 
 
 def process_dir(dirpath, check_hashes=False):
     # List files in directory
-    filenames = set(os.listdir(dirpath)) - IGNORE_FILENAMES
+    filenames = set(path.name for path in dirpath.iterdir()) - IGNORE_FILENAMES
 
     # Load metadata
-    yamlpath = os.path.join(dirpath, 'index.yaml')
+    yamlpath = dirpath / 'index.yaml'
     with open(yamlpath, 'rb') as fh:
         info = yaml.safe_load(fh)
-        format = info['format']
+        format_ = info['format']
         slides = info['slides']
 
     # Check slides against directory
     slide_names = set(slides.keys())
-    ensure_empty(filenames - slide_names,
-            'Missing files in index for %s' % dirpath)
-    ensure_empty(slide_names - filenames,
-            'Missing files in directory %s' % dirpath)
+    ensure_empty(filenames - slide_names, f'Missing files in index for {dirpath}')
+    ensure_empty(slide_names - filenames, f'Missing files in directory {dirpath}')
 
     # Check metadata fields and populate sizes
     for filename, info in sorted(slides.items()):
-        filepath = os.path.join(dirpath, filename)
+        filepath = dirpath / filename
         info_fields = set(info.keys())
-        ensure_empty(info_fields - MANDATORY_FIELDS - OPTIONAL_FIELDS,
-                '%s: Unknown fields' % filepath)
-        ensure_empty(MANDATORY_FIELDS - info_fields,
-                '%s: Missing mandatory fields' % filepath)
+        ensure_empty(
+            info_fields - MANDATORY_FIELDS - OPTIONAL_FIELDS,
+            f'{filepath}: Unknown fields',
+        )
+        ensure_empty(
+            MANDATORY_FIELDS - info_fields, f'{filepath}: Missing mandatory fields'
+        )
         if check_hashes:
             sha = sha256()
             with open(filepath, 'rb') as fh:
@@ -185,15 +187,15 @@ def process_dir(dirpath, check_hashes=False):
                         break
                     sha.update(buf)
                 if sha.hexdigest() != info['sha256']:
-                    raise ValidationError('%s: Hash mismatch' % filepath)
-        info['format'] = format
-        info['size'] = os.stat(filepath).st_size
+                    raise ValidationError(f'{filepath}: Hash mismatch')
+        info['format'] = format_
+        info['size'] = filepath.stat().st_size
 
     # Write index.html
     with open(os.path.join(dirpath, 'index.html'), 'w') as fh:
         index_template.stream(
             has_parent=True,
-            title=format,
+            title=format_,
             files=slides,
             extras=[
                 {
@@ -204,32 +206,30 @@ def process_dir(dirpath, check_hashes=False):
             ],
         ).dump(fh)
 
-    return format, slides
+    return format_, slides
 
 
 def process_repo(basepath, check_hashes=False):
     # Enumerate directory names
-    dirnames = [name for name in sorted(os.listdir(basepath))
-            if os.path.isdir(os.path.join(basepath, name))]
+    directories = sorted(path for path in basepath.iterdir() if path.is_dir())
 
     # Descend into directories
     dir_formats = {}
     slides = {}
-    for dirname in dirnames:
-        dirpath = os.path.join(basepath, dirname)
-        dir_format, dir_slides = process_dir(dirpath,
-                check_hashes=check_hashes)
+    for dirpath in directories:
+        dir_format, dir_slides = process_dir(dirpath, check_hashes=check_hashes)
+        dirname = str(dirpath.relative_to(basepath))
         dir_formats[dirname] = dir_format
         for filename, info in dir_slides.items():
-            slides['%s/%s' % (dirname, filename)] = info
+            slides[f'{dirname}/{filename}'] = info
 
     # Write index.json
-    jsonpath = os.path.join(basepath, 'index.json')
+    jsonpath = basepath / 'index.json'
     with open(jsonpath, 'w') as fh:
         json.dump(slides, fh, indent=2, sort_keys=True)
 
     # Write index.html
-    with open(os.path.join(basepath, 'index.html'), 'w') as fh:
+    with open(basepath / 'index.html', 'w') as fh:
         index_template.stream(
             title='openslide-testdata',
             dirs=dir_formats,
@@ -237,19 +237,20 @@ def process_repo(basepath, check_hashes=False):
                 {
                     'name': 'index.json',
                     'description': 'Consolidated metadata for all slides',
-                    'size': os.stat(jsonpath).st_size,
+                    'size': jsonpath.stat().st_size,
                 },
             ],
         ).dump(fh)
 
 
 def _main():
-    parser = argparse.ArgumentParser(description='Process metadata and ' +
-            'build indexes for openslide-testdata.')
-    parser.add_argument('path',
-            help='path to local copy of openslide-testdata')
-    parser.add_argument('-c', '--check-hashes', action='store_true',
-            help='check SHA-256 digests')
+    parser = argparse.ArgumentParser(
+        description='Process metadata and build indexes for openslide-testdata.'
+    )
+    parser.add_argument('path', type=Path, help='path to local copy of openslide-testdata')
+    parser.add_argument(
+        '-c', '--check-hashes', action='store_true', help='check SHA-256 digests'
+    )
     args = parser.parse_args()
     process_repo(args.path, check_hashes=args.check_hashes)
 
