@@ -113,7 +113,7 @@ Problems with these binaries can be reported [here][winbuild-issues].
     </tr>
     <tr>
       <th>Python</th>
-      <th><a href="https://pypi.python.org/pypi">PyPI</a></th>
+      <th><a href="https://pypi.org/">PyPI</a></th>
       <td></td>
       <td><code>python3 -m pip install openslide-python</code></td>
     </tr>
