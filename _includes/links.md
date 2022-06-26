@@ -1,7 +1,7 @@
 [news]: /news/
 [download]: /download/
 [download-windows]: /download/#windows-binaries
-[download-pypi]: https://pypi.python.org/pypi/openslide-python#downloads
+[download-pypi]: https://pypi.org/project/openslide-python/#files
 [license]: /license/
 [demo]: /demo/
 [other-projects]: /other-projects/

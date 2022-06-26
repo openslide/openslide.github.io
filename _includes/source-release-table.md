@@ -13,7 +13,7 @@
         {% if package == 'openslide-python' %}
           <td>
             {% if release.no_whl == null %}
-              <a href="https://pypi.python.org/pypi/{{ package }}/{{ release.version }}#files">Wheels (PyPI)</a>
+              <a href="https://pypi.org/project/{{ package }}/{{ release.version }}/#files">Wheels (PyPI)</a>
             {% endif %}
           </td>
         {% endif %}
