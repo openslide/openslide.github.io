@@ -115,6 +115,7 @@ There are two mailing lists for OpenSlide:
 Some developer documentation is available:
 
  * [Developer Guide][doc-devguide]
+ * [Signing Off on Changes to OpenSlide][doc-signoff]
  * [Adding Support for a New Slide Format][doc-newformat]
  * [Using the OpenSlide Test Suite][doc-testsuite]
  * [Debug Options][doc-debugopts]

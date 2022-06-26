@@ -17,6 +17,10 @@ First, if you are a new contributor to open-source software, please read
 [this introduction][rjones] to contributing patches upstream.  Some of the
 technical details are obsolete, but the general principles are still valid.
 
+Every contribution to OpenSlide must include a signoff certifying that you
+have the right to contribute your changes to the OpenSlide project.  See
+[this guide][doc-signoff] for details.
+
 Please discuss your changes on the [openslide-users][users-subscribe]
 mailing list or in a GitHub issue, *before* you are ready to submit them, so
 that we can help you integrate your code into the existing codebase.

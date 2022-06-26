@@ -15,6 +15,8 @@ General Public License for more details.
 
 ## License Terms
 
+---
+
 ```
 		  GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999
@@ -519,3 +521,5 @@ necessary.  Here is a sample; alter the names:
 
 That's all there is to it!
 ```
+
+---
