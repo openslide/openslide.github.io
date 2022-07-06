@@ -8,6 +8,7 @@
 [github]: https://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/
+[snapshots-windows]: /builds/windows/
 
 [doc-dev]: /#development
 [doc-debugopts]: /docs/debugopts/
@@ -45,10 +46,12 @@
 [python-github]: https://github.com/openslide/openslide-python
 [java-github]: https://github.com/openslide/openslide-java
 [winbuild-github]: https://github.com/openslide/openslide-winbuild
+[builds-github]: https://github.com/openslide/builds
 [site-github]: https://github.com/openslide/openslide.github.io
 
 [c-issues]: https://github.com/openslide/openslide/issues
 [python-issues]: https://github.com/openslide/openslide-python/issues
 [java-issues]: https://github.com/openslide/openslide-java/issues
 [winbuild-issues]: https://github.com/openslide/openslide-winbuild/issues
+[builds-issues]: https://github.com/openslide/builds/issues
 [site-issues]: https://github.com/openslide/openslide.github.io/issues
