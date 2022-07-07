@@ -31,6 +31,8 @@ of the [GNU Lesser General Public License, version 2.1][license].
 ## Windows Binaries
 
 Problems with these binaries can be reported [here][winbuild-issues].
+If you're looking for the bleeding edge,
+[nightly development builds][snapshots-windows] are also available.
 
 <div class="releases">
   <table>
@@ -148,6 +150,10 @@ Problems with these binaries can be reported [here][winbuild-issues].
     <tr>
       <th><a href="https://github.com/openslide/openslide-winbuild">Windows build scripts</a></th>
       <td><code>git clone https://github.com/openslide/openslide-winbuild.git</code></td>
+    </tr>
+    <tr>
+      <th><a href="https://github.com/openslide/builds">Nightly build infrastructure</a></th>
+      <td><code>git clone https://github.com/openslide/builds.git</code></td>
     </tr>
     <tr>
       <th><a href="https://github.com/openslide/openslide.github.io">Website</a></th>

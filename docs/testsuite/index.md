@@ -9,7 +9,7 @@ title: Using the OpenSlide test suite
 To run the test suite, you will need:
 
 - A Git checkout of OpenSlide
-- &ge; 120 GB of disk space
+- &ge; 120 GB of disk space (25 GB on XFS, btrfs, or APFS)
 - PyYAML
 - python-requests
 - `xdelta3`
@@ -189,9 +189,10 @@ rename:
 
 ### Tips
 
-* **Before checking in new tests, make sure the committed files are small.**
-  Once a large file is added to the repository, it cannot be removed!  If
-  xdelta is producing large diffs, you may need to generate the test case
+* Before checking in new tests, make sure the committed files are small.
+  CI will prevent you from merging a large test case, because once a large
+  file is added to the repository, it cannot be removed.  If xdelta is
+  producing large diffs, you may need to generate the test case
   programmatically via the `generate` config option.
 
 * Try to follow the existing naming convention for tests.
