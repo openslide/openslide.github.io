@@ -23,5 +23,9 @@ options supported by your copy.
 `performance`
 : Log conditions causing OpenSlide to exhibit suboptimal performance.
 
+`synthetic`
+: Opening the empty filename with `openslide_open("")` opens a synthetic
+  test slide that exercises all image decoders.
+
 `tiles`
 : Draw tile outlines and coordinates in `openslide_read_region()` output.
