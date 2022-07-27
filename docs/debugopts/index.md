@@ -23,6 +23,9 @@ options supported by your copy.
 `performance`
 : Log conditions causing OpenSlide to exhibit suboptimal performance.
 
+`sql`
+: Log SQL queries performed by the SQLite decoder.
+
 `synthetic`
 : Opening the empty filename with `openslide_open("")` opens a synthetic
   test slide that exercises all image decoders.
