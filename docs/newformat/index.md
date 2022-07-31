@@ -216,6 +216,69 @@ image is pyramidal but is not too large, your driver can simply provide the
 highest-resolution level.
 
 
+## Memory allocation
+
+OpenSlide uses the glib memory allocators, except where an external API
+requires the use of a different allocator.  Use the [slice allocator] for
+fixed-length allocations that are likely to occur repeatedly, such as
+structs and uncompressed pixel data.  (Cache entries _must_ be allocated
+with the slice allocator.)  Use the regular memory allocator for all other
+allocations.
+
+When allocating and freeing an object within the same function, use
+`g_autoptr()` or `g_autofree` to automatically free the object when it goes
+out of scope.  This makes early returns simpler, since those paths don't
+need to explicitly deallocate or `goto` a common cleanup label.
+`g_autoptr()` is suitable for structs with their own free functions, and
+`g_autofree` is for arbitrary memory that can be freed with `g_free()`.
+Variables declared with `g_auto*` must always be initialized on the spot
+(perhaps to `NULL`) to avoid freeing a garbage pointer; CI has a check for
+this.
+
+When allocating an object that will be returned from the function, or will
+be linked into data structures that outlive the function, prefer using
+`g_auto*` anyway.  This can be skipped where the function cannot fail or the
+object cannot leak, but simplifies cleanup if the function has subsequent
+early returns.  Use [`g_steal_pointer`][g_steal_pointer]`(&object)` to
+remove `object` from the control of `g_auto*`.
+
+There is also `g_auto()` for stack-allocated structs and allocated arrays of
+allocated strings.  The latter is spelled `g_auto(GStrv)`, and the former is
+used by a few OpenSlide APIs to support automatic cleanup.  (Notably, the
+TIFF handle cache, and an OpenSlide-provided wrapper around the slice
+allocator.)
+
+Define a `g_autoptr()` cleanup function for any struct that would benefit
+from automatic cleanup.  To do so, glib requires a typedef for the struct
+type, but OpenSlide does not use typedefs for its internal structs.  The
+solution is to declare a typedef _only_ for use with `g_autoptr()`:
+
+```c
+struct foo {
+  ...
+};
+
+static void foo_free(struct foo *f) {
+  ...
+  g_slice_free(struct foo, f);
+}
+
+typedef struct foo foo;
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(foo, foo_free)
+
+...
+
+bool do_something(GError **err) {
+  ...
+  g_autoptr(foo) my_foo = ...;
+  ...
+}
+```
+
+[slice allocator]: https://docs.gtk.org/glib/memory-slices.html
+[g_steal_pointer]: https://docs.gtk.org/glib/func.steal_pointer.html
+
+
 ## Error handling
 
 OpenSlide takes a conservative approach to error handling.  Where feasible,
