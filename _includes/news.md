@@ -1,5 +1,11 @@
 {% include links.md %}
 
+## New Windows build, 2022-08-06
+
+Windows build 20220806 updates the compiler and all dependencies to current
+versions.
+
+
 ## OpenSlide Python version 1.2.0, 2022-06-17
 
 OpenSlide Python 1.2.0 drops support for Python older than 3.7.  It also
