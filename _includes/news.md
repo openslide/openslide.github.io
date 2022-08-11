@@ -1,5 +1,11 @@
 {% include links.md %}
 
+## New Windows build, 2022-08-11
+
+Windows build 20220811 fixes crashes in the 64-bit binaries when reading
+invalid JPEG or PNG images.
+
+
 ## New Windows build, 2022-08-06
 
 Windows build 20220806 updates the compiler and all dependencies to current
