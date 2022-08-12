@@ -119,6 +119,12 @@ If you're looking for the bleeding edge,
       <td></td>
       <td><code>python3 -m pip install openslide-python</code></td>
     </tr>
+    <tr>
+      <th>Python</th>
+      <th><a href="https://anaconda.org/conda-forge">Anaconda</a></th>
+      <td></td>
+      <td><code>conda install -c conda-forge openslide</code></td>
+    </tr>
   </tbody>
 </table>
 
