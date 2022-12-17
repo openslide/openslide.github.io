@@ -102,7 +102,7 @@ jobs:
           ./_synctiles.py start \
             ${GITHUB_WORKSPACE}/context \
             matrix
-          echo "::set-output name=slide-matrix::$(cat matrix)"
+          echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
       - name: Upload context
         uses: actions/upload-artifact@v3
         with:
