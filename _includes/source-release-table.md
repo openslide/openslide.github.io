@@ -4,7 +4,11 @@
       <tr class="{% cycle package: 'odd', 'even' %}">
         <th>{{ release.version }}</th>
         <td>{{ release.date }}</td>
-        <td><a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.gz">tar.gz</a></td>
+        <td>
+          {% if release.no_gz == null %}
+            <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.gz">tar.gz</a>
+          {% endif %}
+        </td>
         <td>
           {% if release.no_xz == null %}
             <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.xz">tar.xz</a>
