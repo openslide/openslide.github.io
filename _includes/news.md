@@ -1,5 +1,10 @@
 {% include links.md %}
 
+## New Windows build, 2022-12-17
+
+Windows build 20221217 updates OpenSlide Java and several dependencies.
+
+
 ## OpenSlide Java version 0.12.3, 2022-12-17
 
 OpenSlide Java 0.12.3 adds a Meson build system, deprecates the
