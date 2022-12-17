@@ -37,6 +37,7 @@ python:
   - {version: 0.3.0, date: 2011-12-16, no_whl: 1}
   - {version: 0.2.0, date: 2011-09-02, no_whl: 1}
 java:
+  - {version: 0.12.3, date: 2022-12-17, no_gz: 1}
   - {version: 0.12.2, date: 2016-09-11}
   - {version: 0.12.1, date: 2015-04-20}
   - {version: 0.12.0, date: 2014-01-25}
