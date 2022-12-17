@@ -71,7 +71,7 @@ jobs:
             --home=${GITHUB_WORKSPACE}/install \
             --install-platlib=${GITHUB_WORKSPACE}/install/lib/python
       - name: Upload build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: install
@@ -82,13 +82,13 @@ jobs:
     container: registry.fedoraproject.org/fedora:latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: website
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build
           path: install
@@ -102,9 +102,9 @@ jobs:
           ./_synctiles.py start \
             ${GITHUB_WORKSPACE}/context \
             matrix
-          echo "::set-output name=slide-matrix::$(cat matrix)"
+          echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
       - name: Upload context
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: context
           path: context
@@ -120,18 +120,18 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.slide-matrix) }}
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: website
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build
           path: install
       - name: Download context
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: context
       - name: Tile slide
@@ -145,7 +145,7 @@ jobs:
             "${{ matrix.slide }}" \
             ${GITHUB_WORKSPACE}/summary
       - name: Upload summary
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: summary
           path: summary
@@ -156,22 +156,22 @@ jobs:
     container: registry.fedoraproject.org/fedora:latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: website
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build
           path: install
       - name: Download context
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: context
       - name: Download summaries
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: summary
           path: summary
