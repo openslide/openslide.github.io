@@ -54,6 +54,12 @@ To report `openslide_open()` times for primary test cases:
 
     ./driver time
 
+### Selecting a cache directory
+
+Cached slide data is stored in `./_slidedata` by default.  To use a
+different directory, set the `OPENSLIDE_TEST_CACHE` environment variable to
+the desired directory path.
+
 ### Expected failures
 
 On some platforms, certain test cases may fail due to problems in other
