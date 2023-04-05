@@ -23,6 +23,10 @@ options supported by your copy.
 `performance`
 : Log conditions causing OpenSlide to exhibit suboptimal performance.
 
+`search`
+: For formats that require searching the filesystem for related files,
+  log each skipped file and the reason for skipping it.
+
 `sql`
 : Log SQL queries performed by the SQLite decoder.
 
