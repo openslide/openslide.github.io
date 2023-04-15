@@ -1,5 +1,11 @@
 {% include links.md %}
 
+## New Windows build, 2023-04-14
+
+Windows build 20230414 integrates most dependencies into the OpenSlide
+DLL, and also updates various dependencies.
+
+
 ## New Windows build, 2022-12-17
 
 Windows build 20221217 updates OpenSlide Java and several dependencies.
