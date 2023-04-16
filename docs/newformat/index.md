@@ -226,14 +226,14 @@ with the slice allocator.)  Use the regular memory allocator for all other
 allocations.
 
 When allocating and freeing an object within the same function, use
-`g_autoptr()` or `g_autofree` to automatically free the object when it goes
-out of scope.  This makes early returns simpler, since those paths don't
-need to explicitly deallocate or `goto` a common cleanup label.
-`g_autoptr()` is suitable for structs with their own free functions, and
-`g_autofree` is for arbitrary memory that can be freed with `g_free()`.
-Variables declared with `g_auto*` must always be initialized on the spot
-(perhaps to `NULL`) to avoid freeing a garbage pointer; CI has a check for
-this.
+[`g_autoptr`][g_autoptr]`()` or [`g_autofree`][g_autofree] to automatically
+free the object when it goes out of scope.  This makes early returns
+simpler, since those paths don't need to explicitly deallocate or `goto` a
+common cleanup label.  `g_autoptr()` is suitable for structs with their own
+free functions, and `g_autofree` is for arbitrary memory that can be freed
+with `g_free()`.  Variables declared with `g_auto*` must always be
+initialized on the spot (perhaps to `NULL`) to avoid freeing a garbage
+pointer; CI has a check for this.
 
 When allocating an object that will be returned from the function, or will
 be linked into data structures that outlive the function, prefer using
@@ -242,11 +242,11 @@ object cannot leak, but simplifies cleanup if the function has subsequent
 early returns.  Use [`g_steal_pointer`][g_steal_pointer]`(&object)` to
 remove `object` from the control of `g_auto*`.
 
-There is also `g_auto()` for stack-allocated structs and allocated arrays of
-allocated strings.  The latter is spelled `g_auto(GStrv)`, and the former is
-used by a few OpenSlide APIs to support automatic cleanup.  (Notably, the
-TIFF handle cache, and an OpenSlide-provided wrapper around the slice
-allocator.)
+There is also [`g_auto`][g_auto]`()` for stack-allocated structs and
+allocated arrays of allocated strings.  The latter is spelled
+`g_auto(GStrv)`, and the former is used by a few OpenSlide APIs to support
+automatic cleanup.  (Notably, the TIFF handle cache, and an
+OpenSlide-provided wrapper around the slice allocator.)
 
 Define a `g_autoptr()` cleanup function for any struct that would benefit
 from automatic cleanup.  To do so, glib requires a typedef for the struct
@@ -276,6 +276,9 @@ bool do_something(GError **err) {
 ```
 
 [slice allocator]: https://docs.gtk.org/glib/memory-slices.html
+[g_autoptr]: https://developer-old.gnome.org/glib/unstable/glib-Miscellaneous-Macros.html#g-autoptr
+[g_autofree]: https://developer-old.gnome.org/glib/unstable/glib-Miscellaneous-Macros.html#g-autofree
+[g_auto]: https://developer-old.gnome.org/glib/unstable/glib-Miscellaneous-Macros.html#g-auto
 [g_steal_pointer]: https://docs.gtk.org/glib/func.steal_pointer.html
 
 
