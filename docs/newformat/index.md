@@ -218,22 +218,20 @@ highest-resolution level.
 
 ## Memory allocation
 
-OpenSlide uses the glib memory allocators, except where an external API
-requires the use of a different allocator.  Use the [slice allocator] for
-fixed-length allocations that are likely to occur repeatedly, such as
-structs and uncompressed pixel data.  (Cache entries _must_ be allocated
-with the slice allocator.)  Use the regular memory allocator for all other
-allocations.
+OpenSlide uses the [glib memory allocator], except where an external API
+requires the use of a different allocator.  OpenSlide previously also used
+the glib [slice allocator], but [no longer does].  Allocate structs with
+[`g_new0`][g_new0]`(struct some_struct, 1)`.
 
 When allocating and freeing an object within the same function, use
-`g_autoptr()` or `g_autofree` to automatically free the object when it goes
-out of scope.  This makes early returns simpler, since those paths don't
-need to explicitly deallocate or `goto` a common cleanup label.
-`g_autoptr()` is suitable for structs with their own free functions, and
-`g_autofree` is for arbitrary memory that can be freed with `g_free()`.
-Variables declared with `g_auto*` must always be initialized on the spot
-(perhaps to `NULL`) to avoid freeing a garbage pointer; CI has a check for
-this.
+[`g_autoptr`][g_autoptr]`()` or [`g_autofree`][g_autofree] to automatically
+free the object when it goes out of scope.  This makes early returns
+simpler, since those paths don't need to explicitly deallocate or `goto` a
+common cleanup label.  `g_autoptr()` is suitable for structs with their own
+free functions, and `g_autofree` is for arbitrary memory that can be freed
+with `g_free()`.  Variables declared with `g_auto*` must always be
+initialized on the spot (perhaps to `NULL`) to avoid freeing a garbage
+pointer; CI has a check for this.
 
 When allocating an object that will be returned from the function, or will
 be linked into data structures that outlive the function, prefer using
@@ -242,11 +240,10 @@ object cannot leak, but simplifies cleanup if the function has subsequent
 early returns.  Use [`g_steal_pointer`][g_steal_pointer]`(&object)` to
 remove `object` from the control of `g_auto*`.
 
-There is also `g_auto()` for stack-allocated structs and allocated arrays of
-allocated strings.  The latter is spelled `g_auto(GStrv)`, and the former is
-used by a few OpenSlide APIs to support automatic cleanup.  (Notably, the
-TIFF handle cache, and an OpenSlide-provided wrapper around the slice
-allocator.)
+There is also [`g_auto`][g_auto]`()` for stack-allocated structs and
+allocated arrays of allocated strings.  The latter is spelled
+`g_auto(GStrv)`, and the former is used by a few OpenSlide APIs to support
+automatic cleanup, notably the TIFF handle cache.
 
 Define a `g_autoptr()` cleanup function for any struct that would benefit
 from automatic cleanup.  To do so, glib requires a typedef for the struct
@@ -260,7 +257,7 @@ struct foo {
 
 static void foo_free(struct foo *f) {
   ...
-  g_slice_free(struct foo, f);
+  g_free(f);
 }
 
 typedef struct foo foo;
@@ -270,12 +267,18 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(foo, foo_free)
 
 bool do_something(GError **err) {
   ...
-  g_autoptr(foo) my_foo = ...;
+  g_autoptr(foo) my_foo = g_new0(struct foo, 1);
   ...
 }
 ```
 
-[slice allocator]: https://docs.gtk.org/glib/memory-slices.html
+[glib memory allocator]: https://developer-old.gnome.org/glib/unstable/glib-Memory-Allocation.html
+[slice allocator]: https://developer-old.gnome.org/glib/unstable/glib-Memory-Slices.html
+[no longer does]: https://github.com/openslide/openslide/issues/430
+[g_new0]: https://developer-old.gnome.org/glib/unstable/glib-Memory-Allocation.html#g-new0
+[g_autoptr]: https://developer-old.gnome.org/glib/unstable/glib-Miscellaneous-Macros.html#g-autoptr
+[g_autofree]: https://developer-old.gnome.org/glib/unstable/glib-Miscellaneous-Macros.html#g-autofree
+[g_auto]: https://developer-old.gnome.org/glib/unstable/glib-Miscellaneous-Macros.html#g-auto
 [g_steal_pointer]: https://docs.gtk.org/glib/func.steal_pointer.html
 
 
