@@ -16,6 +16,11 @@ To run the test suite, you will need:
 - `cjpeg` and `djpeg`, from libjpeg
 - At least one installed font
 
+Sanitize mode requires:
+
+- clang
+- Debug symbols for library dependencies (particularly glib2) and Fontconfig
+
 Valgrind mode requires:
 
 - Valgrind
@@ -41,6 +46,12 @@ To run a subset of the test cases, you can use a glob pattern:
 
     ./driver run 'mirax*'
 
+You can also run the test cases under Clang sanitizers.  This will catch
+undefined behavior, memory leaks, invalid memory accesses, double frees,
+etc., but is somewhat slow.
+
+    ./driver sanitize
+
 You can also run the test cases under Valgrind.  This will catch memory
 leaks, invalid memory accesses, double frees, etc.  It is also very slow.
 
@@ -53,6 +64,10 @@ To generate a test coverage report:
 To report `openslide_open()` times for primary test cases:
 
     ./driver time
+
+To generate a test render of regions from various slides:
+
+    ./driver mosaic out.png
 
 ### Selecting a cache directory
 
@@ -86,6 +101,8 @@ properties:
   # Detect inadvertent changes to the quickhash definition
   openslide.quickhash-1: <value>
 ```
+
+You should also [add a new mosaic region](#adding-mosaic-regions).
 
 
 ## Creating new test cases
@@ -211,3 +228,22 @@ rename:
 
 * If you are creating many test cases, you may find the shell functions in
   `misc/bulk-testcase-helper.sh` useful.
+
+
+## Adding mosaic regions
+
+Mosaic regions are specified in `test/cases/mosaic.ini`.  Regions are
+rendered in order and labeled with INI section names:
+
+```ini
+[MIRAX Exported]
+base = Mirax/CMU-1-Exported.zip
+; Omit for single-file slides
+slide = CMU-1-Exported.mrxs
+x = 58240
+y = 171905
+```
+
+Mosaic regions are always level 0 and 256 x 256 pixels.  Find an appropriate
+region by testing with `openslide-write-png` and `OPENSLIDE_DEBUG=tiles`.
+A good region includes a tile boundary.
