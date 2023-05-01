@@ -83,6 +83,11 @@ set the `OPENSLIDE_TEST_XFAIL` and/or `OPENSLIDE_VALGRIND_XFAIL` environment
 variables to a comma-separated list of cases which are expected to fail
 during `run` or `valgrind`, respectively.
 
+### Using a local mirror
+
+If you have a local mirror of the openslide-testdata repository, you can
+specify its URL using the `OPENSLIDE_TESTDATA_URL` environment variable.
+
 
 ## Adding new slides
 
