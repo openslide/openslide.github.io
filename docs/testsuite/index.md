@@ -65,6 +65,10 @@ To report `openslide_open()` times for primary test cases:
 
     ./driver time
 
+To generate a test render of regions from various slides:
+
+    ./driver mosaic out.png
+
 ### Selecting a cache directory
 
 Cached slide data is stored in `./_slidedata` by default.  To use a
@@ -97,6 +101,8 @@ properties:
   # Detect inadvertent changes to the quickhash definition
   openslide.quickhash-1: <value>
 ```
+
+You should also [add a new mosaic region](#adding-mosaic-regions).
 
 
 ## Creating new test cases
@@ -222,3 +228,22 @@ rename:
 
 * If you are creating many test cases, you may find the shell functions in
   `misc/bulk-testcase-helper.sh` useful.
+
+
+## Adding mosaic regions
+
+Mosaic regions are specified in `test/cases/mosaic.ini`.  Regions are
+rendered in order and labeled with INI section names:
+
+```ini
+[MIRAX Exported]
+base = Mirax/CMU-1-Exported.zip
+; Omit for single-file slides
+slide = CMU-1-Exported.mrxs
+x = 58240
+y = 171905
+```
+
+Mosaic regions are always level 0 and 256 x 256 pixels.  Find an appropriate
+region by testing with `openslide-write-png` and `OPENSLIDE_DEBUG=tiles`.
+A good region includes a tile boundary.
