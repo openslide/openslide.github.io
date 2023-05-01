@@ -16,6 +16,11 @@ To run the test suite, you will need:
 - `cjpeg` and `djpeg`, from libjpeg
 - At least one installed font
 
+Sanitize mode requires:
+
+- clang
+- Debug symbols for library dependencies (particularly glib2) and Fontconfig
+
 Valgrind mode requires:
 
 - Valgrind
@@ -40,6 +45,12 @@ Run all test cases with:
 To run a subset of the test cases, you can use a glob pattern:
 
     ./driver run 'mirax*'
+
+You can also run the test cases under Clang sanitizers.  This will catch
+undefined behavior, memory leaks, invalid memory accesses, double frees,
+etc., but is somewhat slow.
+
+    ./driver sanitize
 
 You can also run the test cases under Valgrind.  This will catch memory
 leaks, invalid memory accesses, double frees, etc.  It is also very slow.
