@@ -60,11 +60,13 @@
     <div id="details" class="scroll-parent"></div>
 </div>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="openseadragon.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/openseadragon@4.0/build/openseadragon/openseadragon.min.js"></script>
 <script type="text/javascript" src="openseadragon-scalebar.js"></script>
 <script type="text/javascript">
 $(function() {
+    var openseadragon_images = "https://cdn.jsdelivr.net/npm/openseadragon@4.0/build/openseadragon/images/"
+
     var stamp;
     var groups;
     var viewer;
@@ -239,7 +241,7 @@ $(function() {
             $("#view").text("");
             viewer = new OpenSeadragon({
                 id: "view",
-                prefixUrl: "images/",
+                prefixUrl: openseadragon_images,
                 animationTime: 0.5,
                 blendTime: 0.1,
                 constrainDuringPan: true,
