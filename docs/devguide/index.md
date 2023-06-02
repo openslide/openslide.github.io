@@ -21,6 +21,18 @@ Every contribution to OpenSlide must include a signoff certifying that you
 have the right to contribute your changes to the OpenSlide project.  See
 [this guide][doc-signoff] for details.
 
+Pull requests that make significant changes should generally be structured
+as [multiple commits][rjones-splitting-commits], where each commit is a
+self-contained change that evolves the codebase toward the desired outcome.
+For example, there might be one commit to fix a typo you found during
+development, then a commit that moves some code to a helper function, then a
+commit that uses the helper function to add the bare bones of a new feature,
+then two more commits that extend that new feature.  Each commit should have
+a commit message that describes the reasoning for the change.  When
+addressing feedback from code review, edit your existing commits with `git
+rebase -i` and update the branch with `git push -f`, rather than appending
+fixup commits to the branch.
+
 Please discuss your changes on the [openslide-users][users-subscribe]
 mailing list or in a GitHub issue, *before* you are ready to submit them, so
 that we can help you integrate your code into the existing codebase.
@@ -33,6 +45,7 @@ redistribute them with or without modification.  Email the mailing list for
 instructions on how to accomplish this.
 
 [rjones]: https://people.redhat.com/~rjones/how-to-supply-code-to-open-source-projects/
+[rjones-splitting-commits]: https://people.redhat.com/~rjones/how-to-supply-code-to-open-source-projects/#split_patches
 
 
 ## Original development guide
