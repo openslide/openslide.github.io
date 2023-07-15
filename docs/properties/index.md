@@ -34,6 +34,9 @@ This property is not always present.
 `openslide.comment`
 : A free-form text comment.
 
+`openslide.icc-size`
+: The size of the slide's ICC profile, if any.
+
 `openslide.mpp-x`
 : Microns per pixel in the X dimension of level 0.  May not be present or
 accurate.
