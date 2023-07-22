@@ -49,6 +49,8 @@ supports cache customization with OpenSlide 3.5.0, improves pixel read
 performance, and improves installation documentation.
 
 
+{% if page.news_show_extended %}
+
 ## OpenSlide Python version 1.1.2, 2020-09-13
 
 OpenSlide Python 1.1.2 fixes compatibility with setuptools &ge; 46, Python
@@ -97,8 +99,6 @@ Sakura, and Ventana slides, as well as many portability fixes.
 
 Windows build 20150420 also adds separate debug symbols for all binaries.
 
-
-{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.1.0, 2015-04-20
 
