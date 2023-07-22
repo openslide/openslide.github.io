@@ -8,7 +8,7 @@ permissions:
 
 env:
   LD_LIBRARY_PATH: "${{ github.workspace }}/install/lib"
-  PYTHONPATH: "${{ github.workspace }}/install/lib/python"
+  PYTHONPATH: "${{ github.workspace }}/install/python"
   PYTHONUNBUFFERED: 1
   RUNTIME_DEPS: "python3 python3-boto3 python3-pillow python3-requests \
     zlib libpng libjpeg-turbo libtiff openjpeg2 gdk-pixbuf2 \
@@ -24,7 +24,7 @@ jobs:
         run: |
           dnf install -y \
             jq xz \
-            python3 python3-devel python3-setuptools python3-pillow \
+            python3 python3-devel python3-pip python3-pillow python3-wheel \
             gcc make pkg-config \
             zlib-devel \
             libpng-devel \
@@ -66,10 +66,7 @@ jobs:
       - name: Build OpenSlide Python
         working-directory: openslide-python-${{ env.OPENSLIDE_PYTHON_VERSION }}
         run: |
-          python3 setup.py install \
-            --single-version-externally-managed --record /dev/null \
-            --home=${GITHUB_WORKSPACE}/install \
-            --install-platlib=${GITHUB_WORKSPACE}/install/lib/python
+          pip install -t ${GITHUB_WORKSPACE}/install/python .
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:

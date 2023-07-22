@@ -3,7 +3,7 @@
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2015 Carnegie Mellon University
-# Copyright (c) 2016-2021 Benjamin Gilbert
+# Copyright (c) 2016-2023 Benjamin Gilbert
 #
 # This library is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -30,6 +30,7 @@ import openslide
 from openslide import OpenSlide, ImageSlide, OpenSlideError
 from openslide.deepzoom import DeepZoomGenerator
 import os
+from PIL import ImageCms
 import posixpath as urlpath
 import re
 import requests
@@ -39,6 +40,7 @@ from tempfile import mkdtemp
 from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
+import zlib
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'
@@ -57,6 +59,7 @@ QUALITY = 75
 TILE_SIZE = 510
 OVERLAP = 1
 LIMIT_BOUNDS = True
+RENDERING_INTENT = ImageCms.Intent.ABSOLUTE_COLORIMETRIC
 GROUP_NAME_MAP = {
     'Generic-TIFF': 'Generic TIFF',
     'Hamamatsu': 'Hamamatsu NDPI',
@@ -72,11 +75,43 @@ BUCKET_STATIC = {
 CACHE_CONTROL_NOCACHE = 'no-cache'
 CACHE_CONTROL_CACHE = 'public, max-age=31536000'
 
+# Optimized sRGB v2 profile, CC0-1.0 license
+# https://github.com/saucecontrol/Compact-ICC-Profiles/blob/bdd84663/profiles/sRGB-v2-micro.icc
+# ImageCms.createProfile() generates a v4 profile and Firefox has problems
+# with those: https://littlecms.com/blog/2020/09/09/browser-check/
+SRGB_PROFILE_BYTES = zlib.decompress(
+    base64.b64decode(
+        'eNpjYGA8kZOcW8wkwMCQm1dSFOTupBARGaXA/oiBmUGEgZOBj0E2Mbm4wDfYLYQBCIoT'
+        'y4uTS4pyGFDAt2sMjCD6sm5GYl7K3IkMtg4NG2wdSnQa5y1V6mPADzhTUouTgfQHII5P'
+        'LigqYWBg5AGyecpLCkBsCSBbpAjoKCBbB8ROh7AdQOwkCDsErCYkyBnIzgCyE9KR2ElI'
+        'bKhdIMBaCvQsskNKUitKQLSzswEDKAwgop9DwH5jFDuJEMtfwMBg8YmBgbkfIZY0jYFh'
+        'eycDg8QthJgKUB1/KwPDtiPJpUVlUGu0gLiG4QfjHKZS5maWk2x+HEJcEjxJfF8Ez4t8'
+        'k8iS0VNwVlmjmaVXZ/zacrP9NbdwX7OQshjxFNmcttKwut4OnUlmc1Yv79l0e9/MU8ev'
+        'pz4p//jz/38AR4Nk5Q=='
+    )
+)
+SRGB_PROFILE = ImageCms.getOpenProfile(BytesIO(SRGB_PROFILE_BYTES))
 
 def slugify(text):
     """Generate an ASCII-only slug."""
     text = normalize('NFKD', text.lower()).encode('ascii', 'ignore').decode()
     return re.sub('[^a-z0-9]+', '_', text)
+
+
+def get_transform(image):
+    """Return a function that transforms an image to sRGB in place."""
+    if image.color_profile is None:
+        return lambda img: None
+    transform = ImageCms.buildTransform(
+        image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', RENDERING_INTENT, 0
+    )
+    def xfrm(img):
+        ImageCms.applyTransform(img, transform, True)
+        # Some browsers assume we intend the display's color space if we
+        # don't embed the profile.  Pillow's serialization is larger, so
+        # use ours.
+        img.info['icc_profile'] = SRGB_PROFILE_BYTES
+    return xfrm
 
 
 def connect_bucket():
@@ -87,8 +122,10 @@ def connect_bucket():
 def pool_init(slide_path):
     global upload_bucket, dz_generators
     _, upload_bucket = connect_bucket()
-    generator = lambda slide: DeepZoomGenerator(slide, TILE_SIZE,
-            OVERLAP, limit_bounds=LIMIT_BOUNDS)
+    generator = lambda slide: (
+        DeepZoomGenerator(slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS),
+        get_transform(slide)
+    )
     slide = OpenSlide(slide_path)
     dz_generators = {
         None: generator(slide)
@@ -101,10 +138,12 @@ def sync_tile(args):
     """Generate and possibly upload a tile."""
     try:
         associated, level, address, key_name, cur_md5 = args
-        dz = dz_generators[associated]
+        dz, transform = dz_generators[associated]
         tile = dz.get_tile(level, address)
+        transform(tile)
         buf = BytesIO()
-        tile.save(buf, FORMAT, quality=QUALITY)
+        tile.save(buf, FORMAT, quality=QUALITY,
+                icc_profile=tile.info.get('icc_profile'))
         new_md5 = md5(buf.getbuffer())
         if cur_md5 != new_md5.hexdigest():
             upload_bucket.Object(key_name).put(
