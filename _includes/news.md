@@ -1,5 +1,13 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.3.0, 2023-07-22
+
+OpenSlide Python 1.3.0 adds support for the upcoming OpenSlide 4.0.0 and
+drops support for Python 3.7.  It also exposes color management profiles
+where available, and updates the Deep Zoom example tools to transform images
+to sRGB by default.
+
+
 ## New Windows build, 2023-04-14
 
 Windows build 20230414 integrates most dependencies into the OpenSlide
@@ -40,6 +48,8 @@ OpenSlide Python 1.2.0 drops support for Python older than 3.7.  It also
 supports cache customization with OpenSlide 3.5.0, improves pixel read
 performance, and improves installation documentation.
 
+
+{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.1.2, 2020-09-13
 
@@ -89,8 +99,6 @@ Sakura, and Ventana slides, as well as many portability fixes.
 
 Windows build 20150420 also adds separate debug symbols for all binaries.
 
-
-{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.1.0, 2015-04-20
 
