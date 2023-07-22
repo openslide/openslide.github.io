@@ -16,6 +16,7 @@ closest to a desired zoom level.
 OpenSlide can read virtual slides in several formats:
 
 * Aperio_ (``.svs``, ``.tif``)
+* DICOM_ (``.dcm``)
 * Hamamatsu_ (``.ndpi``, ``.vms``, ``.vmu``)
 * Leica_ (``.scn``)
 * MIRAX_ (``.mrxs``)
@@ -30,6 +31,7 @@ Public License, version 2.1`_.
 
 .. _OpenSlide: https://openslide.org/
 .. _Aperio: https://openslide.org/formats/aperio/
+.. _DICOM: https://openslide.org/formats/dicom/
 .. _Hamamatsu: https://openslide.org/formats/hamamatsu/
 .. _Leica: https://openslide.org/formats/leica/
 .. _MIRAX: https://openslide.org/formats/mirax/
@@ -38,7 +40,7 @@ Public License, version 2.1`_.
 .. _Trestle: https://openslide.org/formats/trestle/
 .. _Ventana: https://openslide.org/formats/ventana/
 .. _`Generic tiled TIFF`: https://openslide.org/formats/generic-tiff/
-.. _`GNU Lesser General Public License, version 2.1`: https://raw.github.com/openslide/openslide-python/main/lgpl-2.1.txt
+.. _`GNU Lesser General Public License, version 2.1`: https://openslide.org/license/
 
 
 Installing
@@ -63,14 +65,11 @@ to a known path.  Then, import ``openslide`` inside a
 
     import os
     if hasattr(os, 'add_dll_directory'):
-        # Python >= 3.8 on Windows
+        # Windows
         with os.add_dll_directory(OPENSLIDE_PATH):
             import openslide
     else:
         import openslide
-
-This won't work with Python 3.7 or earlier; you'll need to add the OpenSlide
-``bin`` directory to your ``PATH`` instead.
 
 .. _install: https://openslide.org/download/#distribution-packages
 .. _Anaconda: https://anaconda.org/
@@ -151,6 +150,12 @@ OpenSlide objects
 
       Unlike in the C interface, these images are not premultiplied.
 
+   .. attribute:: color_profile
+
+      The embedded :ref:`color profile <color-management>` for this slide,
+      as a Pillow :class:`~PIL.ImageCms.ImageCmsProfile`, or :obj:`None` if
+      not available.
+
    .. method:: read_region(location, level, size)
 
       Return an RGBA :class:`Image <PIL.Image.Image>` containing the
@@ -184,11 +189,63 @@ OpenSlide objects
       with a default size.
 
       :param OpenSlideCache cache: a cache object
-      :raises OpenSlideVersionError: if OpenSlide is older than version 3.5.0
+      :raises OpenSlideVersionError: if OpenSlide is older than version 4.0.0
 
    .. method:: close()
 
       Close the OpenSlide object.
+
+
+.. _color-management:
+
+Color management
+----------------
+
+Every slide region, associated image, thumbnail, and Deep Zoom tile produced
+by OpenSlide Python includes a reference to an ICC color profile whenever a
+profile is available for the underlying pixel data.  Profiles are stored as
+a :class:`bytes` object in
+:attr:`Image.info <PIL.Image.Image.info>`:attr:`['icc_profile']`.  If no
+profile is available, the :attr:`icc_profile` dictionary key is absent.
+
+To include the profile in an image file when saving the image to disk::
+
+    image.save(filename, icc_profile=image.info.get('icc_profile'))
+
+To perform color conversions using the profile, import it into
+:mod:`ImageCms <PIL.ImageCms>`.  For example, to convert an image in-place
+to a synthesized sRGB profile, using absolute colorimetric rendering::
+
+    from io import BytesIO
+    from PIL import ImageCms
+
+    fromProfile = ImageCms.getOpenProfile(BytesIO(image.info['icc_profile']))
+    toProfile = ImageCms.createProfile('sRGB')
+    ImageCms.profileToProfile(
+        image, fromProfile, toProfile,
+        ImageCms.Intent.ABSOLUTE_COLORIMETRIC, 'RGBA', True, 0
+    )
+
+Absolute colorimetric rendering `maximizes the comparability`_ of images
+produced by different scanners.  When converting Deep Zoom tiles, use
+``'RGB'`` instead of ``'RGBA'``.
+
+All pyramid regions in a slide have the same profile, but each associated
+image can have its own profile.  As a convenience, the former is also
+available as :attr:`OpenSlide.color_profile`, already parsed into an
+:class:`~PIL.ImageCms.ImageCmsProfile` object.  You can save processing time
+by building an :class:`~PIL.ImageCms.ImageCmsTransform` for the slide and
+reusing it for multiple slide regions::
+
+    toProfile = ImageCms.createProfile('sRGB')
+    transform = ImageCms.buildTransform(
+        slide.color_profile, toProfile, 'RGBA', 'RGBA',
+        ImageCms.Intent.ABSOLUTE_COLORIMETRIC, 0
+    )
+    # for each region image:
+    ImageCms.applyTransform(image, transform, True)
+
+.. _maximizes the comparability: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4478790/
 
 
 Caching
@@ -203,7 +260,7 @@ Caching
    default, each :class:`OpenSlide` has its own cache with a default size.
 
    :param int capacity: the cache capacity in bytes
-   :raises OpenSlideVersionError: if OpenSlide is older than version 3.5.0
+   :raises OpenSlideVersionError: if OpenSlide is older than version 4.0.0
 
 
 .. _standard-properties:
@@ -289,8 +346,10 @@ Exceptions
    Subclass of :exc:`OpenSlideError`.
 
 
-Wrapping a PIL Image
-====================
+.. _wrapping-a-pil-image:
+
+Wrapping a Pillow Image
+=======================
 
 .. class:: ImageSlide(file)
 
@@ -321,7 +380,7 @@ OpenSlide Python provides functionality for generating individual
 whole-slide images in a web browser without converting the entire slide to
 Deep Zoom or a similar format.
 
-.. _`Deep Zoom`: http://msdn.microsoft.com/en-us/library/cc645050%28VS.95%29.aspx
+.. _`Deep Zoom`: https://docs.microsoft.com/en-us/previous-versions/windows/silverlight/dotnet-windows-silverlight/cc645050(v=vs.95)
 
 .. class:: DeepZoomGenerator(osr, tile_size=254, overlap=1, limit_bounds=False)
 
