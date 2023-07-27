@@ -16,22 +16,16 @@ OpenSlide is built for Windows using
 [MinGW-w64](https://www.mingw-w64.org/).  The easiest way to build
 OpenSlide and its dependencies is by using the
 [openslide-winbuild][winbuild-github] script, which can run on Linux or
-natively on Windows via [Cygwin](https://www.cygwin.com/).
+Windows in a Docker container.
 
 ### Python
 
 OpenSlide Python is not included in the OpenSlide binary distributions,
 but prebuilt wheels are [available on PyPI][download-pypi].  Install with
-`pip install openslide-python` and make sure OpenSlide is in the DLL search
-path.
+`pip install openslide-python` and make sure OpenSlide is [added to the DLL
+search path](/api/python/#installing) with `os.add_dll_directory()`.
 
 ## Using OpenSlide on Windows
-
-### Crashes when linked with MSVC 2010 (VC10) or earlier
-
-With VC10 and earlier, you will see crashes at runtime if you link with
-`/OPT:REF`, which is the default in release builds.  Link with `/OPT:NOREF`
-or regenerate the import library using the MSVC toolchain.
 
 ### Optional components
 
