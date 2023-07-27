@@ -26,6 +26,20 @@ More info
 : [Aperio format][format-aperio]
 
 
+## DICOM
+
+International standard multi-file medical imaging format.
+
+File extensions
+: `.dcm`
+
+OpenSlide vendor backend
+: `dicom`
+
+More info
+: [DICOM format][format-dicom]
+
+
 ## Hamamatsu
 
 Multi-file JPEG/NGR with proprietary metadata and index file formats, and
