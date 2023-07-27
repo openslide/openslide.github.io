@@ -87,6 +87,12 @@ even though the TIFF standard seems to require this. The correct
 subsampling can be found in the JPEG 2000 codestream.
 
 
+## ICC Profiles
+
+The slide ICC profile is taken from the `ICC Profile` tag of the first
+image.
+
+
 ## Associated Images
 
 thumbnail

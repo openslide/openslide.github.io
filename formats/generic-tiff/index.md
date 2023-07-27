@@ -31,6 +31,12 @@ other tiled images in the file with the "reduced resolution" bit set
 are assumed to be reduced-resolution versions of the original.
 
 
+## ICC Profiles
+
+The slide ICC profile is taken from the `ICC Profile` tag of the
+highest-resolution level.
+
+
 ## Associated Images
 
 None.
