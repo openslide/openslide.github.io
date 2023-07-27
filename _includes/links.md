@@ -26,6 +26,7 @@
 
 [formats]: /formats/
 [format-aperio]: /formats/aperio/
+[format-dicom]: /formats/dicom/
 [format-generic-tiff]: /formats/generic-tiff/
 [format-hamamatsu]: /formats/hamamatsu/
 [format-leica]: /formats/leica/
