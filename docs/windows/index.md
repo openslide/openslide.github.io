@@ -41,6 +41,7 @@ utility programs:
 - `openslide-quickhash1sum.exe`
 - `openslide-show-properties.exe`
 - `openslide-write-png.exe`
+- `slidetool.exe`
 
 These binaries are only necessary if you use OpenSlide Java:
 

@@ -250,5 +250,5 @@ y = 171905
 ```
 
 Mosaic regions are always level 0 and 256 x 256 pixels.  Find an appropriate
-region by testing with `openslide-write-png` and `OPENSLIDE_DEBUG=tiles`.
+region by testing with `slidetool region read` and `OPENSLIDE_DEBUG=tiles`.
 A good region includes a tile boundary.
