@@ -23,6 +23,12 @@ OpenSlide will detect a file as Ventana if:
  3. The XML contains an `iScan` element, either as the root element or as a child of a `Metadata` root element.
 
 
+## ICC Profiles
+
+The slide ICC profile is taken from the `ICC Profile` tag of the
+highest-resolution level.
+
+
 ## Associated Images
 
 `macro`
