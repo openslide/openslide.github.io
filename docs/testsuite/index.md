@@ -139,8 +139,8 @@ original slide (e.g., if OpenSlide falls back to `generic-tiff`), change
 `vendor` to the new string or `null` for NULL.
 
 If the test should only be run if particular OpenSlide dependencies are
-available, set `requires` to a list of feature flags.  Currently the only
-defined feature flag is `dicom`.
+available, set `requires` to a list of feature flags.  Currently there are
+no defined feature flags.
 
 Pack the test:
 
