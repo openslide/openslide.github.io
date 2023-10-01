@@ -86,7 +86,7 @@ If you're looking for the bleeding edge,
     <tr>
       <th>Linux</th>
       <th>
-        <a href="https://www.redhat.com/products/enterprise-linux/">Red Hat Enterprise Linux</a><br>
+        <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">Red Hat Enterprise Linux</a><br>
         <a href="https://www.centos.org/centos-stream/">CentOS Stream</a>
       </th>
       <td>
