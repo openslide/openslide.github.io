@@ -209,6 +209,11 @@ generate:
   ? "CMU-1-40x - 2010-01-12 13.24.05(1,1).jpg"
   : "jpegtran -restart 256B -outfile %(out)s %(in)s"
 
+# Copy test case files during unpack.
+copy:
+  ? DCM_0_copy.dcm
+  : DCM_0.dcm
+
 # Rename or move test case files during unpack.
 rename:
   ? "CMU-1-40x - 2010-01-12 13.24.05(1,1).jpg"
