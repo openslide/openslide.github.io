@@ -28,8 +28,8 @@ OpenSlide will detect a file as DICOM if:
 
 ## File Organization
 
-OpenSlide uses [libdicom](https://libdicom.readthedocs.io/) to parse and
-load DICOM files.
+OpenSlide uses [libdicom](https://github.com/ImagingDataCommons/libdicom/)
+to parse and load DICOM files.
 
 OpenSlide non-recursively scans the containing directory for other DICOM
 files with the same _Series Instance UID_ attribute value as the specified
