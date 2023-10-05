@@ -93,5 +93,4 @@ prefixed with "`philips.`".
 
 ## Test Data
 
-No public data available.  Contact the [mailing list][users-subscribe] if
-you have some.
+<https://openslide.cs.cmu.edu/download/openslide-testdata/Philips-TIFF/>
