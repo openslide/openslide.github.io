@@ -80,6 +80,12 @@ If you're looking for the bleeding edge,
     </tr>
     <tr>
       <th>Linux</th>
+      <th><a href="https://archlinux.org/">Arch Linux</a></th>
+      <td><code>pacman -S openslide</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
       <th>
         <a href="https://www.debian.org/">Debian</a><br>
         <a href="https://ubuntu.com/">Ubuntu</a>
@@ -113,9 +119,30 @@ If you're looking for the bleeding edge,
     </tr>
     <tr>
       <th>Python</th>
+      <th><a href="https://conda-forge.org/">conda-forge</a></th>
+      <td><code>conda install openslide</code></td>
+      <td><code>conda install openslide-python</code></td>
+    </tr>
+    <tr>
+      <th>Python</th>
       <th><a href="https://pypi.org/">PyPI</a></th>
       <td></td>
       <td><code>python3 -m pip install openslide-python</code></td>
+    </tr>
+    <tr>
+      <th>Windows</th>
+      <th><a href="https://www.msys2.org/">MSYS2</a></th>
+      <td>
+        <code>pacman -S mingw-w64-x86_64-openslide</code><br>
+        <i>(or <a href="https://packages.msys2.org/base/mingw-w64-openslide">other variants</a>)</i>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Windows</th>
+      <th><a href="https://vcpkg.io/">vcpkg</a></th>
+      <td><code>vcpkg install openslide</code></td>
+      <td></td>
     </tr>
   </tbody>
 </table>
