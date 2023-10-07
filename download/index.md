@@ -62,20 +62,39 @@ If you're looking for the bleeding edge,
   <tbody>
     <tr>
       <th>Linux</th>
-      <th><a href="https://fedoraproject.org/">Fedora</a></th>
-      <td><code>dnf install openslide</code></td>
-      <td><code>dnf install python3-openslide</code></td>
+      <th>
+        <a href="https://almalinux.org/">AlmaLinux</a><br>
+        <a href="https://www.centos.org/centos-stream/">CentOS Stream</a><br>
+        <a href="https://www.oracle.com/linux/">Oracle Linux</a><br>
+        <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">Red Hat Enterprise Linux</a><br>
+        <a href="https://rockylinux.org/">Rocky Linux</a>
+      </th>
+      <td>
+        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
+        <code>yum install openslide</code><br>
+      </td>
+      <td>
+        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
+        <code>yum install python3-openslide</code><br>
+      </td>
     </tr>
     <tr>
       <th>Linux</th>
-      <th>
-        <a href="https://www.debian.org/">Debian</a><br>
-        <a href="https://ubuntu.com/">Ubuntu</a>
-      </th>
-      <td><code>apt-get install openslide-tools</code></td>
-      <td>
-        <code>apt-get install python3-openslide</code><br>
-      </td>
+      <th><a href="https://archlinux.org/">Arch Linux</a></th>
+      <td><code>pacman -S openslide</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <th><a href="https://www.debian.org/">Debian</a></th>
+      <td><code>apt install openslide-tools</code></td>
+      <td><code>apt install python3-openslide</code></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <th><a href="https://fedoraproject.org/">Fedora</a></th>
+      <td><code>dnf install openslide</code></td>
+      <td><code>dnf install python3-openslide</code></td>
     </tr>
     <tr>
       <th>Linux</th>
@@ -85,38 +104,74 @@ If you're looking for the bleeding edge,
     </tr>
     <tr>
       <th>Linux</th>
-      <th>
-        <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">Red Hat Enterprise Linux</a><br>
-        <a href="https://www.centos.org/centos-stream/">CentOS Stream</a>
-      </th>
+      <th><a href="https://ubuntu.com/">Ubuntu</a></th>
       <td>
-        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install openslide</code><br>
-        <i>(RHEL/CentOS Stream &ge; 8)</i>
+        <div>
+          <i>Official packages:</i><br>
+          <code>apt install openslide-tools</code>
+        </div>
+        <div>
+          <i>Latest OpenSlide:</i><br>
+          <code>
+            apt install software-properties-common<br>
+            add-apt-repository <a href="https://launchpad.net/~openslide/+archive/ubuntu/openslide">ppa:openslide/openslide</a><br>
+            apt install openslide-tools
+          </code>
+        </div>
       </td>
       <td>
-        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install python3-openslide</code><br>
-        <i>(RHEL/CentOS Stream &ge; 8)</i>
+        <div>
+          <i>Official packages:</i><br>
+          <code>apt install python3-openslide</code>
+        </div>
+        <div>
+          <i>Latest OpenSlide Python:</i><br>
+          <code>
+            apt install software-properties-common<br>
+            add-apt-repository <a href="https://launchpad.net/~openslide/+archive/ubuntu/openslide">ppa:openslide/openslide</a><br>
+            apt install python3-openslide
+          </code>
+        </div>
       </td>
     </tr>
     <tr>
-      <th>Mac OS X</th>
+      <th>macOS</th>
+      <th><a href="https://brew.sh/">Homebrew</a></th>
+      <td><code>brew install openslide</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>macOS</th>
       <th><a href="https://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
       <td><code>port install py311-openslide</code></td>
     </tr>
     <tr>
-      <th>Mac OS X</th>
-      <th><a href="https://brew.sh/">Homebrew</a></th>
-      <td><code>brew install openslide</code></td>
-      <td></td>
+      <th>Python</th>
+      <th><a href="https://conda-forge.org/">conda-forge</a></th>
+      <td><code>conda install openslide</code></td>
+      <td><code>conda install openslide-python</code></td>
     </tr>
     <tr>
       <th>Python</th>
       <th><a href="https://pypi.org/">PyPI</a></th>
       <td></td>
       <td><code>python3 -m pip install openslide-python</code></td>
+    </tr>
+    <tr>
+      <th>Windows</th>
+      <th><a href="https://www.msys2.org/">MSYS2</a></th>
+      <td>
+        <code>pacman -S mingw-w64-x86_64-openslide</code><br>
+        <i>(or <a href="https://packages.msys2.org/base/mingw-w64-openslide">other variants</a>)</i>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Windows</th>
+      <th><a href="https://vcpkg.io/">vcpkg</a></th>
+      <td><code>vcpkg install openslide</code></td>
+      <td></td>
     </tr>
   </tbody>
 </table>
