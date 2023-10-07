@@ -62,29 +62,6 @@ If you're looking for the bleeding edge,
   <tbody>
     <tr>
       <th>Linux</th>
-      <th><a href="https://fedoraproject.org/">Fedora</a></th>
-      <td><code>dnf install openslide</code></td>
-      <td><code>dnf install python3-openslide</code></td>
-    </tr>
-    <tr>
-      <th>Linux</th>
-      <th>
-        <a href="https://www.debian.org/">Debian</a><br>
-        <a href="https://ubuntu.com/">Ubuntu</a>
-      </th>
-      <td><code>apt-get install openslide-tools</code></td>
-      <td>
-        <code>apt-get install python3-openslide</code><br>
-      </td>
-    </tr>
-    <tr>
-      <th>Linux</th>
-      <th><a href="https://www.opensuse.org/">openSUSE</a></th>
-      <td><code>zypper install openslide-tools</code></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>Linux</th>
       <th>
         <a href="https://almalinux.org/">AlmaLinux</a><br>
         <a href="https://www.centos.org/centos-stream/">CentOS Stream</a><br>
@@ -102,16 +79,39 @@ If you're looking for the bleeding edge,
       </td>
     </tr>
     <tr>
-      <th>macOS</th>
-      <th><a href="https://www.macports.org/">MacPorts</a></th>
-      <td><code>port install openslide</code></td>
-      <td><code>port install py311-openslide</code></td>
+      <th>Linux</th>
+      <th>
+        <a href="https://www.debian.org/">Debian</a><br>
+        <a href="https://ubuntu.com/">Ubuntu</a>
+      </th>
+      <td><code>apt-get install openslide-tools</code></td>
+      <td>
+        <code>apt-get install python3-openslide</code><br>
+      </td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <th><a href="https://fedoraproject.org/">Fedora</a></th>
+      <td><code>dnf install openslide</code></td>
+      <td><code>dnf install python3-openslide</code></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <th><a href="https://www.opensuse.org/">openSUSE</a></th>
+      <td><code>zypper install openslide-tools</code></td>
+      <td></td>
     </tr>
     <tr>
       <th>macOS</th>
       <th><a href="https://brew.sh/">Homebrew</a></th>
       <td><code>brew install openslide</code></td>
       <td></td>
+    </tr>
+    <tr>
+      <th>macOS</th>
+      <th><a href="https://www.macports.org/">MacPorts</a></th>
+      <td><code>port install openslide</code></td>
+      <td><code>port install py311-openslide</code></td>
     </tr>
     <tr>
       <th>Python</th>
