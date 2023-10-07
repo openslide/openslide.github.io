@@ -86,8 +86,11 @@ If you're looking for the bleeding edge,
     <tr>
       <th>Linux</th>
       <th>
+        <a href="https://almalinux.org/">AlmaLinux</a><br>
+        <a href="https://www.centos.org/centos-stream/">CentOS Stream</a><br>
+        <a href="https://www.oracle.com/linux/">Oracle Linux</a><br>
         <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">Red Hat Enterprise Linux</a><br>
-        <a href="https://www.centos.org/centos-stream/">CentOS Stream</a>
+        <a href="https://rockylinux.org/">Rocky Linux</a>
       </th>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
