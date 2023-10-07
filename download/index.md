@@ -101,13 +101,13 @@ If you're looking for the bleeding edge,
       </td>
     </tr>
     <tr>
-      <th>Mac OS X</th>
+      <th>macOS</th>
       <th><a href="https://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
       <td><code>port install py311-openslide</code></td>
     </tr>
     <tr>
-      <th>Mac OS X</th>
+      <th>macOS</th>
       <th><a href="https://brew.sh/">Homebrew</a></th>
       <td><code>brew install openslide</code></td>
       <td></td>
