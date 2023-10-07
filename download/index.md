@@ -84,10 +84,8 @@ If you're looking for the bleeding edge,
         <a href="https://www.debian.org/">Debian</a><br>
         <a href="https://ubuntu.com/">Ubuntu</a>
       </th>
-      <td><code>apt-get install openslide-tools</code></td>
-      <td>
-        <code>apt-get install python3-openslide</code><br>
-      </td>
+      <td><code>apt install openslide-tools</code></td>
+      <td><code>apt install python3-openslide</code></td>
     </tr>
     <tr>
       <th>Linux</th>
