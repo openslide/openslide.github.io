@@ -92,12 +92,10 @@ If you're looking for the bleeding edge,
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
         <code>yum install openslide</code><br>
-        <i>(RHEL/CentOS Stream &ge; 8)</i>
       </td>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
         <code>yum install python3-openslide</code><br>
-        <i>(RHEL/CentOS Stream &ge; 8)</i>
       </td>
     </tr>
     <tr>
