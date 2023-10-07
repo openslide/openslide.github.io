@@ -91,3 +91,9 @@ div.releases.indent {
 .pinfo tbody th {
   text-align: left;
 }
+.pinfo tbody td div:first-child {
+  margin-bottom: 0.85em;
+}
+.pinfo tbody td div:not(:first-child) {
+  margin-top: 0.85em;
+}

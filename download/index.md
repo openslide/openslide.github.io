@@ -86,10 +86,7 @@ If you're looking for the bleeding edge,
     </tr>
     <tr>
       <th>Linux</th>
-      <th>
-        <a href="https://www.debian.org/">Debian</a><br>
-        <a href="https://ubuntu.com/">Ubuntu</a>
-      </th>
+      <th><a href="https://www.debian.org/">Debian</a></th>
       <td><code>apt install openslide-tools</code></td>
       <td><code>apt install python3-openslide</code></td>
     </tr>
@@ -104,6 +101,38 @@ If you're looking for the bleeding edge,
       <th><a href="https://www.opensuse.org/">openSUSE</a></th>
       <td><code>zypper install openslide-tools</code></td>
       <td></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <th><a href="https://ubuntu.com/">Ubuntu</a></th>
+      <td>
+        <div>
+          <i>Official packages:</i><br>
+          <code>apt install openslide-tools</code>
+        </div>
+        <div>
+          <i>Latest OpenSlide:</i><br>
+          <code>
+            apt install software-properties-common<br>
+            add-apt-repository <a href="https://launchpad.net/~openslide/+archive/ubuntu/openslide">ppa:openslide/openslide</a><br>
+            apt install openslide-tools
+          </code>
+        </div>
+      </td>
+      <td>
+        <div>
+          <i>Official packages:</i><br>
+          <code>apt install python3-openslide</code>
+        </div>
+        <div>
+          <i>Latest OpenSlide Python:</i><br>
+          <code>
+            apt install software-properties-common<br>
+            add-apt-repository <a href="https://launchpad.net/~openslide/+archive/ubuntu/openslide">ppa:openslide/openslide</a><br>
+            apt install python3-openslide
+          </code>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>macOS</th>
