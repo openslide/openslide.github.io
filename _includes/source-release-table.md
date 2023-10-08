@@ -2,7 +2,11 @@
   <table>
     {% for release in releases %}
       <tr class="{% cycle package: 'odd', 'even' %}">
-        <th>{{ release.version }}</th>
+        <th>
+          <a href="https://github.com/openslide/{{ package }}/releases/tag/v{{ release.version }}">
+            {{ release.version }}
+          </a>
+        </th>
         <td>{{ release.date }}</td>
         <td>
           {% if release.no_gz == null %}
