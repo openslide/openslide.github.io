@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.3.1, 2023-10-08
+
+OpenSlide Python 1.3.1 updates the docs and example tools to transform
+images to sRGB using the default rendering intent of the image's ICC
+profile, rather than absolute colorimetric intent.
+
+
 ## OpenSlide Python version 1.3.0, 2023-07-22
 
 OpenSlide Python 1.3.0 adds support for the upcoming OpenSlide 4.0.0 and
