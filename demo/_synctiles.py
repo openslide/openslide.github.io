@@ -65,6 +65,7 @@ GROUP_NAME_MAP = {
     'Hamamatsu': 'Hamamatsu NDPI',
     'Hamamatsu-vms': 'Hamamatsu VMS',
     'Mirax': 'MIRAX',
+    'Philips-TIFF': 'Philips TIFF',
 }
 BUCKET_STATIC = {
     'robots.txt': {
