@@ -59,7 +59,6 @@ QUALITY = 75
 TILE_SIZE = 510
 OVERLAP = 1
 LIMIT_BOUNDS = True
-RENDERING_INTENT = ImageCms.Intent.ABSOLUTE_COLORIMETRIC
 GROUP_NAME_MAP = {
     'Generic-TIFF': 'Generic TIFF',
     'Hamamatsu': 'Hamamatsu NDPI',
@@ -103,8 +102,9 @@ def get_transform(image):
     """Return a function that transforms an image to sRGB in place."""
     if image.color_profile is None:
         return lambda img: None
+    intent = ImageCms.getDefaultIntent(image.color_profile)
     transform = ImageCms.buildTransform(
-        image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', RENDERING_INTENT, 0
+        image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
     )
     def xfrm(img):
         ImageCms.applyTransform(img, transform, True)
