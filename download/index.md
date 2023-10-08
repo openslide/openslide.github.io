@@ -38,7 +38,11 @@ If you're looking for the bleeding edge,
   <table>
     {% for release in site.data.releases.winbuild %}
       <tr class="{% cycle 'winbuild': 'odd', 'even' %}">
-        <th>{{ release.date }}</th>
+        <th>
+          <a href="https://github.com/openslide/openslide-winbuild/releases/tag/v{{ release.date|remove:'-' }}">
+            {{ release.date }}
+          </a>
+        </th>
         <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">32-bit</a></td>
         <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">64-bit</a></td>
         <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Corresponding sources</a></td>
