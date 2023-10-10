@@ -72,8 +72,8 @@ GENERAL.IMAGENUMBER_X + image_x`.  Image coordinates which are not multiples
 of the zoom level's downsample factor are omitted.
 
 Nonhierarchical records refer to associated images and additional metadata.
-Nonhierarchical data items consist of three zero values followed by an
-offset, length, and file number as in hierarchical records.
+Nonhierarchical data items consist of two values which are usually zero,
+followed by an offset, length, and file number as in hierarchical records.
 
 
 ## Data Files
