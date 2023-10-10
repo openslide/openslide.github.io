@@ -101,6 +101,9 @@ the flag byte is always 0.
 In slides with `CURRENT_SLIDE_VERSION` &ge; 2.2, the slide position file is
 compressed with DEFLATE and referenced by the
 `StitchingIntensityLayer.StitchingIntensityLevel` nonhierarchical section.
+In some such slides, the nonhierarchical record has a second data item
+which points to a DEFLATE-compressed blob with four bytes of additional
+metadata per camera position.
 
 
 ## Associated Images
