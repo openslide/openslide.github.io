@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## Ubuntu PPA now available, 2023-10-11
+
+OpenSlide now provides an [Ubuntu PPA][download-ppa], enabling Ubuntu
+users to easily install the latest OpenSlide and OpenSlide Python releases
+before they reach Ubuntu.
+
+
 ## OpenSlide Python version 1.3.1, 2023-10-08
 
 OpenSlide Python 1.3.1 updates the docs and example tools to transform
