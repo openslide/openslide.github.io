@@ -72,8 +72,8 @@ GENERAL.IMAGENUMBER_X + image_x`.  Image coordinates which are not multiples
 of the zoom level's downsample factor are omitted.
 
 Nonhierarchical records refer to associated images and additional metadata.
-Nonhierarchical data items consist of three zero values followed by an
-offset, length, and file number as in hierarchical records.
+Nonhierarchical data items consist of two values which are usually zero,
+followed by an offset, length, and file number as in hierarchical records.
 
 
 ## Data Files
@@ -101,6 +101,9 @@ the flag byte is always 0.
 In slides with `CURRENT_SLIDE_VERSION` &ge; 2.2, the slide position file is
 compressed with DEFLATE and referenced by the
 `StitchingIntensityLayer.StitchingIntensityLevel` nonhierarchical section.
+In some such slides, the nonhierarchical record has a second data item
+which points to a DEFLATE-compressed blob with four bytes of additional
+metadata per camera position.
 
 
 ## Associated Images
@@ -146,3 +149,9 @@ where it says "subtile", substitute "tile".
 ## Test Data
 
 <https://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>
+
+
+## ImHex Patterns
+
+- [Index file](https://github.com/openslide/openslide/blob/main/misc/imhex/mirax-index.hexpat)
+- [Slide position file](https://github.com/openslide/openslide/blob/main/misc/imhex/mirax-position.hexpat)
