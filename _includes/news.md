@@ -32,6 +32,8 @@ OpenSlide Java 0.12.3 adds a Meson build system, deprecates the
 Autotools+Ant one, and fixes builds on newer JDKs.
 
 
+{% if page.news_show_extended %}
+
 ## New Windows build, 2022-11-11
 
 Windows build 20221111 updates the versions of many dependencies.
@@ -55,8 +57,6 @@ OpenSlide Python 1.2.0 drops support for Python older than 3.7.  It also
 supports cache customization with OpenSlide 3.5.0, improves pixel read
 performance, and improves installation documentation.
 
-
-{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.1.2, 2020-09-13
 
