@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 env:
-  LD_LIBRARY_PATH: "${{ github.workspace }}/install/lib"
+  LD_LIBRARY_PATH: "${{ github.workspace }}/install/lib64"
   PYTHONPATH: "${{ github.workspace }}/install/python"
   PYTHONUNBUFFERED: 1
   RUNTIME_DEPS: "python3 python3-boto3 python3-pillow python3-requests \
@@ -25,13 +25,14 @@ jobs:
           dnf install -y \
             jq xz \
             python3 python3-devel python3-pip python3-pillow python3-wheel \
-            gcc make pkg-config \
+            gcc meson pkg-config \
             zlib-devel \
             libpng-devel \
             libjpeg-turbo-devel \
             libtiff-devel \
             openjpeg2-devel \
             gdk-pixbuf2-devel \
+            gdk-pixbuf2-modules \
             libxml2-devel \
             sqlite-devel \
             cairo-devel \
@@ -60,9 +61,14 @@ jobs:
       - name: Build OpenSlide
         working-directory: openslide-${{ env.OPENSLIDE_VERSION }}
         run: |
-          ./configure --prefix=${GITHUB_WORKSPACE}/install
-          make -j4
-          make install
+          meson setup builddir --prefix=${GITHUB_WORKSPACE}/install
+          meson compile -C builddir
+
+          trap "cat builddir/meson-logs/testlog.txt" ERR
+          meson test -C builddir
+          trap - ERR
+
+          meson install -C builddir
       - name: Build OpenSlide Python
         working-directory: openslide-python-${{ env.OPENSLIDE_PYTHON_VERSION }}
         run: |
