@@ -149,3 +149,9 @@ where it says "subtile", substitute "tile".
 ## Test Data
 
 <https://openslide.cs.cmu.edu/download/openslide-testdata/Mirax/>
+
+
+## ImHex Patterns
+
+- [Index file](https://github.com/openslide/openslide/blob/main/misc/imhex/mirax-index.hexpat)
+- [Slide position file](https://github.com/openslide/openslide/blob/main/misc/imhex/mirax-position.hexpat)

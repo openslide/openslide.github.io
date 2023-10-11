@@ -329,3 +329,8 @@ NDPI format
 
 VMS format
 : <https://openslide.cs.cmu.edu/download/openslide-testdata/Hamamatsu-vms/>
+
+
+## ImHex Patterns
+
+- [Optimisation file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vms-opt.hexpat)
