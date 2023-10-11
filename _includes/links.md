@@ -1,6 +1,7 @@
 [news]: /news/
 [download]: /download/
 [download-windows]: /download/#windows-binaries
+[download-ppa]: https://launchpad.net/~openslide/+archive/ubuntu/openslide
 [download-pypi]: https://pypi.org/project/openslide-python/#files
 [license]: /license/
 [demo]: /demo/

@@ -1,5 +1,25 @@
 {% include links.md %}
 
+## OpenSlide version 4.0.0, 2023-10-11
+
+OpenSlide 4.0.0 adds support for DICOM WSI slides, ICC color profiles, tile
+cache customization, adds the `slidetool` command-line utility, removes
+deprecated APIs, and improves format compatibility.
+
+Windows build 20231011 integrates all dependencies into the OpenSlide DLL,
+replaces the separate command-line tools with `slidetool`, and switches
+from MSVCRT to the
+[Universal C Runtime](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment)
+(UCRT).
+
+
+## Ubuntu PPA now available, 2023-10-11
+
+OpenSlide now provides an [Ubuntu PPA][download-ppa], enabling Ubuntu
+users to easily install the latest OpenSlide and OpenSlide Python releases
+before they reach Ubuntu.
+
+
 ## OpenSlide Python version 1.3.1, 2023-10-08
 
 OpenSlide Python 1.3.1 updates the docs and example tools to transform
@@ -32,6 +52,8 @@ OpenSlide Java 0.12.3 adds a Meson build system, deprecates the
 Autotools+Ant one, and fixes builds on newer JDKs.
 
 
+{% if page.news_show_extended %}
+
 ## New Windows build, 2022-11-11
 
 Windows build 20221111 updates the versions of many dependencies.
@@ -55,8 +77,6 @@ OpenSlide Python 1.2.0 drops support for Python older than 3.7.  It also
 supports cache customization with OpenSlide 3.5.0, improves pixel read
 performance, and improves installation documentation.
 
-
-{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.1.2, 2020-09-13
 
