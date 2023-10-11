@@ -1,5 +1,18 @@
 {% include links.md %}
 
+## OpenSlide version 4.0.0, 2023-10-11
+
+OpenSlide 4.0.0 adds support for DICOM WSI slides, ICC color profiles, tile
+cache customization, adds the `slidetool` command-line utility, removes
+deprecated APIs, and improves format compatibility.
+
+Windows build 20231011 integrates all dependencies into the OpenSlide DLL,
+replaces the separate command-line tools with `slidetool`, and switches
+from MSVCRT to the
+[Universal C Runtime](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment)
+(UCRT).
+
+
 ## Ubuntu PPA now available, 2023-10-11
 
 OpenSlide now provides an [Ubuntu PPA][download-ppa], enabling Ubuntu
