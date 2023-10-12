@@ -75,11 +75,11 @@ If you're looking for the bleeding edge,
       </th>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install openslide</code><br>
+        <code>dnf install openslide</code><br>
       </td>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install python3-openslide</code><br>
+        <code>dnf install python3-openslide</code><br>
       </td>
     </tr>
     <tr>
