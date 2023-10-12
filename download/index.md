@@ -74,12 +74,36 @@ If you're looking for the bleeding edge,
         <a href="https://rockylinux.org/">Rocky Linux</a>
       </th>
       <td>
-        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install openslide</code><br>
+        <div>
+          <i>Official packages:</i><br>
+          <b><i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i></b><br>
+          <code>dnf install openslide-tools</code><br>
+        </div>
+        <div>
+          <i>Latest OpenSlide:</i><br>
+          <b><i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i></b><br>
+          <code>
+            dnf install dnf-plugins-core<br>
+            dnf copr enable <a href="https://copr.fedorainfracloud.org/coprs/g/openslide/openslide/">@openslide/openslide</a><br>
+            dnf install openslide-tools
+          </code>
+        </div>
       </td>
       <td>
-        <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>yum install python3-openslide</code><br>
+        <div>
+          <i>Official packages:</i><br>
+          <b><i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i></b><br>
+          <code>dnf install python3-openslide</code><br>
+        </div>
+        <div>
+          <i>Latest OpenSlide Python:</i><br>
+          <b><i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i></b><br>
+          <code>
+            dnf install dnf-plugins-core<br>
+            dnf copr enable <a href="https://copr.fedorainfracloud.org/coprs/g/openslide/openslide/">@openslide/openslide</a><br>
+            dnf install python3-openslide
+          </code>
+        </div>
       </td>
     </tr>
     <tr>
@@ -97,8 +121,34 @@ If you're looking for the bleeding edge,
     <tr>
       <th>Linux</th>
       <th><a href="https://fedoraproject.org/">Fedora</a></th>
-      <td><code>dnf install openslide</code></td>
-      <td><code>dnf install python3-openslide</code></td>
+      <td>
+        <div>
+          <i>Official packages:</i><br>
+          <code>dnf install openslide-tools</code>
+        </div>
+        <div>
+          <i>Latest OpenSlide:</i><br>
+          <code>
+            dnf install dnf-plugins-core<br>
+            dnf copr enable <a href="https://copr.fedorainfracloud.org/coprs/g/openslide/openslide/">@openslide/openslide</a><br>
+            dnf install openslide-tools
+          </code>
+        </div>
+      </td>
+      <td>
+        <div>
+          <i>Official packages:</i><br>
+          <code>dnf install python3-openslide</code>
+        </div>
+        <div>
+          <i>Latest OpenSlide Python:</i><br>
+          <code>
+            dnf install dnf-plugins-core<br>
+            dnf copr enable <a href="https://copr.fedorainfracloud.org/coprs/g/openslide/openslide/">@openslide/openslide</a><br>
+            dnf install python3-openslide
+          </code>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>Linux</th>
