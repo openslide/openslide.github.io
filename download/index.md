@@ -75,7 +75,7 @@ If you're looking for the bleeding edge,
       </th>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
-        <code>dnf install openslide</code><br>
+        <code>dnf install openslide-tools</code><br>
       </td>
       <td>
         <i>First, install <a href="https://fedoraproject.org/wiki/EPEL">EPEL</a>.</i><br>
@@ -97,7 +97,7 @@ If you're looking for the bleeding edge,
     <tr>
       <th>Linux</th>
       <th><a href="https://fedoraproject.org/">Fedora</a></th>
-      <td><code>dnf install openslide</code></td>
+      <td><code>dnf install openslide-tools</code></td>
       <td><code>dnf install python3-openslide</code></td>
     </tr>
     <tr>
