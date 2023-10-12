@@ -2,8 +2,8 @@
 
 ## Fedora and Enterprise Linux Copr now available, 2023-10-11
 
-OpenSlide now provides a [Fedora Copr][download-copr], enabling Fedora
-and RHEL-compatible Enterprise Linux users to easily install the latest
+OpenSlide now provides a [Fedora Copr][download-copr], enabling users of
+Fedora and RHEL-compatible enterprise Linux to easily install the latest
 OpenSlide and OpenSlide Python releases before they reach Fedora or EPEL.
 
 
