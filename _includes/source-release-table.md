@@ -9,18 +9,18 @@
         </th>
         <td>{{ release.date }}</td>
         <td>
-          {% if release.no_gz == null %}
+          {% if release.gz %}
             <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.gz">tar.gz</a>
           {% endif %}
         </td>
         <td>
-          {% if release.no_xz == null %}
+          {% if release.xz %}
             <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.xz">tar.xz</a>
           {% endif %}
         </td>
         {% if package == 'openslide-python' %}
           <td>
-            {% if release.no_whl == null %}
+            {% if release.whl %}
               <a href="https://pypi.org/project/{{ package }}/{{ release.version }}/#files">Wheels (PyPI)</a>
             {% endif %}
           </td>
