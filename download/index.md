@@ -28,11 +28,11 @@ of the [GNU Lesser General Public License, version 2.1][license].
 {% include source-release-table.md %}
 
 
-## Windows Binaries
+## Binaries
 
 Problems with these binaries can be reported [here][winbuild-issues].
 If you're looking for the bleeding edge,
-[nightly development builds][snapshots-windows] are also available.
+[nightly development builds][snapshots] are also available.
 
 <div class="releases">
   <table>
@@ -43,9 +43,9 @@ If you're looking for the bleeding edge,
             {{ release.date }}
           </a>
         </th>
-        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">32-bit</a></td>
-        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">64-bit</a></td>
-        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Corresponding sources</a></td>
+        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Source</a></td>
+        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">Windows 32-bit</a></td>
+        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">Windows 64-bit</a></td>
       </tr>
     {% endfor %}
   </table>
