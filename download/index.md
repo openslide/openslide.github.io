@@ -32,7 +32,7 @@ of the [GNU Lesser General Public License, version 2.1][license].
 
 Problems with these binaries can be reported [here][winbuild-issues].
 If you're looking for the bleeding edge,
-[nightly development builds][snapshots-windows] are also available.
+[nightly development builds][snapshots] are also available.
 
 <div class="releases">
   <table>

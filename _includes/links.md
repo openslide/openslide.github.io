@@ -10,7 +10,7 @@
 [github]: https://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/
-[snapshots-windows]: /builds/windows/
+[snapshots]: /builds/
 
 [doc-dev]: /#development
 [doc-debugopts]: /docs/debugopts/
