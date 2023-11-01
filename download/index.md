@@ -30,22 +30,22 @@ of the [GNU Lesser General Public License, version 2.1][license].
 
 ## Binaries
 
-Problems with these binaries can be reported [here][winbuild-issues].
+Problems with these binaries can be reported [here][bin-issues].
 If you're looking for the bleeding edge,
 [nightly development builds][snapshots] are also available.
 
 <div class="releases">
   <table>
-    {% for release in site.data.releases.winbuild %}
-      <tr class="{% cycle 'winbuild': 'odd', 'even' %}">
+    {% for release in site.data.releases.bin %}
+      <tr class="{% cycle 'bin': 'odd', 'even' %}">
         <th>
-          <a href="https://github.com/openslide/openslide-winbuild/releases/tag/v{{ release.date|remove:'-' }}">
+          <a href="https://github.com/openslide/openslide-bin/releases/tag/v{{ release.date|remove:'-' }}">
             {{ release.date }}
           </a>
         </th>
-        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Source</a></td>
-        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">Windows 32-bit</a></td>
-        <td><a href="https://github.com/openslide/openslide-winbuild/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">Windows 64-bit</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Source</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">Windows 32-bit</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">Windows 64-bit</a></td>
       </tr>
     {% endfor %}
   </table>
@@ -256,8 +256,8 @@ If you're looking for the bleeding edge,
       <td><code>git clone https://github.com/openslide/openslide-java.git</code></td>
     </tr>
     <tr>
-      <th><a href="https://github.com/openslide/openslide-winbuild">Windows build scripts</a></th>
-      <td><code>git clone https://github.com/openslide/openslide-winbuild.git</code></td>
+      <th><a href="https://github.com/openslide/openslide-bin">Binary builds</a></th>
+      <td><code>git clone https://github.com/openslide/openslide-bin.git</code></td>
     </tr>
     <tr>
       <th><a href="https://github.com/openslide/builds">Nightly build infrastructure</a></th>
