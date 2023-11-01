@@ -48,13 +48,13 @@
 [c-github]: https://github.com/openslide/openslide
 [python-github]: https://github.com/openslide/openslide-python
 [java-github]: https://github.com/openslide/openslide-java
-[winbuild-github]: https://github.com/openslide/openslide-winbuild
+[bin-github]: https://github.com/openslide/openslide-bin
 [builds-github]: https://github.com/openslide/builds
 [site-github]: https://github.com/openslide/openslide.github.io
 
 [c-issues]: https://github.com/openslide/openslide/issues
 [python-issues]: https://github.com/openslide/openslide-python/issues
 [java-issues]: https://github.com/openslide/openslide-java/issues
-[winbuild-issues]: https://github.com/openslide/openslide-winbuild/issues
+[bin-issues]: https://github.com/openslide/openslide-bin/issues
 [builds-issues]: https://github.com/openslide/builds/issues
 [site-issues]: https://github.com/openslide/openslide.github.io/issues

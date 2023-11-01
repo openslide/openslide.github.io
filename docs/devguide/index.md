@@ -112,4 +112,4 @@ released, and checking boxes.
 - [OpenSlide Java](https://github.com/openslide/openslide-java/issues/new?labels=release&template=release.md)
 - [OpenSlide Python](https://github.com/openslide/openslide-python/issues/new?labels=release&template=release.md)
   - [Updating for a Python major release](https://github.com/openslide/openslide-python/issues/new?labels=release&template=python-bump.md)
-- [openslide-winbuild](https://github.com/openslide/openslide-winbuild/issues/new?labels=release&template=release.md)
+- [openslide-bin](https://github.com/openslide/openslide-bin/issues/new?labels=release&template=release.md)
