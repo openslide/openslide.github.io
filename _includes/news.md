@@ -1,5 +1,10 @@
 {% include links.md %}
 
+## OpenSlide Java version 0.12.4, 2023-11-07
+
+OpenSlide Java 0.12.4 includes minor build and test improvements.
+
+
 ## Fedora and Enterprise Linux Copr now available, 2023-10-11
 
 OpenSlide now provides a [Fedora Copr][download-copr], enabling users of

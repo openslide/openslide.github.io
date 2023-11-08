@@ -40,6 +40,7 @@ python:
   - {version: 0.3.0, date: 2011-12-16, gz: 1, xz: 1}
   - {version: 0.2.0, date: 2011-09-02, gz: 1, xz: 1}
 java:
+  - {version: 0.12.4, date: 2023-11-07, xz: 1}
   - {version: 0.12.3, date: 2022-12-17, xz: 1}
   - {version: 0.12.2, date: 2016-09-11, gz: 1, xz: 1}
   - {version: 0.12.1, date: 2015-04-20, gz: 1, xz: 1}
