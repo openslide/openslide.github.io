@@ -80,6 +80,7 @@ jobs:
           path: install
   setup:
     name: Set up tiling
+    environment: demo-site
     needs: build
     runs-on: ubuntu-latest
     container: registry.fedoraproject.org/fedora:latest
@@ -115,6 +116,7 @@ jobs:
       slide-matrix: ${{ steps.start-tiling.outputs.slide-matrix }}
   tile:
     name: Tile
+    environment: demo-site
     needs: setup
     runs-on: ubuntu-latest
     container: registry.fedoraproject.org/fedora:latest
@@ -154,6 +156,7 @@ jobs:
           path: summary
   finish:
     name: Finish tiling
+    environment: demo-site
     needs: tile
     runs-on: ubuntu-latest
     container: registry.fedoraproject.org/fedora:latest
