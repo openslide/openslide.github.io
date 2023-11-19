@@ -33,6 +33,12 @@ addressing feedback from code review, edit your existing commits with `git
 rebase -i` and update the branch with `git push -f`, rather than appending
 fixup commits to the branch.
 
+OpenSlide uses Git hooks and the [pre-commit][pre-commit] framework to
+check coding style when you commit.  To configure the hooks, install
+pre-commit from your package manager or with `pip install pre-commit`, then
+run `pre-commit install` in your OpenSlide checkout.  The pre-commit checks
+are also rerun as part of OpenSlide's CI.
+
 Please discuss your changes on the [openslide-users][users-subscribe]
 mailing list or in a GitHub issue, *before* you are ready to submit them, so
 that we can help you integrate your code into the existing codebase.
@@ -46,6 +52,7 @@ license.  See the [submission form][submit-sample] for more details.
 
 [rjones]: https://people.redhat.com/~rjones/how-to-supply-code-to-open-source-projects/
 [rjones-splitting-commits]: https://people.redhat.com/~rjones/how-to-supply-code-to-open-source-projects/#split_patches
+[pre-commit]: https://pre-commit.com/
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 

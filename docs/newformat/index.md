@@ -231,7 +231,7 @@ common cleanup label.  `g_autoptr()` is suitable for structs with their own
 free functions, and `g_autofree` is for arbitrary memory that can be freed
 with `g_free()`.  Variables declared with `g_auto*` must always be
 initialized on the spot (perhaps to `NULL`) to avoid freeing a garbage
-pointer; CI has a check for this.
+pointer; pre-commit checks include a test for this.
 
 When allocating an object that will be returned from the function, or will
 be linked into data structures that outlive the function, prefer using
