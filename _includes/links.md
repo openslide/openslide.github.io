@@ -11,6 +11,7 @@
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/
 [snapshots]: /builds/
+[submit-sample]: /submit/
 
 [doc-dev]: /#development
 [doc-debugopts]: /docs/debugopts/

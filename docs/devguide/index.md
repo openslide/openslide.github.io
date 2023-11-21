@@ -33,19 +33,27 @@ addressing feedback from code review, edit your existing commits with `git
 rebase -i` and update the branch with `git push -f`, rather than appending
 fixup commits to the branch.
 
+OpenSlide uses Git hooks and the [pre-commit][pre-commit] framework to
+check coding style when you commit.  To configure the hooks, install
+pre-commit from your package manager or with `pip install pre-commit`, then
+run `pre-commit install` in your OpenSlide checkout.  The pre-commit checks
+are also rerun as part of OpenSlide's CI.
+
 Please discuss your changes on the [openslide-users][users-subscribe]
 mailing list or in a GitHub issue, *before* you are ready to submit them, so
 that we can help you integrate your code into the existing codebase.
 
 When contributing support for a new format, we *strongly* prefer that you
-also contribute example slide files for our [openslide-testdata][testdata]
-repository.  The example files must be data that you are entitled to
-contribute, and the OpenSlide project must receive permission to
-redistribute them with or without modification.  Email the mailing list for
-instructions on how to accomplish this.
+also [contribute example slide files][submit-sample] for our
+[openslide-testdata][testdata] repository.  The example files must be data
+that you are entitled to contribute, and the OpenSlide project must receive
+permission to redistribute them under the [Creative Commons Zero][cc0]
+license.  See the [submission form][submit-sample] for more details.
 
 [rjones]: https://people.redhat.com/~rjones/how-to-supply-code-to-open-source-projects/
 [rjones-splitting-commits]: https://people.redhat.com/~rjones/how-to-supply-code-to-open-source-projects/#split_patches
+[pre-commit]: https://pre-commit.com/
+[cc0]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 
 ## Original development guide
