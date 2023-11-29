@@ -30,6 +30,10 @@ The first image in the TIFF file is the full-resolution image. Any
 other tiled images in the file with the "reduced resolution" bit set
 are assumed to be reduced-resolution versions of the original.
 
+Starting after OpenSlide 4.0.0, OpenSlide supports generic TIFF files with
+missing tiles, i.e. tiles with zero bytes of image data.  These tiles are
+rendered as transparent pixels.
+
 
 ## ICC Profiles
 
