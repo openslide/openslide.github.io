@@ -74,7 +74,7 @@ jobs:
         run: |
           pip install -t ${GITHUB_WORKSPACE}/install/python .
       - name: Upload build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: install
@@ -92,7 +92,7 @@ jobs:
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build
           path: install
@@ -108,7 +108,7 @@ jobs:
             matrix
           echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
       - name: Upload context
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: context
           path: context
@@ -131,12 +131,12 @@ jobs:
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build
           path: install
       - name: Download context
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: context
       - name: Tile slide
@@ -149,10 +149,11 @@ jobs:
             ${GITHUB_WORKSPACE}/context \
             "${{ matrix.slide }}" \
             ${GITHUB_WORKSPACE}/summary
+          echo "ARTIFACT_NAME=summary-$(echo "${{ matrix.slide }}" | tr -c "a-zA-Z0-9\n" _)" >> $GITHUB_ENV
       - name: Upload summary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: summary
+          name: ${{ env.ARTIFACT_NAME }}
           path: summary
   finish:
     name: Finish tiling
@@ -168,19 +169,20 @@ jobs:
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build
           path: install
       - name: Download context
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: context
       - name: Download summaries
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: summary
+          pattern: "summary-*"
           path: summary
+          merge-multiple: true
       - name: Finish tiling
         working-directory: website/demo
         env:
