@@ -21,10 +21,11 @@
 
 import argparse
 from hashlib import sha256
-from jinja2 import Environment, Template
-from pathlib import Path
 import json
 import os
+from pathlib import Path
+
+from jinja2 import Environment, Template
 import yaml
 
 IGNORE_FILENAMES = frozenset(

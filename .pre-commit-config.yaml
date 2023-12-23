@@ -14,6 +14,12 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: Reorder Python imports with isort
+
   - repo: meta
     hooks:
       - id: check-hooks-apply

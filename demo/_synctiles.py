@@ -21,19 +21,13 @@
 
 from argparse import ArgumentParser
 import base64
-import boto3
 from hashlib import md5, sha256
 from io import BytesIO
 import json
 from multiprocessing import Pool
-import openslide
-from openslide import OpenSlide, ImageSlide, OpenSlideError
-from openslide.deepzoom import DeepZoomGenerator
 import os
-from PIL import ImageCms
 import posixpath as urlpath
 import re
-import requests
 import shutil
 import sys
 from tempfile import mkdtemp
@@ -41,6 +35,13 @@ from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
 import zlib
+
+from PIL import ImageCms
+import boto3
+import openslide
+from openslide import ImageSlide, OpenSlide, OpenSlideError
+from openslide.deepzoom import DeepZoomGenerator
+import requests
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'

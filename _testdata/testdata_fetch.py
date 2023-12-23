@@ -20,15 +20,14 @@
 
 import argparse
 import calendar
+from hashlib import sha256
 import json
 import os
-from hashlib import sha256
 from pathlib import Path
 from urllib.parse import urljoin
 
 import dateutil.parser
 import requests
-
 
 TESTDATA_BASEURL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 BUFSIZE = 10 << 20
