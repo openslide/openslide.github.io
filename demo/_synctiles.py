@@ -29,8 +29,7 @@ from io import BytesIO
 import json
 from multiprocessing import Pool
 from multiprocessing.pool import Pool as PoolType
-from pathlib import Path
-import posixpath as urlpath
+from pathlib import Path, PurePath
 import re
 import sys
 from tempfile import TemporaryDirectory
@@ -107,8 +106,8 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
 Transform = Callable[[Image], None]
 Generator = tuple[DeepZoomGenerator, Transform]
 Json = dict[str, Any]
-KeyMd5s = dict[str, str]
-SyncTileArgs = tuple[str | None, int, tuple[int, int], str, str | None]
+KeyMd5s = dict[PurePath, str]
+SyncTileArgs = tuple[str | None, int, tuple[int, int], PurePath, str | None]
 
 dz_generators: dict[str | None, Generator]
 upload_bucket: Bucket
@@ -164,7 +163,7 @@ def pool_init(slide_path: Path) -> None:
         dz_generators[name] = generator(ImageSlide(image))
 
 
-def sync_tile(args: SyncTileArgs) -> str | BaseException:
+def sync_tile(args: SyncTileArgs) -> PurePath | BaseException:
     """Generate and possibly upload a tile."""
     try:
         associated, level, address, key_name, cur_md5 = args
@@ -180,7 +179,7 @@ def sync_tile(args: SyncTileArgs) -> str | BaseException:
         )
         new_md5 = md5(buf.getbuffer())
         if cur_md5 != new_md5.hexdigest():
-            upload_bucket.Object(key_name).put(
+            upload_bucket.Object(key_name.as_posix()).put(
                 ACL='public-read',
                 Body=buf.getvalue(),
                 CacheControl=CACHE_CONTROL_CACHE,
@@ -195,16 +194,16 @@ def sync_tile(args: SyncTileArgs) -> str | BaseException:
 def enumerate_tiles(
     associated: str | None,
     dz: DeepZoomGenerator,
-    key_imagepath: str,
+    key_imagepath: PurePath,
     key_md5sums: KeyMd5s,
 ) -> Iterator[SyncTileArgs]:
     """Enumerate tiles in a single image."""
     for level in range(dz.level_count):
-        key_levelpath = urlpath.join(key_imagepath, str(level))
+        key_levelpath = key_imagepath / str(level)
         cols, rows = dz.level_tiles[level]
         for row in range(rows):
             for col in range(cols):
-                key_name = urlpath.join(key_levelpath, f'{col}_{row}.{FORMAT}')
+                key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
                 yield (
                     associated,
                     level,
@@ -216,10 +215,10 @@ def enumerate_tiles(
 
 def sync_image(
     pool: PoolType,
-    slide_relpath: str,
+    slide_relpath: PurePath,
     associated: str | None,
     dz: DeepZoomGenerator,
-    key_basepath: str,
+    key_basepath: PurePath,
     key_md5sums: KeyMd5s,
     mpp: float | None = None,
 ) -> Json:
@@ -229,7 +228,7 @@ def sync_image(
     count = 0
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
-    key_imagepath = urlpath.join(key_basepath, f'{associated_slug}_files')
+    key_imagepath = key_basepath / f'{associated_slug}_files'
     iterator = enumerate_tiles(associated, dz, key_imagepath, key_md5sums)
 
     def progress() -> None:
@@ -257,7 +256,7 @@ def sync_image(
     source = {
         'Image': {
             'xmlns': 'http://schemas.microsoft.com/deepzoom/2008',
-            'Url': urljoin(BASE_URL, key_imagepath) + '/',
+            'Url': urljoin(BASE_URL, key_imagepath.as_posix()) + '/',
             'Format': FORMAT,
             'TileSize': TILE_SIZE,
             'Overlap': OVERLAP,
@@ -277,9 +276,9 @@ def sync_image(
 
 
 def upload_metadata(
-    bucket: Bucket, path: str, item: Json, cache: bool = True
+    bucket: Bucket, path: PurePath, item: Json, cache: bool = True
 ) -> None:
-    bucket.Object(path).put(
+    bucket.Object(path.as_posix()).put(
         ACL='public-read',
         Body=json.dumps(item, indent=1, sort_keys=True).encode(),
         CacheControl=CACHE_CONTROL_CACHE if cache else CACHE_CONTROL_NOCACHE,
@@ -291,20 +290,20 @@ def sync_slide(
     stamp: str,
     conn: S3ServiceResource,
     bucket: Bucket,
-    slide_relpath: str,
+    slide_relpath: PurePath,
     slide_info: Json,
     workers: int,
 ) -> Json:
     """Generate and upload tiles and metadata for a single slide."""
 
-    key_basepath = urlpath.splitext(slide_relpath)[0].lower()
-    metadata_key_name = urlpath.join(key_basepath, SLIDE_METADATA_NAME)
-    properties_key_name = urlpath.join(key_basepath, SLIDE_PROPERTIES_NAME)
+    key_basepath = PurePath(slide_relpath.with_suffix('').as_posix().lower())
+    metadata_key_name = key_basepath / SLIDE_METADATA_NAME
+    properties_key_name = key_basepath / SLIDE_PROPERTIES_NAME
 
     # Get current metadata
     try:
         metadata: Json | None = json.load(
-            bucket.Object(metadata_key_name).get()['Body']
+            bucket.Object(metadata_key_name.as_posix()).get()['Body']
         )
     except conn.meta.client.exceptions.NoSuchKey:
         metadata = None
@@ -320,10 +319,11 @@ def sync_slide(
         print(f'Fetching {slide_relpath}...')
         count = 0
         hash = sha256()
-        slide_path = tempdir / urlpath.basename(slide_relpath)
+        slide_path = tempdir / slide_relpath.name
         with slide_path.open('wb') as fh:
             r = requests.get(
-                urljoin(DOWNLOAD_BASE_URL, slide_relpath), stream=True
+                urljoin(DOWNLOAD_BASE_URL, slide_relpath.as_posix()),
+                stream=True,
             )
             r.raise_for_status()
             for buf in r.iter_content(10 << 20):
@@ -342,7 +342,7 @@ def sync_slide(
         try:
             slide = OpenSlide(slide_path)
         except OpenSlideError:
-            if urlpath.splitext(slide_relpath)[1] == '.zip':
+            if slide_relpath.suffix == '.zip':
                 # Unzip slide
                 print(f'Extracting {slide_relpath}...')
                 temp_path = Path(
@@ -363,12 +363,12 @@ def sync_slide(
         # Enumerate existing keys
         print(f"Enumerating keys for {slide_relpath}...")
         key_md5sums = {}
-        for obj in bucket.objects.filter(Prefix=key_basepath + '/'):
-            key_md5sums[obj.key] = obj.e_tag.strip('"')
+        for obj in bucket.objects.filter(Prefix=key_basepath.as_posix() + '/'):
+            key_md5sums[PurePath(obj.key)] = obj.e_tag.strip('"')
 
         # Initialize metadata
         metadata = {
-            'name': urlpath.splitext(urlpath.basename(slide_relpath))[0],
+            'name': slide_relpath.stem,
             'stamp': stamp,
         }
 
@@ -378,7 +378,9 @@ def sync_slide(
                 {
                     'associated': [],
                     'properties': dict(slide.properties),
-                    'properties_url': urljoin(BASE_URL, properties_key_name)
+                    'properties_url': urljoin(
+                        BASE_URL, properties_key_name.as_posix()
+                    )
                     + '?v='
                     + stamp,
                 }
@@ -437,7 +439,7 @@ def sync_slide(
             cur_delete, to_delete = to_delete[0:1000], to_delete[1000:]
             delete_result = bucket.delete_objects(
                 Delete={
-                    'Objects': [{'Key': k} for k in cur_delete],
+                    'Objects': [{'Key': k.as_posix()} for k in cur_delete],
                     'Quiet': True,
                 },
             )
@@ -461,7 +463,7 @@ def upload_status(
         'dirty': dirty,
         'stamp': stamp,
     }
-    upload_metadata(bucket, STATUS_NAME, status, False)
+    upload_metadata(bucket, PurePath(STATUS_NAME), status, False)
 
 
 def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
@@ -538,7 +540,7 @@ def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
 
 
 def retile_slide(
-    ctxfile: TextIO, slide_relpath: str, summarydir: Path, workers: int
+    ctxfile: TextIO, slide_relpath: PurePath, summarydir: Path, workers: int
 ) -> None:
     """Subcommand to retile one slide into S3.  Writes summary data into
     summarydir."""
@@ -551,7 +553,7 @@ def retile_slide(
     conn, bucket = connect_bucket()
 
     # Tile slide
-    slide_info = context['slides'].get(slide_relpath)
+    slide_info = context['slides'].get(slide_relpath.as_posix())
     if slide_info is None:
         raise Exception(f'No such slide {slide_relpath}')
     summary = sync_slide(
@@ -566,7 +568,9 @@ def retile_slide(
             {
                 'credit': slide_info.get('credit'),
                 'description': slide_info['description'],
-                'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
+                'download_url': urljoin(
+                    DOWNLOAD_BASE_URL, slide_relpath.as_posix()
+                ),
             }
         )
         summaryfile = summarydir / slide_relpath
@@ -590,12 +594,12 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
     groups = []
     cur_group_name = None
     cur_slides: list[Json] = []
-    for slide_relpath in sorted(context['slides']):
+    for slide_relpath in sorted(PurePath(p) for p in context['slides']):
         summaryfile = summarydir / slide_relpath
         if summaryfile.exists():
             with summaryfile.open() as fh:
                 summary = json.load(fh)
-            group_name = urlpath.dirname(slide_relpath)
+            group_name = slide_relpath.parent.as_posix()
             if group_name != cur_group_name:
                 cur_group_name = group_name
                 cur_slides = []
@@ -615,7 +619,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
         'stamp': context['stamp'],
         'groups': groups,
     }
-    upload_metadata(bucket, METADATA_NAME, metadata, False)
+    upload_metadata(bucket, PurePath(METADATA_NAME), metadata, False)
 
     # Mark bucket clean
     print('Marking bucket clean...')
@@ -644,7 +648,7 @@ if __name__ == '__main__':
         'context_file', type=FileType('r'), help='path to context file'
     )
     parser_tile.add_argument(
-        'slide', help='slide identifier (from matrix file)'
+        'slide', type=PurePath, help='slide identifier (from matrix file)'
     )
     parser_tile.add_argument(
         'summary_dir', type=Path, help='path to summary directory (output)'
