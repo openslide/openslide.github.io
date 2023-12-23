@@ -21,7 +21,7 @@
 
 from __future__ import annotations
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, FileType
 import base64
 from collections.abc import Callable, Iterator
 from hashlib import md5, sha256
@@ -30,12 +30,13 @@ import json
 from multiprocessing import Pool
 from multiprocessing.pool import Pool as PoolType
 import os
+from pathlib import Path
 import posixpath as urlpath
 import re
 import shutil
 import sys
 from tempfile import mkdtemp
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TextIO
 from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
@@ -465,7 +466,7 @@ def upload_status(
     upload_metadata(bucket, STATUS_NAME, status, False)
 
 
-def start_retile(ctxfile: str, matrixfile: str) -> None:
+def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
     """Subcommand to initialize a retiling run.  Writes common state into
     ctxfile and a list of slides to be retiled into matrixfile."""
 
@@ -527,26 +528,26 @@ def start_retile(ctxfile: str, matrixfile: str) -> None:
         upload_status(bucket, dirty=True, stamp=old_stamp)
 
     # Write output files
-    with open(ctxfile, 'w') as fh:
-        json.dump(context, fh)
-    with open(matrixfile, 'w') as fh:
+    with ctxfile:
+        json.dump(context, ctxfile)
+    with matrixfile:
         json.dump(
             {
                 "slide": sorted(slides.keys()),
             },
-            fh,
+            matrixfile,
         )
 
 
 def retile_slide(
-    ctxfile: str, slide_relpath: str, summarydir: str, workers: int
+    ctxfile: TextIO, slide_relpath: str, summarydir: Path, workers: int
 ) -> None:
     """Subcommand to retile one slide into S3.  Writes summary data into
     summarydir."""
 
     # Load context
-    with open(ctxfile) as fh:
-        context = json.load(fh)
+    with ctxfile:
+        context = json.load(ctxfile)
 
     # Connect to S3
     conn, bucket = connect_bucket()
@@ -570,19 +571,19 @@ def retile_slide(
                 'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
             }
         )
-        summaryfile = os.path.join(summarydir, slide_relpath)
-        os.makedirs(os.path.dirname(summaryfile), exist_ok=True)
-        with open(summaryfile, 'w') as fh:
+        summaryfile = summarydir / slide_relpath
+        summaryfile.parent.mkdir(parents=True, exist_ok=True)
+        with summaryfile.open('w') as fh:
             json.dump(summary, fh)
 
 
-def finish_retile(ctxfile: str, summarydir: str) -> None:
+def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
     """Subcommand to finish a retiling run.  Reads context file and summary
     dir and writes metadata to S3."""
 
     # Load context
-    with open(ctxfile) as fh:
-        context = json.load(fh)
+    with ctxfile:
+        context = json.load(ctxfile)
 
     # Connect to S3
     conn, bucket = connect_bucket()
@@ -592,9 +593,9 @@ def finish_retile(ctxfile: str, summarydir: str) -> None:
     cur_group_name = None
     cur_slides: list[Json] = []
     for slide_relpath in sorted(context['slides']):
-        summaryfile = os.path.join(summarydir, slide_relpath)
-        if os.path.exists(summaryfile):
-            with open(summaryfile) as fh:
+        summaryfile = summarydir / slide_relpath
+        if summaryfile.exists():
+            with summaryfile.open() as fh:
                 summary = json.load(fh)
             group_name = urlpath.dirname(slide_relpath)
             if group_name != cur_group_name:
@@ -629,20 +630,26 @@ if __name__ == '__main__':
 
     parser_start = subparsers.add_parser('start', help='start a retiling run')
     parser_start.add_argument(
-        'context_file', help='path to context file (output)'
+        'context_file',
+        type=FileType('w'),
+        help='path to context file (output)',
     )
     parser_start.add_argument(
-        'matrix_file', help='path to list of slides to tile (output)'
+        'matrix_file',
+        type=FileType('w'),
+        help='path to list of slides to tile (output)',
     )
     parser_start.set_defaults(cmd='start')
 
     parser_tile = subparsers.add_parser('tile', help='retile one slide')
-    parser_tile.add_argument('context_file', help='path to context file')
+    parser_tile.add_argument(
+        'context_file', type=FileType('r'), help='path to context file'
+    )
     parser_tile.add_argument(
         'slide', help='slide identifier (from matrix file)'
     )
     parser_tile.add_argument(
-        'summary_dir', help='path to summary directory (output)'
+        'summary_dir', type=Path, help='path to summary directory (output)'
     )
     parser_tile.add_argument(
         '-j',
@@ -658,8 +665,12 @@ if __name__ == '__main__':
     parser_finish = subparsers.add_parser(
         'finish', help='finish a retiling run'
     )
-    parser_finish.add_argument('context_file', help='path to context file')
-    parser_finish.add_argument('summary_dir', help='path to summary directory')
+    parser_finish.add_argument(
+        'context_file', type=FileType('r'), help='path to context file'
+    )
+    parser_finish.add_argument(
+        'summary_dir', type=Path, help='path to summary directory'
+    )
     parser_finish.set_defaults(cmd='finish')
 
     args = parser.parse_args()
