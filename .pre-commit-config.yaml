@@ -14,6 +14,13 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        name: Modernize Python code
+        args: ["--py312-plus"]
+
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
     hooks:

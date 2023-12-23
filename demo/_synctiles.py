@@ -284,9 +284,9 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 hash.update(buf)
                 count += len(buf)
         if count != int(r.headers['Content-Length']):
-            raise IOError(f'Short read fetching {slide_relpath}')
+            raise OSError(f'Short read fetching {slide_relpath}')
         if hash.hexdigest() != slide_info['sha256']:
-            raise IOError(f'Hash mismatch fetching {slide_relpath}')
+            raise OSError(f'Hash mismatch fetching {slide_relpath}')
 
         # Open slide
         slide = None
@@ -392,7 +392,7 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 },
             )
             if 'Errors' in delete_result:
-                raise IOError(
+                raise OSError(
                     f'Failed to delete {len(delete_result["Errors"])} keys'
                 )
 

@@ -156,7 +156,7 @@ def ensure_empty(items, msg_prefix):
 
 def process_dir(dirpath, check_hashes=False):
     # List files in directory
-    filenames = set(path.name for path in dirpath.iterdir()) - IGNORE_FILENAMES
+    filenames = {path.name for path in dirpath.iterdir()} - IGNORE_FILENAMES
 
     # Load metadata
     yamlpath = dirpath / 'index.yaml'
