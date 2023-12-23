@@ -29,13 +29,11 @@ from io import BytesIO
 import json
 from multiprocessing import Pool
 from multiprocessing.pool import Pool as PoolType
-import os
 from pathlib import Path
 import posixpath as urlpath
 import re
-import shutil
 import sys
-from tempfile import mkdtemp
+from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, Any, TextIO
 from unicodedata import normalize
 from urllib.parse import urljoin
@@ -148,7 +146,7 @@ def connect_bucket() -> tuple[S3ServiceResource, Bucket]:
     return conn, conn.Bucket(S3_BUCKET)
 
 
-def pool_init(slide_path: str) -> None:
+def pool_init(slide_path: Path) -> None:
     global upload_bucket, dz_generators
     _, upload_bucket = connect_bucket()
 
@@ -315,14 +313,15 @@ def sync_slide(
     if metadata is not None and metadata['stamp'] == stamp:
         return metadata
 
-    tempdir = mkdtemp(prefix='synctiles-', dir='/var/tmp')
-    try:
+    with TemporaryDirectory(prefix='synctiles-', dir='/var/tmp') as td:
+        tempdir = Path(td)
+
         # Fetch slide
         print(f'Fetching {slide_relpath}...')
         count = 0
         hash = sha256()
-        slide_path = os.path.join(tempdir, urlpath.basename(slide_relpath))
-        with open(slide_path, 'wb') as fh:
+        slide_path = tempdir / urlpath.basename(slide_relpath)
+        with slide_path.open('wb') as fh:
             r = requests.get(
                 urljoin(DOWNLOAD_BASE_URL, slide_relpath), stream=True
             )
@@ -346,13 +345,14 @@ def sync_slide(
             if urlpath.splitext(slide_relpath)[1] == '.zip':
                 # Unzip slide
                 print(f'Extracting {slide_relpath}...')
-                temp_path = mkdtemp(dir=tempdir)
+                temp_path = Path(
+                    TemporaryDirectory(dir=tempdir, delete=False).name
+                )
                 with ZipFile(slide_path) as zf:
                     zf.extractall(path=temp_path)
                 # Find slide in zip
-                for sub_name in os.listdir(temp_path):
+                for slide_path in temp_path.iterdir():
                     try:
-                        slide_path = os.path.join(temp_path, sub_name)
                         slide = OpenSlide(slide_path)
                     except OpenSlideError:
                         pass
@@ -426,8 +426,6 @@ def sync_slide(
             finally:
                 pool.close()
                 pool.join()
-    finally:
-        shutil.rmtree(tempdir)
 
     # Delete old keys
     for name in metadata_key_name, properties_key_name:
