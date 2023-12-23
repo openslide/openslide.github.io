@@ -93,6 +93,7 @@ SRGB_PROFILE_BYTES = zlib.decompress(
 )
 SRGB_PROFILE = ImageCms.getOpenProfile(BytesIO(SRGB_PROFILE_BYTES))
 
+
 def slugify(text):
     """Generate an ASCII-only slug."""
     text = normalize('NFKD', text.lower()).encode('ascii', 'ignore').decode()
@@ -107,12 +108,14 @@ def get_transform(image):
     transform = ImageCms.buildTransform(
         image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
     )
+
     def xfrm(img):
         ImageCms.applyTransform(img, transform, True)
         # Some browsers assume we intend the display's color space if we
         # don't embed the profile.  Pillow's serialization is larger, so
         # use ours.
         img.info['icc_profile'] = SRGB_PROFILE_BYTES
+
     return xfrm
 
 
@@ -125,13 +128,13 @@ def pool_init(slide_path):
     global upload_bucket, dz_generators
     _, upload_bucket = connect_bucket()
     generator = lambda slide: (
-        DeepZoomGenerator(slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS),
-        get_transform(slide)
+        DeepZoomGenerator(
+            slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
+        ),
+        get_transform(slide),
     )
     slide = OpenSlide(slide_path)
-    dz_generators = {
-        None: generator(slide)
-    }
+    dz_generators = {None: generator(slide)}
     for name, image in slide.associated_images.items():
         dz_generators[name] = generator(ImageSlide(image))
 
@@ -144,8 +147,12 @@ def sync_tile(args):
         tile = dz.get_tile(level, address)
         transform(tile)
         buf = BytesIO()
-        tile.save(buf, FORMAT, quality=QUALITY,
-                icc_profile=tile.info.get('icc_profile'))
+        tile.save(
+            buf,
+            FORMAT,
+            quality=QUALITY,
+            icc_profile=tile.info.get('icc_profile'),
+        )
         new_md5 = md5(buf.getbuffer())
         if cur_md5 != new_md5.hexdigest():
             upload_bucket.Object(key_name).put(
@@ -168,12 +175,18 @@ def enumerate_tiles(associated, dz, key_imagepath, key_md5sums):
         for row in range(rows):
             for col in range(cols):
                 key_name = urlpath.join(key_levelpath, f'{col}_{row}.{FORMAT}')
-                yield (associated, level, (col, row), key_name,
-                        key_md5sums.get(key_name))
+                yield (
+                    associated,
+                    level,
+                    (col, row),
+                    key_name,
+                    key_md5sums.get(key_name),
+                )
 
 
-def sync_image(pool, slide_relpath, associated, dz, key_basepath, key_md5sums,
-        mpp=None):
+def sync_image(
+    pool, slide_relpath, associated, dz, key_basepath, key_md5sums, mpp=None
+):
     """Generate and upload tiles, and generate metadata, for a single image.
     Delete valid tiles from key_md5sums."""
 
@@ -184,8 +197,10 @@ def sync_image(pool, slide_relpath, associated, dz, key_basepath, key_md5sums,
     iterator = enumerate_tiles(associated, dz, key_imagepath, key_md5sums)
 
     def progress():
-        print(f"Tiling {slide_relpath} {associated_slug}: {count}/{total} tiles\r",
-                end='')
+        print(
+            f"Tiling {slide_relpath} {associated_slug}: {count}/{total} tiles\r",
+            end='',
+        )
         sys.stdout.flush()
 
     # Sync tiles
@@ -258,8 +273,9 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
         hash = sha256()
         slide_path = os.path.join(tempdir, urlpath.basename(slide_relpath))
         with open(slide_path, 'wb') as fh:
-            r = requests.get(urljoin(DOWNLOAD_BASE_URL, slide_relpath),
-                    stream=True)
+            r = requests.get(
+                urljoin(DOWNLOAD_BASE_URL, slide_relpath), stream=True
+            )
             r.raise_for_status()
             for buf in r.iter_content(10 << 20):
                 if not buf:
@@ -308,12 +324,15 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
 
         if slide is not None:
             # Add slide metadata
-            metadata.update({
-                'associated': [],
-                'properties': dict(slide.properties),
-                'properties_url': urljoin(BASE_URL, properties_key_name) +
-                        '?v=' + stamp,
-            })
+            metadata.update(
+                {
+                    'associated': [],
+                    'properties': dict(slide.properties),
+                    'properties_url': urljoin(BASE_URL, properties_key_name)
+                    + '?v='
+                    + stamp,
+                }
+            )
 
             # Calculate microns per pixel
             try:
@@ -328,15 +347,25 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
             try:
                 # Tile slide
                 def do_tile(associated, image):
-                    dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
-                                limit_bounds=LIMIT_BOUNDS)
-                    return sync_image(pool, slide_relpath, associated, dz,
-                            key_basepath, key_md5sums,
-                            mpp if associated is None else None)
+                    dz = DeepZoomGenerator(
+                        image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
+                    )
+                    return sync_image(
+                        pool,
+                        slide_relpath,
+                        associated,
+                        dz,
+                        key_basepath,
+                        key_md5sums,
+                        mpp if associated is None else None,
+                    )
+
                 metadata['slide'] = do_tile(None, slide)
 
                 # Tile associated images
-                for associated, image in sorted(slide.associated_images.items()):
+                for associated, image in sorted(
+                    slide.associated_images.items()
+                ):
                     cur_props = do_tile(associated, ImageSlide(image))
                     metadata['associated'].append(cur_props)
             except:
@@ -363,7 +392,9 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 },
             )
             if 'Errors' in delete_result:
-                raise IOError(f'Failed to delete {len(delete_result["Errors"])} keys')
+                raise IOError(
+                    f'Failed to delete {len(delete_result["Errors"])} keys'
+                )
 
     # Update metadata
     if 'properties' in metadata:
@@ -394,11 +425,14 @@ def start_retile(ctxfile, matrixfile):
     context = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
-        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()) \
-                .hexdigest()[:8],
+        'stamp': sha256(
+            f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()
+        ).hexdigest()[:8],
         'slides': slides,
     }
-    print(f'OpenSlide {context["openslide"]}, OpenSlide Python {context["openslide_python"]}')
+    print(
+        f'OpenSlide {context["openslide"]}, OpenSlide Python {context["openslide_python"]}'
+    )
 
     # Connect to S3
     conn, bucket = connect_bucket()
@@ -439,9 +473,12 @@ def start_retile(ctxfile, matrixfile):
     with open(ctxfile, 'w') as fh:
         json.dump(context, fh)
     with open(matrixfile, 'w') as fh:
-        json.dump({
-            "slide": sorted(slides.keys()),
-        }, fh)
+        json.dump(
+            {
+                "slide": sorted(slides.keys()),
+            },
+            fh,
+        )
 
 
 def retile_slide(ctxfile, slide_relpath, summarydir, workers):
@@ -459,18 +496,21 @@ def retile_slide(ctxfile, slide_relpath, summarydir, workers):
     slide_info = context['slides'].get(slide_relpath)
     if slide_info is None:
         raise Exception(f'No such slide {slide_relpath}')
-    summary = sync_slide(context['stamp'], conn, bucket, slide_relpath,
-            slide_info, workers)
+    summary = sync_slide(
+        context['stamp'], conn, bucket, slide_relpath, slide_info, workers
+    )
 
     # Write summary if the slide was readable
     if 'slide' in summary:
         summary.pop('properties', None)
         summary.pop('stamp', None)
-        summary.update({
-            'credit': slide_info.get('credit'),
-            'description': slide_info['description'],
-            'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
-        })
+        summary.update(
+            {
+                'credit': slide_info.get('credit'),
+                'description': slide_info['description'],
+                'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
+            }
+        )
         summaryfile = os.path.join(summarydir, slide_relpath)
         os.makedirs(os.path.dirname(summaryfile), exist_ok=True)
         with open(summaryfile, 'w') as fh:
@@ -501,10 +541,12 @@ def finish_retile(ctxfile, summarydir):
             if group_name != cur_group_name:
                 cur_group_name = group_name
                 cur_slides = []
-                groups.append({
-                    'name': GROUP_NAME_MAP.get(group_name, group_name),
-                    'slides': cur_slides
-                })
+                groups.append(
+                    {
+                        'name': GROUP_NAME_MAP.get(group_name, group_name),
+                        'slides': cur_slides,
+                    }
+                )
             cur_slides.append(summary)
 
     # Upload metadata
@@ -526,41 +568,48 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
 
-    parser_start = subparsers.add_parser('start',
-            help='start a retiling run')
-    parser_start.add_argument('context_file',
-            help='path to context file (output)')
-    parser_start.add_argument('matrix_file',
-            help='path to list of slides to tile (output)')
+    parser_start = subparsers.add_parser('start', help='start a retiling run')
+    parser_start.add_argument(
+        'context_file', help='path to context file (output)'
+    )
+    parser_start.add_argument(
+        'matrix_file', help='path to list of slides to tile (output)'
+    )
     parser_start.set_defaults(cmd='start')
 
-    parser_tile = subparsers.add_parser('tile',
-            help='retile one slide')
-    parser_tile.add_argument('context_file',
-            help='path to context file')
-    parser_tile.add_argument('slide',
-            help='slide identifier (from matrix file)')
-    parser_tile.add_argument('summary_dir',
-            help='path to summary directory (output)')
-    parser_tile.add_argument('-j', '--jobs', metavar='COUNT', dest='workers',
-                type=int, default=4,
-                help='number of worker processes to start [4]')
+    parser_tile = subparsers.add_parser('tile', help='retile one slide')
+    parser_tile.add_argument('context_file', help='path to context file')
+    parser_tile.add_argument(
+        'slide', help='slide identifier (from matrix file)'
+    )
+    parser_tile.add_argument(
+        'summary_dir', help='path to summary directory (output)'
+    )
+    parser_tile.add_argument(
+        '-j',
+        '--jobs',
+        metavar='COUNT',
+        dest='workers',
+        type=int,
+        default=4,
+        help='number of worker processes to start [4]',
+    )
     parser_tile.set_defaults(cmd='tile')
 
-    parser_finish = subparsers.add_parser('finish',
-            help='finish a retiling run')
-    parser_finish.add_argument('context_file',
-            help='path to context file')
-    parser_finish.add_argument('summary_dir',
-            help='path to summary directory')
+    parser_finish = subparsers.add_parser(
+        'finish', help='finish a retiling run'
+    )
+    parser_finish.add_argument('context_file', help='path to context file')
+    parser_finish.add_argument('summary_dir', help='path to summary directory')
     parser_finish.set_defaults(cmd='finish')
 
     args = parser.parse_args()
     if args.cmd == 'start':
         start_retile(args.context_file, args.matrix_file)
     elif args.cmd == 'tile':
-        retile_slide(args.context_file, args.slide, args.summary_dir,
-                args.workers)
+        retile_slide(
+            args.context_file, args.slide, args.summary_dir, args.workers
+        )
     elif args.cmd == 'finish':
         finish_retile(args.context_file, args.summary_dir)
     else:

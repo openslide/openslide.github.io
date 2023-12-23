@@ -20,6 +20,12 @@ repos:
       - id: isort
         name: Reorder Python imports with isort
 
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        name: Format Python code with black
+
   - repo: meta
     hooks:
       - id: check-hooks-apply

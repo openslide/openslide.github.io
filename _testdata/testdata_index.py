@@ -149,7 +149,9 @@ index_template = environment.from_string(INDEX_TEMPLATE)
 
 def ensure_empty(items, msg_prefix):
     if items:
-        raise ValidationError('{}: {}'.format(msg_prefix, ', '.join(sorted(items))))
+        raise ValidationError(
+            '{}: {}'.format(msg_prefix, ', '.join(sorted(items)))
+        )
 
 
 def process_dir(dirpath, check_hashes=False):
@@ -165,8 +167,12 @@ def process_dir(dirpath, check_hashes=False):
 
     # Check slides against directory
     slide_names = set(slides.keys())
-    ensure_empty(filenames - slide_names, f'Missing files in index for {dirpath}')
-    ensure_empty(slide_names - filenames, f'Missing files in directory {dirpath}')
+    ensure_empty(
+        filenames - slide_names, f'Missing files in index for {dirpath}'
+    )
+    ensure_empty(
+        slide_names - filenames, f'Missing files in directory {dirpath}'
+    )
 
     # Check metadata fields and populate sizes
     for filename, info in sorted(slides.items()):
@@ -177,7 +183,8 @@ def process_dir(dirpath, check_hashes=False):
             f'{filepath}: Unknown fields',
         )
         ensure_empty(
-            MANDATORY_FIELDS - info_fields, f'{filepath}: Missing mandatory fields'
+            MANDATORY_FIELDS - info_fields,
+            f'{filepath}: Missing mandatory fields',
         )
         if check_hashes:
             sha = sha256()
@@ -218,7 +225,9 @@ def process_repo(basepath, check_hashes=False):
     dir_formats = {}
     slides = {}
     for dirpath in directories:
-        dir_format, dir_slides = process_dir(dirpath, check_hashes=check_hashes)
+        dir_format, dir_slides = process_dir(
+            dirpath, check_hashes=check_hashes
+        )
         dirname = str(dirpath.relative_to(basepath))
         dir_formats[dirname] = dir_format
         for filename, info in dir_slides.items():
@@ -248,9 +257,14 @@ def _main():
     parser = argparse.ArgumentParser(
         description='Process metadata and build indexes for openslide-testdata.'
     )
-    parser.add_argument('path', type=Path, help='path to local copy of openslide-testdata')
     parser.add_argument(
-        '-c', '--check-hashes', action='store_true', help='check SHA-256 digests'
+        'path', type=Path, help='path to local copy of openslide-testdata'
+    )
+    parser.add_argument(
+        '-c',
+        '--check-hashes',
+        action='store_true',
+        help='check SHA-256 digests',
     )
     args = parser.parse_args()
     process_repo(args.path, check_hashes=args.check_hashes)

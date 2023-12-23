@@ -115,7 +115,9 @@ def fetch_repo(basepath, baseurl=TESTDATA_BASEURL, check_hashes=False):
     # Fetch slides
     dirpaths = set()
     for relpath, info in sorted(slides.items()):
-        fetch_slide(baseurl, basepath, relpath, info, check_hashes=check_hashes)
+        fetch_slide(
+            baseurl, basepath, relpath, info, check_hashes=check_hashes
+        )
         dirpaths.add(str(Path(relpath).parent))
 
     # Fetch YAML metadata
@@ -136,7 +138,9 @@ def _main():
     parser = argparse.ArgumentParser(
         description='Fetch openslide-testdata to local directory.'
     )
-    parser.add_argument('path', type=Path, help='path to destination directory')
+    parser.add_argument(
+        'path', type=Path, help='path to destination directory'
+    )
     parser.add_argument(
         '-c',
         '--check-hashes',
