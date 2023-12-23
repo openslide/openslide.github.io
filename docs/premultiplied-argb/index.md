@@ -22,7 +22,7 @@ deleting the alpha channel.  However, this can lead to incorrect results:
   white; this is exposed via the `openslide.background-color` property.)
 
 - In downsampled levels, the boundaries between present and absent regions
-  of a slide often have a partially-transparent, single-pixel-wide border. 
+  of a slide often have a partially-transparent, single-pixel-wide border.
   If the alpha channel is dropped, this will render as a visible dark line
   at the edge of some slide regions.
 
