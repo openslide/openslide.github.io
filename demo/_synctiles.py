@@ -127,12 +127,15 @@ def connect_bucket():
 def pool_init(slide_path):
     global upload_bucket, dz_generators
     _, upload_bucket = connect_bucket()
-    generator = lambda slide: (
-        DeepZoomGenerator(
-            slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
-        ),
-        get_transform(slide),
-    )
+
+    def generator(slide):
+        return (
+            DeepZoomGenerator(
+                slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
+            ),
+            get_transform(slide),
+        )
+
     slide = OpenSlide(slide_path)
     dz_generators = {None: generator(slide)}
     for name, image in slide.associated_images.items():
@@ -198,7 +201,8 @@ def sync_image(
 
     def progress():
         print(
-            f"Tiling {slide_relpath} {associated_slug}: {count}/{total} tiles\r",
+            f"Tiling {slide_relpath} {associated_slug}: "
+            f"{count}/{total} tiles\r",
             end='',
         )
         sys.stdout.flush()
@@ -368,7 +372,7 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 ):
                     cur_props = do_tile(associated, ImageSlide(image))
                     metadata['associated'].append(cur_props)
-            except:
+            except BaseException:
                 pool.terminate()
                 raise
             finally:
@@ -426,12 +430,16 @@ def start_retile(ctxfile, matrixfile):
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
         'stamp': sha256(
-            f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()
+            (
+                f'{openslide.__library_version__} {openslide.__version__} '
+                f'{STAMP_VERSION}'
+            ).encode()
         ).hexdigest()[:8],
         'slides': slides,
     }
     print(
-        f'OpenSlide {context["openslide"]}, OpenSlide Python {context["openslide_python"]}'
+        f'OpenSlide {context["openslide"]}, '
+        f'OpenSlide Python {context["openslide_python"]}'
     )
 
     # Connect to S3
@@ -532,7 +540,7 @@ def finish_retile(ctxfile, summarydir):
     groups = []
     cur_group_name = None
     cur_slides = None
-    for slide_relpath, slide_info in sorted(context['slides'].items()):
+    for slide_relpath in sorted(context['slides']):
         summaryfile = os.path.join(summarydir, slide_relpath)
         if os.path.exists(summaryfile):
             with open(summaryfile) as fh:

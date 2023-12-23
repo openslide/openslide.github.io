@@ -25,7 +25,7 @@ import json
 import os
 from pathlib import Path
 
-from jinja2 import Environment, Template
+from jinja2 import Environment
 import yaml
 
 IGNORE_FILENAMES = frozenset(
@@ -127,7 +127,7 @@ td.size {
         extra.size|file_size_units, extra.description) }}
   {% endfor %}
 </table>
-'''
+'''  # noqa: E501
 
 
 class ValidationError(Exception):
@@ -255,7 +255,8 @@ def process_repo(basepath, check_hashes=False):
 
 def _main():
     parser = argparse.ArgumentParser(
-        description='Process metadata and build indexes for openslide-testdata.'
+        description='Process metadata and build indexes for '
+        'openslide-testdata.'
     )
     parser.add_argument(
         'path', type=Path, help='path to local copy of openslide-testdata'

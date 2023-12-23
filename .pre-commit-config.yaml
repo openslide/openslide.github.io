@@ -33,6 +33,18 @@ repos:
       - id: black
         name: Format Python code with black
 
+  - repo: https://github.com/asottile/yesqa
+    rev: v1.5.0
+    hooks:
+      - id: yesqa
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        name: Lint Python code with flake8
+        additional_dependencies: [flake8-bugbear, Flake8-pyproject]
+
   - repo: meta
     hooks:
       - id: check-hooks-apply
