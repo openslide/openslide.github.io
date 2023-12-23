@@ -19,29 +19,39 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from __future__ import annotations
+
 from argparse import ArgumentParser
 import base64
+from collections.abc import Callable, Iterator
 from hashlib import md5, sha256
 from io import BytesIO
 import json
 from multiprocessing import Pool
+from multiprocessing.pool import Pool as PoolType
 import os
 import posixpath as urlpath
 import re
 import shutil
 import sys
 from tempfile import mkdtemp
+from typing import TYPE_CHECKING, Any
 from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
 import zlib
 
 from PIL import ImageCms
+from PIL.Image import Image
+from PIL.ImageCms import ImageCmsProfile
 import boto3
 import openslide
-from openslide import ImageSlide, OpenSlide, OpenSlideError
+from openslide import AbstractSlide, ImageSlide, OpenSlide, OpenSlideError
 from openslide.deepzoom import DeepZoomGenerator
 import requests
+
+if TYPE_CHECKING:
+    from mypy_boto3_s3.service_resource import Bucket, S3ServiceResource
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'
@@ -91,25 +101,38 @@ SRGB_PROFILE_BYTES = zlib.decompress(
         'pz4p//jz/38AR4Nk5Q=='
     )
 )
-SRGB_PROFILE = ImageCms.getOpenProfile(BytesIO(SRGB_PROFILE_BYTES))
+SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
+    BytesIO(SRGB_PROFILE_BYTES)
+)  # type: ignore[no-untyped-call]
+
+Transform = Callable[[Image], None]
+Generator = tuple[DeepZoomGenerator, Transform]
+Json = dict[str, Any]
+KeyMd5s = dict[str, str]
+SyncTileArgs = tuple[str | None, int, tuple[int, int], str, str | None]
+
+dz_generators: dict[str | None, Generator]
+upload_bucket: Bucket
 
 
-def slugify(text):
+def slugify(text: str) -> str:
     """Generate an ASCII-only slug."""
     text = normalize('NFKD', text.lower()).encode('ascii', 'ignore').decode()
     return re.sub('[^a-z0-9]+', '_', text)
 
 
-def get_transform(image):
+def get_transform(image: AbstractSlide) -> Transform:
     """Return a function that transforms an image to sRGB in place."""
     if image.color_profile is None:
         return lambda img: None
-    intent = ImageCms.getDefaultIntent(image.color_profile)
+    intent: int = ImageCms.getDefaultIntent(
+        image.color_profile
+    )  # type: ignore[no-untyped-call]
     transform = ImageCms.buildTransform(
         image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
     )
 
-    def xfrm(img):
+    def xfrm(img: Image) -> None:
         ImageCms.applyTransform(img, transform, True)
         # Some browsers assume we intend the display's color space if we
         # don't embed the profile.  Pillow's serialization is larger, so
@@ -119,16 +142,16 @@ def get_transform(image):
     return xfrm
 
 
-def connect_bucket():
+def connect_bucket() -> tuple[S3ServiceResource, Bucket]:
     conn = boto3.resource('s3')
     return conn, conn.Bucket(S3_BUCKET)
 
 
-def pool_init(slide_path):
+def pool_init(slide_path: str) -> None:
     global upload_bucket, dz_generators
     _, upload_bucket = connect_bucket()
 
-    def generator(slide):
+    def generator(slide: AbstractSlide) -> Generator:
         return (
             DeepZoomGenerator(
                 slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
@@ -142,7 +165,7 @@ def pool_init(slide_path):
         dz_generators[name] = generator(ImageSlide(image))
 
 
-def sync_tile(args):
+def sync_tile(args: SyncTileArgs) -> str | BaseException:
     """Generate and possibly upload a tile."""
     try:
         associated, level, address, key_name, cur_md5 = args
@@ -170,7 +193,12 @@ def sync_tile(args):
         return e
 
 
-def enumerate_tiles(associated, dz, key_imagepath, key_md5sums):
+def enumerate_tiles(
+    associated: str | None,
+    dz: DeepZoomGenerator,
+    key_imagepath: str,
+    key_md5sums: KeyMd5s,
+) -> Iterator[SyncTileArgs]:
     """Enumerate tiles in a single image."""
     for level in range(dz.level_count):
         key_levelpath = urlpath.join(key_imagepath, str(level))
@@ -188,8 +216,14 @@ def enumerate_tiles(associated, dz, key_imagepath, key_md5sums):
 
 
 def sync_image(
-    pool, slide_relpath, associated, dz, key_basepath, key_md5sums, mpp=None
-):
+    pool: PoolType,
+    slide_relpath: str,
+    associated: str | None,
+    dz: DeepZoomGenerator,
+    key_basepath: str,
+    key_md5sums: KeyMd5s,
+    mpp: float | None = None,
+) -> Json:
     """Generate and upload tiles, and generate metadata, for a single image.
     Delete valid tiles from key_md5sums."""
 
@@ -199,7 +233,7 @@ def sync_image(
     key_imagepath = urlpath.join(key_basepath, f'{associated_slug}_files')
     iterator = enumerate_tiles(associated, dz, key_imagepath, key_md5sums)
 
-    def progress():
+    def progress() -> None:
         print(
             f"Tiling {slide_relpath} {associated_slug}: "
             f"{count}/{total} tiles\r",
@@ -243,7 +277,9 @@ def sync_image(
     }
 
 
-def upload_metadata(bucket, path, item, cache=True):
+def upload_metadata(
+    bucket: Bucket, path: str, item: Json, cache: bool = True
+) -> None:
     bucket.Object(path).put(
         ACL='public-read',
         Body=json.dumps(item, indent=1, sort_keys=True).encode(),
@@ -252,7 +288,14 @@ def upload_metadata(bucket, path, item, cache=True):
     )
 
 
-def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
+def sync_slide(
+    stamp: str,
+    conn: S3ServiceResource,
+    bucket: Bucket,
+    slide_relpath: str,
+    slide_info: Json,
+    workers: int,
+) -> Json:
     """Generate and upload tiles and metadata for a single slide."""
 
     key_basepath = urlpath.splitext(slide_relpath)[0].lower()
@@ -261,7 +304,9 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
 
     # Get current metadata
     try:
-        metadata = json.load(bucket.Object(metadata_key_name).get()['Body'])
+        metadata: Json | None = json.load(
+            bucket.Object(metadata_key_name).get()['Body']
+        )
     except conn.meta.client.exceptions.NoSuchKey:
         metadata = None
 
@@ -350,7 +395,9 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
             pool = Pool(workers, lambda: pool_init(slide_path))
             try:
                 # Tile slide
-                def do_tile(associated, image):
+                def do_tile(
+                    associated: str | None, image: AbstractSlide
+                ) -> Json:
                     dz = DeepZoomGenerator(
                         image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
                     )
@@ -408,7 +455,9 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
     return metadata
 
 
-def upload_status(bucket, dirty=False, stamp=None):
+def upload_status(
+    bucket: Bucket, dirty: bool = False, stamp: str | None = None
+) -> None:
     status = {
         'dirty': dirty,
         'stamp': stamp,
@@ -416,7 +465,7 @@ def upload_status(bucket, dirty=False, stamp=None):
     upload_metadata(bucket, STATUS_NAME, status, False)
 
 
-def start_retile(ctxfile, matrixfile):
+def start_retile(ctxfile: str, matrixfile: str) -> None:
     """Subcommand to initialize a retiling run.  Writes common state into
     ctxfile and a list of slides to be retiled into matrixfile."""
 
@@ -464,7 +513,7 @@ def start_retile(ctxfile, matrixfile):
         bucket.Object(relpath).put(
             ACL='public-read',
             Body=opts.get('data', '').encode(),
-            ContentType=opts.get('content-type'),
+            ContentType=opts['content-type'],
         )
 
     # If the stamp is changing, mark bucket dirty
@@ -489,7 +538,9 @@ def start_retile(ctxfile, matrixfile):
         )
 
 
-def retile_slide(ctxfile, slide_relpath, summarydir, workers):
+def retile_slide(
+    ctxfile: str, slide_relpath: str, summarydir: str, workers: int
+) -> None:
     """Subcommand to retile one slide into S3.  Writes summary data into
     summarydir."""
 
@@ -525,7 +576,7 @@ def retile_slide(ctxfile, slide_relpath, summarydir, workers):
             json.dump(summary, fh)
 
 
-def finish_retile(ctxfile, summarydir):
+def finish_retile(ctxfile: str, summarydir: str) -> None:
     """Subcommand to finish a retiling run.  Reads context file and summary
     dir and writes metadata to S3."""
 
@@ -539,7 +590,7 @@ def finish_retile(ctxfile, summarydir):
     # Build group list
     groups = []
     cur_group_name = None
-    cur_slides = None
+    cur_slides: list[Json] = []
     for slide_relpath in sorted(context['slides']):
         summaryfile = os.path.join(summarydir, slide_relpath)
         if os.path.exists(summaryfile):

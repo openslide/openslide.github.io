@@ -19,11 +19,15 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from __future__ import annotations
+
 import argparse
+from collections.abc import Iterable
 from hashlib import sha256
 import json
 import os
 from pathlib import Path
+from typing import Any
 
 from jinja2 import Environment
 import yaml
@@ -134,7 +138,7 @@ class ValidationError(Exception):
     pass
 
 
-def file_size_units(value):
+def file_size_units(value: int) -> str:
     for shift, unit in (40, ' TB'), (30, ' GB'), (20, ' MB'), (10, ' KB'):
         if value >= (1 << shift):
             in_units = value / (1 << shift)
@@ -147,14 +151,16 @@ environment.filters['file_size_units'] = file_size_units
 index_template = environment.from_string(INDEX_TEMPLATE)
 
 
-def ensure_empty(items, msg_prefix):
+def ensure_empty(items: Iterable[Any], msg_prefix: str) -> None:
     if items:
         raise ValidationError(
             '{}: {}'.format(msg_prefix, ', '.join(sorted(items)))
         )
 
 
-def process_dir(dirpath, check_hashes=False):
+def process_dir(
+    dirpath: Path, check_hashes: bool = False
+) -> tuple[str, dict[str, dict[str, str]]]:
     # List files in directory
     filenames = {path.name for path in dirpath.iterdir()} - IGNORE_FILENAMES
 
@@ -217,7 +223,7 @@ def process_dir(dirpath, check_hashes=False):
     return format_, slides
 
 
-def process_repo(basepath, check_hashes=False):
+def process_repo(basepath: Path, check_hashes: bool = False) -> None:
     # Enumerate directory names
     directories = sorted(path for path in basepath.iterdir() if path.is_dir())
 
@@ -253,7 +259,7 @@ def process_repo(basepath, check_hashes=False):
         ).dump(fh)
 
 
-def _main():
+def _main() -> None:
     parser = argparse.ArgumentParser(
         description='Process metadata and build indexes for '
         'openslide-testdata.'

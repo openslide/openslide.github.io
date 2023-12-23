@@ -18,12 +18,15 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from __future__ import annotations
+
 import argparse
 import calendar
 from hashlib import sha256
 import json
 import os
 from pathlib import Path
+from typing import cast
 from urllib.parse import urljoin
 
 import dateutil.parser
@@ -40,7 +43,12 @@ IGNORE_FILENAMES = frozenset(
 )
 
 
-def fetch_file(baseurl, basepath, relpath, expected_sha256=None):
+def fetch_file(
+    baseurl: str,
+    basepath: Path,
+    relpath: str,
+    expected_sha256: str | None = None,
+) -> Path:
     path = basepath / relpath
     count = 0
     sha = sha256()
@@ -75,12 +83,12 @@ def fetch_file(baseurl, basepath, relpath, expected_sha256=None):
 
 
 def fetch_slide(
-    baseurl,
-    basepath,
-    relpath,
-    info,
-    check_hashes=False,
-):
+    baseurl: str,
+    basepath: Path,
+    relpath: str,
+    info: dict[str, str | int],
+    check_hashes: bool = False,
+) -> Path:
     path = basepath / relpath
     try:
         if path.stat().st_size == info['size']:
@@ -103,10 +111,12 @@ def fetch_slide(
         pass
 
     print(f'Fetching {relpath}...')
-    return fetch_file(baseurl, basepath, relpath, info['sha256'])
+    return fetch_file(baseurl, basepath, relpath, cast(str, info['sha256']))
 
 
-def fetch_repo(basepath, baseurl=TESTDATA_BASEURL, check_hashes=False):
+def fetch_repo(
+    basepath: Path, baseurl: str = TESTDATA_BASEURL, check_hashes: bool = False
+) -> None:
     # Fetch JSON index
     jsonpath = fetch_file(baseurl, basepath, 'index.json')
     with open(jsonpath) as fh:
@@ -134,7 +144,7 @@ def fetch_repo(basepath, baseurl=TESTDATA_BASEURL, check_hashes=False):
             print(f'Unexpected file: {filepath}')
 
 
-def _main():
+def _main() -> None:
     parser = argparse.ArgumentParser(
         description='Fetch openslide-testdata to local directory.'
     )
