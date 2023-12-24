@@ -34,7 +34,7 @@ from pathlib import Path, PurePath
 import re
 import sys
 from tempfile import TemporaryDirectory
-from typing import TYPE_CHECKING, Any, Self, TextIO
+from typing import TYPE_CHECKING, Any, NotRequired, Self, TextIO, TypedDict
 from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
@@ -101,11 +101,98 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
     BytesIO(SRGB_PROFILE_BYTES)
 )  # type: ignore[no-untyped-call]
 
-Json = dict[str, Any]
 KeyMd5s = dict[PurePath, str]
+TestDataIndex = dict[str, 'TestDataSlide']
 
 dz_generators: dict[str | None, Generator]
 storage: S3Storage
+
+
+class TestDataSlide(TypedDict):
+    """One openslide-testdata slide from index.json."""
+
+    credit: NotRequired[str]
+    description: str
+    format: str
+    license: str
+    sha256: str
+    size: int
+
+
+class Context(TypedDict):
+    """Cross-stage context JSON."""
+
+    openslide: str
+    openslide_python: str
+    stamp: str
+    slides: TestDataIndex
+    bucket: str
+
+
+class Matrix(TypedDict):
+    """Job matrix for GitHub Actions."""
+
+    slide: list[str]
+
+
+class BucketMetadata(TypedDict):
+    """Bucket info.json, for the frontend."""
+
+    openslide: str
+    openslide_python: str
+    stamp: str
+    groups: list[SlideGroup]
+
+
+class SlideGroup(TypedDict):
+    name: str
+    slides: list[SlideMetadata]
+
+
+class SlideMetadata(TypedDict, total=False):
+    """Per-slide slide.json used by this script; also part of bucket
+    metadata for the frontend with a different subset of fields."""
+
+    name: str
+    stamp: str
+    slide: ImageInfo
+    associated: list[ImageInfo]
+    properties: dict[str, str]
+    properties_url: str
+    credit: str | None
+    description: str
+    download_url: str
+
+
+class ImageInfo(TypedDict):
+    name: str | None
+    mpp: float | None
+    source: DzSource
+
+
+class DzSource(TypedDict):
+    Image: DzSourceImage
+
+
+class DzSourceImage(TypedDict):
+    xmlns: str
+    Url: str
+    Format: str
+    TileSize: int
+    Overlap: int
+    Size: DzSourceImageSize
+
+
+class DzSourceImageSize(TypedDict):
+    Width: int
+    Height: int
+
+
+class StatusMetadata(TypedDict):
+    """status.json object for the frontend."""
+
+    dirty: bool
+    stamp: str | None
 
 
 def slugify(text: str) -> str:
@@ -164,7 +251,7 @@ class S3Storage:
         return self.bucket.Object(path.as_posix())
 
     def upload_metadata(
-        self, path: PurePath, item: Json, cache: bool = True
+        self, path: PurePath, item: Any, cache: bool = True
     ) -> None:
         self.object(path).put(
             ACL='public-read',
@@ -252,7 +339,7 @@ def sync_image(
     key_basepath: PurePath,
     key_md5sums: KeyMd5s,
     mpp: float | None = None,
-) -> Json:
+) -> ImageInfo:
     """Generate and upload tiles, and generate metadata, for a single image.
     Delete valid tiles from key_md5sums."""
 
@@ -284,7 +371,7 @@ def sync_image(
     print()
 
     # Format tile source
-    source = {
+    source: DzSource = {
         'Image': {
             'xmlns': 'http://schemas.microsoft.com/deepzoom/2008',
             'Url': urljoin(storage.base_url, key_imagepath.as_posix()) + '/',
@@ -310,9 +397,9 @@ def sync_slide(
     stamp: str,
     storage: S3Storage,
     slide_relpath: PurePath,
-    slide_info: Json,
+    slide_info: TestDataSlide,
     workers: int,
-) -> Json:
+) -> SlideMetadata:
     """Generate and upload tiles and metadata for a single slide."""
 
     key_basepath = PurePath(slide_relpath.with_suffix('').as_posix().lower())
@@ -321,7 +408,7 @@ def sync_slide(
 
     # Get current metadata
     try:
-        metadata: Json | None = json.load(
+        metadata: SlideMetadata | None = json.load(
             storage.object(metadata_key_name).get()['Body']
         )
     except storage.NoSuchKey:
@@ -423,7 +510,7 @@ def sync_slide(
                 # Tile slide
                 def do_tile(
                     associated: str | None, image: AbstractSlide
-                ) -> Json:
+                ) -> ImageInfo:
                     dz = DeepZoomGenerator(
                         image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
                     )
@@ -483,7 +570,7 @@ def sync_slide(
 def upload_status(
     storage: S3Storage, dirty: bool = False, stamp: str | None = None
 ) -> None:
-    status = {
+    status: StatusMetadata = {
         'dirty': dirty,
         'stamp': stamp,
     }
@@ -499,10 +586,10 @@ def start_retile(
     # Get openslide-testdata index
     r = requests.get(urljoin(DOWNLOAD_BASE_URL, DOWNLOAD_INDEX))
     r.raise_for_status()
-    slides = r.json()
+    slides: TestDataIndex = r.json()
 
     # Initialize context for the run
-    context = {
+    context: Context = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
         'stamp': sha256(
@@ -547,7 +634,8 @@ def start_retile(
     # If the stamp is changing, mark bucket dirty
     try:
         stream = storage.object(PurePath(METADATA_NAME)).get()['Body']
-        old_stamp = json.load(stream).get('stamp')
+        metadata: BucketMetadata = json.load(stream)
+        old_stamp = metadata['stamp']
     except storage.NoSuchKey:
         old_stamp = None
     if context['stamp'] != old_stamp:
@@ -558,12 +646,10 @@ def start_retile(
     with ctxfile:
         json.dump(context, ctxfile)
     with matrixfile:
-        json.dump(
-            {
-                "slide": sorted(slides.keys()),
-            },
-            matrixfile,
-        )
+        matrix: Matrix = {
+            "slide": sorted(slides.keys()),
+        }
+        json.dump(matrix, matrixfile)
 
 
 def retile_slide(
@@ -574,7 +660,7 @@ def retile_slide(
 
     # Load context
     with ctxfile:
-        context = json.load(ctxfile)
+        context: Context = json.load(ctxfile)
 
     # Connect to S3
     storage = S3Storage(context['bucket'])
@@ -612,20 +698,20 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
 
     # Load context
     with ctxfile:
-        context = json.load(ctxfile)
+        context: Context = json.load(ctxfile)
 
     # Connect to S3
     storage = S3Storage(context['bucket'])
 
     # Build group list
-    groups = []
+    groups: list[SlideGroup] = []
     cur_group_name = None
-    cur_slides: list[Json] = []
+    cur_slides: list[SlideMetadata] = []
     for slide_relpath in sorted(PurePath(p) for p in context['slides']):
         summaryfile = summarydir / slide_relpath
         if summaryfile.exists():
             with summaryfile.open() as fh:
-                summary = json.load(fh)
+                summary: SlideMetadata = json.load(fh)
             group_name = slide_relpath.parent.as_posix()
             if group_name != cur_group_name:
                 cur_group_name = group_name
@@ -640,7 +726,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
 
     # Upload metadata
     print('Storing metadata...')
-    metadata = {
+    metadata: BucketMetadata = {
         'openslide': context['openslide'],
         'openslide_python': context['openslide_python'],
         'stamp': context['stamp'],
