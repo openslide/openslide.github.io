@@ -101,8 +101,6 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
     BytesIO(SRGB_PROFILE_BYTES)
 )  # type: ignore[no-untyped-call]
 
-Transform = Callable[[Image], None]
-Generator = tuple[DeepZoomGenerator, Transform]
 Json = dict[str, Any]
 KeyMd5s = dict[PurePath, str]
 
@@ -116,25 +114,38 @@ def slugify(text: str) -> str:
     return re.sub('[^a-z0-9]+', '_', text)
 
 
-def get_transform(image: AbstractSlide) -> Transform:
-    """Return a function that transforms an image to sRGB in place."""
-    if image.color_profile is None:
-        return lambda img: None
-    intent: int = ImageCms.getDefaultIntent(
-        image.color_profile
-    )  # type: ignore[no-untyped-call]
-    transform = ImageCms.buildTransform(
-        image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
-    )
+class Generator:
+    def __init__(self, slide: AbstractSlide):
+        self._dz = DeepZoomGenerator(
+            slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
+        )
+        self._transform = self._get_transform(slide)
 
-    def xfrm(img: Image) -> None:
-        ImageCms.applyTransform(img, transform, True)
-        # Some browsers assume we intend the display's color space if we
-        # don't embed the profile.  Pillow's serialization is larger, so
-        # use ours.
-        img.info['icc_profile'] = SRGB_PROFILE_BYTES
+    @staticmethod
+    def _get_transform(image: AbstractSlide) -> Callable[[Image], None]:
+        """Return a function that transforms an image to sRGB in place."""
+        if image.color_profile is None:
+            return lambda img: None
+        intent: int = ImageCms.getDefaultIntent(
+            image.color_profile
+        )  # type: ignore[no-untyped-call]
+        transform = ImageCms.buildTransform(
+            image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
+        )
 
-    return xfrm
+        def xfrm(img: Image) -> None:
+            ImageCms.applyTransform(img, transform, True)
+            # Some browsers assume we intend the display's color space if we
+            # don't embed the profile.  Pillow's serialization is larger, so
+            # use ours.
+            img.info['icc_profile'] = SRGB_PROFILE_BYTES
+
+        return xfrm
+
+    def get_tile(self, level: int, address: tuple[int, int]) -> Image:
+        tile: Image = self._dz.get_tile(level, address)
+        self._transform(tile)
+        return tile
 
 
 class S3Storage:
@@ -168,19 +179,10 @@ class S3Storage:
 def pool_init(bucket_name: str, slide_path: Path) -> None:
     global storage, dz_generators
     storage = S3Storage(bucket_name)
-
-    def generator(slide: AbstractSlide) -> Generator:
-        return (
-            DeepZoomGenerator(
-                slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
-            ),
-            get_transform(slide),
-        )
-
     slide = OpenSlide(slide_path)
-    dz_generators = {None: generator(slide)}
+    dz_generators = {None: Generator(slide)}
     for name, image in slide.associated_images.items():
-        dz_generators[name] = generator(ImageSlide(image))
+        dz_generators[name] = Generator(ImageSlide(image))
 
 
 @dataclass
@@ -194,9 +196,9 @@ class Tile:
     def sync(self) -> PurePath | BaseException:
         """Generate and possibly upload a tile."""
         try:
-            dz, transform = dz_generators[self.associated]
-            tile = dz.get_tile(self.level, self.address)
-            transform(tile)
+            tile = dz_generators[self.associated].get_tile(
+                self.level, self.address
+            )
             buf = BytesIO()
             tile.save(
                 buf,
