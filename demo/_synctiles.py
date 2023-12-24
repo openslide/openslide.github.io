@@ -53,8 +53,6 @@ if TYPE_CHECKING:
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'
-S3_REGION = 'us-east-1'
-BASE_URL = f'https://{S3_BUCKET}.s3.dualstack.{S3_REGION}.amazonaws.com/'
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -142,8 +140,15 @@ def get_transform(image: AbstractSlide) -> Transform:
 
 class S3Storage:
     def __init__(self) -> None:
+        bucket_name = S3_BUCKET
         self.conn = boto3.resource('s3')
-        self.bucket = self.conn.Bucket(S3_BUCKET)
+        self.bucket = self.conn.Bucket(bucket_name)
+        region = self.conn.meta.client.head_bucket(Bucket=bucket_name)[
+            'ResponseMetadata'
+        ]['HTTPHeaders']['x-amz-bucket-region']
+        self.base_url = (
+            f'https://{bucket_name}.s3.dualstack.{region}.amazonaws.com/'
+        )
         self.NoSuchKey = self.conn.meta.client.exceptions.NoSuchKey
 
     def object(self, path: PurePath) -> Object:
@@ -232,6 +237,7 @@ def enumerate_tiles(
 
 def sync_image(
     pool: PoolType,
+    storage: S3Storage,
     slide_relpath: PurePath,
     associated: str | None,
     dz: DeepZoomGenerator,
@@ -273,7 +279,7 @@ def sync_image(
     source = {
         'Image': {
             'xmlns': 'http://schemas.microsoft.com/deepzoom/2008',
-            'Url': urljoin(BASE_URL, key_imagepath.as_posix()) + '/',
+            'Url': urljoin(storage.base_url, key_imagepath.as_posix()) + '/',
             'Format': FORMAT,
             'TileSize': TILE_SIZE,
             'Overlap': OVERLAP,
@@ -386,7 +392,7 @@ def sync_slide(
                     'associated': [],
                     'properties': dict(slide.properties),
                     'properties_url': urljoin(
-                        BASE_URL, properties_key_name.as_posix()
+                        storage.base_url, properties_key_name.as_posix()
                     )
                     + '?v='
                     + stamp,
@@ -413,6 +419,7 @@ def sync_slide(
                     )
                     return sync_image(
                         pool,
+                        storage,
                         slide_relpath,
                         associated,
                         dz,
