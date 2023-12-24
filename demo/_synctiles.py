@@ -49,7 +49,7 @@ from openslide.deepzoom import DeepZoomGenerator
 import requests
 
 if TYPE_CHECKING:
-    from mypy_boto3_s3.service_resource import Bucket, S3ServiceResource
+    from mypy_boto3_s3.service_resource import Object
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
 S3_BUCKET = 'openslide-demo'
@@ -76,7 +76,7 @@ GROUP_NAME_MAP = {
     'Philips-TIFF': 'Philips TIFF',
 }
 BUCKET_STATIC = {
-    'robots.txt': {
+    PurePath('robots.txt'): {
         'data': 'User-agent: *\nDisallow: /\n',
         'content-type': 'text/plain',
     },
@@ -110,7 +110,7 @@ KeyMd5s = dict[PurePath, str]
 SyncTileArgs = tuple[str | None, int, tuple[int, int], PurePath, str | None]
 
 dz_generators: dict[str | None, Generator]
-upload_bucket: Bucket
+storage: S3Storage
 
 
 def slugify(text: str) -> str:
@@ -140,14 +140,31 @@ def get_transform(image: AbstractSlide) -> Transform:
     return xfrm
 
 
-def connect_bucket() -> tuple[S3ServiceResource, Bucket]:
-    conn = boto3.resource('s3')
-    return conn, conn.Bucket(S3_BUCKET)
+class S3Storage:
+    def __init__(self) -> None:
+        self.conn = boto3.resource('s3')
+        self.bucket = self.conn.Bucket(S3_BUCKET)
+        self.NoSuchKey = self.conn.meta.client.exceptions.NoSuchKey
+
+    def object(self, path: PurePath) -> Object:
+        return self.bucket.Object(path.as_posix())
+
+    def upload_metadata(
+        self, path: PurePath, item: Json, cache: bool = True
+    ) -> None:
+        self.object(path).put(
+            ACL='public-read',
+            Body=json.dumps(item, indent=1, sort_keys=True).encode(),
+            CacheControl=CACHE_CONTROL_CACHE
+            if cache
+            else CACHE_CONTROL_NOCACHE,
+            ContentType='application/json',
+        )
 
 
 def pool_init(slide_path: Path) -> None:
-    global upload_bucket, dz_generators
-    _, upload_bucket = connect_bucket()
+    global storage, dz_generators
+    storage = S3Storage()
 
     def generator(slide: AbstractSlide) -> Generator:
         return (
@@ -179,7 +196,7 @@ def sync_tile(args: SyncTileArgs) -> PurePath | BaseException:
         )
         new_md5 = md5(buf.getbuffer())
         if cur_md5 != new_md5.hexdigest():
-            upload_bucket.Object(key_name.as_posix()).put(
+            storage.object(key_name).put(
                 ACL='public-read',
                 Body=buf.getvalue(),
                 CacheControl=CACHE_CONTROL_CACHE,
@@ -275,21 +292,9 @@ def sync_image(
     }
 
 
-def upload_metadata(
-    bucket: Bucket, path: PurePath, item: Json, cache: bool = True
-) -> None:
-    bucket.Object(path.as_posix()).put(
-        ACL='public-read',
-        Body=json.dumps(item, indent=1, sort_keys=True).encode(),
-        CacheControl=CACHE_CONTROL_CACHE if cache else CACHE_CONTROL_NOCACHE,
-        ContentType='application/json',
-    )
-
-
 def sync_slide(
     stamp: str,
-    conn: S3ServiceResource,
-    bucket: Bucket,
+    storage: S3Storage,
     slide_relpath: PurePath,
     slide_info: Json,
     workers: int,
@@ -303,9 +308,9 @@ def sync_slide(
     # Get current metadata
     try:
         metadata: Json | None = json.load(
-            bucket.Object(metadata_key_name.as_posix()).get()['Body']
+            storage.object(metadata_key_name).get()['Body']
         )
-    except conn.meta.client.exceptions.NoSuchKey:
+    except storage.NoSuchKey:
         metadata = None
 
     # Return if metadata is current
@@ -363,7 +368,9 @@ def sync_slide(
         # Enumerate existing keys
         print(f"Enumerating keys for {slide_relpath}...")
         key_md5sums = {}
-        for obj in bucket.objects.filter(Prefix=key_basepath.as_posix() + '/'):
+        for obj in storage.bucket.objects.filter(
+            Prefix=key_basepath.as_posix() + '/'
+        ):
             key_md5sums[PurePath(obj.key)] = obj.e_tag.strip('"')
 
         # Initialize metadata
@@ -437,7 +444,7 @@ def sync_slide(
         print(f"Pruning {len(to_delete)} keys for {slide_relpath}...")
         while to_delete:
             cur_delete, to_delete = to_delete[0:1000], to_delete[1000:]
-            delete_result = bucket.delete_objects(
+            delete_result = storage.bucket.delete_objects(
                 Delete={
                     'Objects': [{'Key': k.as_posix()} for k in cur_delete],
                     'Quiet': True,
@@ -450,20 +457,20 @@ def sync_slide(
 
     # Update metadata
     if 'properties' in metadata:
-        upload_metadata(bucket, properties_key_name, metadata['properties'])
-    upload_metadata(bucket, metadata_key_name, metadata, cache=False)
+        storage.upload_metadata(properties_key_name, metadata['properties'])
+    storage.upload_metadata(metadata_key_name, metadata, cache=False)
 
     return metadata
 
 
 def upload_status(
-    bucket: Bucket, dirty: bool = False, stamp: str | None = None
+    storage: S3Storage, dirty: bool = False, stamp: str | None = None
 ) -> None:
     status = {
         'dirty': dirty,
         'stamp': stamp,
     }
-    upload_metadata(bucket, PurePath(STATUS_NAME), status, False)
+    storage.upload_metadata(PurePath(STATUS_NAME), status, False)
 
 
 def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
@@ -493,11 +500,11 @@ def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
     )
 
     # Connect to S3
-    conn, bucket = connect_bucket()
+    storage = S3Storage()
 
     # Set bucket configuration
     print("Configuring bucket...")
-    bucket.Cors().put(
+    storage.bucket.Cors().put(
         CORSConfiguration={
             'CORSRules': [
                 {
@@ -511,7 +518,7 @@ def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
     # Store static files
     print("Storing static files...")
     for relpath, opts in BUCKET_STATIC.items():
-        bucket.Object(relpath).put(
+        storage.object(relpath).put(
             ACL='public-read',
             Body=opts.get('data', '').encode(),
             ContentType=opts['content-type'],
@@ -519,13 +526,13 @@ def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
 
     # If the stamp is changing, mark bucket dirty
     try:
-        stream = bucket.Object(METADATA_NAME).get()['Body']
+        stream = storage.object(PurePath(METADATA_NAME)).get()['Body']
         old_stamp = json.load(stream).get('stamp')
-    except conn.meta.client.exceptions.NoSuchKey:
+    except storage.NoSuchKey:
         old_stamp = None
     if context['stamp'] != old_stamp:
         print('Marking bucket dirty...')
-        upload_status(bucket, dirty=True, stamp=old_stamp)
+        upload_status(storage, dirty=True, stamp=old_stamp)
 
     # Write output files
     with ctxfile:
@@ -550,14 +557,14 @@ def retile_slide(
         context = json.load(ctxfile)
 
     # Connect to S3
-    conn, bucket = connect_bucket()
+    storage = S3Storage()
 
     # Tile slide
     slide_info = context['slides'].get(slide_relpath.as_posix())
     if slide_info is None:
         raise Exception(f'No such slide {slide_relpath}')
     summary = sync_slide(
-        context['stamp'], conn, bucket, slide_relpath, slide_info, workers
+        context['stamp'], storage, slide_relpath, slide_info, workers
     )
 
     # Write summary if the slide was readable
@@ -588,7 +595,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
         context = json.load(ctxfile)
 
     # Connect to S3
-    conn, bucket = connect_bucket()
+    storage = S3Storage()
 
     # Build group list
     groups = []
@@ -619,11 +626,11 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
         'stamp': context['stamp'],
         'groups': groups,
     }
-    upload_metadata(bucket, PurePath(METADATA_NAME), metadata, False)
+    storage.upload_metadata(PurePath(METADATA_NAME), metadata, False)
 
     # Mark bucket clean
     print('Marking bucket clean...')
-    upload_status(bucket, stamp=context['stamp'])
+    upload_status(storage, stamp=context['stamp'])
 
 
 if __name__ == '__main__':
