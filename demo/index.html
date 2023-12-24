@@ -66,6 +66,7 @@
 <script type="text/javascript">
 $(function() {
     var openseadragon_images = "https://cdn.jsdelivr.net/npm/openseadragon@4.1/build/openseadragon/images/"
+    var storage = "https://openslide-demo.s3.dualstack.us-east-1.amazonaws.com/"
 
     var stamp;
     var groups;
@@ -105,7 +106,7 @@ $(function() {
                 }
             },
             'timeout': 60000,
-            'url': 'https://openslide-demo.s3.dualstack.us-east-1.amazonaws.com/status.json',
+            'url': storage + 'status.json',
         });
     }
     $(window).on('visibilitychange', function() {
@@ -287,7 +288,7 @@ $(function() {
             $('#images').removeClass('loading').
                     html("<div class='error'>Couldn't load slides</div>");
         },
-        'url': 'https://openslide-demo.s3.dualstack.us-east-1.amazonaws.com/info.json'
+        'url': storage + 'info.json'
     });
 
     // CSS doesn't provide a good way to specify a div of height
