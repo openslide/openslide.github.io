@@ -24,6 +24,7 @@ from __future__ import annotations
 from argparse import ArgumentParser, FileType
 import base64
 from collections.abc import Callable, Iterator
+from dataclasses import dataclass
 from hashlib import md5, sha256
 from io import BytesIO
 import json
@@ -33,7 +34,7 @@ from pathlib import Path, PurePath
 import re
 import sys
 from tempfile import TemporaryDirectory
-from typing import TYPE_CHECKING, Any, TextIO
+from typing import TYPE_CHECKING, Any, Self, TextIO
 from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
@@ -104,7 +105,6 @@ Transform = Callable[[Image], None]
 Generator = tuple[DeepZoomGenerator, Transform]
 Json = dict[str, Any]
 KeyMd5s = dict[PurePath, str]
-SyncTileArgs = tuple[str | None, int, tuple[int, int], PurePath, str | None]
 
 dz_generators: dict[str | None, Generator]
 storage: S3Storage
@@ -183,54 +183,62 @@ def pool_init(bucket_name: str, slide_path: Path) -> None:
         dz_generators[name] = generator(ImageSlide(image))
 
 
-def sync_tile(args: SyncTileArgs) -> PurePath | BaseException:
-    """Generate and possibly upload a tile."""
-    try:
-        associated, level, address, key_name, cur_md5 = args
-        dz, transform = dz_generators[associated]
-        tile = dz.get_tile(level, address)
-        transform(tile)
-        buf = BytesIO()
-        tile.save(
-            buf,
-            FORMAT,
-            quality=QUALITY,
-            icc_profile=tile.info.get('icc_profile'),
-        )
-        new_md5 = md5(buf.getbuffer())
-        if cur_md5 != new_md5.hexdigest():
-            storage.object(key_name).put(
-                ACL='public-read',
-                Body=buf.getvalue(),
-                CacheControl=CACHE_CONTROL_CACHE,
-                ContentMD5=base64.b64encode(new_md5.digest()).decode(),
-                ContentType=f'image/{FORMAT}',
+@dataclass
+class Tile:
+    associated: str | None
+    level: int
+    address: tuple[int, int]
+    key_name: PurePath
+    cur_md5: str | None
+
+    def sync(self) -> PurePath | BaseException:
+        """Generate and possibly upload a tile."""
+        try:
+            dz, transform = dz_generators[self.associated]
+            tile = dz.get_tile(self.level, self.address)
+            transform(tile)
+            buf = BytesIO()
+            tile.save(
+                buf,
+                FORMAT,
+                quality=QUALITY,
+                icc_profile=tile.info.get('icc_profile'),
             )
-        return key_name
-    except BaseException as e:
-        return e
-
-
-def enumerate_tiles(
-    associated: str | None,
-    dz: DeepZoomGenerator,
-    key_imagepath: PurePath,
-    key_md5sums: KeyMd5s,
-) -> Iterator[SyncTileArgs]:
-    """Enumerate tiles in a single image."""
-    for level in range(dz.level_count):
-        key_levelpath = key_imagepath / str(level)
-        cols, rows = dz.level_tiles[level]
-        for row in range(rows):
-            for col in range(cols):
-                key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
-                yield (
-                    associated,
-                    level,
-                    (col, row),
-                    key_name,
-                    key_md5sums.get(key_name),
+            new_md5 = md5(buf.getbuffer())
+            if self.cur_md5 != new_md5.hexdigest():
+                storage.object(self.key_name).put(
+                    ACL='public-read',
+                    Body=buf.getvalue(),
+                    CacheControl=CACHE_CONTROL_CACHE,
+                    ContentMD5=base64.b64encode(new_md5.digest()).decode(),
+                    ContentType=f'image/{FORMAT}',
                 )
+            return self.key_name
+        except BaseException as e:
+            return e
+
+    @classmethod
+    def enumerate(
+        cls,
+        associated: str | None,
+        dz: DeepZoomGenerator,
+        key_imagepath: PurePath,
+        key_md5sums: KeyMd5s,
+    ) -> Iterator[Self]:
+        """Enumerate tiles in a single image."""
+        for level in range(dz.level_count):
+            key_levelpath = key_imagepath / str(level)
+            cols, rows = dz.level_tiles[level]
+            for row in range(rows):
+                for col in range(cols):
+                    key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
+                    yield cls(
+                        associated,
+                        level,
+                        (col, row),
+                        key_name,
+                        key_md5sums.get(key_name),
+                    )
 
 
 def sync_image(
@@ -250,7 +258,7 @@ def sync_image(
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
     key_imagepath = key_basepath / f'{associated_slug}_files'
-    iterator = enumerate_tiles(associated, dz, key_imagepath, key_md5sums)
+    iterator = Tile.enumerate(associated, dz, key_imagepath, key_md5sums)
 
     def progress() -> None:
         print(
@@ -262,7 +270,7 @@ def sync_image(
 
     # Sync tiles
     progress()
-    for ret in pool.imap_unordered(sync_tile, iterator, 32):
+    for ret in pool.imap_unordered(Tile.sync, iterator, 32):
         if isinstance(ret, BaseException):
             raise ret
         else:
