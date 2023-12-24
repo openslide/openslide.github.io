@@ -52,7 +52,6 @@ if TYPE_CHECKING:
     from mypy_boto3_s3.service_resource import Object
 
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
-S3_BUCKET = 'openslide-demo'
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -139,8 +138,7 @@ def get_transform(image: AbstractSlide) -> Transform:
 
 
 class S3Storage:
-    def __init__(self) -> None:
-        bucket_name = S3_BUCKET
+    def __init__(self, bucket_name: str) -> None:
         self.conn = boto3.resource('s3')
         self.bucket = self.conn.Bucket(bucket_name)
         region = self.conn.meta.client.head_bucket(Bucket=bucket_name)[
@@ -167,9 +165,9 @@ class S3Storage:
         )
 
 
-def pool_init(slide_path: Path) -> None:
+def pool_init(bucket_name: str, slide_path: Path) -> None:
     global storage, dz_generators
-    storage = S3Storage()
+    storage = S3Storage(bucket_name)
 
     def generator(slide: AbstractSlide) -> Generator:
         return (
@@ -408,7 +406,9 @@ def sync_slide(
                 mpp = None
 
             # Start compute pool
-            pool = Pool(workers, lambda: pool_init(slide_path))
+            pool = Pool(
+                workers, lambda: pool_init(storage.bucket.name, slide_path)
+            )
             try:
                 # Tile slide
                 def do_tile(
@@ -480,7 +480,9 @@ def upload_status(
     storage.upload_metadata(PurePath(STATUS_NAME), status, False)
 
 
-def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
+def start_retile(
+    bucket_name: str, ctxfile: TextIO, matrixfile: TextIO
+) -> None:
     """Subcommand to initialize a retiling run.  Writes common state into
     ctxfile and a list of slides to be retiled into matrixfile."""
 
@@ -500,6 +502,7 @@ def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
             ).encode()
         ).hexdigest()[:8],
         'slides': slides,
+        'bucket': bucket_name,
     }
     print(
         f'OpenSlide {context["openslide"]}, '
@@ -507,7 +510,7 @@ def start_retile(ctxfile: TextIO, matrixfile: TextIO) -> None:
     )
 
     # Connect to S3
-    storage = S3Storage()
+    storage = S3Storage(bucket_name)
 
     # Set bucket configuration
     print("Configuring bucket...")
@@ -564,7 +567,7 @@ def retile_slide(
         context = json.load(ctxfile)
 
     # Connect to S3
-    storage = S3Storage()
+    storage = S3Storage(context['bucket'])
 
     # Tile slide
     slide_info = context['slides'].get(slide_relpath.as_posix())
@@ -602,7 +605,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
         context = json.load(ctxfile)
 
     # Connect to S3
-    storage = S3Storage()
+    storage = S3Storage(context['bucket'])
 
     # Build group list
     groups = []
@@ -645,6 +648,10 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
 
     parser_start = subparsers.add_parser('start', help='start a retiling run')
+    parser_start.add_argument(
+        'bucket',
+        help='name of destination S3 bucket',
+    )
     parser_start.add_argument(
         'context_file',
         type=FileType('w'),
@@ -691,7 +698,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.cmd == 'start':
-        start_retile(args.context_file, args.matrix_file)
+        start_retile(args.bucket, args.context_file, args.matrix_file)
     elif args.cmd == 'tile':
         retile_slide(
             args.context_file, args.slide, args.summary_dir, args.workers

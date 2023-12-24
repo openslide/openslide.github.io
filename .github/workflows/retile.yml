@@ -104,6 +104,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEMO_TILER_AWS_SECRET_KEY }}
         run: |
           ./_synctiles.py start \
+            "${{ vars.DEMO_TILER_BUCKET }}" \
             ${GITHUB_WORKSPACE}/context \
             matrix
           echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
