@@ -25,7 +25,6 @@ import argparse
 from collections.abc import Iterable
 from hashlib import sha256
 import json
-import os
 from pathlib import Path
 from typing import Any
 
@@ -166,7 +165,7 @@ def process_dir(
 
     # Load metadata
     yamlpath = dirpath / 'index.yaml'
-    with open(yamlpath, 'rb') as fh:
+    with yamlpath.open('rb') as fh:
         info = yaml.safe_load(fh)
         format_ = info['format']
         slides = info['slides']
@@ -194,7 +193,7 @@ def process_dir(
         )
         if check_hashes:
             sha = sha256()
-            with open(filepath, 'rb') as fh:
+            with filepath.open('rb') as fh:
                 while True:
                     buf = fh.read(10 << 20)
                     if not buf:
@@ -206,7 +205,7 @@ def process_dir(
         info['size'] = filepath.stat().st_size
 
     # Write index.html
-    with open(os.path.join(dirpath, 'index.html'), 'w') as fh:
+    with open(dirpath / 'index.html', 'w') as fh:
         index_template.stream(
             has_parent=True,
             title=format_,
@@ -215,7 +214,7 @@ def process_dir(
                 {
                     'name': 'index.yaml',
                     'description': 'Slide metadata',
-                    'size': os.stat(yamlpath).st_size,
+                    'size': yamlpath.stat().st_size,
                 },
             ],
         ).dump(fh)
@@ -241,7 +240,7 @@ def process_repo(basepath: Path, check_hashes: bool = False) -> None:
 
     # Write index.json
     jsonpath = basepath / 'index.json'
-    with open(jsonpath, 'w') as fh:
+    with jsonpath.open('w') as fh:
         json.dump(slides, fh, indent=2, sort_keys=True)
 
     # Write index.html

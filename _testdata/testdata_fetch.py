@@ -25,7 +25,7 @@ import calendar
 from hashlib import sha256
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import cast
 from urllib.parse import urljoin
 
@@ -46,19 +46,19 @@ IGNORE_FILENAMES = frozenset(
 def fetch_file(
     baseurl: str,
     basepath: Path,
-    relpath: str,
+    relpath: PurePath,
     expected_sha256: str | None = None,
 ) -> Path:
     path = basepath / relpath
     count = 0
     sha = sha256()
 
-    r = requests.get(urljoin(baseurl, relpath), stream=True)
+    r = requests.get(urljoin(baseurl, relpath.as_posix()), stream=True)
     r.raise_for_status()
 
     path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        with open(path, 'wb') as fh:
+        with path.open('wb') as fh:
             for buf in r.iter_content(BUFSIZE):
                 fh.write(buf)
                 if expected_sha256 is not None:
@@ -75,7 +75,7 @@ def fetch_file(
     try:
         dt = dateutil.parser.parse(r.headers['Last-Modified'])
         stamp = calendar.timegm(dt.utctimetuple())
-        os.utime(str(path), (stamp, stamp))
+        os.utime(path, (stamp, stamp))
     except KeyError:
         pass
 
@@ -85,7 +85,7 @@ def fetch_file(
 def fetch_slide(
     baseurl: str,
     basepath: Path,
-    relpath: str,
+    relpath: PurePath,
     info: dict[str, str | int],
     check_hashes: bool = False,
 ) -> Path:
@@ -96,7 +96,7 @@ def fetch_slide(
             if not check_hashes:
                 # Assume identical to remote
                 return path
-            with open(path, 'rb') as fh:
+            with path.open('rb') as fh:
                 sha = sha256()
                 while True:
                     buf = fh.read(BUFSIZE)
@@ -118,27 +118,28 @@ def fetch_repo(
     basepath: Path, baseurl: str = TESTDATA_BASEURL, check_hashes: bool = False
 ) -> None:
     # Fetch JSON index
-    jsonpath = fetch_file(baseurl, basepath, 'index.json')
-    with open(jsonpath) as fh:
+    jsonpath = fetch_file(baseurl, basepath, PurePath('index.json'))
+    with jsonpath.open() as fh:
         slides = json.load(fh)
 
     # Fetch slides
     dirpaths = set()
-    for relpath, info in sorted(slides.items()):
+    for rp, info in sorted(slides.items()):
+        relpath = PurePath(rp)
         fetch_slide(
             baseurl, basepath, relpath, info, check_hashes=check_hashes
         )
-        dirpaths.add(str(Path(relpath).parent))
+        dirpaths.add(relpath.parent)
 
     # Fetch YAML metadata
     for dirpath in sorted(dirpaths):
-        fetch_file(baseurl, basepath, dirpath + '/index.yaml')
+        fetch_file(baseurl, basepath, dirpath / 'index.yaml')
 
     # Check for extra files in local repo
     for filepath in basepath.rglob('*'):
         if (
             filepath.is_file()
-            and str(filepath.relative_to(basepath)) not in slides
+            and filepath.relative_to(basepath).as_posix() not in slides
             and filepath.name not in IGNORE_FILENAMES
         ):
             print(f'Unexpected file: {filepath}')
