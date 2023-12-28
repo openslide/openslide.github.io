@@ -135,6 +135,17 @@ class Matrix(TypedDict):
     slide: list[str]
 
 
+class SlideMetadata(TypedDict):
+    """Per-slide slide.json stored in the bucket and used by this script."""
+
+    name: str
+    stamp: str
+    slide: NotRequired[ImageInfo]
+    associated: NotRequired[list[ImageInfo]]
+    properties: NotRequired[dict[str, str]]
+    properties_url: NotRequired[str]
+
+
 class BucketMetadata(TypedDict):
     """Bucket info.json, for the frontend."""
 
@@ -146,18 +157,13 @@ class BucketMetadata(TypedDict):
 
 class SlideGroup(TypedDict):
     name: str
-    slides: list[SlideMetadata]
+    slides: list[SlideSummary]
 
 
-class SlideMetadata(TypedDict, total=False):
-    """Per-slide slide.json used by this script; also part of bucket
-    metadata for the frontend with a different subset of fields."""
-
+class SlideSummary(TypedDict):
     name: str
-    stamp: str
     slide: ImageInfo
     associated: list[ImageInfo]
-    properties: dict[str, str]
     properties_url: str
     credit: str | None
     description: str
@@ -669,23 +675,23 @@ def retile_slide(
     slide_info = context['slides'].get(slide_relpath.as_posix())
     if slide_info is None:
         raise Exception(f'No such slide {slide_relpath}')
-    summary = sync_slide(
+    metadata = sync_slide(
         context['stamp'], storage, slide_relpath, slide_info, workers
     )
 
     # Write summary if the slide was readable
-    if 'slide' in summary:
-        summary.pop('properties', None)
-        summary.pop('stamp', None)
-        summary.update(
-            {
-                'credit': slide_info.get('credit'),
-                'description': slide_info['description'],
-                'download_url': urljoin(
-                    DOWNLOAD_BASE_URL, slide_relpath.as_posix()
-                ),
-            }
-        )
+    if 'slide' in metadata:
+        summary: SlideSummary = {
+            'name': metadata['name'],
+            'slide': metadata['slide'],
+            'associated': metadata['associated'],
+            'properties_url': metadata['properties_url'],
+            'credit': slide_info.get('credit'),
+            'description': slide_info['description'],
+            'download_url': urljoin(
+                DOWNLOAD_BASE_URL, slide_relpath.as_posix()
+            ),
+        }
         summaryfile = summarydir / slide_relpath
         summaryfile.parent.mkdir(parents=True, exist_ok=True)
         with summaryfile.open('w') as fh:
@@ -706,12 +712,12 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
     # Build group list
     groups: list[SlideGroup] = []
     cur_group_name = None
-    cur_slides: list[SlideMetadata] = []
+    cur_slides: list[SlideSummary] = []
     for slide_relpath in sorted(PurePath(p) for p in context['slides']):
         summaryfile = summarydir / slide_relpath
         if summaryfile.exists():
             with summaryfile.open() as fh:
-                summary: SlideMetadata = json.load(fh)
+                summary: SlideSummary = json.load(fh)
             group_name = slide_relpath.parent.as_posix()
             if group_name != cur_group_name:
                 cur_group_name = group_name
