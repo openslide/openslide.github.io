@@ -19,33 +19,40 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from argparse import ArgumentParser
+from __future__ import annotations
+
+from argparse import ArgumentParser, FileType
 import base64
-import boto3
+from collections.abc import Callable, Iterator
+from dataclasses import dataclass
 from hashlib import md5, sha256
 from io import BytesIO
 import json
 from multiprocessing import Pool
-import openslide
-from openslide import OpenSlide, ImageSlide, OpenSlideError
-from openslide.deepzoom import DeepZoomGenerator
-import os
-from PIL import ImageCms
-import posixpath as urlpath
+from multiprocessing.pool import Pool as PoolType
+from pathlib import Path, PurePath
 import re
-import requests
-import shutil
 import sys
-from tempfile import mkdtemp
+from tempfile import TemporaryDirectory
+from typing import TYPE_CHECKING, Any, NotRequired, Self, TextIO, TypedDict
 from unicodedata import normalize
 from urllib.parse import urljoin
 from zipfile import ZipFile
 import zlib
 
+from PIL import ImageCms
+from PIL.Image import Image
+from PIL.ImageCms import ImageCmsProfile
+import boto3
+import openslide
+from openslide import AbstractSlide, ImageSlide, OpenSlide, OpenSlideError
+from openslide.deepzoom import DeepZoomGenerator
+import requests
+
+if TYPE_CHECKING:
+    from mypy_boto3_s3.service_resource import Object
+
 STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
-S3_BUCKET = 'openslide-demo'
-S3_REGION = 'us-east-1'
-BASE_URL = f'https://{S3_BUCKET}.s3.dualstack.{S3_REGION}.amazonaws.com/'
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -67,7 +74,7 @@ GROUP_NAME_MAP = {
     'Philips-TIFF': 'Philips TIFF',
 }
 BUCKET_STATIC = {
-    'robots.txt': {
+    PurePath('robots.txt'): {
         'data': 'User-agent: *\nDisallow: /\n',
         'content-type': 'text/plain',
     },
@@ -90,106 +97,275 @@ SRGB_PROFILE_BYTES = zlib.decompress(
         'pz4p//jz/38AR4Nk5Q=='
     )
 )
-SRGB_PROFILE = ImageCms.getOpenProfile(BytesIO(SRGB_PROFILE_BYTES))
+SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
+    BytesIO(SRGB_PROFILE_BYTES)
+)  # type: ignore[no-untyped-call]
 
-def slugify(text):
+KeyMd5s = dict[PurePath, str]
+TestDataIndex = dict[str, 'TestDataSlide']
+
+dz_generators: dict[str | None, Generator]
+storage: S3Storage
+
+
+class TestDataSlide(TypedDict):
+    """One openslide-testdata slide from index.json."""
+
+    credit: NotRequired[str]
+    description: str
+    format: str
+    license: str
+    sha256: str
+    size: int
+
+
+class Context(TypedDict):
+    """Cross-stage context JSON."""
+
+    openslide: str
+    openslide_python: str
+    stamp: str
+    slides: TestDataIndex
+    bucket: str
+
+
+class Matrix(TypedDict):
+    """Job matrix for GitHub Actions."""
+
+    slide: list[str]
+
+
+class SlideMetadata(TypedDict):
+    """Per-slide slide.json stored in the bucket and used by this script."""
+
+    name: str
+    stamp: str
+    slide: NotRequired[ImageInfo]
+    associated: NotRequired[list[ImageInfo]]
+    properties: NotRequired[dict[str, str]]
+    properties_url: NotRequired[str]
+
+
+class BucketMetadata(TypedDict):
+    """Bucket info.json, for the frontend."""
+
+    openslide: str
+    openslide_python: str
+    stamp: str
+    groups: list[SlideGroup]
+
+
+class SlideGroup(TypedDict):
+    name: str
+    slides: list[SlideSummary]
+
+
+class SlideSummary(TypedDict):
+    name: str
+    slide: ImageInfo
+    associated: list[ImageInfo]
+    properties_url: str
+    credit: str | None
+    description: str
+    download_url: str
+
+
+class ImageInfo(TypedDict):
+    name: str | None
+    mpp: float | None
+    source: DzSource
+
+
+class DzSource(TypedDict):
+    Image: DzSourceImage
+
+
+class DzSourceImage(TypedDict):
+    xmlns: str
+    Url: str
+    Format: str
+    TileSize: int
+    Overlap: int
+    Size: DzSourceImageSize
+
+
+class DzSourceImageSize(TypedDict):
+    Width: int
+    Height: int
+
+
+class StatusMetadata(TypedDict):
+    """status.json object for the frontend."""
+
+    dirty: bool
+    stamp: str | None
+
+
+def slugify(text: str) -> str:
     """Generate an ASCII-only slug."""
     text = normalize('NFKD', text.lower()).encode('ascii', 'ignore').decode()
     return re.sub('[^a-z0-9]+', '_', text)
 
 
-def get_transform(image):
-    """Return a function that transforms an image to sRGB in place."""
-    if image.color_profile is None:
-        return lambda img: None
-    intent = ImageCms.getDefaultIntent(image.color_profile)
-    transform = ImageCms.buildTransform(
-        image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
-    )
-    def xfrm(img):
-        ImageCms.applyTransform(img, transform, True)
-        # Some browsers assume we intend the display's color space if we
-        # don't embed the profile.  Pillow's serialization is larger, so
-        # use ours.
-        img.info['icc_profile'] = SRGB_PROFILE_BYTES
-    return xfrm
+class Generator:
+    def __init__(self, slide: AbstractSlide):
+        self._dz = DeepZoomGenerator(
+            slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
+        )
+        self._transform = self._get_transform(slide)
+
+    @staticmethod
+    def _get_transform(image: AbstractSlide) -> Callable[[Image], None]:
+        """Return a function that transforms an image to sRGB in place."""
+        if image.color_profile is None:
+            return lambda img: None
+        intent: int = ImageCms.getDefaultIntent(
+            image.color_profile
+        )  # type: ignore[no-untyped-call]
+        transform = ImageCms.buildTransform(
+            image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
+        )
+
+        def xfrm(img: Image) -> None:
+            ImageCms.applyTransform(img, transform, True)
+            # Some browsers assume we intend the display's color space if we
+            # don't embed the profile.  Pillow's serialization is larger, so
+            # use ours.
+            img.info['icc_profile'] = SRGB_PROFILE_BYTES
+
+        return xfrm
+
+    def get_tile(self, level: int, address: tuple[int, int]) -> Image:
+        tile: Image = self._dz.get_tile(level, address)
+        self._transform(tile)
+        return tile
 
 
-def connect_bucket():
-    conn = boto3.resource('s3')
-    return conn, conn.Bucket(S3_BUCKET)
+class S3Storage:
+    def __init__(self, bucket_name: str) -> None:
+        self.conn = boto3.resource('s3')
+        self.bucket = self.conn.Bucket(bucket_name)
+        region = self.conn.meta.client.head_bucket(Bucket=bucket_name)[
+            'ResponseMetadata'
+        ]['HTTPHeaders']['x-amz-bucket-region']
+        self.base_url = (
+            f'https://{bucket_name}.s3.dualstack.{region}.amazonaws.com/'
+        )
+        self.NoSuchKey = self.conn.meta.client.exceptions.NoSuchKey
+
+    def object(self, path: PurePath) -> Object:
+        return self.bucket.Object(path.as_posix())
+
+    def upload_metadata(
+        self, path: PurePath, item: Any, cache: bool = True
+    ) -> None:
+        self.object(path).put(
+            ACL='public-read',
+            Body=json.dumps(item, indent=1, sort_keys=True).encode(),
+            CacheControl=CACHE_CONTROL_CACHE
+            if cache
+            else CACHE_CONTROL_NOCACHE,
+            ContentType='application/json',
+        )
 
 
-def pool_init(slide_path):
-    global upload_bucket, dz_generators
-    _, upload_bucket = connect_bucket()
-    generator = lambda slide: (
-        DeepZoomGenerator(slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS),
-        get_transform(slide)
-    )
+def pool_init(bucket_name: str, slide_path: Path) -> None:
+    global storage, dz_generators
+    storage = S3Storage(bucket_name)
     slide = OpenSlide(slide_path)
-    dz_generators = {
-        None: generator(slide)
-    }
+    dz_generators = {None: Generator(slide)}
     for name, image in slide.associated_images.items():
-        dz_generators[name] = generator(ImageSlide(image))
+        dz_generators[name] = Generator(ImageSlide(image))
 
 
-def sync_tile(args):
-    """Generate and possibly upload a tile."""
-    try:
-        associated, level, address, key_name, cur_md5 = args
-        dz, transform = dz_generators[associated]
-        tile = dz.get_tile(level, address)
-        transform(tile)
-        buf = BytesIO()
-        tile.save(buf, FORMAT, quality=QUALITY,
-                icc_profile=tile.info.get('icc_profile'))
-        new_md5 = md5(buf.getbuffer())
-        if cur_md5 != new_md5.hexdigest():
-            upload_bucket.Object(key_name).put(
-                ACL='public-read',
-                Body=buf.getvalue(),
-                CacheControl=CACHE_CONTROL_CACHE,
-                ContentMD5=base64.b64encode(new_md5.digest()).decode(),
-                ContentType=f'image/{FORMAT}',
+@dataclass
+class Tile:
+    associated: str | None
+    level: int
+    address: tuple[int, int]
+    key_name: PurePath
+    cur_md5: str | None
+
+    def sync(self) -> PurePath | BaseException:
+        """Generate and possibly upload a tile."""
+        try:
+            tile = dz_generators[self.associated].get_tile(
+                self.level, self.address
             )
-        return key_name
-    except BaseException as e:
-        return e
+            buf = BytesIO()
+            tile.save(
+                buf,
+                FORMAT,
+                quality=QUALITY,
+                icc_profile=tile.info.get('icc_profile'),
+            )
+            new_md5 = md5(buf.getbuffer())
+            if self.cur_md5 != new_md5.hexdigest():
+                storage.object(self.key_name).put(
+                    ACL='public-read',
+                    Body=buf.getvalue(),
+                    CacheControl=CACHE_CONTROL_CACHE,
+                    ContentMD5=base64.b64encode(new_md5.digest()).decode(),
+                    ContentType=f'image/{FORMAT}',
+                )
+            return self.key_name
+        except BaseException as e:
+            return e
+
+    @classmethod
+    def enumerate(
+        cls,
+        associated: str | None,
+        dz: DeepZoomGenerator,
+        key_imagepath: PurePath,
+        key_md5sums: KeyMd5s,
+    ) -> Iterator[Self]:
+        """Enumerate tiles in a single image."""
+        for level in range(dz.level_count):
+            key_levelpath = key_imagepath / str(level)
+            cols, rows = dz.level_tiles[level]
+            for row in range(rows):
+                for col in range(cols):
+                    key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
+                    yield cls(
+                        associated,
+                        level,
+                        (col, row),
+                        key_name,
+                        key_md5sums.get(key_name),
+                    )
 
 
-def enumerate_tiles(associated, dz, key_imagepath, key_md5sums):
-    """Enumerate tiles in a single image."""
-    for level in range(dz.level_count):
-        key_levelpath = urlpath.join(key_imagepath, str(level))
-        cols, rows = dz.level_tiles[level]
-        for row in range(rows):
-            for col in range(cols):
-                key_name = urlpath.join(key_levelpath, f'{col}_{row}.{FORMAT}')
-                yield (associated, level, (col, row), key_name,
-                        key_md5sums.get(key_name))
-
-
-def sync_image(pool, slide_relpath, associated, dz, key_basepath, key_md5sums,
-        mpp=None):
+def sync_image(
+    pool: PoolType,
+    storage: S3Storage,
+    slide_relpath: PurePath,
+    associated: str | None,
+    dz: DeepZoomGenerator,
+    key_basepath: PurePath,
+    key_md5sums: KeyMd5s,
+    mpp: float | None = None,
+) -> ImageInfo:
     """Generate and upload tiles, and generate metadata, for a single image.
     Delete valid tiles from key_md5sums."""
 
     count = 0
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
-    key_imagepath = urlpath.join(key_basepath, f'{associated_slug}_files')
-    iterator = enumerate_tiles(associated, dz, key_imagepath, key_md5sums)
+    key_imagepath = key_basepath / f'{associated_slug}_files'
+    iterator = Tile.enumerate(associated, dz, key_imagepath, key_md5sums)
 
-    def progress():
-        print(f"Tiling {slide_relpath} {associated_slug}: {count}/{total} tiles\r",
-                end='')
+    def progress() -> None:
+        print(
+            f"Tiling {slide_relpath} {associated_slug}: "
+            f"{count}/{total} tiles\r",
+            end='',
+        )
         sys.stdout.flush()
 
     # Sync tiles
     progress()
-    for ret in pool.imap_unordered(sync_tile, iterator, 32):
+    for ret in pool.imap_unordered(Tile.sync, iterator, 32):
         if isinstance(ret, BaseException):
             raise ret
         else:
@@ -201,10 +377,10 @@ def sync_image(pool, slide_relpath, associated, dz, key_basepath, key_md5sums,
     print()
 
     # Format tile source
-    source = {
+    source: DzSource = {
         'Image': {
             'xmlns': 'http://schemas.microsoft.com/deepzoom/2008',
-            'Url': urljoin(BASE_URL, key_imagepath) + '/',
+            'Url': urljoin(storage.base_url, key_imagepath.as_posix()) + '/',
             'Format': FORMAT,
             'TileSize': TILE_SIZE,
             'Overlap': OVERLAP,
@@ -223,42 +399,44 @@ def sync_image(pool, slide_relpath, associated, dz, key_basepath, key_md5sums,
     }
 
 
-def upload_metadata(bucket, path, item, cache=True):
-    bucket.Object(path).put(
-        ACL='public-read',
-        Body=json.dumps(item, indent=1, sort_keys=True).encode(),
-        CacheControl=CACHE_CONTROL_CACHE if cache else CACHE_CONTROL_NOCACHE,
-        ContentType='application/json',
-    )
-
-
-def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
+def sync_slide(
+    stamp: str,
+    storage: S3Storage,
+    slide_relpath: PurePath,
+    slide_info: TestDataSlide,
+    workers: int,
+) -> SlideMetadata:
     """Generate and upload tiles and metadata for a single slide."""
 
-    key_basepath = urlpath.splitext(slide_relpath)[0].lower()
-    metadata_key_name = urlpath.join(key_basepath, SLIDE_METADATA_NAME)
-    properties_key_name = urlpath.join(key_basepath, SLIDE_PROPERTIES_NAME)
+    key_basepath = PurePath(slide_relpath.with_suffix('').as_posix().lower())
+    metadata_key_name = key_basepath / SLIDE_METADATA_NAME
+    properties_key_name = key_basepath / SLIDE_PROPERTIES_NAME
 
     # Get current metadata
     try:
-        metadata = json.load(bucket.Object(metadata_key_name).get()['Body'])
-    except conn.meta.client.exceptions.NoSuchKey:
+        metadata: SlideMetadata | None = json.load(
+            storage.object(metadata_key_name).get()['Body']
+        )
+    except storage.NoSuchKey:
         metadata = None
 
     # Return if metadata is current
     if metadata is not None and metadata['stamp'] == stamp:
         return metadata
 
-    tempdir = mkdtemp(prefix='synctiles-', dir='/var/tmp')
-    try:
+    with TemporaryDirectory(prefix='synctiles-', dir='/var/tmp') as td:
+        tempdir = Path(td)
+
         # Fetch slide
         print(f'Fetching {slide_relpath}...')
         count = 0
         hash = sha256()
-        slide_path = os.path.join(tempdir, urlpath.basename(slide_relpath))
-        with open(slide_path, 'wb') as fh:
-            r = requests.get(urljoin(DOWNLOAD_BASE_URL, slide_relpath),
-                    stream=True)
+        slide_path = tempdir / slide_relpath.name
+        with slide_path.open('wb') as fh:
+            r = requests.get(
+                urljoin(DOWNLOAD_BASE_URL, slide_relpath.as_posix()),
+                stream=True,
+            )
             r.raise_for_status()
             for buf in r.iter_content(10 << 20):
                 if not buf:
@@ -267,25 +445,26 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 hash.update(buf)
                 count += len(buf)
         if count != int(r.headers['Content-Length']):
-            raise IOError(f'Short read fetching {slide_relpath}')
+            raise OSError(f'Short read fetching {slide_relpath}')
         if hash.hexdigest() != slide_info['sha256']:
-            raise IOError(f'Hash mismatch fetching {slide_relpath}')
+            raise OSError(f'Hash mismatch fetching {slide_relpath}')
 
         # Open slide
         slide = None
         try:
             slide = OpenSlide(slide_path)
         except OpenSlideError:
-            if urlpath.splitext(slide_relpath)[1] == '.zip':
+            if slide_relpath.suffix == '.zip':
                 # Unzip slide
                 print(f'Extracting {slide_relpath}...')
-                temp_path = mkdtemp(dir=tempdir)
+                temp_path = Path(
+                    TemporaryDirectory(dir=tempdir, delete=False).name
+                )
                 with ZipFile(slide_path) as zf:
                     zf.extractall(path=temp_path)
                 # Find slide in zip
-                for sub_name in os.listdir(temp_path):
+                for slide_path in temp_path.iterdir():
                     try:
-                        slide_path = os.path.join(temp_path, sub_name)
                         slide = OpenSlide(slide_path)
                     except OpenSlideError:
                         pass
@@ -296,23 +475,30 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
         # Enumerate existing keys
         print(f"Enumerating keys for {slide_relpath}...")
         key_md5sums = {}
-        for obj in bucket.objects.filter(Prefix=key_basepath + '/'):
-            key_md5sums[obj.key] = obj.e_tag.strip('"')
+        for obj in storage.bucket.objects.filter(
+            Prefix=key_basepath.as_posix() + '/'
+        ):
+            key_md5sums[PurePath(obj.key)] = obj.e_tag.strip('"')
 
         # Initialize metadata
         metadata = {
-            'name': urlpath.splitext(urlpath.basename(slide_relpath))[0],
+            'name': slide_relpath.stem,
             'stamp': stamp,
         }
 
         if slide is not None:
             # Add slide metadata
-            metadata.update({
-                'associated': [],
-                'properties': dict(slide.properties),
-                'properties_url': urljoin(BASE_URL, properties_key_name) +
-                        '?v=' + stamp,
-            })
+            metadata.update(
+                {
+                    'associated': [],
+                    'properties': dict(slide.properties),
+                    'properties_url': urljoin(
+                        storage.base_url, properties_key_name.as_posix()
+                    )
+                    + '?v='
+                    + stamp,
+                }
+            )
 
             # Calculate microns per pixel
             try:
@@ -323,29 +509,42 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
                 mpp = None
 
             # Start compute pool
-            pool = Pool(workers, lambda: pool_init(slide_path))
+            pool = Pool(
+                workers, lambda: pool_init(storage.bucket.name, slide_path)
+            )
             try:
                 # Tile slide
-                def do_tile(associated, image):
-                    dz = DeepZoomGenerator(image, TILE_SIZE, OVERLAP,
-                                limit_bounds=LIMIT_BOUNDS)
-                    return sync_image(pool, slide_relpath, associated, dz,
-                            key_basepath, key_md5sums,
-                            mpp if associated is None else None)
+                def do_tile(
+                    associated: str | None, image: AbstractSlide
+                ) -> ImageInfo:
+                    dz = DeepZoomGenerator(
+                        image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
+                    )
+                    return sync_image(
+                        pool,
+                        storage,
+                        slide_relpath,
+                        associated,
+                        dz,
+                        key_basepath,
+                        key_md5sums,
+                        mpp if associated is None else None,
+                    )
+
                 metadata['slide'] = do_tile(None, slide)
 
                 # Tile associated images
-                for associated, image in sorted(slide.associated_images.items()):
+                for associated, image in sorted(
+                    slide.associated_images.items()
+                ):
                     cur_props = do_tile(associated, ImageSlide(image))
                     metadata['associated'].append(cur_props)
-            except:
+            except BaseException:
                 pool.terminate()
                 raise
             finally:
                 pool.close()
                 pool.join()
-    finally:
-        shutil.rmtree(tempdir)
 
     # Delete old keys
     for name in metadata_key_name, properties_key_name:
@@ -355,56 +554,70 @@ def sync_slide(stamp, conn, bucket, slide_relpath, slide_info, workers):
         print(f"Pruning {len(to_delete)} keys for {slide_relpath}...")
         while to_delete:
             cur_delete, to_delete = to_delete[0:1000], to_delete[1000:]
-            delete_result = bucket.delete_objects(
+            delete_result = storage.bucket.delete_objects(
                 Delete={
-                    'Objects': [{'Key': k} for k in cur_delete],
+                    'Objects': [{'Key': k.as_posix()} for k in cur_delete],
                     'Quiet': True,
                 },
             )
             if 'Errors' in delete_result:
-                raise IOError(f'Failed to delete {len(delete_result["Errors"])} keys')
+                raise OSError(
+                    f'Failed to delete {len(delete_result["Errors"])} keys'
+                )
 
     # Update metadata
     if 'properties' in metadata:
-        upload_metadata(bucket, properties_key_name, metadata['properties'])
-    upload_metadata(bucket, metadata_key_name, metadata, cache=False)
+        storage.upload_metadata(properties_key_name, metadata['properties'])
+    storage.upload_metadata(metadata_key_name, metadata, cache=False)
 
     return metadata
 
 
-def upload_status(bucket, dirty=False, stamp=None):
-    status = {
+def upload_status(
+    storage: S3Storage, dirty: bool = False, stamp: str | None = None
+) -> None:
+    status: StatusMetadata = {
         'dirty': dirty,
         'stamp': stamp,
     }
-    upload_metadata(bucket, STATUS_NAME, status, False)
+    storage.upload_metadata(PurePath(STATUS_NAME), status, False)
 
 
-def start_retile(ctxfile, matrixfile):
+def start_retile(
+    bucket_name: str, ctxfile: TextIO, matrixfile: TextIO
+) -> None:
     """Subcommand to initialize a retiling run.  Writes common state into
     ctxfile and a list of slides to be retiled into matrixfile."""
 
     # Get openslide-testdata index
     r = requests.get(urljoin(DOWNLOAD_BASE_URL, DOWNLOAD_INDEX))
     r.raise_for_status()
-    slides = r.json()
+    slides: TestDataIndex = r.json()
 
     # Initialize context for the run
-    context = {
+    context: Context = {
         'openslide': openslide.__library_version__,
         'openslide_python': openslide.__version__,
-        'stamp': sha256(f'{openslide.__library_version__} {openslide.__version__} {STAMP_VERSION}'.encode()) \
-                .hexdigest()[:8],
+        'stamp': sha256(
+            (
+                f'{openslide.__library_version__} {openslide.__version__} '
+                f'{STAMP_VERSION}'
+            ).encode()
+        ).hexdigest()[:8],
         'slides': slides,
+        'bucket': bucket_name,
     }
-    print(f'OpenSlide {context["openslide"]}, OpenSlide Python {context["openslide_python"]}')
+    print(
+        f'OpenSlide {context["openslide"]}, '
+        f'OpenSlide Python {context["openslide_python"]}'
+    )
 
     # Connect to S3
-    conn, bucket = connect_bucket()
+    storage = S3Storage(bucket_name)
 
     # Set bucket configuration
     print("Configuring bucket...")
-    bucket.Cors().put(
+    storage.bucket.Cors().put(
         CORSConfiguration={
             'CORSRules': [
                 {
@@ -418,148 +631,180 @@ def start_retile(ctxfile, matrixfile):
     # Store static files
     print("Storing static files...")
     for relpath, opts in BUCKET_STATIC.items():
-        bucket.Object(relpath).put(
+        storage.object(relpath).put(
             ACL='public-read',
             Body=opts.get('data', '').encode(),
-            ContentType=opts.get('content-type'),
+            ContentType=opts['content-type'],
         )
 
     # If the stamp is changing, mark bucket dirty
     try:
-        stream = bucket.Object(METADATA_NAME).get()['Body']
-        old_stamp = json.load(stream).get('stamp')
-    except conn.meta.client.exceptions.NoSuchKey:
+        stream = storage.object(PurePath(METADATA_NAME)).get()['Body']
+        metadata: BucketMetadata = json.load(stream)
+        old_stamp = metadata['stamp']
+    except storage.NoSuchKey:
         old_stamp = None
     if context['stamp'] != old_stamp:
         print('Marking bucket dirty...')
-        upload_status(bucket, dirty=True, stamp=old_stamp)
+        upload_status(storage, dirty=True, stamp=old_stamp)
 
     # Write output files
-    with open(ctxfile, 'w') as fh:
-        json.dump(context, fh)
-    with open(matrixfile, 'w') as fh:
-        json.dump({
+    with ctxfile:
+        json.dump(context, ctxfile)
+    with matrixfile:
+        matrix: Matrix = {
             "slide": sorted(slides.keys()),
-        }, fh)
+        }
+        json.dump(matrix, matrixfile)
 
 
-def retile_slide(ctxfile, slide_relpath, summarydir, workers):
+def retile_slide(
+    ctxfile: TextIO, slide_relpath: PurePath, summarydir: Path, workers: int
+) -> None:
     """Subcommand to retile one slide into S3.  Writes summary data into
     summarydir."""
 
     # Load context
-    with open(ctxfile) as fh:
-        context = json.load(fh)
+    with ctxfile:
+        context: Context = json.load(ctxfile)
 
     # Connect to S3
-    conn, bucket = connect_bucket()
+    storage = S3Storage(context['bucket'])
 
     # Tile slide
-    slide_info = context['slides'].get(slide_relpath)
+    slide_info = context['slides'].get(slide_relpath.as_posix())
     if slide_info is None:
         raise Exception(f'No such slide {slide_relpath}')
-    summary = sync_slide(context['stamp'], conn, bucket, slide_relpath,
-            slide_info, workers)
+    metadata = sync_slide(
+        context['stamp'], storage, slide_relpath, slide_info, workers
+    )
 
     # Write summary if the slide was readable
-    if 'slide' in summary:
-        summary.pop('properties', None)
-        summary.pop('stamp', None)
-        summary.update({
+    if 'slide' in metadata:
+        summary: SlideSummary = {
+            'name': metadata['name'],
+            'slide': metadata['slide'],
+            'associated': metadata['associated'],
+            'properties_url': metadata['properties_url'],
             'credit': slide_info.get('credit'),
             'description': slide_info['description'],
-            'download_url': urljoin(DOWNLOAD_BASE_URL, slide_relpath),
-        })
-        summaryfile = os.path.join(summarydir, slide_relpath)
-        os.makedirs(os.path.dirname(summaryfile), exist_ok=True)
-        with open(summaryfile, 'w') as fh:
+            'download_url': urljoin(
+                DOWNLOAD_BASE_URL, slide_relpath.as_posix()
+            ),
+        }
+        summaryfile = summarydir / slide_relpath
+        summaryfile.parent.mkdir(parents=True, exist_ok=True)
+        with summaryfile.open('w') as fh:
             json.dump(summary, fh)
 
 
-def finish_retile(ctxfile, summarydir):
+def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
     """Subcommand to finish a retiling run.  Reads context file and summary
     dir and writes metadata to S3."""
 
     # Load context
-    with open(ctxfile) as fh:
-        context = json.load(fh)
+    with ctxfile:
+        context: Context = json.load(ctxfile)
 
     # Connect to S3
-    conn, bucket = connect_bucket()
+    storage = S3Storage(context['bucket'])
 
     # Build group list
-    groups = []
+    groups: list[SlideGroup] = []
     cur_group_name = None
-    cur_slides = None
-    for slide_relpath, slide_info in sorted(context['slides'].items()):
-        summaryfile = os.path.join(summarydir, slide_relpath)
-        if os.path.exists(summaryfile):
-            with open(summaryfile) as fh:
-                summary = json.load(fh)
-            group_name = urlpath.dirname(slide_relpath)
+    cur_slides: list[SlideSummary] = []
+    for slide_relpath in sorted(PurePath(p) for p in context['slides']):
+        summaryfile = summarydir / slide_relpath
+        if summaryfile.exists():
+            with summaryfile.open() as fh:
+                summary: SlideSummary = json.load(fh)
+            group_name = slide_relpath.parent.as_posix()
             if group_name != cur_group_name:
                 cur_group_name = group_name
                 cur_slides = []
-                groups.append({
-                    'name': GROUP_NAME_MAP.get(group_name, group_name),
-                    'slides': cur_slides
-                })
+                groups.append(
+                    {
+                        'name': GROUP_NAME_MAP.get(group_name, group_name),
+                        'slides': cur_slides,
+                    }
+                )
             cur_slides.append(summary)
 
     # Upload metadata
     print('Storing metadata...')
-    metadata = {
+    metadata: BucketMetadata = {
         'openslide': context['openslide'],
         'openslide_python': context['openslide_python'],
         'stamp': context['stamp'],
         'groups': groups,
     }
-    upload_metadata(bucket, METADATA_NAME, metadata, False)
+    storage.upload_metadata(PurePath(METADATA_NAME), metadata, False)
 
     # Mark bucket clean
     print('Marking bucket clean...')
-    upload_status(bucket, stamp=context['stamp'])
+    upload_status(storage, stamp=context['stamp'])
 
 
 if __name__ == '__main__':
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
 
-    parser_start = subparsers.add_parser('start',
-            help='start a retiling run')
-    parser_start.add_argument('context_file',
-            help='path to context file (output)')
-    parser_start.add_argument('matrix_file',
-            help='path to list of slides to tile (output)')
+    parser_start = subparsers.add_parser('start', help='start a retiling run')
+    parser_start.add_argument(
+        'bucket',
+        help='name of destination S3 bucket',
+    )
+    parser_start.add_argument(
+        'context_file',
+        type=FileType('w'),
+        help='path to context file (output)',
+    )
+    parser_start.add_argument(
+        'matrix_file',
+        type=FileType('w'),
+        help='path to list of slides to tile (output)',
+    )
     parser_start.set_defaults(cmd='start')
 
-    parser_tile = subparsers.add_parser('tile',
-            help='retile one slide')
-    parser_tile.add_argument('context_file',
-            help='path to context file')
-    parser_tile.add_argument('slide',
-            help='slide identifier (from matrix file)')
-    parser_tile.add_argument('summary_dir',
-            help='path to summary directory (output)')
-    parser_tile.add_argument('-j', '--jobs', metavar='COUNT', dest='workers',
-                type=int, default=4,
-                help='number of worker processes to start [4]')
+    parser_tile = subparsers.add_parser('tile', help='retile one slide')
+    parser_tile.add_argument(
+        'context_file', type=FileType('r'), help='path to context file'
+    )
+    parser_tile.add_argument(
+        'slide', type=PurePath, help='slide identifier (from matrix file)'
+    )
+    parser_tile.add_argument(
+        'summary_dir', type=Path, help='path to summary directory (output)'
+    )
+    parser_tile.add_argument(
+        '-j',
+        '--jobs',
+        metavar='COUNT',
+        dest='workers',
+        type=int,
+        default=4,
+        help='number of worker processes to start [4]',
+    )
     parser_tile.set_defaults(cmd='tile')
 
-    parser_finish = subparsers.add_parser('finish',
-            help='finish a retiling run')
-    parser_finish.add_argument('context_file',
-            help='path to context file')
-    parser_finish.add_argument('summary_dir',
-            help='path to summary directory')
+    parser_finish = subparsers.add_parser(
+        'finish', help='finish a retiling run'
+    )
+    parser_finish.add_argument(
+        'context_file', type=FileType('r'), help='path to context file'
+    )
+    parser_finish.add_argument(
+        'summary_dir', type=Path, help='path to summary directory'
+    )
     parser_finish.set_defaults(cmd='finish')
 
     args = parser.parse_args()
     if args.cmd == 'start':
-        start_retile(args.context_file, args.matrix_file)
+        start_retile(args.bucket, args.context_file, args.matrix_file)
     elif args.cmd == 'tile':
-        retile_slide(args.context_file, args.slide, args.summary_dir,
-                args.workers)
+        retile_slide(
+            args.context_file, args.slide, args.summary_dir, args.workers
+        )
     elif args.cmd == 'finish':
         finish_retile(args.context_file, args.summary_dir)
     else:

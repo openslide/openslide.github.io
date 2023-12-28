@@ -141,19 +141,19 @@ Some [freely-distributable test data][testdata] is available.
 The design and implementation of the library are described in a published
 technical note:
 
-*OpenSlide: A Vendor-Neutral Software Foundation for Digital Pathology*  
-Adam Goode, Benjamin Gilbert, Jan Harkes, Drazen Jukic, M. Satyanarayanan  
-Journal of Pathology Informatics 2013, 4:27  
+*OpenSlide: A Vendor-Neutral Software Foundation for Digital Pathology*
+Adam Goode, Benjamin Gilbert, Jan Harkes, Drazen Jukic, M. Satyanarayanan
+Journal of Pathology Informatics 2013, 4:27
 [Abstract][paper-abstract]
 [HTML][paper-html]
 [Get PDF][paper-pdf]
 
 There is also an older technical report:
 
-*A Vendor-Neutral Library and Viewer for Whole-Slide Images*  
-Adam Goode, M. Satyanarayanan  
-Technical Report CMU-CS-08-136, June 2008  
-Computer Science Department, Carnegie Mellon University  
+*A Vendor-Neutral Library and Viewer for Whole-Slide Images*
+Adam Goode, M. Satyanarayanan
+Technical Report CMU-CS-08-136, June 2008
+Computer Science Department, Carnegie Mellon University
 [Abstract][tr-abstract]
 [PDF][tr-full]
 

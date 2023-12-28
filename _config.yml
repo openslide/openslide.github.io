@@ -4,5 +4,8 @@ defaults:
     values:
       layout: default
 
+exclude:
+  - pyproject.toml
+
 gems:
   - jekyll-redirect-from

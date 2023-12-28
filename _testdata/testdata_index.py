@@ -19,12 +19,16 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from __future__ import annotations
+
 import argparse
+from collections.abc import Iterable
 from hashlib import sha256
-from jinja2 import Environment, Template
-from pathlib import Path
 import json
-import os
+from pathlib import Path
+from typing import Any
+
+from jinja2 import Environment
 import yaml
 
 IGNORE_FILENAMES = frozenset(
@@ -126,14 +130,14 @@ td.size {
         extra.size|file_size_units, extra.description) }}
   {% endfor %}
 </table>
-'''
+'''  # noqa: E501
 
 
 class ValidationError(Exception):
     pass
 
 
-def file_size_units(value):
+def file_size_units(value: int) -> str:
     for shift, unit in (40, ' TB'), (30, ' GB'), (20, ' MB'), (10, ' KB'):
         if value >= (1 << shift):
             in_units = value / (1 << shift)
@@ -146,26 +150,34 @@ environment.filters['file_size_units'] = file_size_units
 index_template = environment.from_string(INDEX_TEMPLATE)
 
 
-def ensure_empty(items, msg_prefix):
+def ensure_empty(items: Iterable[Any], msg_prefix: str) -> None:
     if items:
-        raise ValidationError('{}: {}'.format(msg_prefix, ', '.join(sorted(items))))
+        raise ValidationError(
+            '{}: {}'.format(msg_prefix, ', '.join(sorted(items)))
+        )
 
 
-def process_dir(dirpath, check_hashes=False):
+def process_dir(
+    dirpath: Path, check_hashes: bool = False
+) -> tuple[str, dict[str, dict[str, str]]]:
     # List files in directory
-    filenames = set(path.name for path in dirpath.iterdir()) - IGNORE_FILENAMES
+    filenames = {path.name for path in dirpath.iterdir()} - IGNORE_FILENAMES
 
     # Load metadata
     yamlpath = dirpath / 'index.yaml'
-    with open(yamlpath, 'rb') as fh:
+    with yamlpath.open('rb') as fh:
         info = yaml.safe_load(fh)
         format_ = info['format']
         slides = info['slides']
 
     # Check slides against directory
     slide_names = set(slides.keys())
-    ensure_empty(filenames - slide_names, f'Missing files in index for {dirpath}')
-    ensure_empty(slide_names - filenames, f'Missing files in directory {dirpath}')
+    ensure_empty(
+        filenames - slide_names, f'Missing files in index for {dirpath}'
+    )
+    ensure_empty(
+        slide_names - filenames, f'Missing files in directory {dirpath}'
+    )
 
     # Check metadata fields and populate sizes
     for filename, info in sorted(slides.items()):
@@ -176,11 +188,12 @@ def process_dir(dirpath, check_hashes=False):
             f'{filepath}: Unknown fields',
         )
         ensure_empty(
-            MANDATORY_FIELDS - info_fields, f'{filepath}: Missing mandatory fields'
+            MANDATORY_FIELDS - info_fields,
+            f'{filepath}: Missing mandatory fields',
         )
         if check_hashes:
             sha = sha256()
-            with open(filepath, 'rb') as fh:
+            with filepath.open('rb') as fh:
                 while True:
                     buf = fh.read(10 << 20)
                     if not buf:
@@ -192,7 +205,7 @@ def process_dir(dirpath, check_hashes=False):
         info['size'] = filepath.stat().st_size
 
     # Write index.html
-    with open(os.path.join(dirpath, 'index.html'), 'w') as fh:
+    with open(dirpath / 'index.html', 'w') as fh:
         index_template.stream(
             has_parent=True,
             title=format_,
@@ -201,7 +214,7 @@ def process_dir(dirpath, check_hashes=False):
                 {
                     'name': 'index.yaml',
                     'description': 'Slide metadata',
-                    'size': os.stat(yamlpath).st_size,
+                    'size': yamlpath.stat().st_size,
                 },
             ],
         ).dump(fh)
@@ -209,7 +222,7 @@ def process_dir(dirpath, check_hashes=False):
     return format_, slides
 
 
-def process_repo(basepath, check_hashes=False):
+def process_repo(basepath: Path, check_hashes: bool = False) -> None:
     # Enumerate directory names
     directories = sorted(path for path in basepath.iterdir() if path.is_dir())
 
@@ -217,7 +230,9 @@ def process_repo(basepath, check_hashes=False):
     dir_formats = {}
     slides = {}
     for dirpath in directories:
-        dir_format, dir_slides = process_dir(dirpath, check_hashes=check_hashes)
+        dir_format, dir_slides = process_dir(
+            dirpath, check_hashes=check_hashes
+        )
         dirname = str(dirpath.relative_to(basepath))
         dir_formats[dirname] = dir_format
         for filename, info in dir_slides.items():
@@ -225,7 +240,7 @@ def process_repo(basepath, check_hashes=False):
 
     # Write index.json
     jsonpath = basepath / 'index.json'
-    with open(jsonpath, 'w') as fh:
+    with jsonpath.open('w') as fh:
         json.dump(slides, fh, indent=2, sort_keys=True)
 
     # Write index.html
@@ -243,13 +258,19 @@ def process_repo(basepath, check_hashes=False):
         ).dump(fh)
 
 
-def _main():
+def _main() -> None:
     parser = argparse.ArgumentParser(
-        description='Process metadata and build indexes for openslide-testdata.'
+        description='Process metadata and build indexes for '
+        'openslide-testdata.'
     )
-    parser.add_argument('path', type=Path, help='path to local copy of openslide-testdata')
     parser.add_argument(
-        '-c', '--check-hashes', action='store_true', help='check SHA-256 digests'
+        'path', type=Path, help='path to local copy of openslide-testdata'
+    )
+    parser.add_argument(
+        '-c',
+        '--check-hashes',
+        action='store_true',
+        help='check SHA-256 digests',
     )
     args = parser.parse_args()
     process_repo(args.path, check_hashes=args.check_hashes)
