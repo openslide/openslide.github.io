@@ -21,15 +21,6 @@ Sanitize mode requires:
 - clang
 - Debug symbols for library dependencies (particularly glib2) and Fontconfig
 
-Valgrind mode requires:
-
-- Valgrind
-- Debug symbols for library dependencies (particularly glib2) and Fontconfig
-
-Profile mode requires:
-
-- Valgrind
-
 Coverage mode requires:
 
 - gcov
@@ -51,11 +42,6 @@ undefined behavior, memory leaks, invalid memory accesses, double frees,
 etc., but is somewhat slow.
 
     ./driver sanitize
-
-You can also run the test cases under Valgrind.  This will catch memory
-leaks, invalid memory accesses, double frees, etc.  It is also very slow.
-
-    ./driver valgrind
 
 To generate a test coverage report:
 
@@ -79,9 +65,8 @@ the desired directory path.
 
 On some platforms, certain test cases may fail due to problems in other
 libraries.  To prevent those cases from cluttering the test report, you can
-set the `OPENSLIDE_TEST_XFAIL` and/or `OPENSLIDE_VALGRIND_XFAIL` environment
-variables to a comma-separated list of cases which are expected to fail
-during `run` or `valgrind`, respectively.
+set the `OPENSLIDE_TEST_XFAIL` environment variable to a comma-separated
+list of cases which are expected to fail.
 
 ### Using a local mirror
 
