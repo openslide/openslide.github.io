@@ -22,7 +22,9 @@ OpenSlide vendor backend
 OpenSlide will detect a file as DICOM if:
 
  1. The file can be parsed as a DICOM Part 10 file.
- 2. The _Media Storage SOP Class UID_ is _VL Whole Slide Microscopy Image
+ 2. The file does not have a `.tif` or `.tiff` filename extension or cannot
+    be parsed as a TIFF file.
+ 3. The _Media Storage SOP Class UID_ is _VL Whole Slide Microscopy Image
     Storage_ (`1.2.840.10008.5.1.4.1.1.77.1.6`).
 
 
