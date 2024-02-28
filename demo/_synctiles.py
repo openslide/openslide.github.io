@@ -309,7 +309,7 @@ class Tile:
                     ContentType=f'image/{FORMAT}',
                 )
             return self.key_name
-        except BaseException as e:
+        except BaseException as e:  # noqa: B036
             return e
 
     @classmethod
