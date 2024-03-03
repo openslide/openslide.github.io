@@ -8,6 +8,9 @@ list of debug options that will affect the behavior of the library.  Pass
 
 ### Options
 
+`decoding`
+: Log non-fatal warnings emitted by format decoding libraries.
+
 `detection`
 : Log the error message returned by each format driver that does *not*
   detect support for the specified slide file during
