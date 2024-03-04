@@ -2,12 +2,14 @@
 title: Debug Options
 ---
 
-Starting in OpenSlide 3.4.0, the `OPENSLIDE_DEBUG` environment variable can
-contain a comma-separated list of debug options that will affect the
-behavior of the library.  Pass `OPENSLIDE_DEBUG=help` for a list of debug
-options supported by your copy.
+The `OPENSLIDE_DEBUG` environment variable can contain a comma-separated
+list of debug options that will affect the behavior of the library.  Pass
+`OPENSLIDE_DEBUG=help` for a list of debug options supported by your copy.
 
 ### Options
+
+`decoding`
+: Log non-fatal warnings emitted by format decoding libraries.
 
 `detection`
 : Log the error message returned by each format driver that does *not*

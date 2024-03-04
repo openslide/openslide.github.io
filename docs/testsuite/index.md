@@ -135,8 +135,11 @@ original slide (e.g., if OpenSlide falls back to `generic-tiff`), change
 `vendor` to the new string or `null` for NULL.
 
 If the test should only be run if particular OpenSlide dependencies are
-available, set `requires` to a list of feature flags.  Currently there are
-no defined feature flags.
+available, set `requires` to a list of feature flags.  Currently the
+supported feature flags are:
+
+> `tiff-log-callbacks`
+> : OpenSlide can capture warning/error log messages from libtiff
 
 Pack the test:
 
