@@ -27,9 +27,9 @@ whole-slide images (also known as virtual slides). The current version
 is {{ site.data.releases.c[0].version }}, released
 {{ site.data.releases.c[0].date }}.
 
-Python and Java bindings are also available. The Python binding includes a
+Python, Java, and MATLAB bindings are also available. The Python binding includes a
 [Deep Zoom][deepzoom] generator and a simple web-based viewer. The Java
-binding includes a simple image viewer.
+binding includes a simple image viewer. The MATLAB bindings are available [on GitHub](https://github.com/fordanic/openslide-matlab).
 
 OpenSlide and its official language bindings are released under the
 terms of the [GNU Lesser General Public License, version 2.1][license].
