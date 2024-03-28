@@ -37,7 +37,11 @@ If you're looking for the bleeding edge,
 <div class="releases">
   <table>
     {% for release in site.data.releases.bin %}
-      {% capture version %}{{ release.date|remove:'-' }}{% endcapture %}
+      {% if release.version %}
+        {% assign version = release.version %}
+      {% else %}
+        {% capture version %}{{ release.date|remove:'-' }}{% endcapture %}
+      {% endif %}
       <tr class="{% cycle 'bin': 'odd', 'even' %}">
         <th>
           <a href="https://github.com/openslide/openslide-bin/releases/tag/v{{ version }}">
@@ -45,9 +49,19 @@ If you're looking for the bleeding edge,
           </a>
         </th>
         <td>{{ release.date }}</td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-winbuild-{{ version }}.zip">Source</a></td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win32-{{ version }}.zip">Windows x86</a></td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win64-{{ version }}.zip">Windows x64</a></td>
+        {% if release.version %}
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}.tar.gz">Source</a></td>
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-linux-x86_64.tar.xz">Linux x86_64</a></td>
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-macos-arm64-x86_64.tar.xz">macOS</a></td>
+          <td></td>
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-windows-x64.zip">Windows x64</a></td>
+        {% else %}
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-winbuild-{{ version }}.zip">Source</a></td>
+          <td></td>
+          <td></td>
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win32-{{ version }}.zip">Windows x86</a></td>
+          <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win64-{{ version }}.zip">Windows x64</a></td>
+        {% endif %}
       </tr>
     {% endfor %}
   </table>

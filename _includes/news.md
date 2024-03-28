@@ -1,5 +1,15 @@
 {% include links.md %}
 
+## Binary build 4.0.0.2, 2024-03-29
+
+[Binary build 4.0.0.2][bin-4.0.0.2] adds Linux and macOS binaries, removes
+32-bit Windows binaries, and adds Python binary packages for use with the
+upcoming OpenSlide Python 1.4.0.  It also updates OpenSlide Java to 0.12.4
+and updates various dependencies.
+
+[bin-4.0.0.2]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.2
+
+
 ## OpenSlide Java version 0.12.4, 2023-11-07
 
 OpenSlide Java 0.12.4 includes minor build and test improvements.
