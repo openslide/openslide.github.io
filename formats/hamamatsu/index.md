@@ -296,7 +296,7 @@ At offset 24 is another 32-bit integer which gives the offset in the file to the
 
 ## Associated Images
 
-macro
+`macro`
 : the image file given by the `MacroImage` value in the VMS/VMU file, or
 `SourceLens` of -1 in NDPI
 
