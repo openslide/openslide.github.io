@@ -44,8 +44,8 @@ If you're looking for the bleeding edge,
           </a>
         </th>
         <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Source</a></td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">Windows 32-bit</a></td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">Windows 64-bit</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">Windows x86</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">Windows x64</a></td>
       </tr>
     {% endfor %}
   </table>
