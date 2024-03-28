@@ -52,6 +52,7 @@ The library can read virtual slides in the following formats:
  * [Sakura (.svslide)][format-sakura]
  * [Trestle (.tif)][format-trestle]
  * [Ventana (.bif, .tif)][format-ventana]
+ * [Zeiss (.czi)][format-zeiss]
  * [Generic tiled TIFF (.tif)][format-generic-tiff]
 
 It provides a simple C interface for programmers to use to decode
