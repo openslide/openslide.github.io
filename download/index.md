@@ -41,9 +41,10 @@ If you're looking for the bleeding edge,
       <tr class="{% cycle 'bin': 'odd', 'even' %}">
         <th>
           <a href="https://github.com/openslide/openslide-bin/releases/tag/v{{ version }}">
-            {{ release.date }}
+            {{ version }}
           </a>
         </th>
+        <td>{{ release.date }}</td>
         <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-winbuild-{{ version }}.zip">Source</a></td>
         <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win32-{{ version }}.zip">Windows x86</a></td>
         <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win64-{{ version }}.zip">Windows x64</a></td>
