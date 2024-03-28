@@ -80,7 +80,7 @@ details.
 
 ## Associated Images
 
-macro
+`macro`
 : the image with a filename extension of "`.Full`" (optional)
 
 

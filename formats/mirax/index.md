@@ -108,14 +108,14 @@ metadata per camera position.
 
 ## Associated Images
 
-thumbnail
-: the image named "`ScanDataLayer_SlidePreview`" in `Slidedat.ini` (optional)
-
-label
+`label`
 : the image named "`ScanDataLayer_SlideBarcode`" in `Slidedat.ini` (optional)
 
-macro
+`macro`
 : the image named "`ScanDataLayer_SlideThumbnail`" in `Slidedat.ini` (optional)
+
+`thumbnail`
+: the image named "`ScanDataLayer_SlidePreview`" in `Slidedat.ini` (optional)
 
 
 ## Known Properties

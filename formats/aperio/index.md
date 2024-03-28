@@ -95,14 +95,14 @@ image.
 
 ## Associated Images
 
-thumbnail
-: the second image in the file
-
-label
+`label`
 : optional, the name "label" is given in `ImageDescription`
 
-macro
+`macro`
 : optional, the name "macro" is given in `ImageDescription`
+
+`thumbnail`
+: the second image in the file
 
 
 ## Known Properties
