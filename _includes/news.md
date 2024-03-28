@@ -47,6 +47,8 @@ where available, and updates the Deep Zoom example tools to transform images
 to sRGB by default.
 
 
+{% if page.news_show_extended %}
+
 ## New Windows build, 2023-04-14
 
 Windows build 20230414 integrates most dependencies into the OpenSlide
@@ -63,8 +65,6 @@ Windows build 20221217 updates OpenSlide Java and several dependencies.
 OpenSlide Java 0.12.3 adds a Meson build system, deprecates the
 Autotools+Ant one, and fixes builds on newer JDKs.
 
-
-{% if page.news_show_extended %}
 
 ## New Windows build, 2022-11-11
 
