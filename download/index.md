@@ -37,15 +37,16 @@ If you're looking for the bleeding edge,
 <div class="releases">
   <table>
     {% for release in site.data.releases.bin %}
+      {% capture version %}{{ release.date|remove:'-' }}{% endcapture %}
       <tr class="{% cycle 'bin': 'odd', 'even' %}">
         <th>
-          <a href="https://github.com/openslide/openslide-bin/releases/tag/v{{ release.date|remove:'-' }}">
+          <a href="https://github.com/openslide/openslide-bin/releases/tag/v{{ version }}">
             {{ release.date }}
           </a>
         </th>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-winbuild-{{ release.date|remove:'-' }}.zip">Source</a></td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win32-{{ release.date|remove:'-' }}.zip">Windows x86</a></td>
-        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ release.date|remove:'-' }}/openslide-win64-{{ release.date|remove:'-' }}.zip">Windows x64</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-winbuild-{{ version }}.zip">Source</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win32-{{ version }}.zip">Windows x86</a></td>
+        <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win64-{{ version }}.zip">Windows x64</a></td>
       </tr>
     {% endfor %}
   </table>
