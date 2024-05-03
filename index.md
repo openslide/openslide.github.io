@@ -144,9 +144,7 @@ technical note:
 *OpenSlide: A Vendor-Neutral Software Foundation for Digital Pathology*
 Adam Goode, Benjamin Gilbert, Jan Harkes, Drazen Jukic, M. Satyanarayanan
 Journal of Pathology Informatics 2013, 4:27
-[Abstract][paper-abstract]
 [HTML][paper-html]
-[Get PDF][paper-pdf]
 
 There is also an older technical report:
 
@@ -157,9 +155,7 @@ Computer Science Department, Carnegie Mellon University
 [Abstract][tr-abstract]
 [PDF][tr-full]
 
-[paper-abstract]: https://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode;type=0
-[paper-html]: https://www.jpathinformatics.org/article.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode
-[paper-pdf]: https://www.jpathinformatics.org/downloadpdf.asp?issn=2153-3539;year=2013;volume=4;issue=1;spage=27;epage=27;aulast=Goode;type=2
+[paper-html]: https://doi.org/10.4103/2153-3539.119005
 [tr-abstract]: http://reports-archive.adm.cs.cmu.edu/anon/2008/abstracts/08-136.html
 [tr-full]: http://reports-archive.adm.cs.cmu.edu/anon/2008/CMU-CS-08-136.pdf
 
