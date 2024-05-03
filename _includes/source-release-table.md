@@ -1,3 +1,10 @@
+{% assign any_whl = false %}
+{% for release in releases %}
+  {% if release.whl %}
+    {% assign any_whl = true %}
+  {% endif %}
+{% endfor %}
+
 <div class="releases indent">
   <table>
     {% for release in releases %}
@@ -18,7 +25,7 @@
             <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.xz">tar.xz</a>
           {% endif %}
         </td>
-        {% if package == 'openslide-python' %}
+        {% if any_whl %}
           <td>
             {% if release.whl %}
               <a href="https://pypi.org/project/{{ package }}/{{ release.version }}/#files">Wheels (PyPI)</a>
