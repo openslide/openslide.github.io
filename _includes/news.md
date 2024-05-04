@@ -1,5 +1,18 @@
 {% include links.md %}
 
+## OpenSlide Java version 0.13.0, 2024-05-04
+
+[OpenSlide Java 0.13.0][java-0.13.0] requires Java ≥ 22 and OpenSlide ≥
+4.0.0, switches from JNI to FFM so OpenSlide Java builds are
+platform-independent, adds support for OpenSlide 4.0.0 features, and
+switches the build system to Maven.
+
+[Binary build 4.0.0.3][bin-4.0.0.3] removes OpenSlide Java.
+
+[java-0.13.0]: https://github.com/openslide/openslide-java/releases/tag/v0.13.0
+[bin-4.0.0.3]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.3
+
+
 ## Binary build 4.0.0.2, 2024-03-29
 
 [Binary build 4.0.0.2][bin-4.0.0.2] adds Linux and macOS binaries, removes
