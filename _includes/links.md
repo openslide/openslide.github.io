@@ -38,6 +38,7 @@
 [format-sakura]: /formats/sakura/
 [format-trestle]: /formats/trestle/
 [format-ventana]: /formats/ventana/
+[format-zeiss]: /formats/zeiss/
 
 [announce-subscribe]: https://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
 [users-subscribe]: https://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/

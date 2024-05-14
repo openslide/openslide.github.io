@@ -141,6 +141,20 @@ More info
 : [Ventana format][format-ventana]
 
 
+## Zeiss
+
+Single-file binary format with overlaps, often using JPEG XR compression.
+
+File extensions
+: `.czi`
+
+OpenSlide vendor backend
+: `zeiss`
+
+More info
+: [Zeiss format][format-zeiss]
+
+
 ## Generic tiled TIFF
 
 Single-file pyramidal tiled TIFF.
