@@ -49,9 +49,14 @@ size in the subblock's level.
 
 Pixel data may be compressed in any of several formats.  JPEG XR is common.
 Uncompressed 24 bpp or 48 bpp pixel data is also possible, as well as pixel
-data compressed with lossless [Zstandard][zstd] compression.  The format
-also permits JPEG and LZW compression, though these do not appear to be
-common and OpenSlide does not support them.
+data compressed with lossless [Zstandard][zstd] compression.  CZI's
+Zstandard support comes in two flavors, zstd0 and zstd1, with the latter
+prefixed by an uncompressed header typically three bytes long.  A flag in
+that header indicates the presence of HiLo packing, in which the low bytes
+of 16-bit color samples are packed together in the first half of the
+uncompressed buffer and the high bytes in the second half.  CZI also permits
+JPEG and LZW compression, though these do not appear to be common and
+OpenSlide does not support them.
 
 CZI files can embed arbitrary named attachments, which might be JPEG images,
 nested CZI files, or other metadata.  The `Label` and `SlidePreview`
