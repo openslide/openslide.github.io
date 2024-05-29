@@ -328,4 +328,6 @@ VMS format
 
 ## ImHex Patterns
 
-- [Optimisation file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vms-opt.hexpat)
+- [VMS optimisation file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vms-opt.hexpat)
+- [VMU NGR file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vmu-ngr.hexpat)
+- [NDPI file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-ndpi.hexpat)
