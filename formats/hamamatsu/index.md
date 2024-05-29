@@ -195,23 +195,16 @@ altered when fed into libjpeg.
 
 NDPI is based on the classic TIFF format, which does not support files
 larger than 4 GB.  However, NDPI files can be larger than 4 GB.  NDPI
-generally handles this by overflowing the corresponding TIFF fields,
-requiring the reader to guess the high-order bits.  This affects TIFF Value
-Offsets with pointers to out-of-line values, as well as the value of the
-`StripOffsets` field.  Some TIFF fields (e.g. `Software`) have the same
-Value Offset in every directory; for these, no concatenation of high-order
-bits is necessary.  For the others (primarily field 65426) it seems
-reasonable to select high-order bits which place the value at the largest
-offset below the directory itself, since the TIFF directory is positioned
-after the data it points to.  NDPI always stores next-directory offsets (in
-the TIFF header and at the end of each directory) as 64-bit quantities, even
-though TIFF specifies them as 32 bits; this is possible because the TIFF
-standard places them at the end of their parent data structures.
-
-It is not clear whether NDPI can support individual directories larger than
-4 GB.  Such files would require additional inferences for the
-`StripByteCounts` field, for Value Offsets that are identical across
-directories, and for the optimisation entries.
+handles this by storing the high-order bits of file offsets beyond the ends
+of standard TIFF structures.  TIFF puts next-directory offsets (in the TIFF
+header and at the end of each directory) at the ends of their parent data
+structures, so NDPI simply extends these values to 64-bit quantities.  The
+high-order bits of directory entry Value Offsets are stored in an array
+immediately after the end of each TIFF directory, 4 bytes per directory
+entry.  Values that TIFF would normally store inline in the Value Offset are
+still stored inline, even if the high 32 bits are non-zero (e.g.
+`StripOffsets` and `StripByteCounts`, which always have a Count of 1 in
+NDPI), and other values are still stored out-of-line.
 
 Here are the observed TIFF tags:
 
@@ -233,10 +226,11 @@ Tag          | Description      |
 65423|`YOffsetFromSlideCentre`|
 65424|Seemingly the Z offset from the center focal plane (in nm?)|
 65425|Unknown, always 0?|
-65426|Optimisation entries, as above|
+65426|Low 32 bits of optimisation entries, as above|
 65427|`Reference`|
 65428|Unknown, `AuthCode`?|
 65430|Unknown, have seen 0.0|
+65432|High 32 bits of optimisation entries|
 65433|Unknown, I have seen 1500 in this tag|
 65439|Unknown, perhaps some polygon ROI?|
 65440|Unknown, I have seen this: `<0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 1 9 1 10 1 11 1 12 1 13 1 14 1 15 1 16 1 17>`|
@@ -251,6 +245,7 @@ Tag          | Description      |
 65456|Unknown, have seen 101|
 65457|Unknown, always 0?|
 65458|Unknown, always 0?|
+65459|Unknown, have seen ASCII "`RGB`" stored out-of-line even though TIFF says it should be stored inline|
 
 
 ## Optimisation File (only for VMS)
@@ -333,4 +328,6 @@ VMS format
 
 ## ImHex Patterns
 
-- [Optimisation file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vms-opt.hexpat)
+- [VMS optimisation file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vms-opt.hexpat)
+- [VMU NGR file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-vmu-ngr.hexpat)
+- [NDPI file](https://github.com/openslide/openslide/blob/main/misc/imhex/hamamatsu-ndpi.hexpat)
