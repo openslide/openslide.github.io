@@ -260,7 +260,6 @@ class S3Storage:
         self, path: PurePath, item: Any, cache: bool = True
     ) -> None:
         self.object(path).put(
-            ACL='public-read',
             Body=json.dumps(item, indent=1, sort_keys=True).encode(),
             CacheControl=CACHE_CONTROL_CACHE
             if cache
@@ -302,7 +301,6 @@ class Tile:
             new_md5 = md5(buf.getbuffer())
             if self.cur_md5 != new_md5.hexdigest():
                 storage.object(self.key_name).put(
-                    ACL='public-read',
                     Body=buf.getvalue(),
                     CacheControl=CACHE_CONTROL_CACHE,
                     ContentMD5=base64.b64encode(new_md5.digest()).decode(),
@@ -632,7 +630,6 @@ def start_retile(
     print("Storing static files...")
     for relpath, opts in BUCKET_STATIC.items():
         storage.object(relpath).put(
-            ACL='public-read',
             Body=opts.get('data', '').encode(),
             ContentType=opts['content-type'],
         )
