@@ -1,5 +1,13 @@
 {% include links.md %}
 
+## Binary build 4.0.0.4, 2024-09-01
+
+[Binary build 4.0.0.4][bin-4.0.0.4] updates the versions of many
+dependencies.
+
+[bin-4.0.0.4]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.4
+
+
 ## OpenSlide Java version 0.13.0, 2024-05-04
 
 [OpenSlide Java 0.13.0][java-0.13.0] requires Java ≥ 22 and OpenSlide ≥
