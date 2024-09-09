@@ -81,6 +81,22 @@ If you're looking for the bleeding edge,
   </thead>
   <tbody>
     <tr>
+      <th>Any</th>
+      <th><a href="https://conan.io/">Conan</a></th>
+      <td>
+        <i>Add to</i> <code>conanfile.txt</code>:
+        <pre>[requires]
+openslide/[~4]</pre>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>FreeBSD</th>
+      <th><a href="https://ports.freebsd.org/">Ports</a></th>
+      <td><code>pkg install openslide</code></td>
+      <td><code>pkg install py311-openslide-python</code></td>
+    </tr>
+    <tr>
       <th>Linux</th>
       <th>
         <a href="https://almalinux.org/">AlmaLinux</a><br>
@@ -171,6 +187,12 @@ If you're looking for the bleeding edge,
       <th><a href="https://www.opensuse.org/">openSUSE</a></th>
       <td><code>zypper install openslide-tools</code></td>
       <td></td>
+    </tr>
+    <tr>
+      <th>Linux</th>
+      <th><a href="https://spack.io/">Spack</a></th>
+      <td><code>spack install openslide</code></td>
+      <td><code>spack install py-openslide-python</code></td>
     </tr>
     <tr>
       <th>Linux</th>
