@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## Binary build 4.0.0.5, 2024-09-10
+
+[Binary build 4.0.0.5][bin-4.0.0.5] adds Linux aarch64 (ARM64) binaries.
+
+[bin-4.0.0.5]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.5
+
+
 ## Binary build 4.0.0.4, 2024-09-01
 
 [Binary build 4.0.0.4][bin-4.0.0.4] updates the versions of many
