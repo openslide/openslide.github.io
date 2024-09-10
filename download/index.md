@@ -52,11 +52,13 @@ If you're looking for the bleeding edge,
         {% if release.version %}
           <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}.tar.gz">Source</a></td>
           <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-linux-x86_64.tar.xz">Linux x86_64</a></td>
+          <td>{% if release.linux_aarch64 %}<a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-linux-aarch64.tar.xz">Linux aarch64</a>{% endif %}</td>
           <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-macos-arm64-x86_64.tar.xz">macOS</a></td>
           <td></td>
           <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-bin-{{ version }}-windows-x64.zip">Windows x64</a></td>
         {% else %}
           <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-winbuild-{{ version }}.zip">Source</a></td>
+          <td></td>
           <td></td>
           <td></td>
           <td><a href="https://github.com/openslide/openslide-bin/releases/download/v{{ version }}/openslide-win32-{{ version }}.zip">Windows x86</a></td>
