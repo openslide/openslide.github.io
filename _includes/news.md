@@ -1,5 +1,13 @@
 {% include links.md %}
 
+## Binary build 4.0.0.6, 2024-09-29
+
+[Binary build 4.0.0.6][bin-4.0.0.6] switches from zlib to zlib-ng and
+updates various dependencies.
+
+[bin-4.0.0.6]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.6
+
+
 ## Binary build 4.0.0.5, 2024-09-10
 
 [Binary build 4.0.0.5][bin-4.0.0.5] adds Linux aarch64 (ARM64) binaries.
