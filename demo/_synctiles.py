@@ -261,9 +261,9 @@ class S3Storage:
     ) -> None:
         self.object(path).put(
             Body=json.dumps(item, indent=1, sort_keys=True).encode(),
-            CacheControl=CACHE_CONTROL_CACHE
-            if cache
-            else CACHE_CONTROL_NOCACHE,
+            CacheControl=(
+                CACHE_CONTROL_CACHE if cache else CACHE_CONTROL_NOCACHE
+            ),
             ContentType='application/json',
         )
 
