@@ -16,6 +16,11 @@
 <div class="releases indent">
   <table>
     {% for release in releases %}
+      {% if release.src_ %}
+        {% capture srcname %}{{ package|replace:'-','_' }}{% endcapture %}
+      {% else %}
+        {% assign srcname = package %}
+      {% endif %}
       <tr class="{% cycle package: 'odd', 'even' %}">
         <th>
           <a href="https://github.com/openslide/{{ package }}/releases/tag/v{{ release.version }}">
@@ -25,14 +30,14 @@
         <td>{{ release.date }}</td>
         <td>
           {% if release.gz %}
-            <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.gz">tar.gz</a>
+            <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ srcname }}-{{ release.version }}.tar.gz">tar.gz</a>
           {% elsif release.gh %}
             <a href="https://github.com/openslide/{{ package }}/archive/refs/tags/v{{ release.version }}.tar.gz">tar.gz</a>
           {% endif %}
         </td>
         <td>
           {% if release.xz %}
-            <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ package }}-{{ release.version }}.tar.xz">tar.xz</a>
+            <a href="https://github.com/openslide/{{ package }}/releases/download/v{{ release.version }}/{{ srcname }}-{{ release.version }}.tar.xz">tar.xz</a>
           {% endif %}
         </td>
         {% if any_gh %}

@@ -1,5 +1,14 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.4.0, 2024-10-29
+
+[OpenSlide Python 1.4.0][python-1.4.0] adds support for OpenSlide [installed
+from PyPI][bin-pypi], adds type hints, adds Linux and macOS wheels, drops
+32-bit Windows wheels, and fixes bugs.
+
+[python-1.4.0]: https://github.com/openslide/openslide-python/releases/tag/v1.4.0
+
+
 ## Binary build 4.0.0.6, 2024-09-29
 
 [Binary build 4.0.0.6][bin-4.0.0.6] switches from zlib to zlib-ng and
