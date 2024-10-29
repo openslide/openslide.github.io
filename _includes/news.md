@@ -1,5 +1,14 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.4.0, 2024-10-29
+
+[OpenSlide Python 1.4.0][python-1.4.0] adds support for OpenSlide [installed
+from PyPI][bin-pypi], adds type hints, adds Linux and macOS wheels, drops
+32-bit Windows wheels, and fixes bugs.
+
+[python-1.4.0]: https://github.com/openslide/openslide-python/releases/tag/v1.4.0
+
+
 ## Binary build 4.0.0.6, 2024-09-29
 
 [Binary build 4.0.0.6][bin-4.0.0.6] switches from zlib to zlib-ng and
@@ -78,6 +87,8 @@ users to easily install the latest OpenSlide and OpenSlide Python releases
 before they reach Ubuntu.
 
 
+{% if page.news_show_extended %}
+
 ## OpenSlide Python version 1.3.1, 2023-10-08
 
 OpenSlide Python 1.3.1 updates the docs and example tools to transform
@@ -92,8 +103,6 @@ drops support for Python 3.7.  It also exposes color management profiles
 where available, and updates the Deep Zoom example tools to transform images
 to sRGB by default.
 
-
-{% if page.news_show_extended %}
 
 ## New Windows build, 2023-04-14
 

@@ -60,3 +60,5 @@
 [bin-issues]: https://github.com/openslide/openslide-bin/issues
 [builds-issues]: https://github.com/openslide/builds/issues
 [site-issues]: https://github.com/openslide/openslide.github.io/issues
+
+[bin-pypi]: https://pypi.org/project/openslide-bin/

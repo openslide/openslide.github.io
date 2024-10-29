@@ -249,7 +249,7 @@ openslide/[~4]</pre>
     <tr>
       <th>Python</th>
       <th><a href="https://pypi.org/">PyPI</a></th>
-      <td></td>
+      <td><code>python3 -m pip install openslide-bin</code></td>
       <td><code>python3 -m pip install openslide-python</code></td>
     </tr>
     <tr>
