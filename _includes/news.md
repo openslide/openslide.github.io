@@ -78,6 +78,8 @@ users to easily install the latest OpenSlide and OpenSlide Python releases
 before they reach Ubuntu.
 
 
+{% if page.news_show_extended %}
+
 ## OpenSlide Python version 1.3.1, 2023-10-08
 
 OpenSlide Python 1.3.1 updates the docs and example tools to transform
@@ -92,8 +94,6 @@ drops support for Python 3.7.  It also exposes color management profiles
 where available, and updates the Deep Zoom example tools to transform images
 to sRGB by default.
 
-
-{% if page.news_show_extended %}
 
 ## New Windows build, 2023-04-14
 
