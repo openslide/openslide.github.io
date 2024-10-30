@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.4.1, 2024-10-30
+
+[OpenSlide Python 1.4.1][python-1.4.1] fixes some failures on older systems.
+
+[python-1.4.1]: https://github.com/openslide/openslide-python/releases/tag/v1.4.1
+
+
 ## OpenSlide Python version 1.4.0, 2024-10-29
 
 [OpenSlide Python 1.4.0][python-1.4.0] adds support for OpenSlide [installed
