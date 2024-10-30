@@ -30,6 +30,7 @@ from io import BytesIO
 import json
 from multiprocessing import Pool
 from multiprocessing.pool import Pool as PoolType
+import os
 from pathlib import Path, PurePath
 import re
 import sys
@@ -743,6 +744,8 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
 
 
 if __name__ == '__main__':
+    cpu_count = os.process_cpu_count()  # type: ignore[attr-defined]
+
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
 
@@ -779,8 +782,8 @@ if __name__ == '__main__':
         metavar='COUNT',
         dest='workers',
         type=int,
-        default=4,
-        help='number of worker processes to start [4]',
+        default=cpu_count,
+        help=f'number of worker processes to start [{cpu_count}]',
     )
     parser_tile.set_defaults(cmd='tile')
 
