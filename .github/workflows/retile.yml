@@ -12,7 +12,7 @@ env:
   PYTHONUNBUFFERED: 1
   RUNTIME_DEPS: "python3 python3-boto3 python3-pillow python3-requests \
     zlib libpng libjpeg-turbo libtiff openjpeg2 gdk-pixbuf2 \
-    gdk-pixbuf2-modules libxml2 sqlite cairo glib2"
+    gdk-pixbuf2-modules-extra libxml2 sqlite cairo glib2"
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
             libtiff-devel \
             openjpeg2-devel \
             gdk-pixbuf2-devel \
-            gdk-pixbuf2-modules \
+            gdk-pixbuf2-modules-extra \
             libxml2-devel \
             sqlite-devel \
             cairo-devel \
