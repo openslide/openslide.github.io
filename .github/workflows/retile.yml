@@ -54,7 +54,7 @@ jobs:
             curl -LO "${url}"
 
             # Unpack
-            tar xf "$1-${version}.tar.xz"
+            tar xf "$(echo "$1" | tr - _)-${version}.tar.xz"
           }
           get_release openslide
           get_release openslide-python
@@ -70,7 +70,7 @@ jobs:
 
           meson install -C builddir
       - name: Build OpenSlide Python
-        working-directory: openslide-python-${{ env.OPENSLIDE_PYTHON_VERSION }}
+        working-directory: openslide_python-${{ env.OPENSLIDE_PYTHON_VERSION }}
         run: |
           pip install -t ${GITHUB_WORKSPACE}/install/python .
       - name: Upload build
