@@ -238,7 +238,7 @@ openslide/[~4]</pre>
       <th>macOS</th>
       <th><a href="https://www.macports.org/">MacPorts</a></th>
       <td><code>port install openslide</code></td>
-      <td><code>port install py312-openslide</code></td>
+      <td><code>port install py313-openslide</code></td>
     </tr>
     <tr>
       <th>Python</th>
