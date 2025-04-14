@@ -744,7 +744,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
 
 
 if __name__ == '__main__':
-    cpu_count = os.process_cpu_count()  # type: ignore[attr-defined]
+    cpu_count = os.process_cpu_count()
 
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
