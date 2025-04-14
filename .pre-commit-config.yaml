@@ -58,6 +58,12 @@ repos:
           - types-PyYAML
           - types-requests
 
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        name: Check spelling with codespell
+
   - repo: meta
     hooks:
       - id: check-hooks-apply
