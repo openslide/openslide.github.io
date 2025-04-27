@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## Binary build 4.0.0.8, 2025-04-27
+
+[Binary build 4.0.0.8][bin-4.0.0.8] updates many dependencies.
+
+[bin-4.0.0.8]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.8
+
+
 ## OpenSlide Python version 1.4.1, 2024-10-30
 
 [OpenSlide Python 1.4.1][python-1.4.1] fixes some failures on older systems.
