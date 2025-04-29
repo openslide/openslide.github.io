@@ -1,5 +1,13 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.4.2, 2025-04-28
+
+[OpenSlide Python 1.4.2][python-1.4.2] drops support for Python 3.8 and adds
+minor improvements.
+
+[python-1.4.2]: https://github.com/openslide/openslide-python/releases/tag/v1.4.2
+
+
 ## Binary build 4.0.0.8, 2025-04-27
 
 [Binary build 4.0.0.8][bin-4.0.0.8] updates many dependencies.
