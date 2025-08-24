@@ -113,11 +113,9 @@ advice.
 ## Release process
 
 We have issue templates for each type of release.  OpenSlide maintainers can
-perform a release by filing a new issue named after the new version to be
-released, and checking boxes.
+perform a release by filing a new issue and checking boxes.
 
-- [OpenSlide](https://github.com/openslide/openslide/issues/new?labels=release&template=release.md)
-- [OpenSlide Java](https://github.com/openslide/openslide-java/issues/new?labels=release&template=release.md)
-- [OpenSlide Python](https://github.com/openslide/openslide-python/issues/new?labels=release&template=release.md)
-  - [Updating for a Python major release](https://github.com/openslide/openslide-python/issues/new?labels=release&template=python-bump.md)
-- [openslide-bin](https://github.com/openslide/openslide-bin/issues/new?labels=release&template=release.md)
+- [OpenSlide](https://github.com/openslide/openslide/blob/main/.github/maintainer/README.md)
+- [OpenSlide Java](https://github.com/openslide/openslide-java/blob/main/.github/maintainer/README.md)
+- [OpenSlide Python](https://github.com/openslide/openslide-python/blob/main/.github/maintainer/README.md)
+- [openslide-bin](https://github.com/openslide/openslide-bin/blob/main/.github/maintainer/README.md)

@@ -104,8 +104,8 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
 KeyMd5s = dict[PurePath, str]
 TestDataIndex = dict[str, 'TestDataSlide']
 
-dz_generators: dict[str | None, Generator]
-storage: S3Storage
+dz_generators: dict[str | None, Generator] = {}
+storage: S3Storage | None = None
 
 
 class TestDataSlide(TypedDict):
@@ -287,6 +287,7 @@ class Tile:
 
     def sync(self) -> PurePath | BaseException:
         """Generate and possibly upload a tile."""
+        assert storage is not None
         try:
             tile = dz_generators[self.associated].get_tile(
                 self.level, self.address
