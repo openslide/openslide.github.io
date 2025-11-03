@@ -74,7 +74,7 @@ jobs:
         run: |
           pip install -t ${GITHUB_WORKSPACE}/install/python .
       - name: Upload build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build
           path: install
@@ -92,7 +92,7 @@ jobs:
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build
           path: install
@@ -109,7 +109,7 @@ jobs:
             matrix
           echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
       - name: Upload context
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: context
           path: context
@@ -132,12 +132,12 @@ jobs:
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build
           path: install
       - name: Download context
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: context
       - name: Tile slide
@@ -152,7 +152,7 @@ jobs:
             ${GITHUB_WORKSPACE}/summary
           echo "ARTIFACT_NAME=summary-$(echo "${{ matrix.slide }}" | tr -c "a-zA-Z0-9\n" _)" >> $GITHUB_ENV
       - name: Upload summary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: summary
@@ -170,16 +170,16 @@ jobs:
       - name: Install dependencies
         run: dnf install -y ${RUNTIME_DEPS}
       - name: Download build
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build
           path: install
       - name: Download context
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: context
       - name: Download summaries
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: "summary-*"
           path: summary
