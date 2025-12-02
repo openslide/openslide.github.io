@@ -1,5 +1,13 @@
 {% include links.md %}
 
+## OpenSlide Java version 0.13.1, 2025-12-02
+
+[OpenSlide Java 0.13.1][java-0.13.1] fixes backward compatibility of JARs
+built with Java newer than 22.
+
+[java-0.13.1]: https://github.com/openslide/openslide-java/releases/tag/v0.13.1
+
+
 ## OpenSlide Python version 1.4.2, 2025-04-28
 
 [OpenSlide Python 1.4.2][python-1.4.2] drops support for Python 3.8 and adds
