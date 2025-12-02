@@ -1,5 +1,14 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.4.3, 2025-12-03
+
+[OpenSlide Python 1.4.3][python-1.4.3] adds support for
+[free-threaded Python][] and drops support for Python 3.9.
+
+[python-1.4.3]: https://github.com/openslide/openslide-python/releases/tag/v1.4.3
+[free-threaded Python]: https://docs.python.org/3/howto/free-threading-python.html
+
+
 ## OpenSlide Java version 0.13.1, 2025-12-02
 
 [OpenSlide Java 0.13.1][java-0.13.1] fixes backward compatibility of JARs
