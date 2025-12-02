@@ -1,5 +1,14 @@
 {% include links.md %}
 
+## Binary build 4.0.0.10, 2025-12-03
+
+[Binary build 4.0.0.10][bin-4.0.0.10] drops Python 3.8 support in the Python
+binary packages, enables SIMD JPEG decoding on macOS x86_64, and updates
+many dependencies.
+
+[bin-4.0.0.10]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.10
+
+
 ## OpenSlide Python version 1.4.3, 2025-12-03
 
 [OpenSlide Python 1.4.3][python-1.4.3] adds support for

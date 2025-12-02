@@ -251,7 +251,7 @@ openslide/[~4]</pre>
       <th><a href="https://pypi.org/">PyPI</a></th>
       <td>
         <div>
-          <i>On RHEL 8 (with Python 3.8+) or Ubuntu 20.04:</i><br>
+          <i>On RHEL 8 (with Python 3.9+):</i><br>
           <code>
             python3 -m pip install --upgrade pip<br>
             python3 -m pip install openslide-bin
