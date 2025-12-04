@@ -57,7 +57,7 @@ import requests
 if TYPE_CHECKING:
     from mypy_boto3_s3.service_resource import Object
 
-STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
+STAMP_VERSION = 'threads'  # change to retile without OpenSlide version bump
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
