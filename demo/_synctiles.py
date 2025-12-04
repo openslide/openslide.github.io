@@ -33,7 +33,6 @@ from pathlib import Path, PurePath
 import re
 import sys
 from tempfile import TemporaryDirectory
-from threading import local
 from typing import TYPE_CHECKING, Any, NotRequired, Self, TextIO, TypedDict
 from unicodedata import normalize
 from urllib.parse import urljoin
@@ -103,8 +102,6 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
 
 KeyMd5s = dict[PurePath, str]
 TestDataIndex = dict[str, 'TestDataSlide']
-
-pool: local = local()
 
 
 class TestDataSlide(TypedDict):
@@ -267,17 +264,10 @@ class S3Storage:
         )
 
 
-def pool_init(bucket_name: str, slide_path: Path) -> None:
-    pool.storage = S3Storage(bucket_name)
-    slide = OpenSlide(slide_path)
-    pool.generators = {None: Generator(slide)}
-    for name, image in slide.associated_images.items():
-        pool.generators[name] = Generator(ImageSlide(image))
-
-
 @dataclass
 class Tile:
-    associated: str | None
+    storage: S3Storage
+    generator: Generator
     level: int
     address: tuple[int, int]
     key_name: PurePath
@@ -285,10 +275,7 @@ class Tile:
 
     def sync(self) -> PurePath:
         """Generate and possibly upload a tile."""
-        assert pool.storage is not None
-        tile = pool.generators[self.associated].get_tile(
-            self.level, self.address
-        )
+        tile = self.generator.get_tile(self.level, self.address)
         buf = BytesIO()
         tile.save(
             buf,
@@ -298,7 +285,7 @@ class Tile:
         )
         new_md5 = md5(buf.getbuffer())
         if self.cur_md5 != new_md5.hexdigest():
-            pool.storage.object(self.key_name).put(
+            self.storage.object(self.key_name).put(
                 Body=buf.getvalue(),
                 CacheControl=CACHE_CONTROL_CACHE,
                 ContentMD5=base64.b64encode(new_md5.digest()).decode(),
@@ -309,7 +296,7 @@ class Tile:
     @classmethod
     def enumerate(
         cls,
-        associated: str | None,
+        storage: S3Storage,
         generator: Generator,
         key_imagepath: PurePath,
         key_md5sums: KeyMd5s,
@@ -322,7 +309,8 @@ class Tile:
                 for col in range(cols):
                     key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
                     yield cls(
-                        associated,
+                        storage,
+                        generator,
                         level,
                         (col, row),
                         key_name,
@@ -333,9 +321,9 @@ class Tile:
 def sync_image(
     exec: ThreadPoolExecutor,
     storage: S3Storage,
+    generator: Generator,
     slide_relpath: PurePath,
     associated: str | None,
-    generator: Generator,
     key_basepath: PurePath,
     key_md5sums: KeyMd5s,
     mpp: float | None = None,
@@ -361,7 +349,7 @@ def sync_image(
     for future in as_completed(
         exec.submit(Tile.sync, tile)
         for tile in Tile.enumerate(
-            associated, generator, key_imagepath, key_md5sums
+            storage, generator, key_imagepath, key_md5sums
         )
     ):
         key_md5sums.pop(future.result(), None)
@@ -504,23 +492,18 @@ def sync_slide(
                 mpp = None
 
             # Start compute pool
-            exec = ThreadPoolExecutor(
-                max_workers=workers,
-                initializer=pool_init,
-                initargs=(storage.bucket.name, slide_path),
-            )
+            exec = ThreadPoolExecutor(workers)
             try:
                 # Tile slide
                 def do_tile(
                     associated: str | None, image: AbstractSlide
                 ) -> ImageInfo:
-                    generator = Generator(image)
                     return sync_image(
                         exec,
                         storage,
+                        Generator(image),
                         slide_relpath,
                         associated,
-                        generator,
                         key_basepath,
                         key_md5sums,
                         mpp if associated is None else None,
