@@ -508,9 +508,7 @@ def sync_slide(
                 mpp = None
 
             # Start compute pool
-            pool = Pool(
-                workers, lambda: pool_init(storage.bucket.name, slide_path)
-            )
+            pool = Pool(workers, pool_init, (storage.bucket.name, slide_path))
             try:
                 # Tile slide
                 def do_tile(
