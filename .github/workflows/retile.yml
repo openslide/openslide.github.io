@@ -9,7 +9,7 @@ permissions:
 env:
   PIP_CACHE_KEY: retile-pip-${{ github.run_id }}
   PYTHONUNBUFFERED: 1
-  PYTHON_VER: "3.14"
+  PYTHON_VER: "3.14t"
   PYTHON_DEPS: "boto3 openslide-bin openslide-python requests"
 
 jobs:

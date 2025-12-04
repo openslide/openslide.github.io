@@ -3,7 +3,7 @@
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2015 Carnegie Mellon University
-# Copyright (c) 2016-2023 Benjamin Gilbert
+# Copyright (c) 2016-2025 Benjamin Gilbert
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -23,17 +23,17 @@ from __future__ import annotations
 from argparse import ArgumentParser, FileType
 import base64
 from collections.abc import Callable, Iterator
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from hashlib import md5, sha256
 from io import BytesIO
 import json
-from multiprocessing import Pool
-from multiprocessing.pool import Pool as PoolType
 import os
 from pathlib import Path, PurePath
 import re
 import sys
 from tempfile import TemporaryDirectory
+from threading import local
 from typing import TYPE_CHECKING, Any, NotRequired, Self, TextIO, TypedDict
 from unicodedata import normalize
 from urllib.parse import urljoin
@@ -104,8 +104,7 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
 KeyMd5s = dict[PurePath, str]
 TestDataIndex = dict[str, 'TestDataSlide']
 
-dz_generators: dict[str | None, Generator] = {}
-storage: S3Storage | None = None
+pool: local = local()
 
 
 class TestDataSlide(TypedDict):
@@ -269,12 +268,11 @@ class S3Storage:
 
 
 def pool_init(bucket_name: str, slide_path: Path) -> None:
-    global storage, dz_generators
-    storage = S3Storage(bucket_name)
+    pool.storage = S3Storage(bucket_name)
     slide = OpenSlide(slide_path)
-    dz_generators = {None: Generator(slide)}
+    pool.generators = {None: Generator(slide)}
     for name, image in slide.associated_images.items():
-        dz_generators[name] = Generator(ImageSlide(image))
+        pool.generators[name] = Generator(ImageSlide(image))
 
 
 @dataclass
@@ -285,31 +283,28 @@ class Tile:
     key_name: PurePath
     cur_md5: str | None
 
-    def sync(self) -> PurePath | BaseException:
+    def sync(self) -> PurePath:
         """Generate and possibly upload a tile."""
-        assert storage is not None
-        try:
-            tile = dz_generators[self.associated].get_tile(
-                self.level, self.address
+        assert pool.storage is not None
+        tile = pool.generators[self.associated].get_tile(
+            self.level, self.address
+        )
+        buf = BytesIO()
+        tile.save(
+            buf,
+            FORMAT,
+            quality=QUALITY,
+            icc_profile=tile.info.get('icc_profile'),
+        )
+        new_md5 = md5(buf.getbuffer())
+        if self.cur_md5 != new_md5.hexdigest():
+            pool.storage.object(self.key_name).put(
+                Body=buf.getvalue(),
+                CacheControl=CACHE_CONTROL_CACHE,
+                ContentMD5=base64.b64encode(new_md5.digest()).decode(),
+                ContentType=f'image/{FORMAT}',
             )
-            buf = BytesIO()
-            tile.save(
-                buf,
-                FORMAT,
-                quality=QUALITY,
-                icc_profile=tile.info.get('icc_profile'),
-            )
-            new_md5 = md5(buf.getbuffer())
-            if self.cur_md5 != new_md5.hexdigest():
-                storage.object(self.key_name).put(
-                    Body=buf.getvalue(),
-                    CacheControl=CACHE_CONTROL_CACHE,
-                    ContentMD5=base64.b64encode(new_md5.digest()).decode(),
-                    ContentType=f'image/{FORMAT}',
-                )
-            return self.key_name
-        except BaseException as e:  # noqa: B036
-            return e
+        return self.key_name
 
     @classmethod
     def enumerate(
@@ -336,7 +331,7 @@ class Tile:
 
 
 def sync_image(
-    pool: PoolType,
+    exec: ThreadPoolExecutor,
     storage: S3Storage,
     slide_relpath: PurePath,
     associated: str | None,
@@ -352,7 +347,6 @@ def sync_image(
     total = dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
     key_imagepath = key_basepath / f'{associated_slug}_files'
-    iterator = Tile.enumerate(associated, dz, key_imagepath, key_md5sums)
 
     def progress() -> None:
         print(
@@ -364,11 +358,11 @@ def sync_image(
 
     # Sync tiles
     progress()
-    for ret in pool.imap_unordered(Tile.sync, iterator, 32):
-        if isinstance(ret, BaseException):
-            raise ret
-        else:
-            key_md5sums.pop(ret, None)
+    for future in as_completed(
+        exec.submit(Tile.sync, tile)
+        for tile in Tile.enumerate(associated, dz, key_imagepath, key_md5sums)
+    ):
+        key_md5sums.pop(future.result(), None)
         count += 1
         if count % 100 == 0:
             progress()
@@ -508,7 +502,11 @@ def sync_slide(
                 mpp = None
 
             # Start compute pool
-            pool = Pool(workers, pool_init, (storage.bucket.name, slide_path))
+            exec = ThreadPoolExecutor(
+                max_workers=workers,
+                initializer=pool_init,
+                initargs=(storage.bucket.name, slide_path),
+            )
             try:
                 # Tile slide
                 def do_tile(
@@ -518,7 +516,7 @@ def sync_slide(
                         image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
                     )
                     return sync_image(
-                        pool,
+                        exec,
                         storage,
                         slide_relpath,
                         associated,
@@ -537,11 +535,10 @@ def sync_slide(
                     cur_props = do_tile(associated, ImageSlide(image))
                     metadata['associated'].append(cur_props)
             except BaseException:
-                pool.terminate()
+                exec.shutdown(cancel_futures=True)
                 raise
             finally:
-                pool.close()
-                pool.join()
+                exec.shutdown()
 
     # Delete old keys
     for name in metadata_key_name, properties_key_name:
@@ -742,7 +739,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
 
 
 if __name__ == '__main__':
-    cpu_count = os.process_cpu_count()
+    thread_count = 2 * os.process_cpu_count()
 
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
@@ -780,8 +777,8 @@ if __name__ == '__main__':
         metavar='COUNT',
         dest='workers',
         type=int,
-        default=cpu_count,
-        help=f'number of worker processes to start [{cpu_count}]',
+        default=thread_count,
+        help=f'number of threads to start [{thread_count}]',
     )
     parser_tile.set_defaults(cmd='tile')
 
