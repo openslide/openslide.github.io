@@ -208,7 +208,7 @@ def slugify(text: str) -> str:
 
 class Generator:
     def __init__(self, slide: AbstractSlide):
-        self._dz = DeepZoomGenerator(
+        self.dz = DeepZoomGenerator(
             slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
         )
         self._transform = self._get_transform(slide)
@@ -235,7 +235,7 @@ class Generator:
         return xfrm
 
     def get_tile(self, level: int, address: tuple[int, int]) -> Image:
-        tile: Image = self._dz.get_tile(level, address)
+        tile: Image = self.dz.get_tile(level, address)
         self._transform(tile)
         return tile
 
@@ -310,14 +310,14 @@ class Tile:
     def enumerate(
         cls,
         associated: str | None,
-        dz: DeepZoomGenerator,
+        generator: Generator,
         key_imagepath: PurePath,
         key_md5sums: KeyMd5s,
     ) -> Iterator[Self]:
         """Enumerate tiles in a single image."""
-        for level in range(dz.level_count):
+        for level in range(generator.dz.level_count):
             key_levelpath = key_imagepath / str(level)
-            cols, rows = dz.level_tiles[level]
+            cols, rows = generator.dz.level_tiles[level]
             for row in range(rows):
                 for col in range(cols):
                     key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
@@ -335,7 +335,7 @@ def sync_image(
     storage: S3Storage,
     slide_relpath: PurePath,
     associated: str | None,
-    dz: DeepZoomGenerator,
+    generator: Generator,
     key_basepath: PurePath,
     key_md5sums: KeyMd5s,
     mpp: float | None = None,
@@ -344,7 +344,7 @@ def sync_image(
     Delete valid tiles from key_md5sums."""
 
     count = 0
-    total = dz.tile_count
+    total = generator.dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
     key_imagepath = key_basepath / f'{associated_slug}_files'
 
@@ -360,7 +360,9 @@ def sync_image(
     progress()
     for future in as_completed(
         exec.submit(Tile.sync, tile)
-        for tile in Tile.enumerate(associated, dz, key_imagepath, key_md5sums)
+        for tile in Tile.enumerate(
+            associated, generator, key_imagepath, key_md5sums
+        )
     ):
         key_md5sums.pop(future.result(), None)
         count += 1
@@ -378,8 +380,8 @@ def sync_image(
             'TileSize': TILE_SIZE,
             'Overlap': OVERLAP,
             'Size': {
-                'Width': dz.level_dimensions[-1][0],
-                'Height': dz.level_dimensions[-1][1],
+                'Width': generator.dz.level_dimensions[-1][0],
+                'Height': generator.dz.level_dimensions[-1][1],
             },
         }
     }
@@ -512,15 +514,13 @@ def sync_slide(
                 def do_tile(
                     associated: str | None, image: AbstractSlide
                 ) -> ImageInfo:
-                    dz = DeepZoomGenerator(
-                        image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
-                    )
+                    generator = Generator(image)
                     return sync_image(
                         exec,
                         storage,
                         slide_relpath,
                         associated,
-                        dz,
+                        generator,
                         key_basepath,
                         key_md5sums,
                         mpp if associated is None else None,
