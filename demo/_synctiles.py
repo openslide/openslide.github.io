@@ -3,7 +3,7 @@
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2015 Carnegie Mellon University
-# Copyright (c) 2016-2023 Benjamin Gilbert
+# Copyright (c) 2016-2025 Benjamin Gilbert
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -23,12 +23,11 @@ from __future__ import annotations
 from argparse import ArgumentParser, FileType
 import base64
 from collections.abc import Callable, Iterator
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from hashlib import md5, sha256
 from io import BytesIO
 import json
-from multiprocessing import Pool
-from multiprocessing.pool import Pool as PoolType
 import os
 from pathlib import Path, PurePath
 import re
@@ -45,14 +44,20 @@ from PIL.Image import Image
 from PIL.ImageCms import ImageCmsProfile
 import boto3
 import openslide
-from openslide import AbstractSlide, ImageSlide, OpenSlide, OpenSlideError
+from openslide import (
+    AbstractSlide,
+    ImageSlide,
+    OpenSlide,
+    OpenSlideCache,
+    OpenSlideError,
+)
 from openslide.deepzoom import DeepZoomGenerator
 import requests
 
 if TYPE_CHECKING:
     from mypy_boto3_s3.service_resource import Object
 
-STAMP_VERSION = 'size-510'  # change to retile without OpenSlide version bump
+STAMP_VERSION = 'threads'  # change to retile without OpenSlide version bump
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -103,9 +108,6 @@ SRGB_PROFILE: ImageCmsProfile = ImageCms.getOpenProfile(
 
 KeyMd5s = dict[PurePath, str]
 TestDataIndex = dict[str, 'TestDataSlide']
-
-dz_generators: dict[str | None, Generator] = {}
-storage: S3Storage | None = None
 
 
 class TestDataSlide(TypedDict):
@@ -209,7 +211,7 @@ def slugify(text: str) -> str:
 
 class Generator:
     def __init__(self, slide: AbstractSlide):
-        self._dz = DeepZoomGenerator(
+        self.dz = DeepZoomGenerator(
             slide, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
         )
         self._transform = self._get_transform(slide)
@@ -236,7 +238,7 @@ class Generator:
         return xfrm
 
     def get_tile(self, level: int, address: tuple[int, int]) -> Image:
-        tile: Image = self._dz.get_tile(level, address)
+        tile: Image = self.dz.get_tile(level, address)
         self._transform(tile)
         return tile
 
@@ -268,66 +270,53 @@ class S3Storage:
         )
 
 
-def pool_init(bucket_name: str, slide_path: Path) -> None:
-    global storage, dz_generators
-    storage = S3Storage(bucket_name)
-    slide = OpenSlide(slide_path)
-    dz_generators = {None: Generator(slide)}
-    for name, image in slide.associated_images.items():
-        dz_generators[name] = Generator(ImageSlide(image))
-
-
 @dataclass
 class Tile:
-    associated: str | None
+    storage: S3Storage
+    generator: Generator
     level: int
     address: tuple[int, int]
     key_name: PurePath
     cur_md5: str | None
 
-    def sync(self) -> PurePath | BaseException:
+    def sync(self) -> PurePath:
         """Generate and possibly upload a tile."""
-        assert storage is not None
-        try:
-            tile = dz_generators[self.associated].get_tile(
-                self.level, self.address
+        tile = self.generator.get_tile(self.level, self.address)
+        buf = BytesIO()
+        tile.save(
+            buf,
+            FORMAT,
+            quality=QUALITY,
+            icc_profile=tile.info.get('icc_profile'),
+        )
+        new_md5 = md5(buf.getbuffer())
+        if self.cur_md5 != new_md5.hexdigest():
+            self.storage.object(self.key_name).put(
+                Body=buf.getvalue(),
+                CacheControl=CACHE_CONTROL_CACHE,
+                ContentMD5=base64.b64encode(new_md5.digest()).decode(),
+                ContentType=f'image/{FORMAT}',
             )
-            buf = BytesIO()
-            tile.save(
-                buf,
-                FORMAT,
-                quality=QUALITY,
-                icc_profile=tile.info.get('icc_profile'),
-            )
-            new_md5 = md5(buf.getbuffer())
-            if self.cur_md5 != new_md5.hexdigest():
-                storage.object(self.key_name).put(
-                    Body=buf.getvalue(),
-                    CacheControl=CACHE_CONTROL_CACHE,
-                    ContentMD5=base64.b64encode(new_md5.digest()).decode(),
-                    ContentType=f'image/{FORMAT}',
-                )
-            return self.key_name
-        except BaseException as e:  # noqa: B036
-            return e
+        return self.key_name
 
     @classmethod
     def enumerate(
         cls,
-        associated: str | None,
-        dz: DeepZoomGenerator,
+        storage: S3Storage,
+        generator: Generator,
         key_imagepath: PurePath,
         key_md5sums: KeyMd5s,
     ) -> Iterator[Self]:
         """Enumerate tiles in a single image."""
-        for level in range(dz.level_count):
+        for level in range(generator.dz.level_count):
             key_levelpath = key_imagepath / str(level)
-            cols, rows = dz.level_tiles[level]
+            cols, rows = generator.dz.level_tiles[level]
             for row in range(rows):
                 for col in range(cols):
                     key_name = key_levelpath / f'{col}_{row}.{FORMAT}'
                     yield cls(
-                        associated,
+                        storage,
+                        generator,
                         level,
                         (col, row),
                         key_name,
@@ -336,11 +325,11 @@ class Tile:
 
 
 def sync_image(
-    pool: PoolType,
+    exec: ThreadPoolExecutor,
     storage: S3Storage,
+    generator: Generator,
     slide_relpath: PurePath,
     associated: str | None,
-    dz: DeepZoomGenerator,
     key_basepath: PurePath,
     key_md5sums: KeyMd5s,
     mpp: float | None = None,
@@ -349,10 +338,9 @@ def sync_image(
     Delete valid tiles from key_md5sums."""
 
     count = 0
-    total = dz.tile_count
+    total = generator.dz.tile_count
     associated_slug = slugify(associated) if associated else VIEWER_SLIDE_NAME
     key_imagepath = key_basepath / f'{associated_slug}_files'
-    iterator = Tile.enumerate(associated, dz, key_imagepath, key_md5sums)
 
     def progress() -> None:
         print(
@@ -364,11 +352,13 @@ def sync_image(
 
     # Sync tiles
     progress()
-    for ret in pool.imap_unordered(Tile.sync, iterator, 32):
-        if isinstance(ret, BaseException):
-            raise ret
-        else:
-            key_md5sums.pop(ret, None)
+    for future in as_completed(
+        exec.submit(Tile.sync, tile)
+        for tile in Tile.enumerate(
+            storage, generator, key_imagepath, key_md5sums
+        )
+    ):
+        key_md5sums.pop(future.result(), None)
         count += 1
         if count % 100 == 0:
             progress()
@@ -384,8 +374,8 @@ def sync_image(
             'TileSize': TILE_SIZE,
             'Overlap': OVERLAP,
             'Size': {
-                'Width': dz.level_dimensions[-1][0],
-                'Height': dz.level_dimensions[-1][1],
+                'Width': generator.dz.level_dimensions[-1][0],
+                'Height': generator.dz.level_dimensions[-1][1],
             },
         }
     }
@@ -486,6 +476,9 @@ def sync_slide(
         }
 
         if slide is not None:
+            # Configure cache
+            slide.set_cache(OpenSlideCache(workers << 25))
+
             # Add slide metadata
             metadata.update(
                 {
@@ -508,21 +501,18 @@ def sync_slide(
                 mpp = None
 
             # Start compute pool
-            pool = Pool(workers, pool_init, (storage.bucket.name, slide_path))
+            exec = ThreadPoolExecutor(workers)
             try:
                 # Tile slide
                 def do_tile(
                     associated: str | None, image: AbstractSlide
                 ) -> ImageInfo:
-                    dz = DeepZoomGenerator(
-                        image, TILE_SIZE, OVERLAP, limit_bounds=LIMIT_BOUNDS
-                    )
                     return sync_image(
-                        pool,
+                        exec,
                         storage,
+                        Generator(image),
                         slide_relpath,
                         associated,
-                        dz,
                         key_basepath,
                         key_md5sums,
                         mpp if associated is None else None,
@@ -537,11 +527,10 @@ def sync_slide(
                     cur_props = do_tile(associated, ImageSlide(image))
                     metadata['associated'].append(cur_props)
             except BaseException:
-                pool.terminate()
+                exec.shutdown(cancel_futures=True)
                 raise
             finally:
-                pool.close()
-                pool.join()
+                exec.shutdown()
 
     # Delete old keys
     for name in metadata_key_name, properties_key_name:
@@ -742,7 +731,7 @@ def finish_retile(ctxfile: TextIO, summarydir: Path) -> None:
 
 
 if __name__ == '__main__':
-    cpu_count = os.process_cpu_count()
+    thread_count = 2 * os.process_cpu_count()
 
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(metavar='subcommand', required=True)
@@ -780,8 +769,8 @@ if __name__ == '__main__':
         metavar='COUNT',
         dest='workers',
         type=int,
-        default=cpu_count,
-        help=f'number of worker processes to start [{cpu_count}]',
+        default=thread_count,
+        help=f'number of threads to start [{thread_count}]',
     )
     parser_tile.set_defaults(cmd='tile')
 

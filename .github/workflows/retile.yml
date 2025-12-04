@@ -7,189 +7,124 @@ permissions:
   contents: read
 
 env:
-  LD_LIBRARY_PATH: "${{ github.workspace }}/install/lib64"
-  PYTHONPATH: "${{ github.workspace }}/install/python"
+  PIP_CACHE_KEY: retile-pip-${{ github.run_id }}
   PYTHONUNBUFFERED: 1
-  RUNTIME_DEPS: "python3 python3-boto3 python3-pillow python3-requests \
-    zlib libpng libjpeg-turbo libtiff openjpeg2 gdk-pixbuf2 \
-    gdk-pixbuf2-modules-extra libxml2 sqlite cairo glib2"
+  PYTHON_VER: "3.14t"
+  PYTHON_DEPS: "boto3 openslide-bin openslide-python requests"
 
 jobs:
-  build:
-    name: Build releases
-    runs-on: ubuntu-latest
-    container: registry.fedoraproject.org/fedora:latest
-    steps:
-      - name: Install dependencies
-        run: |
-          dnf install -y \
-            jq xz \
-            python3 python3-devel python3-pip python3-pillow python3-wheel \
-            gcc meson pkg-config \
-            zlib-devel \
-            libpng-devel \
-            libjpeg-turbo-devel \
-            libtiff-devel \
-            openjpeg2-devel \
-            gdk-pixbuf2-devel \
-            gdk-pixbuf2-modules-extra \
-            libxml2-devel \
-            sqlite-devel \
-            cairo-devel \
-            glib2-devel
-      - name: Download releases
-        run: |
-          set -euxo pipefail
-          get_release() {
-            # Query GitHub for latest release
-            curl -s -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/openslide/$1/releases/latest" \
-              > "$1-release.json"
-            local env_var=$(echo "$1" | tr a-z- A-Z_)_VERSION
-            local version=$(jq -r .tag_name < "$1-release.json" | sed s/^v//)
-            echo "${env_var}=${version}" >> ${GITHUB_ENV}
-
-            # Download release
-            local url=$(jq -r '.assets | map(select(.content_type == "application/x-xz")) | .[0].browser_download_url' < "$1-release.json")
-            curl -LO "${url}"
-
-            # Unpack
-            tar xf "$(echo "$1" | tr - _)-${version}.tar.xz"
-          }
-          get_release openslide
-          get_release openslide-python
-      - name: Build OpenSlide
-        working-directory: openslide-${{ env.OPENSLIDE_VERSION }}
-        run: |
-          meson setup builddir --prefix=${GITHUB_WORKSPACE}/install
-          meson compile -C builddir
-
-          trap "cat builddir/meson-logs/testlog.txt" ERR
-          meson test -C builddir
-          trap - ERR
-
-          meson install -C builddir
-      - name: Build OpenSlide Python
-        working-directory: openslide_python-${{ env.OPENSLIDE_PYTHON_VERSION }}
-        run: |
-          pip install -t ${GITHUB_WORKSPACE}/install/python .
-      - name: Upload build
-        uses: actions/upload-artifact@v5
-        with:
-          name: build
-          path: install
   setup:
     name: Set up tiling
     environment: demo-site
-    needs: build
     runs-on: ubuntu-latest
-    container: registry.fedoraproject.org/fedora:latest
     steps:
       - name: Check out repo
         uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          path: website
+          python-version: ${{ env.PYTHON_VER }}
       - name: Install dependencies
-        run: dnf install -y ${RUNTIME_DEPS}
-      - name: Download build
-        uses: actions/download-artifact@v6
+        run: pip install --break-system-packages ${PYTHON_DEPS}
+      - name: Cache dependencies
+        uses: actions/cache/save@v4
         with:
-          name: build
-          path: install
+          key: ${{ env.PIP_CACHE_KEY }}
+          path: /home/runner/.cache/pip
       - name: Set up tiling
         id: start-tiling
-        working-directory: website/demo
+        working-directory: demo
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEMO_TILER_AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEMO_TILER_AWS_SECRET_KEY }}
         run: |
-          ./_synctiles.py start \
-            "${{ vars.DEMO_TILER_BUCKET }}" \
-            ${GITHUB_WORKSPACE}/context \
-            matrix
+          ./_synctiles.py start "${{ vars.DEMO_TILER_BUCKET }}" context matrix
           echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
       - name: Upload context
         uses: actions/upload-artifact@v5
         with:
           name: context
-          path: context
+          path: demo/context
     outputs:
       slide-matrix: ${{ steps.start-tiling.outputs.slide-matrix }}
+
   tile:
     name: Tile
     environment: demo-site
     needs: setup
     runs-on: ubuntu-latest
-    container: registry.fedoraproject.org/fedora:latest
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.slide-matrix) }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          path: website
+          python-version: ${{ env.PYTHON_VER }}
+      - name: Cache dependencies
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ env.PIP_CACHE_KEY }}
+          path: /home/runner/.cache/pip
+          fail-on-cache-miss: true
       - name: Install dependencies
-        run: dnf install -y ${RUNTIME_DEPS}
-      - name: Download build
-        uses: actions/download-artifact@v6
-        with:
-          name: build
-          path: install
+        run: pip install --break-system-packages ${PYTHON_DEPS}
       - name: Download context
         uses: actions/download-artifact@v6
         with:
           name: context
+          path: demo
       - name: Tile slide
-        working-directory: website/demo
+        working-directory: demo
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEMO_TILER_AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEMO_TILER_AWS_SECRET_KEY }}
         run: |
-          ./_synctiles.py tile \
-            ${GITHUB_WORKSPACE}/context \
-            "${{ matrix.slide }}" \
-            ${GITHUB_WORKSPACE}/summary
+          ./_synctiles.py tile context "${{ matrix.slide }}" summary
           echo "ARTIFACT_NAME=summary-$(echo "${{ matrix.slide }}" | tr -c "a-zA-Z0-9\n" _)" >> $GITHUB_ENV
       - name: Upload summary
         uses: actions/upload-artifact@v5
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: summary
+          path: demo/summary
+
   finish:
     name: Finish tiling
     environment: demo-site
     needs: tile
     runs-on: ubuntu-latest
-    container: registry.fedoraproject.org/fedora:latest
     steps:
       - name: Check out repo
         uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          path: website
+          python-version: ${{ env.PYTHON_VER }}
+      - name: Cache dependencies
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ env.PIP_CACHE_KEY }}
+          path: /home/runner/.cache/pip
+          fail-on-cache-miss: true
       - name: Install dependencies
-        run: dnf install -y ${RUNTIME_DEPS}
-      - name: Download build
-        uses: actions/download-artifact@v6
-        with:
-          name: build
-          path: install
+        run: pip install --break-system-packages ${PYTHON_DEPS}
       - name: Download context
         uses: actions/download-artifact@v6
         with:
           name: context
+          path: demo
       - name: Download summaries
         uses: actions/download-artifact@v6
         with:
           pattern: "summary-*"
-          path: summary
+          path: demo/summary
           merge-multiple: true
       - name: Finish tiling
-        working-directory: website/demo
+        working-directory: demo
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEMO_TILER_AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEMO_TILER_AWS_SECRET_KEY }}
         run: |
-          ./_synctiles.py finish \
-            ${GITHUB_WORKSPACE}/context \
-            ${GITHUB_WORKSPACE}/summary
+          ./_synctiles.py finish context summary
