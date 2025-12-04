@@ -44,7 +44,13 @@ from PIL.Image import Image
 from PIL.ImageCms import ImageCmsProfile
 import boto3
 import openslide
-from openslide import AbstractSlide, ImageSlide, OpenSlide, OpenSlideError
+from openslide import (
+    AbstractSlide,
+    ImageSlide,
+    OpenSlide,
+    OpenSlideCache,
+    OpenSlideError,
+)
 from openslide.deepzoom import DeepZoomGenerator
 import requests
 
@@ -470,6 +476,9 @@ def sync_slide(
         }
 
         if slide is not None:
+            # Configure cache
+            slide.set_cache(OpenSlideCache(workers << 25))
+
             # Add slide metadata
             metadata.update(
                 {
