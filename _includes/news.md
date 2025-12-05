@@ -1,5 +1,31 @@
 {% include links.md %}
 
+## Binary build 4.0.0.10, 2025-12-03
+
+[Binary build 4.0.0.10][bin-4.0.0.10] drops Python 3.8 support in the Python
+binary packages, enables SIMD JPEG decoding on macOS x86_64, and updates
+many dependencies.
+
+[bin-4.0.0.10]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.10
+
+
+## OpenSlide Python version 1.4.3, 2025-12-03
+
+[OpenSlide Python 1.4.3][python-1.4.3] adds support for
+[free-threaded Python][] and drops support for Python 3.9.
+
+[python-1.4.3]: https://github.com/openslide/openslide-python/releases/tag/v1.4.3
+[free-threaded Python]: https://docs.python.org/3/howto/free-threading-python.html
+
+
+## OpenSlide Java version 0.13.1, 2025-12-02
+
+[OpenSlide Java 0.13.1][java-0.13.1] fixes backward compatibility of JARs
+built with Java newer than 22.
+
+[java-0.13.1]: https://github.com/openslide/openslide-java/releases/tag/v0.13.1
+
+
 ## OpenSlide Python version 1.4.2, 2025-04-28
 
 [OpenSlide Python 1.4.2][python-1.4.2] drops support for Python 3.8 and adds
