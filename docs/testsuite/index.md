@@ -10,11 +10,11 @@ To run the test suite, you will need:
 
 - A Git checkout of OpenSlide
 - &ge; 120 GB of disk space (25 GB on XFS, btrfs, or APFS)
-- PyYAML
-- python-requests
 - `xdelta3`
 - `cjpeg` and `djpeg`, from libjpeg-turbo or IJG libjpeg
 - At least one installed font
+
+`xdelta3` is built automatically if you configure with `-Dtest=enabled`.
 
 Sanitize mode requires:
 
@@ -203,10 +203,11 @@ properties:
 # Generate test case files programmatically at unpack time.  Useful when
 # test cases can be deterministically produced by a program but their deltas
 # are too large to check in.  Of course this introduces a dependency on the
-# specified program.  Use with caution, and only as a last resort.
+# specified program, which should be detected by Meson and its filesystem
+# path plumbed into the driver.  Use with caution, and only as a last resort.
 generate:
   ? "CMU-1-40x - 2010-01-12 13.24.05(1,1).jpg"
-  : "jpegtran -restart 256B -outfile %(out)s %(in)s"
+  : "%(jpegtran) -restart 256B -outfile %(out)s %(in)s"
 
 # Copy test case files during unpack.
 copy:
