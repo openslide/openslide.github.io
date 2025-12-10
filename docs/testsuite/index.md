@@ -13,7 +13,7 @@ To run the test suite, you will need:
 - PyYAML
 - python-requests
 - `xdelta3`
-- `cjpeg` and `djpeg`, from libjpeg
+- `cjpeg` and `djpeg`, from libjpeg-turbo or IJG libjpeg
 - At least one installed font
 
 Sanitize mode requires:
