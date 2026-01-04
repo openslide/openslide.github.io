@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## Binary build 4.0.0.11, 2026-01-04
+
+[Binary build 4.0.0.11][bin-4.0.0.11] updates several dependencies.
+
+[bin-4.0.0.11]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.11
+
+
 ## Binary build 4.0.0.10, 2025-12-03
 
 [Binary build 4.0.0.10][bin-4.0.0.10] drops Python 3.8 support in the Python
