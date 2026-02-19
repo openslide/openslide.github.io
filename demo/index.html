@@ -240,6 +240,7 @@ $(function() {
             viewer = new OpenSeadragon({
                 id: "view",
                 prefixUrl: openseadragon_images,
+                crossOriginPolicy: "anonymous",
                 animationTime: 0.5,
                 blendTime: 0.1,
                 constrainDuringPan: true,
