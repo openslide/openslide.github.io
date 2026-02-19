@@ -59,7 +59,7 @@
     <div id="details" class="scroll-parent"></div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/openseadragon@5.0.1/build/openseadragon/openseadragon.min.js"></script>
 <script src="openseadragon-scalebar.js"></script>
 <script>
@@ -86,7 +86,6 @@ $(function() {
         status_skipped = false;
         $.ajax({
             'dataType': 'json',
-            'jsonp': false,  // use CORS
             'success': function(data, status, xhr) {
                 if (data.stamp && data.stamp !== stamp) {
                     // retiled existing slides, so reload page
@@ -217,7 +216,6 @@ $(function() {
             $("#details").html('').addClass('loading');
             $.ajax({
                 'dataType': 'json',
-                'jsonp': false,  // use CORS
                 'success': function(data, status, xhr) {
                     populate_details(slide, data);
                 },
@@ -281,7 +279,6 @@ $(function() {
 
     $.ajax({
         'dataType': 'json',
-        'jsonp': false,  // use CORS
         'success': populate_images,
         'error': function() {
             $('#images').removeClass('loading').
