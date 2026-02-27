@@ -41,10 +41,10 @@ jobs:
           ./_synctiles.py start "${{ vars.DEMO_TILER_BUCKET }}" context matrix
           echo "slide-matrix=$(cat matrix)" >> $GITHUB_OUTPUT
       - name: Upload context
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
-          name: context
           path: demo/context
+          archive: false
     outputs:
       slide-matrix: ${{ steps.start-tiling.outputs.slide-matrix }}
 
@@ -72,7 +72,7 @@ jobs:
       - name: Install dependencies
         run: pip install --break-system-packages ${PYTHON_DEPS}
       - name: Download context
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: context
           path: demo
@@ -85,7 +85,7 @@ jobs:
           ./_synctiles.py tile context "${{ matrix.slide }}" summary
           echo "ARTIFACT_NAME=summary-$(echo "${{ matrix.slide }}" | tr -c "a-zA-Z0-9\n" _)" >> $GITHUB_ENV
       - name: Upload summary
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: demo/summary
@@ -111,12 +111,12 @@ jobs:
       - name: Install dependencies
         run: pip install --break-system-packages ${PYTHON_DEPS}
       - name: Download context
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: context
           path: demo
       - name: Download summaries
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           pattern: "summary-*"
           path: demo/summary
