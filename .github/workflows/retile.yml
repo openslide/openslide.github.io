@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: pip install --break-system-packages ${PYTHON_DEPS}
       - name: Cache dependencies
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           key: ${{ env.PIP_CACHE_KEY }}
           path: /home/runner/.cache/pip
@@ -58,13 +58,13 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.slide-matrix) }}
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VER }}
       - name: Cache dependencies
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           key: ${{ env.PIP_CACHE_KEY }}
           path: /home/runner/.cache/pip
@@ -97,13 +97,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VER }}
       - name: Cache dependencies
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           key: ${{ env.PIP_CACHE_KEY }}
           path: /home/runner/.cache/pip
