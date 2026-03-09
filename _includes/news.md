@@ -1,5 +1,14 @@
 {% include links.md %}
 
+## Binary build 4.0.0.12, 2026-03-08
+
+[Binary build 4.0.0.12][bin-4.0.0.12] fixes a regression in build 4.0.0.10
+that returns uninitialized data in the bottom tile row of non-JPEG, non-JP2K
+TIFF levels, and updates various dependencies.
+
+[bin-4.0.0.12]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.12
+
+
 ## Binary build 4.0.0.11, 2026-01-04
 
 [Binary build 4.0.0.11][bin-4.0.0.11] updates several dependencies.
