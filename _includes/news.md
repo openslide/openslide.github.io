@@ -1,5 +1,12 @@
 {% include links.md %}
 
+## Binary build 4.0.0.13, 2026-03-18
+
+[Binary build 4.0.0.13][bin-4.0.0.13] adds a build fix and updates glib.
+
+[bin-4.0.0.13]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.13
+
+
 ## Binary build 4.0.0.12, 2026-03-08
 
 [Binary build 4.0.0.12][bin-4.0.0.12] fixes a regression in build 4.0.0.10
