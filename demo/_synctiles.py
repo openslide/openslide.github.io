@@ -534,7 +534,7 @@ def sync_slide(
     for name in metadata_key_name, properties_key_name:
         key_md5sums.pop(name, None)
     if key_md5sums:
-        to_delete = [k for k in key_md5sums]
+        to_delete = list(key_md5sums)
         print(f'Pruning {len(to_delete)} keys for {slide_relpath}...')
         while to_delete:
             cur_delete, to_delete = to_delete[0:1000], to_delete[1000:]
