@@ -344,8 +344,8 @@ def sync_image(
 
     def progress() -> None:
         print(
-            f"Tiling {slide_relpath} {associated_slug}: "
-            f"{count}/{total} tiles\r",
+            f'Tiling {slide_relpath} {associated_slug}: '
+            f'{count}/{total} tiles\r',
             end='',
         )
         sys.stdout.flush()
@@ -462,7 +462,7 @@ def sync_slide(
         # slide will be None if we can't read it
 
         # Enumerate existing keys
-        print(f"Enumerating keys for {slide_relpath}...")
+        print(f'Enumerating keys for {slide_relpath}...')
         key_md5sums = {}
         for obj in storage.bucket.objects.filter(
             Prefix=key_basepath.as_posix() + '/'
@@ -537,7 +537,7 @@ def sync_slide(
         key_md5sums.pop(name, None)
     if key_md5sums:
         to_delete = [k for k in key_md5sums]
-        print(f"Pruning {len(to_delete)} keys for {slide_relpath}...")
+        print(f'Pruning {len(to_delete)} keys for {slide_relpath}...')
         while to_delete:
             cur_delete, to_delete = to_delete[0:1000], to_delete[1000:]
             delete_result = storage.bucket.delete_objects(
@@ -602,7 +602,7 @@ def start_retile(
     storage = S3Storage(bucket_name)
 
     # Set bucket configuration
-    print("Configuring bucket...")
+    print('Configuring bucket...')
     storage.bucket.Cors().put(
         CORSConfiguration={
             'CORSRules': [
@@ -615,7 +615,7 @@ def start_retile(
     )
 
     # Store static files
-    print("Storing static files...")
+    print('Storing static files...')
     for relpath, opts in BUCKET_STATIC.items():
         storage.object(relpath).put(
             Body=opts.get('data', '').encode(),
@@ -638,7 +638,7 @@ def start_retile(
         json.dump(context, ctxfile)
     with matrixfile:
         matrix: Matrix = {
-            "slide": sorted(slides.keys()),
+            'slide': sorted(slides.keys()),
         }
         json.dump(matrix, matrixfile)
 

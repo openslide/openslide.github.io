@@ -64,7 +64,7 @@ def fetch_file(
                     sha.update(buf)
                 count += len(buf)
         if count != int(r.headers['Content-Length']):
-            raise OSError(f"Short read fetching {relpath}")
+            raise OSError(f'Short read fetching {relpath}')
         if expected_sha256 is not None and expected_sha256 != sha.hexdigest():
             raise OSError(f'Hash mismatch fetching {relpath}')
     except Exception:

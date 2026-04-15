@@ -45,7 +45,7 @@ MANDATORY_FIELDS = frozenset(
 )
 OPTIONAL_FIELDS = frozenset(('credit',))
 
-INDEX_TEMPLATE = '''<!doctype html>
+INDEX_TEMPLATE = """<!doctype html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <style type="text/css">
 table {
@@ -129,7 +129,7 @@ td.size {
         extra.size|file_size_units, extra.description) }}
   {% endfor %}
 </table>
-'''  # noqa: E501
+"""  # noqa: E501
 
 
 class ValidationError(Exception):
