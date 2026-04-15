@@ -39,9 +39,6 @@ from urllib.parse import urljoin
 from zipfile import ZipFile
 import zlib
 
-from PIL import ImageCms
-from PIL.Image import Image
-from PIL.ImageCms import ImageCmsProfile
 import boto3
 import openslide
 from openslide import (
@@ -52,6 +49,9 @@ from openslide import (
     OpenSlideError,
 )
 from openslide.deepzoom import DeepZoomGenerator
+from PIL import ImageCms
+from PIL.Image import Image
+from PIL.ImageCms import ImageCmsProfile
 import requests
 
 if TYPE_CHECKING:
@@ -221,9 +221,7 @@ class Generator:
         """Return a function that transforms an image to sRGB in place."""
         if image.color_profile is None:
             return lambda img: None
-        intent: int = ImageCms.getDefaultIntent(
-            image.color_profile
-        )  # type: ignore[no-untyped-call]
+        intent: int = ImageCms.getDefaultIntent(image.color_profile)  # type: ignore[no-untyped-call]
         transform = ImageCms.buildTransform(
             image.color_profile, SRGB_PROFILE, 'RGB', 'RGB', intent, 0
         )

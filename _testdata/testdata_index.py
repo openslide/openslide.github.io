@@ -129,7 +129,7 @@ td.size {
         extra.size|file_size_units, extra.description) }}
   {% endfor %}
 </table>
-"""  # noqa: E501
+"""
 
 
 class ValidationError(Exception):
