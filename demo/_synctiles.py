@@ -246,8 +246,8 @@ class S3Storage:
         self.conn = boto3.resource('s3')
         self.bucket = self.conn.Bucket(bucket_name)
         region = self.conn.meta.client.head_bucket(Bucket=bucket_name)[
-            'ResponseMetadata'
-        ]['HTTPHeaders']['x-amz-bucket-region']
+            'BucketRegion'
+        ]
         self.base_url = (
             f'https://{bucket_name}.s3.dualstack.{region}.amazonaws.com/'
         )
