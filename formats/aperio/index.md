@@ -35,6 +35,7 @@ Tag                 | Description                    |
 --------------------|--------------------------------|
 `ImageDescription`|Stores some important key-value pairs and other information, see below|
 `Compression`|May be 33003 or 33005, which represent specific kinds of JPEG 2000 compression, see below|
+`NewSubfileType`|1 for the label associated image, 9 for the macro associated image|
 
 
 ## Extra data stored in `ImageDescription`
@@ -46,11 +47,6 @@ stored, in at least the full-resolution image. A key-value pair is
 equals-delimited. These key-values are stored as properties starting
 with "`aperio.`". Currently, OpenSlide does not use any of the
 information present in these key-value fields.
-
-For stripped images, the `ImageDescription` tag may contain a name,
-followed by a carriage return. This is used for naming the associated
-images. The second image in the file does not have a name, though it
-is an associated image.
 
 
 ## TIFF Image Directory Organization
@@ -95,11 +91,15 @@ image.
 
 ## Associated Images
 
+There are up to three stripped images: a thumbnail image, which is
+always the second image in the file; and label and macro images at the
+end of the file, with subfile types 1 and 9 respectively.
+
 `label`
-: optional, the name "label" is given in `ImageDescription`
+: optional, non-tiled image with subfile type 1
 
 `macro`
-: optional, the name "macro" is given in `ImageDescription`
+: optional, non-tiled image with subfile type 9
 
 `thumbnail`
 : the second image in the file
