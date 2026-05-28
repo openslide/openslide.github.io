@@ -132,7 +132,7 @@ returns.
 
 If `openslide_detect_vendor()` should return a different result than for the
 original slide (e.g., if OpenSlide falls back to `generic-tiff`), change
-`vendor` to the new string or `null` for NULL.
+`vendor` to the new string or `~` for NULL.
 
 If the test should only be run if particular OpenSlide dependencies are
 available, set `requires` to a list of feature flags.  Currently the
@@ -172,7 +172,7 @@ success: false
 error: ^Tile size not consistent$
 
 # The string that should be returned by openslide_detect_vendor(),
-# or null.
+# or ~ for NULL.
 vendor: hamamatsu
 
 # True if this is the "vanilla" (unmodified) test case for this slide.
@@ -196,7 +196,7 @@ regions:
   - [1000, 1000, 2, 1, 1]
 
 # Optional map of property values to check against the properties returned
-# by OpenSlide.
+# by OpenSlide.  If ~ is specified, the property must be absent.
 properties:
   openslide.vendor: hamamatsu
 
