@@ -55,6 +55,20 @@ More info
 : [Hamamatsu format][format-hamamatsu]
 
 
+## Huron
+
+Single-file pyramidal tiled TIFF with non-standard metadata.
+
+File extensions
+: `.tif`
+
+OpenSlide vendor backend
+: `huron`
+
+More info
+: [Huron format][format-huron]
+
+
 ## Leica
 
 Single-file pyramidal tiled BigTIFF with non-standard metadata.
