@@ -193,6 +193,10 @@ the width or height as stored in the JPEG file is 0. libjpeg will refuse
 to read the header of such a file, so the JPEG data stream must be
 altered when fed into libjpeg.
 
+Conversely, on some pyramid levels without restart markers, the TIFF
+`ImageWidth` and `ImageHeight` may not match the JPEG dimensions due to
+inconsistent rounding.
+
 NDPI is based on the classic TIFF format, which does not support files
 larger than 4 GB.  However, NDPI files can be larger than 4 GB.  NDPI
 handles this by storing the high-order bits of file offsets beyond the ends
