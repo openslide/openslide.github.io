@@ -32,6 +32,7 @@
 [format-dicom]: /formats/dicom/
 [format-generic-tiff]: /formats/generic-tiff/
 [format-hamamatsu]: /formats/hamamatsu/
+[format-huron]: /formats/huron/
 [format-leica]: /formats/leica/
 [format-mirax]: /formats/mirax/
 [format-philips]: /formats/philips/

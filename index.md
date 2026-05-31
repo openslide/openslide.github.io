@@ -46,6 +46,7 @@ The library can read virtual slides in the following formats:
  * [Aperio (.svs, .tif)][format-aperio]
  * [DICOM (.dcm)][format-dicom]
  * [Hamamatsu (.vms, .vmu, .ndpi)][format-hamamatsu]
+ * [Huron (.tif)][format-huron]
  * [Leica (.scn)][format-leica]
  * [MIRAX (.mrxs)][format-mirax]
  * [Philips (.tiff)][format-philips]
