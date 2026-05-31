@@ -84,6 +84,9 @@ _ICC Profile_ of the associated image.
 Many DICOM attributes are represented hierarchically as properties prefixed
 with "`dicom.`".
 
+`openslide.barcode`
+: _Barcode Value_ from highest-resolution level
+
 `openslide.mpp-x`
 : normalized X component of _Pixel Spacing_ from highest-resolution level
 

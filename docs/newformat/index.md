@@ -124,6 +124,7 @@ Your driver is also responsible for setting some
 [standard properties][doc-properties], when they apply to your format:
 
 - `openslide.background-color`
+- `openslide.barcode`
 - `openslide.bounds-height` (must be an integer)
 - `openslide.bounds-width` (must be an integer)
 - `openslide.bounds-x` (must be an integer)
@@ -139,6 +140,9 @@ Your driver is also responsible for setting some
 
 `openslide.background-color` should be set with
 `_openslide_set_background_color_prop()`.
+
+`openslide.barcode` should be set to the decoded value of the label's
+barcode if included in the slide metadata.
 
 The `openslide.bounds-*` properties should be set for slides that omit image
 data along an entire edge of level 0.  Drivers that use a single grid per

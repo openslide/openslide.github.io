@@ -15,6 +15,9 @@ redirect_from:
 : The background color of the slide, given as an RGB hex triplet. This property
  is not always present.
 
+`openslide.barcode`
+: The contents of the slide's barcode. This property is not always present.
+
 `openslide.bounds-height`
 : The height of the rectangle bounding the non-empty region of the slide.
 This property is not always present.

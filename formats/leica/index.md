@@ -104,6 +104,9 @@ OpenSlide mailing list.)*
 `leica.objective`
 : the `objective` of the main image
 
+`openslide.barcode`
+: `leica.barcode`
+
 `openslide.mpp-x`
 : calculated as `10000/tiff.XResolution`, if `tiff.ResolutionUnit` is
 `centimeter`
