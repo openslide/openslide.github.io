@@ -72,6 +72,7 @@ TILE_SIZE = 510
 OVERLAP = 1
 LIMIT_BOUNDS = True
 GROUP_NAME_MAP = {
+    'Argos': 'ARGOS',
     'Generic-TIFF': 'Generic TIFF',
     'Hamamatsu': 'Hamamatsu NDPI',
     'Hamamatsu-vms': 'Hamamatsu VMS',

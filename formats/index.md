@@ -26,6 +26,20 @@ More info
 : [Aperio format][format-aperio]
 
 
+## ARGOS
+
+Single-file pyramidal tiled BigTIFF with non-standard metadata.
+
+File extensions
+: `.avs`
+
+OpenSlide vendor backend
+: `argos`
+
+More info
+: [ARGOS format][format-argos]
+
+
 ## DICOM
 
 International standard multi-file medical imaging format.
