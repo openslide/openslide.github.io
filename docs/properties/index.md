@@ -32,7 +32,7 @@ This property is not always present.
 This property is not always present.
 
 `openslide.comment`
-: A free-form text comment.
+: A free-form text comment. This property is not always present.
 
 `openslide.icc-size`
 : The size of the slide's ICC profile, if any.

@@ -181,7 +181,8 @@ NDPI uses a TIFF-like structure, but libtiff cannot read the headers of an
 NDPI file.  This is because NDPI specifies the `RowsPerStrip` as the height
 of the file, and after doing out the multiplication, this typically
 overflows libtiff and it refuses to open the file.  Also, the TIFF tags are
-not stored in sorted order.
+not stored in sorted order, and ASCII values are always stored out-of-line
+even when TIFF would store them inline.
 
 NDPI stores an image pyramid in TIFF directory entries.  In some files, the
 lower-resolution pyramid levels contain no restart markers.  The macro
@@ -193,6 +194,10 @@ the width or height as stored in the JPEG file is 0. libjpeg will refuse
 to read the header of such a file, so the JPEG data stream must be
 altered when fed into libjpeg.
 
+Conversely, on some pyramid levels without restart markers, the TIFF
+`ImageWidth` and `ImageHeight` may not match the JPEG dimensions due to
+inconsistent rounding.
+
 NDPI is based on the classic TIFF format, which does not support files
 larger than 4 GB.  However, NDPI files can be larger than 4 GB.  NDPI
 handles this by storing the high-order bits of file offsets beyond the ends
@@ -201,7 +206,8 @@ header and at the end of each directory) at the ends of their parent data
 structures, so NDPI simply extends these values to 64-bit quantities.  The
 high-order bits of directory entry Value Offsets are stored in an array
 immediately after the end of each TIFF directory, 4 bytes per directory
-entry.  Values that TIFF would normally store inline in the Value Offset are
+entry.  Values that would normally be stored inline in the Value Offset
+(not ASCII, as mentioned above) are
 still stored inline, even if the high 32 bits are non-zero (e.g.
 `StripOffsets` and `StripByteCounts`, which always have a Count of 1 in
 NDPI), and other values are still stored out-of-line.
@@ -245,7 +251,7 @@ Tag          | Description      |
 65456|Unknown, have seen 101|
 65457|Unknown, always 0?|
 65458|Unknown, always 0?|
-65459|Unknown, have seen ASCII "`RGB`" stored out-of-line even though TIFF says it should be stored inline|
+65459|Unknown, have seen ASCII "`JPEG`", "`Native RGB`", and "`RGB`"|
 
 
 ## Optimisation File (only for VMS)
