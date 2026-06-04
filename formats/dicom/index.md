@@ -59,8 +59,8 @@ supported:
 | - | - | - |
 | Uncompressed little-endian | `1.2.840.10008.1.2.1` | `RGB` |
 | JPEG baseline | `1.2.840.10008.1.2.4.50` | `RGB`<br>`YBR_FULL_422` |
-| JPEG 2000 | `1.2.840.10008.1.2.4.91` | `RGB`<br>`YBR_ICT` |
-| JPEG 2000 lossless | `1.2.840.10008.1.2.4.90` | `RGB`<br>`YBR_ICT` |
+| JPEG 2000 | `1.2.840.10008.1.2.4.91` | `RGB`<br>`YBR_ICT`<br>`YBR_RCT` |
+| JPEG 2000 (lossless only) | `1.2.840.10008.1.2.4.90` | `RGB`<br>`YBR_RCT` |
 
 
 ## ICC Profiles
