@@ -44,6 +44,9 @@ the file's role within the whole slide image:
 | Associated image | `ORIGINAL\PRIMARY\LABEL\NONE`<br>`ORIGINAL\PRIMARY\OVERVIEW\NONE`<br>`ORIGINAL\PRIMARY\THUMBNAIL\RESAMPLED`<br>`DERIVED\PRIMARY\LABEL\NONE`<br>`DERIVED\PRIMARY\OVERVIEW\NONE`<br>`DERIVED\PRIMARY\THUMBNAIL\RESAMPLED` |
 | Ignored | All others |
 
+A slide level can be spread across multiple files that share a
+_Concatenation UID_.
+
 If multiple files in the directory have the same _SOP Instance UID_,
 the extra copies are ignored.
 
