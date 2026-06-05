@@ -114,6 +114,7 @@ class TestDataSlide(TypedDict):
     """One openslide-testdata slide from index.json."""
 
     credit: NotRequired[str]
+    deprecated: NotRequired[bool]
     description: str
     format: str
     license: str
@@ -577,6 +578,11 @@ def start_retile(
     r = requests.get(urljoin(DOWNLOAD_BASE_URL, DOWNLOAD_INDEX))
     r.raise_for_status()
     slides: TestDataIndex = r.json()
+    slides = {
+        slide_relpath: slide_info
+        for slide_relpath, slide_info in slides.items()
+        if not slide_info.get('deprecated', False)
+    }
 
     # Initialize context for the run
     context: Context = {

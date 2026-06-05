@@ -43,7 +43,7 @@ MANDATORY_FIELDS = frozenset(
         'sha256',
     )
 )
-OPTIONAL_FIELDS = frozenset(('credit',))
+OPTIONAL_FIELDS = frozenset(('credit', 'deprecated'))
 
 INDEX_TEMPLATE = """<!doctype html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -58,6 +58,10 @@ tr:nth-child(2n + 3) {
 th {
   padding-left: 10px;
   padding-right: 10px;
+}
+tr.deprecated {
+  color: #888888;
+  background: #f4e8e8;
 }
 td {
   padding-top: 0.5em;
@@ -88,14 +92,17 @@ td.size {
     <th>Credit</th>
   </tr>
   {% macro row(icon, href, name, size='', description='', license='',
-      credit='') %}
-    <tr>
+      credit='', deprecated=false) %}
+    <tr class="{% if deprecated %}deprecated{% endif %}">
       <td class="filename">
         <i class="filetype fa {{ icon }}"></i>
         <a href="{{ href }}">{{ name }}</a>
       </td>
       <td class="size">{{ size }}</td>
-      <td class="description">{{ description }}</td>
+      <td class="description">
+        {{ description }}
+        {% if deprecated %}(deprecated){% endif %}
+      </td>
       <td class="license">
         {% if license == 'distributable' %}
           Free to use and distribute, with or without modification
@@ -122,7 +129,7 @@ td.size {
   {% for name, info in (files or {}).items()|sort %}
     {{ row('fa-file-archive-o' if name.endswith('.zip') else 'fa-file-image-o',
         name, name, info.size|file_size_units, info.description,
-        info.license, info.credit) }}
+        info.license, info.credit, info.deprecated) }}
   {% endfor %}
   {% for extra in extras %}
     {{ row('fa-file-code-o', extra.name, extra.name,
