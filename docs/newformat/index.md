@@ -16,8 +16,9 @@ Your driver can use the *grid* module to map pixel coordinates to tile
 addresses:
 
 - The `simple` grid is suitable for slide formats that have non-overlapping,
-  regularly-spaced, equal-sized tiles, and do not need to record individual
-  information about each tile.  (TIFF images often have this property.)
+  regularly-spaced, equal-sized tiles, possibly sparse, and do not need to
+  record additional information about each tile.  (TIFF images often have
+  this property.)
 
 - The `tilemap` grid is suitable for formats in which each tile is assigned
   a row and column on a regular grid, but the tiles may be offset from their
@@ -139,10 +140,11 @@ Your driver is also responsible for setting some
 `openslide.background-color` should be set with
 `_openslide_set_background_color_prop()`.
 
-The `openslide.bounds-*` properties should be set for formats that do not
-store image data for every pixel in the level.  Drivers that use a single
-`tilemap` or `range` grid per level can set these properties with
-`_openslide_set_bounds_props_from_grid()`.
+The `openslide.bounds-*` properties should be set for slides that omit image
+data along an entire edge of level 0.  Drivers that use a single grid per
+level can set these properties with
+`_openslide_set_bounds_props_from_grid()`, which automatically omits the
+properties if the bounding box entirely covers level 0.
 
 `openslide.mpp-x`, `openslide.mpp-y`, and `openslide.objective-power` should
 be a copy of, or otherwise derived from, another vendor-specific property.
