@@ -75,9 +75,9 @@ page 14:
 
 Some Aperio files use compression type 33003 or 33005. Images using
 this compression need to be decoded as a JPEG 2000 codestream. For
-33003: YCbCr format, possibly with a chroma subsampling of 4:2:2. For
-33005: RGB format. Note that the TIFF file may not encode the
-colorspace or subsampling parameters in the
+33003: YCbCr format with no MCT, possibly with a chroma subsampling of
+4:2:2. For 33005: MCT, which OpenJPEG decodes into RGB. Note that the TIFF
+file may not encode the colorspace or subsampling parameters in the
 `PhotometricInterpretation` field, nor the `YCbCrSubsampling` field,
 even though the TIFF standard seems to require this. The correct
 subsampling can be found in the JPEG 2000 codestream.
