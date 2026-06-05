@@ -35,13 +35,14 @@ to parse and load DICOM files.
 
 OpenSlide non-recursively scans the containing directory for other DICOM
 files with the same _Series Instance UID_ attribute value as the specified
-file.  It uses the _Image Type_ attribute of each matching file to determine
-the file's role within the whole slide image:
+file.  It uses the _Image Flavor_ (value 3 of the _Image Type_ attribute)
+of each matching file to determine the file's role within the whole slide
+image:
 
-| Role | Allowed _Image Type_ values |
+| Role | _Image Flavor_ values |
 | - | - | - |
-| Slide level | `ORIGINAL\PRIMARY\VOLUME\NONE`<br>`DERIVED\PRIMARY\VOLUME\NONE`<br>`DERIVED\PRIMARY\VOLUME\RESAMPLED` |
-| Associated image | `ORIGINAL\PRIMARY\LABEL\NONE`<br>`ORIGINAL\PRIMARY\OVERVIEW\NONE`<br>`ORIGINAL\PRIMARY\THUMBNAIL\RESAMPLED`<br>`DERIVED\PRIMARY\LABEL\NONE`<br>`DERIVED\PRIMARY\OVERVIEW\NONE`<br>`DERIVED\PRIMARY\THUMBNAIL\RESAMPLED` |
+| Slide level | `VOLUME` |
+| Associated image | `LABEL`<br>`OVERVIEW`<br>`THUMBNAIL` |
 | Ignored | All others |
 
 A slide level can be spread across multiple files that share a
@@ -71,11 +72,11 @@ _ICC Profile_ of the associated image.
 
 ## Associated Images
 
-| Associated image | Allowed _Image Type_ values |
+| Associated image | _Image Flavor_ |
 | - | - | - |
-| `label` | `ORIGINAL\PRIMARY\LABEL\NONE`<br>`DERIVED\PRIMARY\LABEL\NONE` |
-| `macro` | `ORIGINAL\PRIMARY\OVERVIEW\NONE`<br>`DERIVED\PRIMARY\OVERVIEW\NONE` |
-| `thumbnail` | `ORIGINAL\PRIMARY\THUMBNAIL\RESAMPLED`<br>`DERIVED\PRIMARY\THUMBNAIL\RESAMPLED` |
+| `label` | `LABEL` |
+| `macro` | `OVERVIEW` |
+| `thumbnail` | `THUMBNAIL` |
 
 
 ## Known Properties
