@@ -84,6 +84,9 @@ All key-value data encoded in the `DPUfsImport` object, in the first
 object's `PixelDataRepresentation` objects is represented as properties
 prefixed with "`philips.`".
 
+`openslide.barcode`
+: Base64-decoded `philips.PIM_DP_UFS_BARCODE`
+
 `openslide.mpp-x`
 : calculated as `1000 * philips.DICOM_PIXEL_SPACING[1]`
 

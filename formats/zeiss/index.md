@@ -100,6 +100,11 @@ properties prefixed with "`zeiss.`".  The available properties are those
 from the `AttachmentInfos`, `DisplaySetting`, `Information`, and `Scaling`
 elements of `ImageDocument.Metadata`.
 
+`openslide.barcode`
+: the value of the property matching
+  `zeiss.AttachmentInfos.*.Label.Barcodes.*.Content` that occurs earliest
+  in the XML metadata
+
 `openslide.mpp-x`
 : calculated as 1000000 times `zeiss.Scaling.Items.X.Value`
 

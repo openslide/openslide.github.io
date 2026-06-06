@@ -29,6 +29,7 @@
 
 [formats]: /formats/
 [format-aperio]: /formats/aperio/
+[format-argos]: /formats/argos/
 [format-dicom]: /formats/dicom/
 [format-generic-tiff]: /formats/generic-tiff/
 [format-hamamatsu]: /formats/hamamatsu/
