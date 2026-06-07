@@ -71,7 +71,9 @@ for (int64_t i = 0; i < w * h; i++) {
         uint8_t r = 255 * ((pixel >> 16) & 0xff) / a;
         uint8_t g = 255 * ((pixel >> 8) & 0xff) / a;
         uint8_t b = 255 * (pixel & 0xff) / a;
-        out[i] = GUINT32_TO_BE(r << 24 | g << 16 | b << 8);
+        // uint32_t cast avoids undefined behavior: left shift into sign bit
+        // after r is promoted to int.
+        out[i] = GUINT32_TO_BE((uint32_t) r << 24 | g << 16 | b << 8);
     }
 }
 ```
