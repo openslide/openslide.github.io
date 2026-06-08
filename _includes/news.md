@@ -1,5 +1,15 @@
 {% include links.md %}
 
+## Binary build 4.0.0.14, 2026-06-07
+
+[Binary build 4.0.0.14][bin-4.0.0.14] fixes an arbitrary memory write with
+a crafted Ventana BIF file ([CVE-2026-48977][CVE-2026-48977]) and updates
+various dependencies.
+
+[bin-4.0.0.14]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.14
+[CVE-2026-48977]: https://github.com/openslide/openslide/security/advisories/GHSA-mxg2-48g7-fmwc
+
+
 ## OpenSlide Python 1.4.6 and OpenSlide Java 0.13.3, 2026-06-07
 
 [OpenSlide Python 1.4.6][python-1.4.6] and
