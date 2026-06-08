@@ -1,5 +1,43 @@
 {% include links.md %}
 
+## OpenSlide version 4.0.1, 2026-06-07
+
+[OpenSlide 4.0.1][openslide-4.0.1] adds support for
+[ARGOS AVS][format-argos],
+[Huron TIFF][format-huron], and some
+[Zeiss CZI][format-zeiss] files, improves support for
+[Aperio][format-aperio],
+[DICOM][format-dicom],
+[Hamamatsu][format-hamamatsu], and
+[MIRAX][format-mirax] files,
+fixes two security issues, and adds other improvements.
+
+[Binary build 4.0.1.1][bin-4.0.1.1] updates to OpenSlide 4.0.1.
+
+[openslide-4.0.1]: https://github.com/openslide/openslide/releases/tag/v4.0.1
+[bin-4.0.1.1]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.1.1
+
+
+## Binary build 4.0.0.14, 2026-06-07
+
+[Binary build 4.0.0.14][bin-4.0.0.14] fixes an arbitrary memory write with
+a crafted Ventana BIF file ([CVE-2026-48977][CVE-2026-48977]) and updates
+various dependencies.
+
+[bin-4.0.0.14]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.14
+[CVE-2026-48977]: https://github.com/openslide/openslide/security/advisories/GHSA-mxg2-48g7-fmwc
+
+
+## OpenSlide Python 1.4.6 and OpenSlide Java 0.13.3, 2026-06-07
+
+[OpenSlide Python 1.4.6][python-1.4.6] and
+[OpenSlide Java 0.13.3][java-0.13.3] add a constant for the
+`openslide.barcode` property.
+
+[java-0.13.3]: https://github.com/openslide/openslide-java/releases/tag/v0.13.3
+[python-1.4.6]: https://github.com/openslide/openslide-python/releases/tag/v1.4.6
+
+
 ## Binary build 4.0.0.13, 2026-03-18
 
 [Binary build 4.0.0.13][bin-4.0.0.13] adds a build fix and updates glib.
@@ -48,6 +86,8 @@ built with Java newer than 22.
 
 [java-0.13.1]: https://github.com/openslide/openslide-java/releases/tag/v0.13.1
 
+
+{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.4.2, 2025-04-28
 
@@ -157,8 +197,6 @@ OpenSlide now provides an [Ubuntu PPA][download-ppa], enabling Ubuntu
 users to easily install the latest OpenSlide and OpenSlide Python releases
 before they reach Ubuntu.
 
-
-{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.3.1, 2023-10-08
 
