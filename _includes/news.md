@@ -49,6 +49,8 @@ built with Java newer than 22.
 [java-0.13.1]: https://github.com/openslide/openslide-java/releases/tag/v0.13.1
 
 
+{% if page.news_show_extended %}
+
 ## OpenSlide Python version 1.4.2, 2025-04-28
 
 [OpenSlide Python 1.4.2][python-1.4.2] drops support for Python 3.8 and adds
@@ -157,8 +159,6 @@ OpenSlide now provides an [Ubuntu PPA][download-ppa], enabling Ubuntu
 users to easily install the latest OpenSlide and OpenSlide Python releases
 before they reach Ubuntu.
 
-
-{% if page.news_show_extended %}
 
 ## OpenSlide Python version 1.3.1, 2023-10-08
 
