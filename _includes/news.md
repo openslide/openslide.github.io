@@ -1,5 +1,13 @@
 {% include links.md %}
 
+## OpenSlide Java version 0.13.3, 2026-06-07
+
+[OpenSlide Java 0.13.3][java-0.13.3] adds a constant for the
+`openslide.barcode` property.
+
+[java-0.13.3]: https://github.com/openslide/openslide-java/releases/tag/v0.13.3
+
+
 ## Binary build 4.0.0.13, 2026-03-18
 
 [Binary build 4.0.0.13][bin-4.0.0.13] adds a build fix and updates glib.
