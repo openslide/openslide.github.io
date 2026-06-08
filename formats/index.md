@@ -17,7 +17,7 @@ vendors and may be incomplete.  Problems should be reported to the OpenSlide
 Single-file pyramidal tiled TIFF, with non-standard metadata and compression.
 
 File extensions
-: `.svs`, `.tif`
+: `.svs`
 
 OpenSlide vendor backend
 : `aperio`

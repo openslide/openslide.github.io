@@ -43,7 +43,7 @@ terms of the [GNU Lesser General Public License, version 2.1][license].
 
 The library can read virtual slides in the following formats:
 
- * [Aperio (.svs, .tif)][format-aperio]
+ * [Aperio (.svs)][format-aperio]
  * [ARGOS (.avs)][format-argos]
  * [DICOM (.dcm)][format-dicom]
  * [Hamamatsu (.vms, .vmu, .ndpi)][format-hamamatsu]
