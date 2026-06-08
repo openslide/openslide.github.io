@@ -1,5 +1,23 @@
 {% include links.md %}
 
+## OpenSlide version 4.0.1, 2026-06-07
+
+[OpenSlide 4.0.1][openslide-4.0.1] adds support for
+[ARGOS AVS][format-argos],
+[Huron TIFF][format-huron], and some
+[Zeiss CZI][format-zeiss] files, improves support for
+[Aperio][format-aperio],
+[DICOM][format-dicom],
+[Hamamatsu][format-hamamatsu], and
+[MIRAX][format-mirax] files,
+fixes two security issues, and adds other improvements.
+
+[Binary build 4.0.1.1][bin-4.0.1.1] updates to OpenSlide 4.0.1.
+
+[openslide-4.0.1]: https://github.com/openslide/openslide/releases/tag/v4.0.1
+[bin-4.0.1.1]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.1.1
+
+
 ## Binary build 4.0.0.14, 2026-06-07
 
 [Binary build 4.0.0.14][bin-4.0.0.14] fixes an arbitrary memory write with
