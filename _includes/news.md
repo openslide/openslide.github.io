@@ -14,9 +14,6 @@ fixes two security issues, and adds other improvements.
 
 [Binary build 4.0.1.1][bin-4.0.1.1] updates to OpenSlide 4.0.1.
 
-[openslide-4.0.1]: https://github.com/openslide/openslide/releases/tag/v4.0.1
-[bin-4.0.1.1]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.1.1
-
 
 ## Binary build 4.0.0.14, 2026-06-07
 
@@ -24,7 +21,6 @@ fixes two security issues, and adds other improvements.
 a crafted Ventana BIF file ([CVE-2026-48977][CVE-2026-48977]) and updates
 various dependencies.
 
-[bin-4.0.0.14]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.14
 [CVE-2026-48977]: https://github.com/openslide/openslide/security/advisories/GHSA-mxg2-48g7-fmwc
 
 
@@ -34,15 +30,10 @@ various dependencies.
 [OpenSlide Java 0.13.3][java-0.13.3] add a constant for the
 `openslide.barcode` property.
 
-[java-0.13.3]: https://github.com/openslide/openslide-java/releases/tag/v0.13.3
-[python-1.4.6]: https://github.com/openslide/openslide-python/releases/tag/v1.4.6
-
 
 ## Binary build 4.0.0.13, 2026-03-18
 
 [Binary build 4.0.0.13][bin-4.0.0.13] adds a build fix and updates glib.
-
-[bin-4.0.0.13]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.13
 
 
 ## Binary build 4.0.0.12, 2026-03-08
@@ -51,14 +42,10 @@ various dependencies.
 that returned uninitialized data in the bottom tile row of non-JPEG, non-JP2K
 TIFF levels, and updates various dependencies.
 
-[bin-4.0.0.12]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.12
-
 
 ## Binary build 4.0.0.11, 2026-01-04
 
 [Binary build 4.0.0.11][bin-4.0.0.11] updates several dependencies.
-
-[bin-4.0.0.11]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.11
 
 
 ## Binary build 4.0.0.10, 2025-12-03
@@ -67,15 +54,12 @@ TIFF levels, and updates various dependencies.
 binary packages, enables SIMD JPEG decoding on macOS x86_64, and updates
 many dependencies.
 
-[bin-4.0.0.10]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.10
-
 
 ## OpenSlide Python version 1.4.3, 2025-12-03
 
 [OpenSlide Python 1.4.3][python-1.4.3] adds support for
 [free-threaded Python][] and drops support for Python 3.9.
 
-[python-1.4.3]: https://github.com/openslide/openslide-python/releases/tag/v1.4.3
 [free-threaded Python]: https://docs.python.org/3/howto/free-threading-python.html
 
 
@@ -83,8 +67,6 @@ many dependencies.
 
 [OpenSlide Java 0.13.1][java-0.13.1] fixes backward compatibility of JARs
 built with Java newer than 22.
-
-[java-0.13.1]: https://github.com/openslide/openslide-java/releases/tag/v0.13.1
 
 
 {% if page.news_show_extended %}
@@ -94,21 +76,15 @@ built with Java newer than 22.
 [OpenSlide Python 1.4.2][python-1.4.2] drops support for Python 3.8 and adds
 minor improvements.
 
-[python-1.4.2]: https://github.com/openslide/openslide-python/releases/tag/v1.4.2
-
 
 ## Binary build 4.0.0.8, 2025-04-27
 
 [Binary build 4.0.0.8][bin-4.0.0.8] updates many dependencies.
 
-[bin-4.0.0.8]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.8
-
 
 ## OpenSlide Python version 1.4.1, 2024-10-30
 
 [OpenSlide Python 1.4.1][python-1.4.1] fixes some failures on older systems.
-
-[python-1.4.1]: https://github.com/openslide/openslide-python/releases/tag/v1.4.1
 
 
 ## OpenSlide Python version 1.4.0, 2024-10-29
@@ -117,30 +93,22 @@ minor improvements.
 from PyPI][bin-pypi], adds type hints, adds Linux and macOS wheels, drops
 32-bit Windows wheels, and fixes bugs.
 
-[python-1.4.0]: https://github.com/openslide/openslide-python/releases/tag/v1.4.0
-
 
 ## Binary build 4.0.0.6, 2024-09-29
 
 [Binary build 4.0.0.6][bin-4.0.0.6] switches from zlib to zlib-ng and
 updates various dependencies.
 
-[bin-4.0.0.6]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.6
-
 
 ## Binary build 4.0.0.5, 2024-09-10
 
 [Binary build 4.0.0.5][bin-4.0.0.5] adds Linux aarch64 (ARM64) binaries.
-
-[bin-4.0.0.5]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.5
 
 
 ## Binary build 4.0.0.4, 2024-09-01
 
 [Binary build 4.0.0.4][bin-4.0.0.4] updates the versions of many
 dependencies.
-
-[bin-4.0.0.4]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.4
 
 
 ## OpenSlide Java version 0.13.0, 2024-05-04
@@ -152,9 +120,6 @@ switches the build system to Maven.
 
 [Binary build 4.0.0.3][bin-4.0.0.3] removes OpenSlide Java.
 
-[java-0.13.0]: https://github.com/openslide/openslide-java/releases/tag/v0.13.0
-[bin-4.0.0.3]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.3
-
 
 ## Binary build 4.0.0.2, 2024-03-29
 
@@ -162,8 +127,6 @@ switches the build system to Maven.
 32-bit Windows binaries, and adds Python binary packages for use with the
 upcoming OpenSlide Python 1.4.0.  It also updates OpenSlide Java to 0.12.4
 and updates various dependencies.
-
-[bin-4.0.0.2]: https://github.com/openslide/openslide-bin/releases/tag/v4.0.0.2
 
 
 ## OpenSlide Java version 0.12.4, 2023-11-07

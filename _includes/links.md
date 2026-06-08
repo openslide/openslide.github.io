@@ -64,3 +64,12 @@
 [site-issues]: https://github.com/openslide/openslide.github.io/issues
 
 [bin-pypi]: https://pypi.org/project/openslide-bin/
+
+{% assign table = 'c' %}
+{% include release-links.md %}
+{% assign table = 'python' %}
+{% include release-links.md %}
+{% assign table = 'java' %}
+{% include release-links.md %}
+{% assign table = 'bin' %}
+{% include release-links.md %}
