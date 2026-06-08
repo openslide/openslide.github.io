@@ -1,11 +1,13 @@
 {% include links.md %}
 
-## OpenSlide Java version 0.13.3, 2026-06-07
+## OpenSlide Python 1.4.6 and OpenSlide Java 0.13.3, 2026-06-07
 
-[OpenSlide Java 0.13.3][java-0.13.3] adds a constant for the
+[OpenSlide Python 1.4.6][python-1.4.6] and
+[OpenSlide Java 0.13.3][java-0.13.3] add a constant for the
 `openslide.barcode` property.
 
 [java-0.13.3]: https://github.com/openslide/openslide-java/releases/tag/v0.13.3
+[python-1.4.6]: https://github.com/openslide/openslide-python/releases/tag/v1.4.6
 
 
 ## Binary build 4.0.0.13, 2026-03-18
