@@ -25,6 +25,7 @@ import base64
 from collections.abc import Callable, Iterator
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
+import gzip
 from hashlib import md5, sha256
 from io import BytesIO
 import json
@@ -262,10 +263,15 @@ class S3Storage:
         self, path: PurePath, item: Any, cache: bool = True
     ) -> None:
         self.object(path).put(
-            Body=json.dumps(item, indent=1, sort_keys=True).encode(),
+            Body=gzip.compress(
+                json.dumps(
+                    item, separators=(',', ':'), sort_keys=True
+                ).encode()
+            ),
             CacheControl=(
                 CACHE_CONTROL_CACHE if cache else CACHE_CONTROL_NOCACHE
             ),
+            ContentEncoding='gzip',
             ContentType='application/json',
         )
 
@@ -403,8 +409,11 @@ def sync_slide(
 
     # Get current metadata
     try:
+        resp = storage.object(metadata_key_name).get()
         metadata: SlideMetadata | None = json.load(
-            storage.object(metadata_key_name).get()['Body']
+            gzip.open(resp['Body'])
+            if resp.get('ContentEncoding') == 'gzip'
+            else resp['Body']
         )
     except storage.NoSuchKey:
         metadata = None
@@ -629,8 +638,12 @@ def start_retile(
 
     # If the stamp is changing, mark bucket dirty
     try:
-        stream = storage.object(PurePath(METADATA_NAME)).get()['Body']
-        metadata: BucketMetadata = json.load(stream)
+        resp = storage.object(PurePath(METADATA_NAME)).get()
+        metadata: BucketMetadata = json.load(
+            gzip.open(resp['Body'])
+            if resp.get('ContentEncoding') == 'gzip'
+            else resp['Body']
+        )
         old_stamp = metadata['stamp']
     except storage.NoSuchKey:
         old_stamp = None
