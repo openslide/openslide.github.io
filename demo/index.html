@@ -277,9 +277,6 @@ $(function() {
                     if (!tileExists.apply(this, arguments)) {
                         return false;
                     }
-                    if (!image.sparse) {
-                        return true;
-                    }
                     var sparse = image.sparse[level];
                     if (!sparse) {
                         return true;
