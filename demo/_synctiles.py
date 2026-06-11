@@ -3,7 +3,7 @@
 # _synctiles - Generate and upload Deep Zoom tiles for test slides
 #
 # Copyright (c) 2010-2015 Carnegie Mellon University
-# Copyright (c) 2016-2025 Benjamin Gilbert
+# Copyright (c) 2016-2026 Benjamin Gilbert
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of version 2.1 of the GNU Lesser General Public License
@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 from argparse import ArgumentParser, FileType
+from array import array
 import base64
 from collections.abc import Callable, Iterator
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -58,7 +59,7 @@ import requests
 if TYPE_CHECKING:
     from mypy_boto3_s3.service_resource import Object
 
-STAMP_VERSION = 'threads'  # change to retile without OpenSlide version bump
+STAMP_VERSION = 'sparse'  # change to retile without OpenSlide version bump
 CORS_ORIGINS = ['*']
 DOWNLOAD_BASE_URL = 'https://openslide.cs.cmu.edu/download/openslide-testdata/'
 DOWNLOAD_INDEX = 'index.json'
@@ -179,6 +180,12 @@ class ImageInfo(TypedDict):
     name: str | None
     mpp: float | None
     source: DzSource
+    sparse: dict[str, SparseLevel]
+
+
+class SparseLevel(TypedDict):
+    tiles: tuple[int, int]
+    bitmap: str
 
 
 class DzSource(TypedDict):
@@ -276,6 +283,30 @@ class S3Storage:
         )
 
 
+class SparseMap:
+    def __init__(self, generator: Generator):
+        self._level_tiles = generator.dz.level_tiles
+        self._bitmaps = [
+            # ceil division
+            array('B', [0] * -(level_tiles[0] * level_tiles[1] // -8))
+            for level_tiles in self._level_tiles
+        ]
+
+    def set_bit(self, level: int, address: tuple[int, int]) -> None:
+        bit = self._level_tiles[level][0] * address[1] + address[0]
+        self._bitmaps[level][bit >> 3] |= 1 << (bit & 7)
+
+    def save(self) -> dict[str, SparseLevel]:
+        return {
+            str(level): {
+                'tiles': self._level_tiles[level],
+                'bitmap': base64.b64encode(bitmap.tobytes()).decode(),
+            }
+            for level, bitmap in enumerate(self._bitmaps)
+            if any(bitmap)
+        }
+
+
 @dataclass
 class Tile:
     storage: S3Storage
@@ -285,9 +316,12 @@ class Tile:
     key_name: PurePath
     cur_md5: str | None
 
-    def sync(self) -> PurePath:
+    def sync(self) -> PurePath | tuple[int, tuple[int, int]]:
         """Generate and possibly upload a tile."""
         tile = self.generator.get_tile(self.level, self.address)
+        if tile.getextrema() == ((255, 255), (255, 255), (255, 255)):  # type: ignore[no-untyped-call]
+            # completely white tile; add to sparse bitmap
+            return (self.level, self.address)
         buf = BytesIO()
         tile.save(
             buf,
@@ -358,13 +392,18 @@ def sync_image(
 
     # Sync tiles
     progress()
+    sparse_map = SparseMap(generator)
     for future in as_completed(
         exec.submit(Tile.sync, tile)
         for tile in Tile.enumerate(
             storage, generator, key_imagepath, key_md5sums
         )
     ):
-        key_md5sums.pop(future.result(), None)
+        result = future.result()
+        if isinstance(result, PurePath):
+            key_md5sums.pop(result, None)
+        else:
+            sparse_map.set_bit(*result)
         count += 1
         if count % 100 == 0:
             progress()
@@ -391,6 +430,7 @@ def sync_image(
         'name': associated,
         'mpp': mpp,
         'source': source,
+        'sparse': sparse_map.save(),
     }
 
 

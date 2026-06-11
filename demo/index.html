@@ -2,7 +2,7 @@
   OpenSlide demo site
 
   Copyright (c) 2010-2015 Carnegie Mellon University
-  Copyright (c) 2016 Benjamin Gilbert
+  Copyright (c) 2016-2026 Benjamin Gilbert
 
   This program is free software; you can redistribute it and/or modify it
   under the terms of version 2.1 of the GNU Lesser General Public License
@@ -70,6 +70,7 @@ $(function() {
     var stamp;
     var groups;
     var viewer;
+    var image;
     var status_skipped;
 
     function check_status() {
@@ -114,6 +115,22 @@ $(function() {
     });
     setInterval(check_status, 300000);
 
+    function decode_sparse_bitmaps(image) {
+        $.each(image.sparse, function(level, sparse) {
+            if (Uint8Array.fromBase64) {
+                sparse.bitmap = Uint8Array.fromBase64(sparse.bitmap, {
+                    lastChunkHandling: "strict"
+                });
+            } else {
+                var decoded = atob(sparse.bitmap);
+                sparse.bitmap = new Uint8Array(decoded.length);
+                for (var i = 0; i < decoded.length; i++) {
+                    sparse.bitmap[i] = decoded.charCodeAt(i);
+                }
+            }
+        });
+    }
+
     function populate_images(data, status, xhr) {
         stamp = data.stamp;
         groups = data.groups;
@@ -140,7 +157,9 @@ $(function() {
                     a.data('slide', j);
                     a.data('image', k);
                     $('<li/>').appendTo(images).append(a);
+                    decode_sparse_bitmaps(image);
                 });
+                decode_sparse_bitmaps(slide.slide);
             });
         });
         var versions = $('<p id="versions">');
@@ -201,7 +220,6 @@ $(function() {
         var slide_id = link.data('slide');
         var associated_id = link.data('image');
         var slide = groups[group_id].slides[slide_id];
-        var image;
         if (typeof associated_id === 'undefined') {
             image = slide.slide;
         } else {
@@ -253,6 +271,28 @@ $(function() {
                 var getTileUrl = viewer.source.getTileUrl;
                 viewer.source.getTileUrl = function() {
                     return getTileUrl.apply(this, arguments) + '?v=' + stamp;
+                };
+                var tileExists = viewer.source.tileExists;
+                viewer.source.tileExists = function(level, x, y) {
+                    if (!tileExists.apply(this, arguments)) {
+                        return false;
+                    }
+                    if (!image.sparse) {
+                        return true;
+                    }
+                    var sparse = image.sparse[level];
+                    if (!sparse) {
+                        return true;
+                    }
+                    if (x < 0 || y < 0 ||
+                        x >= sparse.tiles[0] || y >= sparse.tiles[1]) {
+                        return false;
+                    }
+                    var idx = y * sparse.tiles[0] + x;
+                    if (sparse.bitmap[idx >> 3] & (1 << (idx & 7))) {
+                        return false;
+                    }
+                    return true;
                 };
             });
             viewer.scalebar({
