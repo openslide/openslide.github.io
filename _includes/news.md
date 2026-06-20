@@ -1,5 +1,11 @@
 {% include links.md %}
 
+## Binary build 4.0.1.2, 2026-06-19
+
+[Binary build 4.0.1.2][bin-4.0.1.2] reduces binary file sizes and fixes the
+`slidetool` self-test on Windows.
+
+
 ## OpenSlide version 4.0.1, 2026-06-07
 
 [OpenSlide 4.0.1][openslide-4.0.1] adds support for
