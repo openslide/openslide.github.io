@@ -450,11 +450,7 @@ def sync_slide(
     # Get current metadata
     try:
         resp = storage.object(metadata_key_name).get()
-        metadata: SlideMetadata | None = json.load(
-            gzip.open(resp['Body'])
-            if resp.get('ContentEncoding') == 'gzip'
-            else resp['Body']
-        )
+        metadata: SlideMetadata | None = json.load(gzip.open(resp['Body']))
     except storage.NoSuchKey:
         metadata = None
 
@@ -679,11 +675,7 @@ def start_retile(
     # If the stamp is changing, mark bucket dirty
     try:
         resp = storage.object(PurePath(METADATA_NAME)).get()
-        metadata: BucketMetadata = json.load(
-            gzip.open(resp['Body'])
-            if resp.get('ContentEncoding') == 'gzip'
-            else resp['Body']
-        )
+        metadata: BucketMetadata = json.load(gzip.open(resp['Body']))
         old_stamp = metadata['stamp']
     except storage.NoSuchKey:
         old_stamp = None
