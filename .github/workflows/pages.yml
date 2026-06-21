@@ -1,0 +1,44 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.py'
+      - .github/workflows/dco-*.yml
+      - .github/workflows/retile.yml
+      - .github/workflows/validate.yml
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v7
+      - name: Set up Pages
+        uses: actions/configure-pages@v6
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+
+  deploy:
+    name: Deploy site
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-slim
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v5
