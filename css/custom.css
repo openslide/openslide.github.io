@@ -1,9 +1,9 @@
 div.searchbox {
   position: absolute;
   top: 0;
-  right: 10px;
+  right: 0;
   height: 110px;
-  width: 300px;
+  width: 400px;
 }
 div.searchbox .inner {
   position: absolute;
@@ -16,15 +16,8 @@ div.searchbox table {
 div.searchbox table td {
   border: 0;
 }
-div.searchbox .gsc-input-box {
-  height: 28px;
-  box-shadow: none;
-}
 div.searchbox .gsc-input-box a {
   margin-top: 4px;
-}
-div.searchbox .gsc-search-button {
-  display: none;
 }
 
 /* Scrollable releases table, fixed-height rows */
