@@ -6,7 +6,6 @@
 [download-pypi]: https://pypi.org/project/openslide-python/#files
 [license]: {{ site.baseurl }}/license/
 [demo]: {{ site.baseurl }}/demo/
-[other-projects]: {{ site.baseurl }}/other-projects/
 [github]: https://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/

@@ -1,6 +1,10 @@
 ---
 title: OpenSlide
 news_show_extended: false
+redirect_from:
+  # dead pages
+  - /other-projects/
+  - /Some Projects Using OpenSlide/
 ---
 
 {% include links.md %}
@@ -58,9 +62,6 @@ OpenSlide is a product of the research group of [M. Satyanarayanan][satya]
 
 [cmucs]: https://www.cs.cmu.edu/
 [satya]: https://www.cs.cmu.edu/~satya/
-
-
-See how [some projects use OpenSlide][other-projects].
 
 
 ## Demo
