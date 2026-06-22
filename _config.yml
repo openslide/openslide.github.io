@@ -7,5 +7,5 @@ defaults:
 exclude:
   - pyproject.toml
 
-gems:
+plugins:
   - jekyll-redirect-from
