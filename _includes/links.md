@@ -1,46 +1,46 @@
-[news]: /news/
-[download]: /download/
-[download-bin]: /download/#binaries
+[news]: {{ site.baseurl }}/news/
+[download]: {{ site.baseurl }}/download/
+[download-bin]: {{ site.baseurl }}/download/#binaries
 [download-copr]: https://copr.fedorainfracloud.org/coprs/g/openslide/openslide/
 [download-ppa]: https://launchpad.net/~openslide/+archive/ubuntu/openslide
 [download-pypi]: https://pypi.org/project/openslide-python/#files
-[license]: /license/
-[demo]: /demo/
-[other-projects]: /other-projects/
+[license]: {{ site.baseurl }}/license/
+[demo]: {{ site.baseurl }}/demo/
+[other-projects]: {{ site.baseurl }}/other-projects/
 [github]: https://github.com/openslide
 [wiki]: https://github.com/openslide/openslide/wiki
 [testdata]: https://openslide.cs.cmu.edu/download/openslide-testdata/
-[snapshots]: /builds/
-[submit-sample]: /submit/
+[snapshots]: {{ site.baseurl }}/builds/
+[submit-sample]: {{ site.baseurl }}/submit/
 
-[doc-dev]: /#development
-[doc-debugopts]: /docs/debugopts/
-[doc-devguide]: /docs/devguide/
-[doc-newformat]: /docs/newformat/
-[doc-premultiplied]: /docs/premultiplied-argb/
-[doc-properties]: /docs/properties/
-[doc-signoff]: /docs/signoff/
-[doc-testsuite]: /docs/testsuite/
-[doc-windows]: /docs/windows/
+[doc-dev]: {{ site.baseurl }}/#development
+[doc-debugopts]: {{ site.baseurl }}/docs/debugopts/
+[doc-devguide]: {{ site.baseurl }}/docs/devguide/
+[doc-newformat]: {{ site.baseurl }}/docs/newformat/
+[doc-premultiplied]: {{ site.baseurl }}/docs/premultiplied-argb/
+[doc-properties]: {{ site.baseurl }}/docs/properties/
+[doc-signoff]: {{ site.baseurl }}/docs/signoff/
+[doc-testsuite]: {{ site.baseurl }}/docs/testsuite/
+[doc-windows]: {{ site.baseurl }}/docs/windows/
 [gerror-rules]: https://docs.gtk.org/glib/error-reporting.html#rules-for-use-of-gerror
 
-[c-api]: /api/openslide_8h.html
-[python-api]: /api/python/
+[c-api]: {{ site.baseurl }}/api/openslide_8h.html
+[python-api]: {{ site.baseurl }}/api/python/
 
-[formats]: /formats/
-[format-aperio]: /formats/aperio/
-[format-argos]: /formats/argos/
-[format-dicom]: /formats/dicom/
-[format-generic-tiff]: /formats/generic-tiff/
-[format-hamamatsu]: /formats/hamamatsu/
-[format-huron]: /formats/huron/
-[format-leica]: /formats/leica/
-[format-mirax]: /formats/mirax/
-[format-philips]: /formats/philips/
-[format-sakura]: /formats/sakura/
-[format-trestle]: /formats/trestle/
-[format-ventana]: /formats/ventana/
-[format-zeiss]: /formats/zeiss/
+[formats]: {{ site.baseurl }}/formats/
+[format-aperio]: {{ site.baseurl }}/formats/aperio/
+[format-argos]: {{ site.baseurl }}/formats/argos/
+[format-dicom]: {{ site.baseurl }}/formats/dicom/
+[format-generic-tiff]: {{ site.baseurl }}/formats/generic-tiff/
+[format-hamamatsu]: {{ site.baseurl }}/formats/hamamatsu/
+[format-huron]: {{ site.baseurl }}/formats/huron/
+[format-leica]: {{ site.baseurl }}/formats/leica/
+[format-mirax]: {{ site.baseurl }}/formats/mirax/
+[format-philips]: {{ site.baseurl }}/formats/philips/
+[format-sakura]: {{ site.baseurl }}/formats/sakura/
+[format-trestle]: {{ site.baseurl }}/formats/trestle/
+[format-ventana]: {{ site.baseurl }}/formats/ventana/
+[format-zeiss]: {{ site.baseurl }}/formats/zeiss/
 
 [announce-subscribe]: https://lists.andrew.cmu.edu/mailman/listinfo/openslide-announce/
 [users-subscribe]: https://lists.andrew.cmu.edu/mailman/listinfo/openslide-users/

@@ -13,7 +13,7 @@ extra_credits:
 {% include links.md %}
 
 <a href="https://github.com/openslide">
-  <img class="forkme-ribbon" src="/images/fork-me.png" alt="Fork me on GitHub">
+  <img class="forkme-ribbon" src="{{ site.baseurl }}/images/fork-me.png" alt="Fork me on GitHub">
 </a>
 
 <div markdown="1" class="newsflash">
