@@ -47,7 +47,7 @@ OPTIONAL_FIELDS = frozenset(('credit', 'deprecated'))
 
 INDEX_TEMPLATE = """<!doctype html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<style type="text/css">
+<style>
 table {
   margin-left: 20px;
   border-collapse: collapse;
