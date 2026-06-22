@@ -26,16 +26,15 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get -y install minify
+          sudo apt-get -y install jekyll minify ruby-jekyll-redirect-from
       - name: Check out repo
         uses: actions/checkout@v7
       - name: Set up Pages
+        id: pages
         uses: actions/configure-pages@v6
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-      - name: Minify
+      - name: Build
         run: |
-          sudo chown -R $USER:$USER _site
+          jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
           minify -ri _site --exclude '_site/api/**'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
