@@ -4,6 +4,12 @@ defaults:
     values:
       layout: default
 
+include:
+  # should be 'api/python/_*'
+  # https://github.com/jekyll/jekyll/issues/9116
+  - _sources
+  - _static
+
 exclude:
   - pyproject.toml
 
