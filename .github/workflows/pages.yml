@@ -21,14 +21,22 @@ concurrency:
 jobs:
   build:
     name: Build site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install minify
       - name: Check out repo
         uses: actions/checkout@v7
       - name: Set up Pages
         uses: actions/configure-pages@v6
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
+      - name: Minify
+        run: |
+          sudo chown -R $USER:$USER _site
+          minify -ri _site --exclude '_site/api/**'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
 
