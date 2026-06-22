@@ -1,20 +1,9 @@
 ---
 title: OpenSlide
-classes: forkme
 news_show_extended: false
-extra_credits:
-  <a href="https://github.com/aral/fork-me-on-github-retina-ribbons/">
-  "Fork me on GitHub" ribbon</a> copyright &copy; 2013 Aral Balkan,
-  released under a
-  <a href="https://creativecommons.org/licenses/by/2.0/uk/">
-  Creative Commons Attribution 2.0&#58; England & Wales</a> license.
 ---
 
 {% include links.md %}
-
-<a href="https://github.com/openslide">
-  <img class="forkme-ribbon" src="{{ site.baseurl }}/images/fork-me.png" alt="Fork me on GitHub">
-</a>
 
 <div markdown="1" class="newsflash">
 {% include news.md %}
