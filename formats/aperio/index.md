@@ -17,7 +17,9 @@ OpenSlide vendor backend
 
 ## Vendor Documentation
 
-[Documentation PDF](https://web.archive.org/web/20120420105738/http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf)
+[Documentation PDF][spec-2008]
+
+[spec-2008]: https://web.archive.org/web/20120420105738/http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf
 
 
 ## Detection
@@ -51,8 +53,7 @@ information present in these key-value fields.
 
 ## TIFF Image Directory Organization
 
-<http://www.aperio.com/documents/api/Aperio_Digital_Slides_and_Third-party_data_interchange.pdf>
-page 14:
+[Digital Slides and Third-Party Data Interchange][spec-2008] page 14:
 
 > The first image in an SVS file is always the baseline image (full
 > resolution). This image is always tiled, usually with a tile size
