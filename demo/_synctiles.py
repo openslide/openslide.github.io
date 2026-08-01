@@ -213,7 +213,7 @@ class StatusMetadata(TypedDict):
     stamp: str | None
 
 
-class SyncTilesException(Exception):
+class SyncError(Exception):
     pass
 
 
@@ -715,7 +715,7 @@ def retile_slide(
     # Tile slide
     slide_info = context['slides'].get(slide_relpath.as_posix())
     if slide_info is None:
-        raise SyncTilesException(f'No such slide {slide_relpath}')
+        raise SyncError(f'No such slide {slide_relpath}')
     metadata = sync_slide(
         context['stamp'], storage, slide_relpath, slide_info, workers
     )
@@ -851,4 +851,4 @@ if __name__ == '__main__':
     elif args.cmd == 'finish':
         finish_retile(args.context_file, args.summary_dir)
     else:
-        raise SyncTilesException('unimplemented subcommand')
+        raise SyncError('unimplemented subcommand')
