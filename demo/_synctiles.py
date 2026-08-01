@@ -213,6 +213,10 @@ class StatusMetadata(TypedDict):
     stamp: str | None
 
 
+class SyncTilesException(Exception):
+    pass
+
+
 def slugify(text: str) -> str:
     """Generate an ASCII-only slug."""
     text = normalize('NFKD', text.lower()).encode('ascii', 'ignore').decode()
@@ -450,7 +454,8 @@ def sync_slide(
     # Get current metadata
     try:
         resp = storage.object(metadata_key_name).get()
-        metadata: SlideMetadata | None = json.load(gzip.open(resp['Body']))
+        with gzip.open(resp['Body']) as body:
+            metadata: SlideMetadata | None = json.load(body)
     except storage.NoSuchKey:
         metadata = None
 
@@ -675,7 +680,8 @@ def start_retile(
     # If the stamp is changing, mark bucket dirty
     try:
         resp = storage.object(PurePath(METADATA_NAME)).get()
-        metadata: BucketMetadata = json.load(gzip.open(resp['Body']))
+        with gzip.open(resp['Body']) as body:
+            metadata: BucketMetadata = json.load(body)
         old_stamp = metadata['stamp']
     except storage.NoSuchKey:
         old_stamp = None
@@ -709,7 +715,7 @@ def retile_slide(
     # Tile slide
     slide_info = context['slides'].get(slide_relpath.as_posix())
     if slide_info is None:
-        raise Exception(f'No such slide {slide_relpath}')
+        raise SyncTilesException(f'No such slide {slide_relpath}')
     metadata = sync_slide(
         context['stamp'], storage, slide_relpath, slide_info, workers
     )
@@ -845,4 +851,4 @@ if __name__ == '__main__':
     elif args.cmd == 'finish':
         finish_retile(args.context_file, args.summary_dir)
     else:
-        raise Exception('unimplemented subcommand')
+        raise SyncTilesException('unimplemented subcommand')
