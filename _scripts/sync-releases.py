@@ -65,7 +65,7 @@ PROJECTS = (
 )
 
 
-class SyncReleasesException(Exception):
+class SyncError(Exception):
     pass
 
 
@@ -134,9 +134,7 @@ def main() -> None:
             expected_hash = artifact['digest'].replace('sha256:', '')
             found_hash = sha256(resp.content).hexdigest()
             if expected_hash != found_hash:
-                raise SyncReleasesException(
-                    f'SHA-256 {found_hash} != {expected_hash}'
-                )
+                raise SyncError(f'SHA-256 {found_hash} != {expected_hash}')
 
             # unpack
             docdir = DOCROOT / proj.docs.subdir
