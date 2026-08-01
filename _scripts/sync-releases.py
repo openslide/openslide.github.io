@@ -65,6 +65,10 @@ PROJECTS = (
 )
 
 
+class SyncReleasesException(Exception):
+    pass
+
+
 def api_request(endpoint: str) -> Any:
     resp = requests.get(
         f'https://api.github.com/{endpoint}',
@@ -105,7 +109,7 @@ def main() -> None:
         if version != prev['version']:
             cur = prev.copy()
             cur['version'] = version
-            cur['date'] = date.today().strftime('%Y-%m-%d')
+            cur['date'] = date.today().strftime('%Y-%m-%d')  # noqa: DTZ011
             releases[proj.id].insert(0, cur)
 
         # sync docs
@@ -130,7 +134,9 @@ def main() -> None:
             expected_hash = artifact['digest'].replace('sha256:', '')
             found_hash = sha256(resp.content).hexdigest()
             if expected_hash != found_hash:
-                raise Exception(f'SHA-256 {found_hash} != {expected_hash}')
+                raise SyncReleasesException(
+                    f'SHA-256 {found_hash} != {expected_hash}'
+                )
 
             # unpack
             docdir = DOCROOT / proj.docs.subdir
