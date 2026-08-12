@@ -24,7 +24,7 @@ import argparse
 from collections.abc import Iterable
 from hashlib import sha256
 import json
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Any
 
 from jinja2 import Environment
@@ -123,10 +123,10 @@ td.size {
   {% if has_parent %}
     {{ row('fa-level-up', '..', '[Parent Directory]') }}
   {% endif %}
-  {% for name, format in (dirs or {}).items()|sort %}
+  {% for name, format in (dirs or {}).items() %}
     {{ row('fa-folder', name + '/', name, description=format) }}
   {% endfor %}
-  {% for name, info in (files or {}).items()|sort %}
+  {% for name, info in (files or {}).items() %}
     {{ row('fa-file-archive-o' if name.endswith('.zip') else 'fa-file-image-o',
         name, name, info.size|file_size_units, info.description,
         info.license, info.credit, info.deprecated) }}
@@ -215,7 +215,9 @@ def process_dir(
         index_template.stream(
             has_parent=True,
             title=format_,
-            files=slides,
+            files=dict(
+                sorted(slides.items(), key=lambda p: PurePath(p[0]).stem)
+            ),
             extras=[
                 {
                     'name': 'index.yaml',
