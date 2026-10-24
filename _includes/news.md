@@ -1,5 +1,11 @@
 {% include links.md %}
 
+## OpenSlide Python version 1.4.7, 2026-10-23
+
+[OpenSlide Python 1.4.7][python-1.4.7] adds version-independent wheels for
+[free-threaded Python][].
+
+
 ## Binary build 4.0.1.2, 2026-06-19
 
 [Binary build 4.0.1.2][bin-4.0.1.2] reduces binary file sizes and fixes the
