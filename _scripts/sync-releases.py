@@ -92,9 +92,12 @@ def main() -> None:
     with TABLES.open() as fh:
         releases = yaml.safe_load(fh)
 
-    # clear docs dir
-    if DOCROOT.exists():
-        shutil.rmtree(DOCROOT)
+    # compute DOCROOT children owned by projects
+    project_docs_dirs = {
+        DOCROOT / proj.docs.subdir
+        for proj in PROJECTS
+        if proj.docs and proj.docs.subdir != PurePath()
+    }
 
     for proj in PROJECTS:
         # get current version from GitHub
@@ -118,11 +121,25 @@ def main() -> None:
             url = f'repos/{proj.repo}/actions/workflows/{proj.docs.workflow}/runs?branch={tag}&event=push&status=completed'
             run = one(api_request(url)['workflow_runs'])
             url = f'repos/{proj.repo}/actions/runs/{run["id"]}/artifacts'
-            artifact = one(
+            artifacts = [
                 a
                 for a in api_request(url)['artifacts']
                 if a['name'].startswith(proj.docs.artifact_prefix)
-            )
+            ]
+            if not artifacts:
+                # expired
+                continue
+            artifact = one(artifacts)
+
+            # clear docs dir
+            if proj.docs.subdir == PurePath():
+                for child in DOCROOT.iterdir():
+                    if child.is_file():
+                        child.unlink()
+                    elif child not in project_docs_dirs:
+                        shutil.rmtree(child)
+            else:
+                shutil.rmtree(DOCROOT / proj.docs.subdir)
 
             # fetch artifact through third-party service; GitHub wants a
             # token to fetch artifacts.  check hash so we don't have to
