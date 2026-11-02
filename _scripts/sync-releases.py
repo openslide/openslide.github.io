@@ -112,7 +112,7 @@ def main() -> None:
         if version != prev['version']:
             cur = prev.copy()
             cur['version'] = version
-            cur['date'] = date.today().strftime('%Y-%m-%d')  # noqa: DTZ011
+            cur['date'] = date.today().strftime('%Y-%m-%d')
             releases[proj.id].insert(0, cur)
 
         # sync docs
